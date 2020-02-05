@@ -9,6 +9,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import io.fotoapparat.Fotoapparat
+import io.fotoapparat.parameter.ScaleType
+import io.fotoapparat.selector.back
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import permissions.dispatcher.*
@@ -16,11 +18,19 @@ import permissions.dispatcher.*
 @RuntimePermissions
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var fotoapparat: Fotoapparat
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        fotoapparat = Fotoapparat(
+            context = this,
+            view = camera_view,
+            scaleType = ScaleType.CenterCrop,
+            lensPosition = back()
+        )
 
         fab.setOnClickListener {
             println("Fab")
@@ -56,12 +66,9 @@ class MainActivity : AppCompatActivity() {
 
     @NeedsPermission(Manifest.permission.CAMERA)
     fun showCamera() {
-        val fotoapparat = Fotoapparat(
-            context = this,
-            view = camera_view
-        )
-
         fotoapparat.start()
+        fotoapparat.autoFocus()
+            .takePicture()
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
