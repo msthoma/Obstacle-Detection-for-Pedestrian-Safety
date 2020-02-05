@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ObsAI</string>
     <string name="action_settings">Settings</string>
+    <string name="permission_camera_denied">The app cannot work without access to the camera, please grant it before proceeding.</string>
+    <string name="permission_camera_rationale">App needs camera permission</string>
+    <string name="button_allow">Yes</string>
+    <string name="button_deny">No</string>
 </resources>
