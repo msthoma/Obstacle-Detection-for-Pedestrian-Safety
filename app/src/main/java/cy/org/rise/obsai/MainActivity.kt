@@ -1,7 +1,9 @@
 package cy.org.rise.obsai
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,6 +19,8 @@ import permissions.dispatcher.*
 
 @RuntimePermissions
 class MainActivity : AppCompatActivity() {
+
+    val REQUEST_IMAGE_CAPTURE = 1
 
     private lateinit var fotoapparat: Fotoapparat
 
@@ -35,6 +39,11 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             println("Fab")
             showCameraWithPermissionCheck()
+        }
+
+        ext_camera_button.setOnClickListener {
+            println("External camera button pressed")
+            dispatchTakePictureIntent()
         }
     }
 
@@ -93,5 +102,13 @@ class MainActivity : AppCompatActivity() {
             .setCancelable(false)
             .setMessage(messageResId)
             .show()
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
     }
 }
