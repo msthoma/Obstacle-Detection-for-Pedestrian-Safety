@@ -6,4 +6,5 @@
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
     <string name="button_ext_camera">Ext.camera</string>
+    <string name="element_text">Element</string>
 </resources>
