@@ -8,11 +8,14 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.parameter.ScaleType
 import io.fotoapparat.selector.back
@@ -28,6 +31,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     lateinit var currentPhotoPath: String
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var dataset: Array<String>
 
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -38,22 +43,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fotoapparat = Fotoapparat(
-            context = this,
-            view = camera_view,
-            scaleType = ScaleType.CenterCrop,
-            lensPosition = back()
-        )
+
+        recyclerView = recycler_view
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        initDataset()
+        recyclerView.adapter = CustomAdapter(dataset)
+
+
+//        fotoapparat = Fotoapparat(
+//            context = this,
+//            view = camera_view,
+//            scaleType = ScaleType.CenterCrop,
+//            lensPosition = back()
+//        )
 
         fab.setOnClickListener {
             println("Fab")
-            showCameraWithPermissionCheck()
+            dispatchTakePictureIntent()
+//            showCameraWithPermissionCheck()
         }
 
-        ext_camera_button.setOnClickListener {
-            println("External camera button pressed")
-            dispatchTakePictureIntent()
-        }
+//        ext_camera_button.setOnClickListener {
+//            println("External camera button pressed")
+//            dispatchTakePictureIntent()
+//        }
     }
 
     override fun onRequestPermissionsResult(
@@ -151,5 +164,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initDataset() {
+        dataset = Array(60, { i -> "This is element # $i" })
     }
 }
