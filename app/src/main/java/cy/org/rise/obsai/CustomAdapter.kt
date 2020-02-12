@@ -44,7 +44,6 @@ class CustomAdapter(private val dataSet: Array<String>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d(TAG, "Element $position set.")
         // Set name
         viewHolder.textView.text = dataSet[position]
         // Set picture
