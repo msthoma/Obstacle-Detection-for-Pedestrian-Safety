@@ -6,19 +6,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.fotoapparat.Fotoapparat
-import io.fotoapparat.parameter.ScaleType
-import io.fotoapparat.selector.back
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import permissions.dispatcher.*
@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var currentPhotoPath: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataset: Array<String>
+    private lateinit var obstacleViewModel: ObstacleViewModel
 
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -41,15 +42,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        toolbar.title = "Obstacles"
         setSupportActionBar(toolbar)
 
+//        obstacleViewModel = ViewModelProvider(this).get(ObstacleViewModel::class.java)
 
+        // setup recycler view
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(this)
         initDataset()
-        recyclerView.adapter = CustomAdapter(dataset)
+        val adapter = CustomAdapter(dataset)
+        recyclerView.adapter = adapter
 
-
+//        obstacleViewModel.allObstacles.observe(this, Observer { obstacles ->
+//            obstacles?.let { adapter.setObstacles(it) }
+//        })
 //        fotoapparat = Fotoapparat(
 //            context = this,
 //            view = camera_view,
@@ -58,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 //        )
 
         fab.setOnClickListener {
-            println("Fab")
             dispatchTakePictureIntent()
 //            showCameraWithPermissionCheck()
         }
@@ -68,6 +74,20 @@ class MainActivity : AppCompatActivity() {
 //            dispatchTakePictureIntent()
 //        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.e(
+                "result",
+                currentPhotoPath.removePrefix(
+                    "/storage/emulated/0/Android/data/cy.org.rise.obsai/files/Pictures/"
+                )
+            )
+
+        }
+    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -166,7 +186,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initDataset() {
-        dataset = Array(60, { i -> "This is element # $i" })
+        val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+        dataset = File(path).list()
     }
 }

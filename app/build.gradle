@@ -23,13 +23,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.1.0'
     testImplementation 'junit:junit:4.13'
@@ -88,5 +92,6 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
-
+    // Picasso - Image loader - https://github.com/square/picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.text_row_item.view.*
+import java.io.File
 
 /**
  * Provide views to RecyclerView with data from dataSet.
@@ -42,10 +45,19 @@ class CustomAdapter(private val dataSet: Array<String>) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         Log.d(TAG, "Element $position set.")
-
-        // Get element from your dataset at this position and replace the contents of the view
-        // with that element
+        // Set name
         viewHolder.textView.text = dataSet[position]
+        // Set picture
+        Picasso.get()
+            .load(
+                File(
+                    "/storage/emulated/0/Android/data/cy.org.rise.obsai/files/Pictures/"
+                            + dataSet[position]
+                )
+            )
+            .resize(120, 120)
+            .centerCrop()
+            .into(viewHolder.itemView.imageView)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
