@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.fotoapparat.Fotoapparat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import permissions.dispatcher.*
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
     val REQUEST_IMAGE_CAPTURE = 1
 
-    private lateinit var fotoapparat: Fotoapparat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,22 +54,12 @@ class MainActivity : AppCompatActivity() {
 //        obstacleViewModel.allObstacles.observe(this, Observer { obstacles ->
 //            obstacles?.let { adapter.setObstacles(it) }
 //        })
-//        fotoapparat = Fotoapparat(
-//            context = this,
-//            view = camera_view,
-//            scaleType = ScaleType.CenterCrop,
-//            lensPosition = back()
-//        )
+
 
         fab.setOnClickListener {
             dispatchTakePictureIntent()
 //            showCameraWithPermissionCheck()
         }
-
-//        ext_camera_button.setOnClickListener {
-//            println("External camera button pressed")
-//            dispatchTakePictureIntent()
-//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,15 +98,17 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_internal_camera -> {
+                lauchCameraActivity()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
     fun showCamera() {
-        fotoapparat.start()
-        fotoapparat.autoFocus()
-            .takePicture()
+
     }
 
     @OnShowRationale(Manifest.permission.CAMERA)
@@ -190,5 +180,10 @@ class MainActivity : AppCompatActivity() {
     private fun initDataset() {
         val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
         dataset = File(path).list()
+    }
+
+    private fun lauchCameraActivity() {
+        Log.d("launch camera pressed", "")
+        startActivity(Intent(this, CameraActivity::class.java))
     }
 }
