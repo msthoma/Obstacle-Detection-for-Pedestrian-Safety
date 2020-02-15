@@ -2,32 +2,27 @@ package cy.org.rise.obsai
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import io.fotoapparat.Fotoapparat
-import io.fotoapparat.parameter.ScaleType
-import io.fotoapparat.selector.back
+import com.otaliastudios.cameraview.CameraListener
+import com.otaliastudios.cameraview.CameraView
+import com.otaliastudios.cameraview.PictureResult
 import kotlinx.android.synthetic.main.activity_camera.*
 
 class CameraActivity : AppCompatActivity() {
-    private lateinit var fotoapparat: Fotoapparat
+    private lateinit var cameraView: CameraView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        fotoapparat = Fotoapparat(
-            context = this,
-            view = camera_view,
-            scaleType = ScaleType.CenterCrop,
-            lensPosition = back()
-        )
-
-        fotoapparat.start()
-        fotoapparat.autoFocus()
-            .takePicture()
+        // most of the other settings for CameraView are set in the activity's xml layout
+        cameraView = camera_view
+        cameraView.setLifecycleOwner(this)
+        cameraView.addCameraListener(Listener())
     }
 
-    override fun onStop() {
-        super.onStop()
-        fotoapparat.stop()
+    private class Listener : CameraListener() {
+        override fun onPictureTaken(result: PictureResult) {
+            super.onPictureTaken(result)
+        }
     }
 }
