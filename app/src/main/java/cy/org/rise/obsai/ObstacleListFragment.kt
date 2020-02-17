@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import java.io.File
 
 class ObstacleListFragment : Fragment() {
@@ -22,7 +22,7 @@ class ObstacleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.content_main, container, false)
+        return inflater.inflate(R.layout.fragment_obstacle_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

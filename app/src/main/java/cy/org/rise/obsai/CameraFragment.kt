@@ -56,6 +56,7 @@ class CameraFragment : Fragment() {
                     result.run {
                         toFile(it) { file ->
                             file?.let {
+                                // TODO pass to obstacle edit fragment
                                 Log.d(TAG(), "photo file ready: " + file.absolutePath)
                             }
                         }
