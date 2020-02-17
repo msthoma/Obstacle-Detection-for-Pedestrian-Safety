@@ -10,6 +10,30 @@
     <string name="action_internal_camera">Internal camera</string>
     <string name="action_sign_in">Sign in</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="obstacles_array">
+        <item>Crack</item>
+        <item>Hole/Pot-hole</item>
+        <item>Paver (broken)</item>
+        <item>Narrow Pavement</item>
+        <item>No Pavement</item>
+        <item>Bench</item>
+        <item>Light</item>
+        <item>Bin</item>
+        <item>Parking Meter</item>
+        <item>Plant Pot</item>
+        <item>Tree</item>
+        <item>Shrub</item>
+        <item>Parking Prevention</item>
+        <item>Mail Box</item>
+        <item>4-wheels</item>
+        <item>2-wheels</item>
+        <item>Boulder</item>
+        <item>Safety Sign</item>
+        <item>Fence</item>
+        <item>Traffic Cone</item>
+        <item>Litter</item>
+        <item>Chair</item>
+        <item>Table</item>
+        <item>Advert. Sign</item>
+    </string-array>
 </resources>

@@ -118,4 +118,7 @@ dependencies {
 
     // CameraView library - https://github.com/natario1/CameraView
     api 'com.otaliastudios:cameraview:2.6.1'
+
+    // Android Image Cropper - https://github.com/ArthurHub/Android-Image-Cropper
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 }

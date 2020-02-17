@@ -16,11 +16,18 @@
         tools:layout="@layout/fragment_camera" >
         <action
             android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment" />
+            app:destination="@id/obstacleEditFragment" >
+            <argument android:defaultValue='""'
+                android:name="currentPhoto" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/obstacleEditFragment"
         android:name="cy.org.rise.obsai.ObstacleEditFragment"
         android:label="fragment_obstacle_edit"
-        tools:layout="@layout/fragment_obstacle_edit" />
+        tools:layout="@layout/fragment_obstacle_edit" >
+        <argument
+            android:name="currentPhoto"
+            app:argType="string" />
+    </fragment>
 </navigation>

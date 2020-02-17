@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
@@ -58,6 +59,12 @@ class CameraFragment : Fragment() {
                             file?.let {
                                 // TODO pass to obstacle edit fragment
                                 Log.d(TAG(), "photo file ready: " + file.absolutePath)
+                                val action =
+                                    CameraFragmentDirections
+                                        .actionCameraFragmentToObstacleEditFragment(
+                                            file.absolutePath
+                                        )
+                                cameraView.findNavController().navigate(action)
                             }
                         }
                     }
