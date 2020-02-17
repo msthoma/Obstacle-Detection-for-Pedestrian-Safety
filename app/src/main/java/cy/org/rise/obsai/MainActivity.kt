@@ -15,10 +15,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import permissions.dispatcher.*
 import java.io.File
 import java.io.IOException
@@ -29,37 +26,19 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     lateinit var currentPhotoPath: String
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var dataset: Array<String>
     private lateinit var obstacleViewModel: ObstacleViewModel
 
     val REQUEST_IMAGE_CAPTURE = 1
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toolbar.title = "Obstacles"
-        setSupportActionBar(toolbar)
 
-//        obstacleViewModel = ViewModelProvider(this).get(ObstacleViewModel::class.java)
-
-        // setup recycler view
-        recyclerView = recycler_view
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        initDataset()
-        val adapter = CustomAdapter(dataset)
-        recyclerView.adapter = adapter
-
-//        obstacleViewModel.allObstacles.observe(this, Observer { obstacles ->
-//            obstacles?.let { adapter.setObstacles(it) }
-//        })
-
-
-        fab.setOnClickListener {
-            dispatchTakePictureIntent()
-//            showCameraWithPermissionCheck()
-        }
+        val fragment = ObstacleListFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.main_content, fragment)
+            .commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -74,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -151,7 +129,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
@@ -174,12 +151,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-
-    private fun initDataset() {
-        val path = getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-        dataset = File(path).list()
     }
 
     private fun lauchCameraActivity() {
