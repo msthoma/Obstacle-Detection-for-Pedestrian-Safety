@@ -9,4 +9,7 @@
     <string name="element_text">Element</string>
     <string name="action_internal_camera">Internal camera</string>
     <string name="action_sign_in">Sign in</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
