@@ -15,7 +15,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.RecyclerView
 import permissions.dispatcher.*
 import java.io.File
 import java.io.IOException
@@ -33,12 +32,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val fragment = ObstacleListFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.main_content, fragment)
-            .commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
