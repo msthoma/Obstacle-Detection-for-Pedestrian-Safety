@@ -53,7 +53,13 @@ class CameraFragment : Fragment() {
                 }
 
                 photoFile?.let {
-                    result.toFile(it) {}
+                    result.run {
+                        toFile(it) { file ->
+                            file?.let {
+                                Log.d(TAG(), "photo file ready: " + file.absolutePath)
+                            }
+                        }
+                    }
                 }
             }
         })
