@@ -6,10 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".CameraActivity">
 
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize" />-->
+
     <com.otaliastudios.cameraview.CameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:keepScreenOn="true"
         app:cameraAudio="off"
         app:cameraEngine="camera2"
@@ -23,7 +27,7 @@
         app:cameraMode="picture"
         app:cameraPlaySounds="false"
         app:cameraPreview="glSurface"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recognized"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +38,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recognized"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/camera_button" />
+
+    <TextView
+        android:id="@+id/recognized"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@android:color/black"
+        android:text="Recognized objects..."
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
