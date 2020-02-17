@@ -13,7 +13,11 @@
         android:id="@+id/cameraFragment"
         android:name="cy.org.rise.obsai.CameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
+            app:destination="@id/obstacleEditFragment" />
+    </fragment>
     <fragment
         android:id="@+id/obstacleEditFragment"
         android:name="cy.org.rise.obsai.ObstacleEditFragment"
