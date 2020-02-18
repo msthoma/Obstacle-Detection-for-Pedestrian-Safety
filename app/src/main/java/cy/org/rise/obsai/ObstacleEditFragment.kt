@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -39,13 +40,21 @@ class ObstacleEditFragment : Fragment() {
             context?.also { context ->
                 val photoUri =
                     FileProvider.getUriForFile(
-                        context, "com.example.android.fileprovider", it)
+                        context, "com.example.android.fileprovider", it
+                    )
                 crop_image_view.setImageUriAsync(photoUri)
                 crop_image_view.isAutoZoomEnabled = true
                 crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
             }
-
         }
-//        spinner.
+
+        ArrayAdapter.createFromResource(
+            context!!, // TODO fix !!
+            R.array.obstacles_array,
+            android.R.layout.simple_spinner_dropdown_item
+        ).also { arrayAdapter ->
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = arrayAdapter
+        }
     }
 }

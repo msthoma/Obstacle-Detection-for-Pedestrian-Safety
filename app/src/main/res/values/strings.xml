@@ -9,8 +9,10 @@
     <string name="element_text">Element</string>
     <string name="action_internal_camera">Internal camera</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="select_obstacle_type">Select obstacle type:</string>
 
     <string-array name="obstacles_array">
+        <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
         <item>Paver (broken)</item>
@@ -34,6 +36,5 @@
         <item>Litter</item>
         <item>Chair</item>
         <item>Table</item>
-        <item>Advert. Sign</item>
     </string-array>
 </resources>
