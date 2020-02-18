@@ -41,9 +41,6 @@ class CameraFragment : Fragment() {
         cameraView.addCameraListener(object : CameraListener() {
             override fun onPictureTaken(result: PictureResult) {
 //                super.onPictureTaken(result)
-                Log.d(TAG(), "picture taken")
-                Log.d("pictureSize", result.size.toString())
-                Log.d("pictureType", result.javaClass.name)
 
                 val photoFile: File? = try {
                     createImageFile()
