@@ -10,6 +10,9 @@
     <string name="action_internal_camera">Internal camera</string>
     <string name="action_sign_in">Sign in</string>
     <string name="select_obstacle_type">Select obstacle type:</string>
+    <string name="label_fragment_obstacle_list">Obstacles</string>
+    <string name="label_fragment_camera">Add new obstacle</string>
+    <string name="label_fragment_obstacle_edit">Edit obstacle</string>
 
     <string-array name="obstacles_array">
         <item>Advert. Sign</item>
