@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        fab.setOnClickListener {
-            Log.d(TAG(), "fab pressed")
-            navController.navigate(R.id.cameraFragment)
-        }
+//        fab.setOnClickListener {
+//            Log.d(TAG(), "fab pressed")
+//            navController.navigate(R.id.cameraFragment)
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
