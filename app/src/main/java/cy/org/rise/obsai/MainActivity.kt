@@ -15,6 +15,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -41,9 +42,12 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
-//        fab.setOnClickListener {
-//            Log.d(TAG(), "fab pressed")
-//            navController.navigate(R.id.cameraFragment)
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            title = when (destination.id) {
+//                R.id.obstacleListFragment -> "Obstacles"
+//                R.id.cameraFragment -> "Add new obstacle"
+//                else -> ""
+//            }
 //        }
     }
 

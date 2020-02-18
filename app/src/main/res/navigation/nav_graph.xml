@@ -8,17 +8,22 @@
     <fragment
         android:id="@+id/obstacleListFragment"
         android:name="cy.org.rise.obsai.ObstacleListFragment"
-        android:label="ObstacleListFragment" />
+        android:label="@string/label_fragment_obstacle_list" >
+        <action
+            android:id="@+id/action_obstacleListFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="cy.org.rise.obsai.CameraFragment"
-        android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" >
+        android:label="@string/label_fragment_camera"
+        tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment" >
-            <argument android:defaultValue='""'
-                android:name="currentPhoto" />
+            app:destination="@id/obstacleEditFragment">
+            <argument
+                android:name="currentPhoto"
+                android:defaultValue='""' />
         </action>
     </fragment>
     <fragment
@@ -29,5 +34,8 @@
         <argument
             android:name="currentPhoto"
             app:argType="string" />
+        <action
+            android:id="@+id/action_obstacleEditFragment_to_obstacleListFragment"
+            app:destination="@id/obstacleListFragment" />
     </fragment>
 </navigation>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
@@ -55,6 +56,10 @@ class ObstacleEditFragment : Fragment() {
         ).also { arrayAdapter ->
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = arrayAdapter
+        }
+
+        submit_button.setOnClickListener { v ->
+            v.findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
     }
 }
