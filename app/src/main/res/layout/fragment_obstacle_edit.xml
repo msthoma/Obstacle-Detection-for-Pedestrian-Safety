@@ -11,30 +11,39 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cropInitialCropWindowPaddingRatio="0"
-        app:layout_constraintBottom_toTopOf="@id/select_obstacle_type_text"
+        app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </com.theartofdev.edmodo.cropper.CropImageView>
 
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toTopOf="@id/select_obstacle_type_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/crop_image_view" />
+
     <TextView
         android:id="@+id/select_obstacle_type_text"
-        style="@style/TextAppearance.AppCompat.Large"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="6dp"
         android:text="@string/select_obstacle_type"
         app:layout_constraintBottom_toTopOf="@id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/crop_image_view" />
+        app:layout_constraintTop_toBottomOf="@id/map" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="6dp"
         app:layout_constraintBottom_toTopOf="@id/submit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

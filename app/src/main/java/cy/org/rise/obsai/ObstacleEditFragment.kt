@@ -11,13 +11,20 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
+import org.osmdroid.api.IMapController
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 import java.io.File
 import java.io.IOException
 
 class ObstacleEditFragment : Fragment() {
 
+    private lateinit var mapView: MapView
     val args: ObstacleEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -61,5 +68,26 @@ class ObstacleEditFragment : Fragment() {
         submit_button.setOnClickListener { v ->
             v.findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
+
+        // map configuration - see https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library for details
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        mapView = map
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        // set photo location on map
+        val mapController: IMapController = mapView.controller
+        mapController.setZoom(18.5)
+        val geoPoint = GeoPoint(35.16989, 33.36116)
+        mapView.setExpectedCenter(geoPoint)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
     }
 }
