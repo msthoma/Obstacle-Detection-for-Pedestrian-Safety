@@ -1,6 +1,11 @@
 package cy.org.rise.obsai
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -20,13 +25,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CameraFragment : Fragment() {
+class CameraFragment : Fragment(), SensorEventListener {
     private lateinit var cameraView: CameraView
     lateinit var currentPhotoPath: String
+
+    // Location related vars
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
+    // Orientation related vars
+    private lateinit var sensorManager: SensorManager
+    private val accelerometerReading = FloatArray(3)
+    private val magnetometerReading = FloatArray(3)
+    private val rotationMatrix = FloatArray(9)
+    private val orientationAngles = FloatArray(3)
+
+    private var sensor: Sensor? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,13 +54,13 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // set camera settings
         // most of the other settings for CameraView are set in the activity's xml layout
         cameraView = camera_view
         cameraView.setLifecycleOwner(this)
 
         cameraView.addCameraListener(object : CameraListener() {
             override fun onPictureTaken(result: PictureResult) {
-//                super.onPictureTaken(result)
 
                 val photoFile: File? = try {
                     createImageFile()
@@ -59,7 +74,6 @@ class CameraFragment : Fragment() {
                     result.run {
                         toFile(it) { file ->
                             file?.let {
-                                // TODO pass to obstacle edit fragment
                                 Log.d(TAG(), "photo file ready: " + file.absolutePath)
                                 val action =
                                     CameraFragmentDirections
@@ -79,13 +93,19 @@ class CameraFragment : Fragment() {
             cameraView.takePicture()
         }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-
+        // Get last known location (below a service is started that will provide a more up to date
+        // location if it becomes available)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            recognized.text = "Lat:" + location.latitude + ", Long:" + location.longitude
+            coordinates.text =
+                "Location: Lat:" + location.latitude + ", Long:" + location.longitude
         }
-
+        // TODO update last known location with any updates from below
         getLocationUpdates()
+
+        // Orientation stuff
+        sensorManager =
+            context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager // TODO fix
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -107,7 +127,7 @@ class CameraFragment : Fragment() {
     }
 
     private fun getLocationUpdates() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
         locationRequest = LocationRequest.create().apply {
             interval = 50000
             fastestInterval = 50000
@@ -137,10 +157,58 @@ class CameraFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         stopLocationUpdates()
+
+        // Don't receive any more updates from orientation sensors
+        sensorManager.unregisterListener(this)
     }
 
     override fun onResume() {
         super.onResume()
+        // comment //TODO fix
         startLocationUpdates()
+
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+            sensorManager.registerListener(
+                this,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        }
+        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
+            sensorManager.registerListener(
+                this,
+                magneticField,
+                SensorManager.SENSOR_DELAY_NORMAL,
+                SensorManager.SENSOR_DELAY_UI
+            )
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.d(TAG(), "Sensor accuracy changed to $accuracy")
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                System.arraycopy(
+                    event.values,
+                    0,
+                    accelerometerReading,
+                    0,
+                    accelerometerReading.size
+                )
+            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
+                System.arraycopy(
+                    event.values,
+                    0,
+                    magnetometerReading,
+                    0,
+                    magnetometerReading.size
+                )
+            }
+            orientation.text = "Orientation: " + accelerometerReading.asList().toString()
+        }
     }
 }
