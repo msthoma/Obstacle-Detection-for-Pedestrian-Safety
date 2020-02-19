@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.android.gms.location.*
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
@@ -22,6 +23,10 @@ import java.util.*
 class CameraFragment : Fragment() {
     private lateinit var cameraView: CameraView
     lateinit var currentPhotoPath: String
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +78,14 @@ class CameraFragment : Fragment() {
             Log.d(TAG(), "camera button pressed")
             cameraView.takePicture()
         }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            recognized.text = "Lat:" + location.latitude + ", Long:" + location.longitude
+        }
+
+        getLocationUpdates()
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -91,5 +104,43 @@ class CameraFragment : Fragment() {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
         }
+    }
+
+    private fun getLocationUpdates() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        locationRequest = LocationRequest.create().apply {
+            interval = 50000
+            fastestInterval = 50000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            smallestDisplacement = 10f // 10m
+        }
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                Log.d(TAG(), "location callback")
+                locationResult ?: return
+                for (location in locationResult.locations) {
+                    Log.d(TAG(), "Lat:" + location.latitude + ", Long:" + location.longitude)
+                }
+            }
+        }
+    }
+
+    private fun startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startLocationUpdates()
     }
 }
