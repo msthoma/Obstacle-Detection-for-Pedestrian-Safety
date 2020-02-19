@@ -46,7 +46,12 @@ class CropFragment : Fragment() {
                 crop_image_view.setImageUriAsync(photoUri)
                 crop_image_view.isAutoZoomEnabled = true
                 crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
+                crop_image_view.isShowProgressBar = true
             }
+        }
+
+        button_rotate.setOnClickListener { v ->
+            crop_image_view.rotateImage(90)
         }
 
         button_crop.setOnClickListener { v ->
