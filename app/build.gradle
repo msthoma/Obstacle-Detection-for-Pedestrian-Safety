@@ -121,4 +121,7 @@ dependencies {
 
     // Android Image Cropper - https://github.com/ArthurHub/Android-Image-Cropper
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+    // Play Services location provider
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }
