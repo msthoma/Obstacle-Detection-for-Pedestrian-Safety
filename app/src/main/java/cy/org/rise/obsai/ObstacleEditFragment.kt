@@ -13,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
 import com.squareup.picasso.Picasso
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
@@ -21,7 +20,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import java.io.File
-import java.io.IOException
 
 class ObstacleEditFragment : Fragment() {
 
@@ -37,11 +35,10 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d(TAG(), args.currentPhoto)
         val photoFile: File? = try {
             File(args.currentPhoto)
-        } catch (ex: IOException) {
-            Log.e(TAG(), "Error creating image file")
+        } catch (ex: IllegalArgumentException) {
+            Log.e(TAG(), "Error getting image file")
             null
         }
 
@@ -51,13 +48,14 @@ class ObstacleEditFragment : Fragment() {
                     FileProvider.getUriForFile(
                         context, "com.example.android.fileprovider", it
                     )
-                Picasso.get().load(photoUri).into(crop_image_view)
+                Picasso.get().load(photoUri).into(obstacle_image_view)
 //                crop_image_view.setImageUriAsync(photoUri)
 //                crop_image_view.isAutoZoomEnabled = true
 //                crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
             }
         }
 
+        // set possible obstacle labels in spinner
         ArrayAdapter.createFromResource(
             context!!, // TODO fix !!
             R.array.obstacles_array,
@@ -67,8 +65,16 @@ class ObstacleEditFragment : Fragment() {
             spinner.adapter = arrayAdapter
         }
 
-        submit_button.setOnClickListener { v ->
+        button_submit.setOnClickListener { v ->
             v.findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+        }
+
+        button_edit_photo.setOnClickListener { v ->
+            v.findNavController().navigate(
+                ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
+                    photoFile?.absolutePath ?: ""
+                )
+            )
         }
 
         // map configuration - see https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library for details

@@ -8,7 +8,7 @@
     tools:context=".ObstacleEditFragment">
 
     <ImageView
-        android:id="@+id/crop_image_view"
+        android:id="@+id/obstacle_image_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -30,15 +30,16 @@
         android:background="@android:color/white"
         android:padding="2dp"
         android:text="Obstacle photo"
-        app:layout_constraintStart_toStartOf="@id/crop_image_view"
-        app:layout_constraintTop_toTopOf="@id/crop_image_view" />
+        app:layout_constraintStart_toStartOf="@id/obstacle_image_view"
+        app:layout_constraintTop_toTopOf="@id/obstacle_image_view" />
 
     <ImageButton
+        android:id="@+id/button_edit_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_edit_white_24dp"
-        app:layout_constraintEnd_toEndOf="@id/crop_image_view"
-        app:layout_constraintTop_toTopOf="@id/crop_image_view" />
+        app:layout_constraintEnd_toEndOf="@id/obstacle_image_view"
+        app:layout_constraintTop_toTopOf="@id/obstacle_image_view" />
 
     <org.osmdroid.views.MapView
         android:id="@+id/map"
@@ -48,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@id/select_obstacle_type_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/crop_image_view" />
+        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view" />
 
     <TextView
         android:id="@+id/map_title"
@@ -69,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:text="@string/select_obstacle_type"
-        app:layout_constraintBottom_toTopOf="@id/submit_button"
+        app:layout_constraintBottom_toTopOf="@id/button_submit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/map" />
 
@@ -78,12 +79,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        app:layout_constraintBottom_toTopOf="@id/submit_button"
+        app:layout_constraintBottom_toTopOf="@id/button_submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/map" />
 
     <Button
-        android:id="@+id/submit_button"
+        android:id="@+id/button_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit obstacle"

@@ -29,13 +29,29 @@
     <fragment
         android:id="@+id/obstacleEditFragment"
         android:name="cy.org.rise.obsai.ObstacleEditFragment"
-        android:label="fragment_obstacle_edit"
-        tools:layout="@layout/fragment_obstacle_edit" >
+        android:label="@string/label_fragment_obstacle_edit"
+        tools:layout="@layout/fragment_obstacle_edit">
         <argument
             android:name="currentPhoto"
             app:argType="string" />
         <action
             android:id="@+id/action_obstacleEditFragment_to_obstacleListFragment"
             app:destination="@id/obstacleListFragment" />
+        <action
+            android:id="@+id/action_obstacleEditFragment_to_cropFragment"
+            app:destination="@id/cropFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cropFragment"
+        android:name="cy.org.rise.obsai.CropFragment"
+        android:label="fragment_crop"
+        tools:layout="@layout/fragment_crop" >
+        <action
+            android:id="@+id/action_cropFragment_to_obstacleEditFragment"
+            app:destination="@id/obstacleEditFragment" />
+        <argument
+            android:name="currentPhoto"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 </navigation>
