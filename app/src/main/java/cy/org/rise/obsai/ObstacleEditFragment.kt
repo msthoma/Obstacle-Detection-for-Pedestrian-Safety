@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import org.osmdroid.api.IMapController
@@ -50,9 +51,10 @@ class ObstacleEditFragment : Fragment() {
                     FileProvider.getUriForFile(
                         context, "com.example.android.fileprovider", it
                     )
-                crop_image_view.setImageUriAsync(photoUri)
-                crop_image_view.isAutoZoomEnabled = true
-                crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
+                Picasso.get().load(photoUri).into(crop_image_view)
+//                crop_image_view.setImageUriAsync(photoUri)
+//                crop_image_view.isAutoZoomEnabled = true
+//                crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
             }
         }
 
