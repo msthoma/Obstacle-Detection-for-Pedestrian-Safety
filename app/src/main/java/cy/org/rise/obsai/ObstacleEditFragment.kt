@@ -49,9 +49,6 @@ class ObstacleEditFragment : Fragment() {
                         context, "com.example.android.fileprovider", it
                     )
                 Picasso.get().load(photoUri).into(obstacle_image_view)
-//                crop_image_view.setImageUriAsync(photoUri)
-//                crop_image_view.isAutoZoomEnabled = true
-//                crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
             }
         }
 
