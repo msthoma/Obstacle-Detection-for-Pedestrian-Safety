@@ -13,6 +13,7 @@
     <string name="label_fragment_obstacle_list">Obstacles</string>
     <string name="label_fragment_camera">Add new obstacle</string>
     <string name="label_fragment_obstacle_edit">Edit obstacle</string>
+    <string name="label_fragment_crop">Edit image</string>
 
     <string-array name="obstacles_array">
         <item>Advert. Sign</item>

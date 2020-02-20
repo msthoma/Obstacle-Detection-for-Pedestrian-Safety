@@ -44,14 +44,14 @@
     <fragment
         android:id="@+id/cropFragment"
         android:name="cy.org.rise.obsai.CropFragment"
-        android:label="fragment_crop"
-        tools:layout="@layout/fragment_crop" >
+        android:label="@string/label_fragment_crop"
+        tools:layout="@layout/fragment_crop">
         <action
             android:id="@+id/action_cropFragment_to_obstacleEditFragment"
             app:destination="@id/obstacleEditFragment" />
         <argument
             android:name="currentPhoto"
-            app:argType="string"
-            android:defaultValue='""' />
+            android:defaultValue='""'
+            app:argType="string" />
     </fragment>
 </navigation>
