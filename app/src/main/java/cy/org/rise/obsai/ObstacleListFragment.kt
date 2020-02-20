@@ -28,11 +28,20 @@ class ObstacleListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        toolbar.title = "Obstacles"
-        // TODO set toolbar title here
+
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
         initDataset()
+
+        // Show empty view message
+        if (dataset.isEmpty()) {
+            empty_list_view.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            empty_list_view.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+
         val adapter = CustomAdapter(dataset)
         recyclerView.adapter = adapter
 
