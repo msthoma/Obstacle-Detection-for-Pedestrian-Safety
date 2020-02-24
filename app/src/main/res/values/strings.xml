@@ -13,6 +13,7 @@
     <string name="label_fragment_camera">Add new obstacle</string>
     <string name="label_fragment_obstacle_edit">Edit obstacle</string>
     <string name="label_fragment_crop">Edit image</string>
+    <string name="account_fragment_title">Sign in to your account</string>
 
     <string-array name="obstacles_array">
         <item>Advert. Sign</item>
@@ -40,7 +41,4 @@
         <item>Chair</item>
         <item>Table</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
