@@ -2,9 +2,8 @@ package cy.org.rise.obsai
 
 import android.os.Bundle
 import android.os.Environment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +21,8 @@ class ObstacleListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // Set toolbar menu
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_obstacle_list, container, false)
     }
 
@@ -47,6 +47,20 @@ class ObstacleListFragment : Fragment() {
 
         fab.setOnClickListener {
             view.findNavController().navigate(R.id.cameraFragment)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

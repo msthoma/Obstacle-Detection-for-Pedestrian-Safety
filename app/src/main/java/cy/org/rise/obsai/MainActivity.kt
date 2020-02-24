@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -17,7 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import permissions.dispatcher.*
 import java.io.File
@@ -29,6 +28,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     lateinit var currentPhotoPath: String
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var obstacleViewModel: ObstacleViewModel
 
     val REQUEST_IMAGE_CAPTURE = 1
@@ -37,17 +37,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Setting up toolbar, see following links
+        // https://stackoverflow.com/q/30721664/3755276
+        // https://stackoverflow.com/a/55380395/3755276
+        // https://developer.android.com/guide/navigation/navigation-ui#action_bar
+        setSupportActionBar(toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+    }
 
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            title = when (destination.id) {
-//                R.id.obstacleListFragment -> "Obstacles"
-//                R.id.cameraFragment -> "Add new obstacle"
-//                else -> ""
-//            }
-//        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                     "/storage/emulated/0/Android/data/cy.org.rise.obsai/files/Pictures/"
                 )
             )
-
         }
     }
 
@@ -71,23 +72,6 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // NOTE: delegate the permission handling to generated method
         onRequestPermissionsResult(requestCode, grantResults)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            R.id.action_internal_camera -> true
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
