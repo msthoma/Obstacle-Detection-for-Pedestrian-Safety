@@ -133,5 +133,9 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.0"
 
     // Drawerlayout
-    "androidx.drawerlayout:drawerlayout:1.0.0"
+    implementation "androidx.drawerlayout:drawerlayout:1.0.0"
+
+    // AboutLibraries library
+    implementation "com.mikepenz:aboutlibraries-core:8.0.0-rc01"
+    implementation "com.mikepenz:aboutlibraries:8.0.0-rc01"
 }
