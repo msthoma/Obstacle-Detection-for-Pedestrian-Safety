@@ -11,7 +11,9 @@
         android:label="@string/label_fragment_obstacle_list" >
         <action
             android:id="@+id/action_obstacleListFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -20,7 +22,9 @@
         tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment">
+            app:destination="@id/obstacleEditFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
             <argument
                 android:name="currentPhoto"
                 android:defaultValue='""' />
@@ -36,10 +40,14 @@
             app:argType="string" />
         <action
             android:id="@+id/action_obstacleEditFragment_to_obstacleListFragment"
-            app:destination="@id/obstacleListFragment" />
+            app:destination="@id/obstacleListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_obstacleEditFragment_to_cropFragment"
-            app:destination="@id/cropFragment" />
+            app:destination="@id/cropFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/cropFragment"
@@ -48,7 +56,9 @@
         tools:layout="@layout/fragment_crop">
         <action
             android:id="@+id/action_cropFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment" />
+            app:destination="@id/obstacleEditFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="currentPhoto"
             android:defaultValue='""'
