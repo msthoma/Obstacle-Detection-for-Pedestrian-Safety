@@ -11,7 +11,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "cy.org.rise.obsai"
         minSdkVersion 21
@@ -83,7 +83,7 @@ dependencies {
 
 
     // Room persistence library (SQLite ORM)
-    def room_version = "2.2.3"
+    def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
@@ -101,7 +101,7 @@ dependencies {
 
 
     // Navigation component library - https://developer.android.com/guide/navigation
-    def nav_version = "2.3.0-alpha01"
+    def nav_version = "2.3.0-alpha02"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
