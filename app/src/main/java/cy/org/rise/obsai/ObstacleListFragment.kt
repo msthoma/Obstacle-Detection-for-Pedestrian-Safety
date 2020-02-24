@@ -5,7 +5,7 @@ import android.os.Environment
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
@@ -46,7 +46,7 @@ class ObstacleListFragment : Fragment() {
         recyclerView.adapter = adapter
 
         fab.setOnClickListener {
-            view.findNavController().navigate(R.id.cameraFragment)
+            findNavController().navigate(R.id.cameraFragment)
         }
     }
 
@@ -58,6 +58,10 @@ class ObstacleListFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_sign_in -> {
+                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
