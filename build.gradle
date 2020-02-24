@@ -13,6 +13,8 @@ buildscript {
         // Safe Args Gradle plugin
         def nav_version = "2.3.0-alpha01"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        // AboutLibraries
+        classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:8.0.0-rc01"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
