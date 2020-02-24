@@ -26,6 +26,7 @@ import java.util.*
 
 
 class CameraFragment : Fragment(), SensorEventListener {
+    // Camera/photo related vars
     private lateinit var cameraView: CameraView
     lateinit var currentPhotoPath: String
 
@@ -34,7 +35,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    // Orientation related vars
+    // Sensor related vars
     private lateinit var sensorManager: SensorManager
     private val accelerometerReading = FloatArray(3)
     private val magnetometerReading = FloatArray(3)
@@ -127,6 +128,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     }
 
     private fun getLocationUpdates() {
+        // TODO fix getting location updates (currently only showing last known location)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
         locationRequest = LocationRequest.create().apply {
             interval = 50000
