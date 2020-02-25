@@ -20,6 +20,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Enable incremental annotation processing for Room
+        // see https://stackoverflow.com/a/58122855/3755276
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.incremental":"true"]
+            }
+        }
     }
     buildTypes {
         release {
