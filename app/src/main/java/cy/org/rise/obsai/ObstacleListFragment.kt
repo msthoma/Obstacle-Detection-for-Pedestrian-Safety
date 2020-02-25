@@ -1,5 +1,6 @@
 package cy.org.rise.obsai
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cy.org.rise.obsai.ui.AboutActivity
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import java.io.File
 
@@ -62,6 +64,10 @@ class ObstacleListFragment : Fragment() {
             }
             R.id.action_sign_in -> {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
+                true
+            }
+            R.id.action_about -> {
+                startActivity(Intent(activity, AboutActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
