@@ -6,10 +6,12 @@ import android.os.Environment
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cy.org.rise.obsai.ui.AboutActivity
+import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import java.io.File
 
@@ -17,6 +19,10 @@ class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataset: Array<String>
+
+    private val viewModel: ObstacleViewModel by viewModels {
+        InjectorUtils.provideObstacleViewModelFactory(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

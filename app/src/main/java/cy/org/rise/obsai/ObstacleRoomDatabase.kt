@@ -10,9 +10,10 @@ abstract class ObstacleRoomDatabase : RoomDatabase() {
     abstract fun obstacleDao(): ObstacleDao
 
     companion object {
-        private var INSTANCE: ObstacleRoomDatabase? = null
+        // For Singleton instantiation
+        @Volatile private var INSTANCE: ObstacleRoomDatabase? = null
 
-        fun getDatabase(context: Context): ObstacleRoomDatabase {
+        fun getInstance(context: Context): ObstacleRoomDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {

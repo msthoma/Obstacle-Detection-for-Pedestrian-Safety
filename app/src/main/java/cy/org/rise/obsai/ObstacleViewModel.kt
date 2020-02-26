@@ -1,20 +1,18 @@
 package cy.org.rise.obsai
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 
-class ObstacleViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: ObstacleRepository
-    val allObstacles: LiveData<List<Obstacle>>
+class ObstacleViewModel internal constructor(
+    obstacleRepository: ObstacleRepository,
+    private val savedStateHandle: SavedStateHandle
+) :
+    ViewModel() {
 
-    init {
-        val obstacleDao = ObstacleRoomDatabase.getDatabase(application).obstacleDao()
-        repository = ObstacleRepository(obstacleDao)
-        allObstacles = repository.allObstacles
-    }
+    val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getObstacles()
 
-    fun insertObstacle(obstacle: Obstacle) {
-        repository.insertObstacle(obstacle)
-    }
+//    fun insertObstacle(obstacle: Obstacle) {
+//        obstacleRepository.insertObstacle(obstacle)
+//    }
 }
