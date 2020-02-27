@@ -59,9 +59,6 @@ dependencies {
     // Recycler view
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
-    // Camera library https://github.com/RedApparat/Fotoapparat
-    implementation 'io.fotoapparat:fotoapparat:2.7.0'
-
     // PermissionsDispatcher for handling camera permission request
     implementation "org.permissionsdispatcher:permissionsdispatcher:4.6.0"
     kapt "org.permissionsdispatcher:permissionsdispatcher-processor:4.6.0"
