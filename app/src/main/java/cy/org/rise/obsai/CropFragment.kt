@@ -50,7 +50,7 @@ class CropFragment : Fragment() {
             }
         }
 
-        button_rotate.setOnClickListener { v ->
+        button_rotate.setOnClickListener { _ ->
             crop_image_view.rotateImage(90)
         }
 
