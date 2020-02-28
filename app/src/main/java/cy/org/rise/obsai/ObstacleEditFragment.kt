@@ -11,8 +11,10 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
@@ -49,7 +51,7 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        // set possible obstacle labels in spinner
+        // set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
             context!!, // TODO fix !!
             R.array.obstacles_array,
@@ -74,7 +76,6 @@ class ObstacleEditFragment : Fragment() {
         // map configuration - see https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library for details
 //        Configuration.getInstance()
 //            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        mapView = map
 //        mapView.setTileSource(TileSourceFactory.MAPNIK)
 //        // set photo location on map
 //        val mapController: IMapController = mapView.controller
@@ -82,9 +83,22 @@ class ObstacleEditFragment : Fragment() {
 //        val geoPoint = GeoPoint(35.16989, 33.36116)
 //        mapView.setExpectedCenter(geoPoint)
 
+        mapView = map
         mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
-        mapView.getMapAsync { map ->
-            map.addMarker(MarkerOptions().position(LatLng(35.16989, 33.36116)).title("Marker"))
+        mapView.getMapAsync { googleMap ->
+            // Add marker indicating the obstacle
+            googleMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(35.16989, 33.36116))
+                    .title("Marker")
+            )
+
+            // Add map boundaries
+            val CYPRUS = LatLngBounds(
+                LatLng(34.520142, 32.186723), // Southwest corner
+                LatLng(35.738372, 34.644546) // Northeast corner
+            )
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(CYPRUS, 0))
         }
     }
 
