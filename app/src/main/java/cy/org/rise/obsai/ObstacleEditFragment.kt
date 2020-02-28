@@ -11,14 +11,11 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.preference.PreferenceManager
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
-import org.osmdroid.api.IMapController
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
 import java.io.File
 
 class ObstacleEditFragment : Fragment() {
@@ -75,20 +72,45 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // map configuration - see https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library for details
-        Configuration.getInstance()
-            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+//        Configuration.getInstance()
+//            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
         mapView = map
-        mapView.setTileSource(TileSourceFactory.MAPNIK)
-        // set photo location on map
-        val mapController: IMapController = mapView.controller
-        mapController.setZoom(18.5)
-        val geoPoint = GeoPoint(35.16989, 33.36116)
-        mapView.setExpectedCenter(geoPoint)
+//        mapView.setTileSource(TileSourceFactory.MAPNIK)
+//        // set photo location on map
+//        val mapController: IMapController = mapView.controller
+//        mapController.setZoom(18.5)
+//        val geoPoint = GeoPoint(35.16989, 33.36116)
+//        mapView.setExpectedCenter(geoPoint)
+
+        mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
+        mapView.getMapAsync { map ->
+            map.addMarker(MarkerOptions().position(LatLng(35.16989, 33.36116)).title("Marker"))
+        }
     }
 
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
     }
 
     override fun onPause() {
