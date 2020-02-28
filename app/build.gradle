@@ -12,8 +12,8 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 
 // for appending to version name
-static def buildTime() {
-    return new Date().format("yyyyMMdd_HHmm")
+static def buildDate() {
+    return new Date().format("yyyyMMdd")
 }
 
 android {
@@ -27,8 +27,8 @@ android {
         // versioning
         versionCode 1
         def versionMajor = 0
-        def versionMinor = 1
-        versionName "${versionMajor}.${versionMinor}.build${buildTime()}"
+        def versionMinor = 2
+        versionName "${versionMajor}.${versionMinor}.build${buildDate()}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
