@@ -29,11 +29,11 @@ class ObstacleEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
             File(args.currentPhoto)
         } catch (ex: IllegalArgumentException) {
@@ -41,6 +41,7 @@ class ObstacleEditFragment : Fragment() {
             null
         }
 
+        // If the photo file exists, set it in image view
         photoFile?.also {
             context?.also { context ->
                 val photoUri =
@@ -51,7 +52,7 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        // set obstacle label choices in spinner
+        // Set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
             context!!, // TODO fix !!
             R.array.obstacles_array,
@@ -61,8 +62,11 @@ class ObstacleEditFragment : Fragment() {
             spinner.adapter = arrayAdapter
         }
 
+        // Setup OnClickListeners for buttons
         button_submit.setOnClickListener { v ->
-            v.findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+            v.findNavController().navigate(
+                R.id.action_obstacleEditFragment_to_obstacleListFragment
+            )
         }
 
         button_edit_photo.setOnClickListener { v ->
@@ -83,6 +87,7 @@ class ObstacleEditFragment : Fragment() {
 //        val geoPoint = GeoPoint(35.16989, 33.36116)
 //        mapView.setExpectedCenter(geoPoint)
 
+        // Setup map view
         mapView = map
         mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
         mapView.getMapAsync { googleMap ->
