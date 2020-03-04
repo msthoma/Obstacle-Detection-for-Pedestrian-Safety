@@ -4,6 +4,10 @@
     tools:context=".SettingsFragment">
 
     <Preference
+        app:key="version"
+        app:title="Version" />
+
+    <Preference
         app:key="open_source_libraries"
         app:summary="Links to the open source libraries used in this app"
         app:title="Open source libraries" />
