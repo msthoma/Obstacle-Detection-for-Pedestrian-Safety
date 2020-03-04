@@ -1,11 +1,15 @@
 package cy.org.rise.obsai
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.text_row_item.view.*
+import java.io.File
 
 /**
  * Provide views to RecyclerView with data from dataSet.
@@ -41,10 +45,22 @@ class CustomAdapter internal constructor() :
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from the dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.textView.text = obstacles[position].obstacle + obstacles[position].id
+        val obs = obstacles[position]
+        viewHolder.textView.text = "Location:\t${obs.latitude}, ${obs.longitude}\n" +
+                "Orientation:\tx: ${"%.3f".format(obs.x)}, y: ${"%.3f".format(obs.y)}, " +
+                "z: ${"%.3f".format(obs.z)}\n" +
+                "Date/Time:\t11.00 \n" +
+                "Altitude:\t20m"
+        // Set picture
+        Picasso.get()
+            .load(File(obs.photo))
+            .resize(120, 120)
+            .centerCrop()
+            .into(viewHolder.itemView.imageView)
     }
 
     internal fun setObstacles(obstacles: List<Obstacle>) {
