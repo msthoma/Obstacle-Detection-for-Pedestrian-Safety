@@ -13,4 +13,7 @@ interface ObstacleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertObstacle(obstacle: Obstacle)
+
+    @Query("DELETE FROM obstacle_table")
+    fun deleteAll()
 }
