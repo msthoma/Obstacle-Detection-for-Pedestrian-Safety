@@ -9,9 +9,9 @@ import java.util.*
 data class Obstacle(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo(name = "obstacle") val obstacle: String,
+    @ColumnInfo val obstacle: String,
 
-    @ColumnInfo(name = "latitude") val latitude: Double,
+    @ColumnInfo val latitude: Double,
 
-    @ColumnInfo(name = "longitude") val longitude: Double
+    @ColumnInfo val longitude: Double
 )
