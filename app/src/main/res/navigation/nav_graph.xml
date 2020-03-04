@@ -19,6 +19,9 @@
             app:destination="@id/accountFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_obstacleListFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -74,4 +77,9 @@
         android:name="cy.org.rise.obsai.AccountFragment"
         android:label="@string/label_fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="cy.org.rise.obsai.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
