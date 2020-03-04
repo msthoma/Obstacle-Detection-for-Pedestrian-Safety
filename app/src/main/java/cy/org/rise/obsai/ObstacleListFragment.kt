@@ -1,7 +1,6 @@
 package cy.org.rise.obsai
 
 import android.os.Bundle
-import android.os.Environment
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -11,12 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
-import java.io.File
 
 class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var dataset: Array<String>
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -93,10 +90,5 @@ class ObstacleListFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun initDataset() {
-        val path = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-        dataset = File(path).list()
     }
 }
