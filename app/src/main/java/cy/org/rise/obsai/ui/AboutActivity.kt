@@ -9,6 +9,9 @@ import kotlinx.android.synthetic.main.activity_about.*
 
 class AboutActivity : AppCompatActivity() {
 
+    // TODO override back button to go to settings fragment instead of list fragment
+    // TODO fix activity title to open source libraries
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
@@ -16,10 +19,7 @@ class AboutActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val fragment: LibsSupportFragment = LibsBuilder()
-            .withAboutAppName(resources.getString(R.string.app_name))
-            .withAboutDescription("App allows reporting obstacles in a city.")
-            .supportFragment()
+        val fragment: LibsSupportFragment = LibsBuilder().supportFragment()
 
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
     }
