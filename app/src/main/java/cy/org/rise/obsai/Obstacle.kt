@@ -3,26 +3,27 @@ package cy.org.rise.obsai
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo val obstacle: String,
+    @ColumnInfo var obstacle: String,
 
-    @ColumnInfo val obs_type: String,
+    @ColumnInfo var obs_type: String,
 
-    @ColumnInfo val photo: String,
+    @ColumnInfo var photo: String,
 
-    @ColumnInfo val latitude: Double,
+    @ColumnInfo var latitude: Double,
 
-    @ColumnInfo val longitude: Double,
+    @ColumnInfo var longitude: Double,
 
     // Orientation axes (best replaced with class or similar)
-    @ColumnInfo val x: Double,
-    @ColumnInfo val y: Double,
-    @ColumnInfo val z: Double,
+    @ColumnInfo var x: Double,
+    @ColumnInfo var y: Double,
+    @ColumnInfo var z: Double,
 
-    @ColumnInfo val altitude: Double? = null
-)
+    @ColumnInfo var altitude: Double? = null
+) : Serializable
