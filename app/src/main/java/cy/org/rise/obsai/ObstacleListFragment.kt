@@ -96,10 +96,6 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
                 true
             }
-            R.id.action_about -> {
-                startActivity(Intent(activity, AboutActivity::class.java))
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
