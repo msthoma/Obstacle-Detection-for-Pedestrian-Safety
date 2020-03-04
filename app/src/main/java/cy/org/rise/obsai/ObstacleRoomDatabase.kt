@@ -22,6 +22,7 @@ abstract class ObstacleRoomDatabase : RoomDatabase() {
                     ObstacleRoomDatabase::class.java,
                     "obstacle_db"
                 )
+                    .allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 instance
