@@ -11,10 +11,13 @@ class ObstacleViewModel internal constructor(
 ) :
     ViewModel() {
     private val rep = obstacleRepository
+
     val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getObstacles()
 
     fun insertObstacle(obstacle: Obstacle) {
-        Log.d(TAG(),"inserting obstacle...")
+        Log.d(TAG(), "inserting obstacle...")
         return rep.insertObstacle(obstacle)
     }
+
+    fun deleteAll() = rep.deleteAll()
 }

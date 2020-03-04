@@ -16,6 +16,8 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
         return obstacleDao.insertObstacle(obstacle)
     }
 
+    fun deleteAll() = obstacleDao.deleteAll()
+
     companion object {
         // For Singleton instantiation
         @Volatile

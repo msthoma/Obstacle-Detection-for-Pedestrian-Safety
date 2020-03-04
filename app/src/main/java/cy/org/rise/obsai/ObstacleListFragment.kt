@@ -2,6 +2,7 @@ package cy.org.rise.obsai
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -86,6 +87,11 @@ class ObstacleListFragment : Fragment() {
                         photo = "jkdhfak"
                     )
                 )
+                true
+            }
+            R.id.action_delete_all -> {
+                viewModel.deleteAll()
+                Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
