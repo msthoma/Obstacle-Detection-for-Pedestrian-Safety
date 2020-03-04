@@ -50,7 +50,8 @@ class CustomAdapter internal constructor() :
         // Get element from the dataset at this position and replace the contents of the view
         // with that element
         val obs = obstacles[position]
-        viewHolder.textView.text = "Location:\t${obs.latitude}, ${obs.longitude}\n" +
+        viewHolder.textView.text = "Type:\t${obs.obs_type}\n" +
+                "Location:\t${obs.latitude}, ${obs.longitude}\n" +
                 "Orientation:\tx: ${"%.3f".format(obs.x)}, y: ${"%.3f".format(obs.y)}, " +
                 "z: ${"%.3f".format(obs.z)}\n" +
                 "Date/Time:\t11.00 \n" +
