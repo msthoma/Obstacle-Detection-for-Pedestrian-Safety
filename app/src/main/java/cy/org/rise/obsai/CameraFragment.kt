@@ -6,6 +6,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -31,6 +32,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     lateinit var currentPhotoPath: String
 
     // Location related vars
+    private lateinit var currentLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -45,8 +47,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     private var sensor: Sensor? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_camera, container, false)
@@ -76,6 +77,8 @@ class CameraFragment : Fragment(), SensorEventListener {
                         toFile(it) { file ->
                             file?.let {
                                 Log.d(TAG(), "photo file ready: " + file.absolutePath)
+                                val obs = createCurrentObstacle()
+                                Log.d(TAG(), "obstacle created ${obs.toString()}")
                                 val action =
                                     CameraFragmentDirections
                                         .actionCameraFragmentToObstacleEditFragment(
@@ -98,10 +101,12 @@ class CameraFragment : Fragment(), SensorEventListener {
         // location if it becomes available)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            currentLocation = location
             coordinates.text =
                 "Location: Lat:" + location.latitude + ", Long:" + location.longitude
         }
         // TODO update last known location with any updates from below
+        // TODO basically update currentLocation var if there are updates
         getLocationUpdates()
 
         // Orientation stuff
@@ -154,6 +159,20 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun createCurrentObstacle(): Obstacle {
+        return Obstacle(
+            obstacle = "new",
+            obs_type = "",
+            photo = currentPhotoPath,
+            latitude = currentLocation.latitude,
+            longitude = currentLocation.longitude,
+            // TODO will these numbers change during saving the obstacle?
+            x = accelerometerReading[0].toDouble(),
+            y = accelerometerReading[1].toDouble(),
+            z = accelerometerReading[2].toDouble()
+        )
     }
 
     override fun onPause() {
