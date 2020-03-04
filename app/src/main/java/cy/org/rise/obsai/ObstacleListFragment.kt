@@ -82,14 +82,14 @@ class ObstacleListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
-                viewModel.insertObstacle(
-                    Obstacle(
-                        obstacle = "kjsdfak",
-                        latitude = 35.16989,
-                        longitude = 33.36116
-                    )
-                )
+                findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
+//                viewModel.insertObstacle(
+//                    Obstacle(
+//                        obstacle = "kjsdfak",
+//                        latitude = 35.16989,
+//                        longitude = 33.36116
+//                    )
+//                )
                 true
             }
             R.id.action_sign_in -> {
