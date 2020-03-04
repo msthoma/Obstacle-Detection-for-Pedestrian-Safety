@@ -10,6 +10,8 @@ import java.util.*
 data class Obstacle(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
 
+    @ColumnInfo val timestamp: Date = Calendar.getInstance().time,
+
     @ColumnInfo var obstacle: String,
 
     @ColumnInfo var obs_type: String,
