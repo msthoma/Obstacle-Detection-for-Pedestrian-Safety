@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.reactivex.Completable
 
 @Dao
 interface ObstacleDao {
@@ -13,5 +12,5 @@ interface ObstacleDao {
     fun getAllObstacles(): LiveData<List<Obstacle>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertObstacle(obstacle: Obstacle): Completable
+    fun insertObstacle(obstacle: Obstacle)
 }

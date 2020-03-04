@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import io.reactivex.Completable
 
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
@@ -14,7 +13,7 @@ class ObstacleViewModel internal constructor(
     private val rep = obstacleRepository
     val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getObstacles()
 
-    fun insertObstacle(obstacle: Obstacle): Completable {
+    fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(),"inserting obstacle...")
         return rep.insertObstacle(obstacle)
     }
