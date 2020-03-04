@@ -35,7 +35,7 @@ class ObstacleListFragment : Fragment() {
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val adapter = CustomAdapter2()
+        val adapter = CustomAdapter()
         recyclerView.adapter = adapter
 
         viewModel.obstacles.observe(viewLifecycleOwner, Observer { obstacles ->

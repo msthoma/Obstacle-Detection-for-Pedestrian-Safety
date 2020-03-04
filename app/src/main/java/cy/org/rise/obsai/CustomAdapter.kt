@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.text_row_item.view.*
-import java.io.File
 
 /**
  * Provide views to RecyclerView with data from dataSet.
@@ -18,8 +15,10 @@ import java.io.File
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
 
-class CustomAdapter(private val dataSet: Array<String>) :
+class CustomAdapter internal constructor() :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+
+    private var obstacles = emptyList<Obstacle>() // Cached copy of obstacles
 
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -38,29 +37,25 @@ class CustomAdapter(private val dataSet: Array<String>) :
         // Create a new view.
         val v = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.text_row_item, viewGroup, false)
-
         return ViewHolder(v)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        // Set name
-        viewHolder.textView.text = dataSet[position]
-        // Set picture
-        Picasso.get()
-            .load(
-                File(
-                    "/storage/emulated/0/Android/data/cy.org.rise.obsai/files/Pictures/"
-                            + dataSet[position]
-                )
-            )
-            .resize(120, 120)
-            .centerCrop()
-            .into(viewHolder.itemView.imageView)
+        Log.d(TAG, "Element $position set.")
+
+        // Get element from your dataset at this position and replace the contents of the view
+        // with that element
+        viewHolder.textView.text = obstacles[position].obstacle + obstacles[position].id
+    }
+
+    internal fun setObstacles(obstacles: List<Obstacle>) {
+        this.obstacles = obstacles
+        notifyDataSetChanged()
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = obstacles.size
 
     companion object {
         private val TAG = "CustomAdapter"
