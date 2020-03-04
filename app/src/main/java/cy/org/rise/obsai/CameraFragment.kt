@@ -76,13 +76,10 @@ class CameraFragment : Fragment(), SensorEventListener {
                     result.run {
                         toFile(it) { file ->
                             file?.let {
-                                Log.d(TAG(), "photo file ready: " + file.absolutePath)
-                                val obs = createCurrentObstacle()
-                                Log.d(TAG(), "obstacle created ${obs.toString()}")
                                 val action =
                                     CameraFragmentDirections
                                         .actionCameraFragmentToObstacleEditFragment(
-                                            file.absolutePath
+                                            file.absolutePath, createCurrentObstacle()
                                         )
                                 cameraView.findNavController().navigate(action)
                             }
