@@ -73,7 +73,7 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
                 true
             }
-            R.id.action_about -> {
+            R.id.action_add_mock_element -> {
                 viewModel.insertObstacle(
                     Obstacle(
                         obstacle = "kjsdfak",

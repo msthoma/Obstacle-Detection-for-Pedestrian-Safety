@@ -17,8 +17,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_about"
+        android:id="@+id/action_add_mock_element"
         android:orderInCategory="400"
-        android:title="@string/action_about"
+        android:title="@string/action_add_mock_element"
         app:showAsAction="never"/>
 </menu>
