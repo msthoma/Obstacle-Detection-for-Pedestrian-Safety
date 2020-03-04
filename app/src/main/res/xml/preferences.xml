@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SettingsFragment">
+
+    <Preference
+        app:key="open_source_libraries"
+        app:summary="Links to the open source libraries used in this app"
+        app:title="Open source libraries" />
+
+    <SwitchPreferenceCompat
+        app:key="test_pref"
+        app:title="Test toggle setting" />
+
+</PreferenceScreen>
