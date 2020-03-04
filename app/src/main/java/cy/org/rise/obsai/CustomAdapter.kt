@@ -59,8 +59,9 @@ class CustomAdapter internal constructor() :
         // Set picture
         Picasso.get()
             .load(File(obs.photo))
+            .placeholder(R.drawable.ic_noun_barrier_1218014)
             .resize(120, 120)
-            .centerCrop()
+            .centerInside()
             .into(viewHolder.itemView.imageView)
     }
 
