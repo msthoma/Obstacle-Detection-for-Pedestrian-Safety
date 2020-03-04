@@ -2,7 +2,6 @@ package cy.org.rise.obsai
 
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import java.io.File
-import java.util.*
 
 class ObstacleListFragment : Fragment() {
 
@@ -39,24 +37,16 @@ class ObstacleListFragment : Fragment() {
 
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
-//        initDataset()
 
         val adapter = CustomAdapter2()
         recyclerView.adapter = adapter
 
-        viewModel.insertObstacle(
-            Obstacle(
-                UUID.randomUUID().toString(),
-                obstacle = "kjsdfak",
-                latitude = 35.16989,
-                longitude = 33.36116
-            )
-        )
-
         viewModel.obstacles.observe(viewLifecycleOwner, Observer { obstacles ->
+
+            // Observe and set list of obstacles in recycler view
             adapter.setObstacles(obstacles)
 //            adapter.notifyDataSetChanged()
-            Log.d(TAG(), obstacles.size.toString() + obstacles.javaClass.canonicalName)
+
             // Show empty view message
             if (adapter.itemCount == 0) {
                 empty_list_view.visibility = View.VISIBLE
@@ -80,17 +70,25 @@ class ObstacleListFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
-//                viewModel.insertObstacle(
-//                    Obstacle(
-//                        obstacle = "kjsdfak",
-//                        latitude = 35.16989,
-//                        longitude = 33.36116
-//                    )
-//                )
                 true
             }
             R.id.action_sign_in -> {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
+                true
+            }
+            R.id.action_about -> {
+                viewModel.insertObstacle(
+                    Obstacle(
+                        obstacle = "kjsdfak",
+                        obs_type = "crack",
+                        latitude = 35.16989,
+                        longitude = 33.36116,
+                        x = 0.1,
+                        y = 0.1,
+                        z = 0.1,
+                        photo = "jkdhfak"
+                    )
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
