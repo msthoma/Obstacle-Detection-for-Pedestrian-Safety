@@ -36,4 +36,11 @@
         android:layout_margin="@dimen/margin_small"
         android:text="Sign in" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center_horizontal"
+        android:text="Currently signed in as an anonymous user" />
+
 </LinearLayout>
