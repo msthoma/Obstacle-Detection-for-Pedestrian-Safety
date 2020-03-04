@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import cy.org.rise.obsai.Obstacle
+import cy.org.rise.obsai.R
+import cy.org.rise.obsai.TAG
 import kotlinx.android.synthetic.main.text_row_item.view.*
 import java.io.File
 
@@ -54,14 +57,14 @@ class CustomAdapter internal constructor() :
                 "Location:\t${obs.latitude}, ${obs.longitude}\n" +
                 "Orientation:\tx: ${"%.3f".format(obs.x)}, y: ${"%.3f".format(obs.y)}, " +
                 "z: ${"%.3f".format(obs.z)}\n" +
-                "Date/Time:\t11.00 \n" +
-                "Altitude:\t20m"
+                "${obs.timestamp}"
+
         // Set picture
         Picasso.get()
             .load(File(obs.photo))
             .placeholder(R.drawable.ic_noun_barrier_1218014)
             .resize(120, 120)
-            .centerInside()
+            .centerCrop()
             .into(viewHolder.itemView.imageView)
     }
 
