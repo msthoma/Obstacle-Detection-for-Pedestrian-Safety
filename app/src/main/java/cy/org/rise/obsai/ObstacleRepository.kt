@@ -1,5 +1,6 @@
 package cy.org.rise.obsai
 
+import android.util.Log
 import io.reactivex.Completable
 
 /**
@@ -11,7 +12,10 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
 
     fun getObstacles() = obstacleDao.getAllObstacles()
 
-    fun insertObstacle(obstacle: Obstacle): Completable = obstacleDao.insertObstacle(obstacle)
+    fun insertObstacle(obstacle: Obstacle): Completable {
+        Log.d(TAG(), "inserting obstacle ${obstacle.obstacle}")
+        return obstacleDao.insertObstacle(obstacle)
+    }
 
     companion object {
         // For Singleton instantiation
