@@ -21,9 +21,7 @@ class ObstacleListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Set toolbar menu
         setHasOptionsMenu(true)
@@ -43,7 +41,6 @@ class ObstacleListFragment : Fragment() {
 
             // Observe and set list of obstacles in recycler view
             adapter.setObstacles(obstacles)
-//            adapter.notifyDataSetChanged()
 
             // Show empty view message
             if (adapter.itemCount == 0) {
@@ -56,7 +53,7 @@ class ObstacleListFragment : Fragment() {
         })
 
         fab.setOnClickListener {
-            findNavController().navigate(R.id.cameraFragment)
+            findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
         }
     }
 
