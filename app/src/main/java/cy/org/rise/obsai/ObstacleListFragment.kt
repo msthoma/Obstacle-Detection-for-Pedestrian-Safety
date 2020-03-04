@@ -75,12 +75,12 @@ class ObstacleListFragment : Fragment() {
                 viewModel.insertObstacle(
                     Obstacle(
                         obstacle = "kjsdfak",
-                        obs_type = "crack",
-                        latitude = 35.16989,
-                        longitude = 33.36116,
-                        x = 0.1,
-                        y = 0.1,
-                        z = 0.1,
+                        obs_type = "Mock obstacle",
+                        latitude = 35.169160,
+                        longitude = 33.361459,
+                        x = 0.0,
+                        y = 0.0,
+                        z = 0.0,
                         photo = "jkdhfak"
                     )
                 )
