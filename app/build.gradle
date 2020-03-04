@@ -143,7 +143,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     // Maps library, uses OpenStreetMap - http://osmdroid.github.io/osmdroid/
-    implementation 'org.osmdroid:osmdroid-android:6.1.0'
+    // removed, leaving this in case it's needed in the future
+    // implementation 'org.osmdroid:osmdroid-android:6.1.0'
 
     // Google Maps library
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
