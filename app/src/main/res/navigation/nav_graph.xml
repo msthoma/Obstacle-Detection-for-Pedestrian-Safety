@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/obstacleListFragment"
         android:name="cy.org.rise.obsai.ObstacleListFragment"
-        android:label="@string/label_fragment_obstacle_list">
+        android:label="@string/label_fragment_obstacle_list"
+        tools:layout="@layout/fragment_obstacle_list">
         <action
             android:id="@+id/action_obstacleListFragment_to_cameraFragment"
             app:destination="@id/cameraFragment"
