@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,13 +18,19 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
+import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import java.io.File
 
 class ObstacleEditFragment : Fragment() {
 
     private lateinit var mapView: MapView
+    private lateinit var currentObstacle: Obstacle
     val args: ObstacleEditFragmentArgs by navArgs()
+
+    private val viewModel: ObstacleViewModel by viewModels {
+        InjectorUtils.provideObstacleViewModelFactory(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,9 +40,12 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Get current obstacle
+        currentObstacle = args.currentObstacle!! // TODO fix !!
+
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
-            File(args.currentPhoto)
+            File(currentObstacle.photo)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null
@@ -64,6 +74,8 @@ class ObstacleEditFragment : Fragment() {
 
         // Setup OnClickListeners for buttons
         button_submit.setOnClickListener { v ->
+            currentObstacle.obs_type = spinner.selectedItem.toString()
+            viewModel.insertObstacle(currentObstacle)
             v.findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
             )
@@ -94,7 +106,7 @@ class ObstacleEditFragment : Fragment() {
             // Add marker indicating the obstacle
             googleMap.addMarker(
                 MarkerOptions()
-                    .position(LatLng(35.16989, 33.36116))
+                    .position(LatLng(currentObstacle.latitude, currentObstacle.longitude))
                     .title("Marker")
             )
 
