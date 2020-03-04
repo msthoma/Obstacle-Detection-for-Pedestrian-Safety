@@ -28,7 +28,7 @@ class CustomAdapter internal constructor() :
 
         init {
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
+            v.setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
             textView = v.findViewById(R.id.textView)
         }
     }
@@ -42,9 +42,7 @@ class CustomAdapter internal constructor() :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d(TAG, "Element $position set.")
-
-        // Get element from your dataset at this position and replace the contents of the view
+        // Get element from the dataset at this position and replace the contents of the view
         // with that element
         viewHolder.textView.text = obstacles[position].obstacle + obstacles[position].id
     }
@@ -56,8 +54,4 @@ class CustomAdapter internal constructor() :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = obstacles.size
-
-    companion object {
-        private val TAG = "CustomAdapter"
-    }
 }
