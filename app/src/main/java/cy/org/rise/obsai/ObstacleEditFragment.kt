@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -54,15 +53,7 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // If the photo file exists, set it in image view
-        photoFile?.also {
-            context?.also { context ->
-                val photoUri =
-                    FileProvider.getUriForFile(
-                        context, "com.example.android.fileprovider", it
-                    )
-                Picasso.get().load(photoUri).into(obstacle_image_view)
-            }
-        }
+        photoFile?.also { Picasso.get().load(photoFile).into(obstacle_image_view) }
 
         // Set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
