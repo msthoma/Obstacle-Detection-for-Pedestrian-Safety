@@ -57,22 +57,35 @@ class CropFragment : Fragment() {
             }
         }
 
+        // React to cropped photo
         cropImageView.setOnCropImageCompleteListener { view, result ->
             cropImageView.setImageBitmap(result.bitmap)
             Log.d(TAG(), result.cropPoints.toString())
-        }
-
-        button_rotate.setOnClickListener { crop_image_view.rotateImage(90) }
-
-        button_crop.setOnClickListener {
-            cropImageView.getCroppedImageAsync()
-//            findNavController().navigate(
-//                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
-//            )
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_crop, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_rotate_photo -> {
+                cropImageView.rotateImage(90)
+                true
+            }
+            R.id.action_confirm_edit_photo -> {
+                cropImageView.getCroppedImageAsync()
+//            findNavController().navigate(
+//                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+//            )
+                true
+            }
+            R.id.action_cancel_edit_photo -> {
+                // TODO implement cancelling edit
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
