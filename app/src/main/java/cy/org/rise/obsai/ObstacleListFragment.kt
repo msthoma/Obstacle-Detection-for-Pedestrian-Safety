@@ -67,7 +67,9 @@ class ObstacleListFragment : Fragment() {
 
             } else {
                 // Show permission rationales
-                val permissionHandler = createDialogRationale(R.string.app_name) {
+                val permissionHandler = createDialogRationale(
+                    R.string.permission_rationale_dialog_title
+                ) {
                     onPermission(CAMERA, R.string.permission_camera_rationale)
                     onPermission(ACCESS_FINE_LOCATION, R.string.permission_location_rationale)
                 }

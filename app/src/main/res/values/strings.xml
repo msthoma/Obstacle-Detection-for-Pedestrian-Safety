@@ -6,6 +6,7 @@
         function, please grant it to proceed.</string>
     <string name="permission_location_rationale">The app requires access to your location to
         function, please grant it to proceed.</string>
+    <string name="permission_rationale_dialog_title">Permission required</string>
 
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
