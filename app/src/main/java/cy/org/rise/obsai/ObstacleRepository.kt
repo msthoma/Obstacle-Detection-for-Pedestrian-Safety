@@ -1,7 +1,5 @@
 package cy.org.rise.obsai
 
-import android.util.Log
-
 /**
  * Repository module for handling data operations.
  * https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt
@@ -12,7 +10,6 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
     fun getObstacles() = obstacleDao.getAllObstacles()
 
     fun insertObstacle(obstacle: Obstacle) {
-        Log.d(TAG(), "inserting obstacle ${obstacle.obstacle}")
         return obstacleDao.insertObstacle(obstacle)
     }
 
