@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.theartofdev.edmodo.cropper.CropImageView
 import cy.org.rise.obsai.db.Obstacle
@@ -23,6 +22,7 @@ class CropFragment : Fragment() {
 
     private val args: ObstacleEditFragmentArgs by navArgs()
     private lateinit var currentObstacle: Obstacle
+    private lateinit var cropImageView: CropImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,7 +31,11 @@ class CropFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Initialize view and obstacle
+        cropImageView = crop_image_view
         currentObstacle = args.currentObstacle
+
+        // Attempt to read photo file
         val photoFile: File? = try {
             File(currentObstacle.photo)
         } catch (ex: IllegalArgumentException) {
@@ -39,6 +43,7 @@ class CropFragment : Fragment() {
             null
         }
 
+        // Set photo in crop view
         photoFile?.also {
             context?.also { context ->
                 val photoUri =
@@ -52,12 +57,18 @@ class CropFragment : Fragment() {
             }
         }
 
+        cropImageView.setOnCropImageCompleteListener { view, result ->
+            cropImageView.setImageBitmap(result.bitmap)
+            Log.d(TAG(), result.cropPoints.toString())
+        }
+
         button_rotate.setOnClickListener { crop_image_view.rotateImage(90) }
 
         button_crop.setOnClickListener {
-            findNavController().navigate(
-                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
-            )
+            cropImageView.getCroppedImageAsync()
+//            findNavController().navigate(
+//                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+//            )
         }
     }
 }
