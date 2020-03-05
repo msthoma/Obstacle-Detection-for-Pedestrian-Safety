@@ -5,24 +5,24 @@
     tools:context="cy.org.rise.obsai.MainActivity">
 
     <item
-        android:title="@string/action_rotate_photo"
         android:id="@+id/action_rotate_photo"
         android:icon="@android:drawable/ic_menu_rotate"
         android:orderInCategory="100"
+        android:title="@string/action_rotate_photo"
         app:showAsAction="ifRoom" />
 
     <item
-        android:title="@string/action_confirm"
         android:id="@+id/action_confirm_edit_photo"
-        android:icon="@android:drawable/checkbox_on_background"
+        android:icon="@drawable/ic_check_white_24dp"
         android:orderInCategory="200"
+        android:title="@string/action_confirm"
         app:showAsAction="always" />
 
     <item
-        android:title="@string/action_cancel_edit_photo"
         android:id="@+id/action_cancel_edit_photo"
-        android:icon="@android:drawable/ic_menu_rotate"
+        android:icon="@drawable/ic_rotate_right_white_24dp"
         android:orderInCategory="200"
+        android:title="@string/action_cancel_edit_photo"
         app:showAsAction="never" />
 
 </menu>
