@@ -21,7 +21,7 @@ import java.io.File
  */
 class CropFragment : Fragment() {
 
-    val args: ObstacleEditFragmentArgs by navArgs()
+    private val args: ObstacleEditFragmentArgs by navArgs()
     private lateinit var currentObstacle: Obstacle
 
     override fun onCreateView(
@@ -31,7 +31,7 @@ class CropFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        currentObstacle = args.currentObstacle!! // TODO fix !!
+        currentObstacle = args.currentObstacle
         val photoFile: File? = try {
             File(currentObstacle.photo)
         } catch (ex: IllegalArgumentException) {
