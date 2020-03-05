@@ -1,5 +1,7 @@
 package cy.org.rise.obsai
 
+import cy.org.rise.obsai.db.Obstacle
+
 /**
  * Repository module for handling data operations.
  * https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt

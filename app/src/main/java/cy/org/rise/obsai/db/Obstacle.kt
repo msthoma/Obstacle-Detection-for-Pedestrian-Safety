@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

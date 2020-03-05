@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.ui.CustomAdapter
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*

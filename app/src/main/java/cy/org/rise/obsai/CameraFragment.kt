@@ -19,6 +19,7 @@ import com.google.android.gms.location.*
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
+import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File

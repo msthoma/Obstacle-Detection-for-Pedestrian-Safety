@@ -56,7 +56,7 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="currentObstacle"
-            app:argType="cy.org.rise.obsai.Obstacle"
+            app:argType="cy.org.rise.obsai.db.Obstacle"
             app:nullable="true" />
     </fragment>
     <fragment
@@ -71,7 +71,7 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="currentObstacle"
-            app:argType="cy.org.rise.obsai.Obstacle" />
+            app:argType="cy.org.rise.obsai.db.Obstacle" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
