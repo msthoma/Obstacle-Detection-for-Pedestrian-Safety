@@ -160,7 +160,6 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     private fun createCurrentObstacle(): Obstacle {
         return Obstacle(
-            obstacle = "new",
             obs_type = "",
             photo = currentPhotoPath,
             latitude = currentLocation.latitude,

@@ -75,7 +75,6 @@ class ObstacleListFragment : Fragment() {
             R.id.action_add_mock_element -> {
                 viewModel.insertObstacle(
                     Obstacle(
-                        obstacle = "kjsdfak",
                         obs_type = "Mock obstacle",
                         latitude = 35.169160,
                         longitude = 33.361459,
