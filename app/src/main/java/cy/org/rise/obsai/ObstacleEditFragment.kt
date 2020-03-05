@@ -27,7 +27,7 @@ class ObstacleEditFragment : Fragment() {
 
     private lateinit var mapView: MapView
     private lateinit var currentObstacle: Obstacle
-    val args: ObstacleEditFragmentArgs by navArgs()
+    private val args: ObstacleEditFragmentArgs by navArgs()
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -42,7 +42,7 @@ class ObstacleEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get current obstacle
-        currentObstacle = args.currentObstacle!! // TODO fix !!
+        currentObstacle = args.currentObstacle
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
