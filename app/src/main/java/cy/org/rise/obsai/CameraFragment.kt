@@ -14,7 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
@@ -78,12 +78,11 @@ class CameraFragment : Fragment(), SensorEventListener {
                     result.run {
                         toFile(it) { file ->
                             file?.let {
-                                val action =
-                                    CameraFragmentDirections
-                                        .actionCameraFragmentToObstacleEditFragment(
-                                            file.absolutePath, createCurrentObstacle()
-                                        )
-                                cameraView.findNavController().navigate(action)
+                                val action = CameraFragmentDirections
+                                    .actionCameraFragmentToObstacleEditFragment(
+                                        createCurrentObstacle()
+                                    )
+                                findNavController().navigate(action)
                             }
                         }
                     }

@@ -31,13 +31,7 @@
         tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim">
-            <argument
-                android:name="currentPhoto"
-                android:defaultValue='""' />
-        </action>
+            app:destination="@id/obstacleEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/obstacleEditFragment"
@@ -56,8 +50,7 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
             android:name="currentObstacle"
-            app:argType="cy.org.rise.obsai.db.Obstacle"
-            app:nullable="true" />
+            app:argType="cy.org.rise.obsai.db.Obstacle" />
     </fragment>
     <fragment
         android:id="@+id/cropFragment"
