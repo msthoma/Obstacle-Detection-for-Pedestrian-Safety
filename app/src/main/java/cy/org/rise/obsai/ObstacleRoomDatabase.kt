@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import cy.org.rise.obsai.db.Converters
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.db.ObstacleDao
 
 @Database(entities = [Obstacle::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)

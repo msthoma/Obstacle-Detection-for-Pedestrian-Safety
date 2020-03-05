@@ -1,6 +1,7 @@
 package cy.org.rise.obsai
 
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.db.ObstacleDao
 
 /**
  * Repository module for handling data operations.
