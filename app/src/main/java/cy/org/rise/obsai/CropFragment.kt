@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.theartofdev.edmodo.cropper.CropImageView
+import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_crop.*
 import java.io.File
 

@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.utils
 
 /**
  * Returns activity name for logging purposes

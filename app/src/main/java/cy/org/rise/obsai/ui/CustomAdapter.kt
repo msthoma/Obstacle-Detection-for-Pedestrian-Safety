@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.Obstacle
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.TAG
+import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.text_row_item.view.*
 import java.io.File
 
