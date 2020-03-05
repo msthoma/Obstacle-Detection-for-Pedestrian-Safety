@@ -62,14 +62,17 @@ class ObstacleListFragment : Fragment() {
         fab.setOnClickListener {
             // Check whether the relevant permission are granted before launching camera fragment
             if (isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
+                // All permissions granted
                 findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
 
             } else {
+                // Show permission rationales
                 val permissionHandler = createDialogRationale(R.string.app_name) {
                     onPermission(CAMERA, R.string.permission_camera_rationale)
-                    onPermission(ACCESS_FINE_LOCATION, R.string.permission_camera_rationale)
+                    onPermission(ACCESS_FINE_LOCATION, R.string.permission_location_rationale)
                 }
 
+                // Ask for permissions, and then launch camera fragment
                 runWithPermissions(
                     CAMERA,
                     ACCESS_FINE_LOCATION,
@@ -79,6 +82,8 @@ class ObstacleListFragment : Fragment() {
                         findNavController().navigate(
                             R.id.action_obstacleListFragment_to_cameraFragment
                         )
+                    } else {
+                        // TODO deal with permission rejections
                     }
                 }
             }
