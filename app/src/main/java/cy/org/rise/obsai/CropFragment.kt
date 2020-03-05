@@ -1,17 +1,20 @@
 package cy.org.rise.obsai
 
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.theartofdev.edmodo.cropper.CropImageView
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_crop.*
 import java.io.File
+import java.io.FileOutputStream
 
 /**
  * A simple [Fragment] subclass.
@@ -57,10 +60,21 @@ class CropFragment : Fragment() {
             }
         }
 
-        // React to cropped photo
-        cropImageView.setOnCropImageCompleteListener { view, result ->
-            cropImageView.setImageBitmap(result.bitmap)
-            Log.d(TAG(), result.cropPoints.toString())
+        // Listen for cropped photo
+        cropImageView.setOnCropImageCompleteListener { _, result ->
+            // cropImageView.setImageBitmap(result.bitmap)
+
+            // overwrite original photo file https://stackoverflow.com/a/673014/3755276
+            // this action probably happens on the UI thread
+            // TODO move action to background thread
+            result.bitmap.compress(
+                Bitmap.CompressFormat.JPEG, 100, FileOutputStream(photoFile!!)
+            )
+
+            // Navigate back to edit fragment
+            findNavController().navigate(
+                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+            )
         }
     }
 
@@ -75,10 +89,8 @@ class CropFragment : Fragment() {
                 true
             }
             R.id.action_confirm_edit_photo -> {
+                // Crops image, OnCropImageCompleteListener above listens for result
                 cropImageView.getCroppedImageAsync()
-//            findNavController().navigate(
-//                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
-//            )
                 true
             }
             R.id.action_cancel_edit_photo -> {
