@@ -94,7 +94,10 @@ class CropFragment : Fragment() {
                 true
             }
             R.id.action_cancel_edit_photo -> {
-                // TODO implement cancelling edit
+                // Cancel by navigating back to edit fragment
+                findNavController().navigate(
+                    CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
