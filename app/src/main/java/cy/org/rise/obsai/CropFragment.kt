@@ -3,9 +3,7 @@ package cy.org.rise.obsai
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -27,6 +25,8 @@ class CropFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        // Set toolbar menu
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_crop, container, false)
     }
 
@@ -70,5 +70,9 @@ class CropFragment : Fragment() {
 //                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
 //            )
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
     }
 }
