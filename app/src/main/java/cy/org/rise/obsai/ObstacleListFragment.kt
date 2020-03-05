@@ -9,6 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.assent.Permission.ACCESS_FINE_LOCATION
+import com.afollestad.assent.Permission.CAMERA
+import com.afollestad.assent.isAllGranted
+import com.afollestad.assent.rationale.createDialogRationale
+import com.afollestad.assent.runWithPermissions
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.ui.CustomAdapter
 import cy.org.rise.obsai.utils.InjectorUtils
@@ -55,7 +60,28 @@ class ObstacleListFragment : Fragment() {
         })
 
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
+            // Check whether the relevant permission are granted before launching camera fragment
+            if (isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
+                findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
+
+            } else {
+                val permissionHandler = createDialogRationale(R.string.app_name) {
+                    onPermission(CAMERA, R.string.permission_camera_rationale)
+                    onPermission(ACCESS_FINE_LOCATION, R.string.permission_camera_rationale)
+                }
+
+                runWithPermissions(
+                    CAMERA,
+                    ACCESS_FINE_LOCATION,
+                    rationaleHandler = permissionHandler
+                ) { result ->
+                    if (result.isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
+                        findNavController().navigate(
+                            R.id.action_obstacleListFragment_to_cameraFragment
+                        )
+                    }
+                }
+            }
         }
     }
 
