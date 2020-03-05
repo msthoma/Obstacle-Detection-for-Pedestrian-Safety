@@ -7,6 +7,7 @@
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
     <string name="button_ext_camera">Ext.camera</string>
+    <string name="button_sign_in">Sign in</string>
 
     <string name="element_text">Element</string>
     <string name="account_fragment_title">Sign in to your account</string>
@@ -25,6 +26,9 @@
     <string name="action_sign_in">Sign in</string>
 
     <string name="title_activity_about">Open source libraries</string>
+
+    <string name="hint_password">Password</string>
+    <string name="hint_username">Username</string>
 
     <string-array name="obstacles_array">
         <item>Advert. Sign</item>

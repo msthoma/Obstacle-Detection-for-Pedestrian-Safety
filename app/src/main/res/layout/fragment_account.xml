@@ -20,14 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:hint="Username"
+        android:hint="@string/hint_username"
         android:inputType="text" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:hint="Password"
+        android:hint="@string/hint_password"
         android:inputType="textPassword" />
 
     <Button
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
-        android:text="Sign in" />
+        android:text="@string/button_sign_in" />
 
     <TextView
         android:layout_width="match_parent"
