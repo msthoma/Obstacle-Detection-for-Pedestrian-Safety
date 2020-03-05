@@ -12,8 +12,6 @@ data class Obstacle(
 
     @ColumnInfo val timestamp: Date = Calendar.getInstance().time,
 
-    @ColumnInfo var obstacle: String,
-
     @ColumnInfo var obs_type: String,
 
     @ColumnInfo var photo: String,
