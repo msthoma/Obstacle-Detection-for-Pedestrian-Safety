@@ -21,7 +21,9 @@ import java.io.FileOutputStream
  */
 class CropFragment : Fragment() {
 
+    // Arguments from the edit fragment
     private val args: ObstacleEditFragmentArgs by navArgs()
+
     private lateinit var currentObstacle: Obstacle
     private lateinit var cropImageView: CropImageView
 
@@ -34,8 +36,9 @@ class CropFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Initialize view and obstacle
+        // Initialize crop view
         cropImageView = crop_image_view
+        // Get obstacle object passed by the edit fragment
         currentObstacle = args.currentObstacle
 
         // Attempt to read photo file
@@ -85,11 +88,12 @@ class CropFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_rotate_photo -> {
+                // Rotate photo 90o clockwise
                 cropImageView.rotateImage(90)
                 true
             }
             R.id.action_confirm_edit_photo -> {
-                // Crops image, OnCropImageCompleteListener above listens for result
+                // Crops photo, OnCropImageCompleteListener above listens for result
                 cropImageView.getCroppedImageAsync()
                 true
             }
