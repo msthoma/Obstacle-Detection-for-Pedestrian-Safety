@@ -1,10 +1,11 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.ui
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import cy.org.rise.obsai.ui.AboutActivity
+import cy.org.rise.obsai.BuildConfig
+import cy.org.rise.obsai.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

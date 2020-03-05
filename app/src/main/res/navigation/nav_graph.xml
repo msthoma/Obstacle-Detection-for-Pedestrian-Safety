@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/obstacleListFragment"
-        android:name="cy.org.rise.obsai.ObstacleListFragment"
+        android:name="cy.org.rise.obsai.ui.ObstacleListFragment"
         android:label="@string/label_fragment_obstacle_list"
         tools:layout="@layout/fragment_obstacle_list">
         <action
@@ -68,12 +68,12 @@
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
-        android:name="cy.org.rise.obsai.AccountFragment"
+        android:name="cy.org.rise.obsai.ui.AccountFragment"
         android:label="@string/label_fragment_account"
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="cy.org.rise.obsai.SettingsFragment"
+        android:name="cy.org.rise.obsai.ui.SettingsFragment"
         android:label="@string/label_fragment_settings"
         tools:layout="@xml/preferences" />
 </navigation>

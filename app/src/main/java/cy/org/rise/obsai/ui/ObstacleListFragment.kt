@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.ui
 
 import android.os.Bundle
 import android.view.*
@@ -14,8 +14,9 @@ import com.afollestad.assent.Permission.CAMERA
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
+import cy.org.rise.obsai.ObstacleViewModel
+import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.ui.CustomAdapter
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
@@ -70,8 +71,14 @@ class ObstacleListFragment : Fragment() {
                 val permissionHandler = createDialogRationale(
                     R.string.permission_rationale_dialog_title
                 ) {
-                    onPermission(CAMERA, R.string.permission_camera_rationale)
-                    onPermission(ACCESS_FINE_LOCATION, R.string.permission_location_rationale)
+                    onPermission(
+                        CAMERA,
+                        R.string.permission_camera_rationale
+                    )
+                    onPermission(
+                        ACCESS_FINE_LOCATION,
+                        R.string.permission_location_rationale
+                    )
                 }
 
                 // Ask for permissions, and then launch camera fragment
