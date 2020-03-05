@@ -2,7 +2,10 @@
     <string name="app_name">ObsAI</string>
 
     <string name="permission_camera_denied">The app cannot work without access to the camera, please grant it before proceeding.</string>
-    <string name="permission_camera_rationale">App needs camera permission</string>
+    <string name="permission_camera_rationale">The app requires access to the camera to
+        function, please grant it to proceed.</string>
+    <string name="permission_location_rationale">The app requires access to your location to
+        function, please grant it to proceed.</string>
 
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
