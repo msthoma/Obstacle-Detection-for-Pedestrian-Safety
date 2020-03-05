@@ -84,7 +84,7 @@ class ObstacleEditFragment : Fragment() {
         button_edit_photo.setOnClickListener { v ->
             v.findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
-                    photoFile?.absolutePath ?: ""
+                    currentObstacle
                 )
             )
         }

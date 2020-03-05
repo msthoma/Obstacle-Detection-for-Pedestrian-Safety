@@ -44,9 +44,6 @@
         android:name="cy.org.rise.obsai.ObstacleEditFragment"
         android:label="@string/label_fragment_obstacle_edit"
         tools:layout="@layout/fragment_obstacle_edit">
-        <argument
-            android:name="currentPhoto"
-            app:argType="string" />
         <action
             android:id="@+id/action_obstacleEditFragment_to_obstacleListFragment"
             app:destination="@id/obstacleListFragment"
@@ -73,9 +70,8 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
         <argument
-            android:name="currentPhoto"
-            android:defaultValue='""'
-            app:argType="string" />
+            android:name="currentObstacle"
+            app:argType="cy.org.rise.obsai.Obstacle" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
