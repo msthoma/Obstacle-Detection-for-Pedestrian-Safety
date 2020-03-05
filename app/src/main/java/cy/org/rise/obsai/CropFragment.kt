@@ -56,10 +56,14 @@ class CropFragment : Fragment() {
                     FileProvider.getUriForFile(
                         context, "com.example.android.fileprovider", it
                     )
-                crop_image_view.setImageUriAsync(photoUri)
-                crop_image_view.isAutoZoomEnabled = true
-                crop_image_view.scaleType = CropImageView.ScaleType.FIT_CENTER
-                crop_image_view.isShowProgressBar = true
+
+                // Set crop view properties
+                cropImageView.apply {
+                    setImageUriAsync(photoUri)
+                    isAutoZoomEnabled = true
+                    scaleType = CropImageView.ScaleType.FIT_CENTER
+                    isShowProgressBar = true
+                }
             }
         }
 
