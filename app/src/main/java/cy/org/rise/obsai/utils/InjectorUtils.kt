@@ -2,9 +2,9 @@ package cy.org.rise.obsai.utils
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import cy.org.rise.obsai.ObstacleRepository
-import cy.org.rise.obsai.ObstacleRoomDatabase
 import cy.org.rise.obsai.ObstacleViewModelFactory
+import cy.org.rise.obsai.db.ObstacleRepository
+import cy.org.rise.obsai.db.ObstacleRoomDatabase
 
 /**
  * Static methods used to inject classes needed for Activities and Fragments.

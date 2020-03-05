@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
 
 class ObstacleViewModel internal constructor(

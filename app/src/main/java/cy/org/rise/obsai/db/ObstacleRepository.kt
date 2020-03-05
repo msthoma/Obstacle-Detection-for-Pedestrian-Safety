@@ -1,7 +1,4 @@
-package cy.org.rise.obsai
-
-import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.db.ObstacleDao
+package cy.org.rise.obsai.db
 
 /**
  * Repository module for handling data operations.
@@ -25,7 +22,9 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
 
         fun getInstance(obstacleDao: ObstacleDao) =
             instance ?: synchronized(this) {
-                instance ?: ObstacleRepository(obstacleDao).also { instance = it }
+                instance
+                    ?: ObstacleRepository(obstacleDao)
+                        .also { instance = it }
             }
     }
 }

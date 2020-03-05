@@ -5,6 +5,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import cy.org.rise.obsai.db.ObstacleRepository
 
 /*
  * Factory for creating an [ObstacleViewModel] with a constructor that takes an [ObstacleRepository]
