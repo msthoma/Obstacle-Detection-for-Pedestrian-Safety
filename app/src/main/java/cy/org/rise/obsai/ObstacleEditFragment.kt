@@ -104,19 +104,23 @@ class ObstacleEditFragment : Fragment() {
         mapView = map
         mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
         mapView.getMapAsync { googleMap ->
+            val obstaclePosition = LatLng(currentObstacle.latitude, currentObstacle.longitude)
+
             // Add marker indicating the obstacle
-            googleMap.addMarker(
-                MarkerOptions()
-                    .position(LatLng(currentObstacle.latitude, currentObstacle.longitude))
-                    .title("Marker")
-            )
+            googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+
+            // Move camera to appropriate position
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
 
             // Add map boundaries
             val CYPRUS = LatLngBounds(
                 LatLng(34.520142, 32.186723), // Southwest corner
                 LatLng(35.738372, 34.644546) // Northeast corner
             )
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(CYPRUS, 0))
+            googleMap.setLatLngBoundsForCameraTarget(CYPRUS)
+
+            // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
+            googleMap.setMinZoomPreference(7.5f)
         }
     }
 
