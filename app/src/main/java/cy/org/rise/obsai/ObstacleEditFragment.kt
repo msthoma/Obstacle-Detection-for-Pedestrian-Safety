@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
@@ -63,19 +63,27 @@ class ObstacleEditFragment : Fragment() {
         ).also { arrayAdapter ->
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = arrayAdapter
+
+            // When coming from crop fragment, if the type was already set, restore its value
+            if (currentObstacle.obs_type != "") {
+                spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obs_type))
+            }
         }
 
         // Setup OnClickListeners for buttons
-        button_submit.setOnClickListener { v ->
+        button_submit.setOnClickListener {
+            // Save obstacle type
             currentObstacle.obs_type = spinner.selectedItem.toString()
             viewModel.insertObstacle(currentObstacle)
-            v.findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
             )
         }
 
-        button_edit_photo.setOnClickListener { v ->
-            v.findNavController().navigate(
+        button_edit_photo.setOnClickListener {
+            // Save type before going to the crop fragment
+            currentObstacle.obs_type = spinner.selectedItem.toString()
+            findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     currentObstacle
                 )
