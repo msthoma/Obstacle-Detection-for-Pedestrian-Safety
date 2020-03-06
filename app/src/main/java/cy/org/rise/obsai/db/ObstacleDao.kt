@@ -1,11 +1,7 @@
 package cy.org.rise.obsai.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import cy.org.rise.obsai.db.Obstacle
+import androidx.room.*
 
 @Dao
 interface ObstacleDao {
@@ -14,6 +10,9 @@ interface ObstacleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertObstacle(obstacle: Obstacle)
+
+    @Update
+    fun updateObstacle(obstacle: Obstacle)
 
     @Query("DELETE FROM obstacle_table")
     fun deleteAll()
