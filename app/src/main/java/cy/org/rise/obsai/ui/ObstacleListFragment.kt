@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: CustomAdapter
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -42,7 +43,7 @@ class ObstacleListFragment : Fragment() {
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val adapter = CustomAdapter()
+        adapter = CustomAdapter()
         recyclerView.adapter = adapter
 
         viewModel.obstacles.observe(viewLifecycleOwner, Observer { obstacles ->
@@ -58,6 +59,9 @@ class ObstacleListFragment : Fragment() {
                 empty_list_view.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
             }
+
+            // Invalidate menu, to hide "Delete all" in case of empty db (see onCreateOptionsMenu)
+            activity?.invalidateOptionsMenu()
         })
 
         fab.setOnClickListener {
@@ -101,6 +105,11 @@ class ObstacleListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+
+        // Show/hide the delete all option, depending on whether the db is empty or not
+        if (adapter.itemCount == 0) {
+            menu.findItem(R.id.action_delete_all).isVisible = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
