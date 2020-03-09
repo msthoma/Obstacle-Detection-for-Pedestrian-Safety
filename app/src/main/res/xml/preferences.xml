@@ -5,12 +5,12 @@
 
     <Preference
         app:key="version"
-        app:title="App version" />
+        app:title="@string/settings_app_version_title" />
 
     <Preference
         app:key="open_source_libraries"
-        app:summary="Links to the open source libraries used in this app"
-        app:title="Open source libraries" />
+        app:summary="@string/setting_open_source_libraries_summary"
+        app:title="@string/setting_open_source_libraries_title" />
 
     <SwitchPreferenceCompat
         app:key="test_pref"
