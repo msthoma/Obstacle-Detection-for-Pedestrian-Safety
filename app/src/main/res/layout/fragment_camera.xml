@@ -39,31 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/camera_button" />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="6dp"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <TextView-->
-<!--            style="@style/TextAppearance.AppCompat.Medium"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="6dp"-->
-<!--            android:text="Location\nLat\nLong"-->
-<!--            android:textColor="@android:color/white" />-->
-
-<!--        <TextView-->
-<!--            style="@style/TextAppearance.AppCompat.Medium"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="6dp"-->
-<!--            android:text="Orientation"-->
-<!--            android:textColor="@android:color/white" />-->
-<!--    </LinearLayout>-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/camera_info_views"
         android:layout_width="match_parent"
