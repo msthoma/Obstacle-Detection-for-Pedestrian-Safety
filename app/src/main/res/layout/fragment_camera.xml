@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
             android:background="@android:color/black"
-            android:text="Recognized objects..."
+            android:text="Getting location..."
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toTopOf="@id/orientation"
             app:layout_constraintEnd_toEndOf="parent"
