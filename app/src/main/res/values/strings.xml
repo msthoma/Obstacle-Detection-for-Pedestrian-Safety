@@ -37,6 +37,12 @@
     <string name="hint_password">Password</string>
     <string name="hint_username">Username</string>
 
+    <string name="acra_crash_dialog_title">Obstacles app has crashed</string>
+    <string name="acra_crash_input_prompt">You can add a comment here (optional):</string>
+    <string name="acra_crash_positive_button">OK</string>
+    <string name="acra_crash_negative_button">Cancel</string>
+    <string name="acra_crash_message">Sorry, the application crashed. Please report the crash by clicking OK below (you\'ll be prompted to email a crash file to the developer).</string>
+
     <string-array name="obstacles_array">
         <item>Advert. Sign</item>
         <item>Crack</item>
