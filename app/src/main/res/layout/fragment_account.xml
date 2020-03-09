@@ -42,6 +42,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
-        android:text="Currently signed in as an anonymous user" />
+        android:text="Currently signed in as an anonymous user"
+        android:visibility="invisible" />
 
 </LinearLayout>
