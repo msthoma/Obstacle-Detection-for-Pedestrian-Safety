@@ -5,8 +5,7 @@
 
     <Preference
         app:key="version"
-        app:title="Version"
-        tools:summary="App version" />
+        app:title="App version" />
 
     <Preference
         app:key="open_source_libraries"
