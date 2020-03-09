@@ -3,6 +3,7 @@ package cy.org.rise.obsai.ui
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -100,6 +101,13 @@ class ObstacleListFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            // Prevents back press on list fragment going back to edit fragment, in case an
+            // obstacle was just added
+            // TODO is there a better way to handle this with the Navigation component?
+            activity?.finish()
         }
     }
 
