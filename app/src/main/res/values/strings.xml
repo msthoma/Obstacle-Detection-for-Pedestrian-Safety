@@ -48,6 +48,7 @@
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
 
     <string-array name="obstacles_array">
+        <item>-</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
