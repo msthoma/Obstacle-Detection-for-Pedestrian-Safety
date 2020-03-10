@@ -1,12 +1,16 @@
 package cy.org.rise.obsai
 
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.graphics.Color.argb
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -83,11 +87,26 @@ class ObstacleEditFragment : Fragment() {
         // Setup OnClickListeners for buttons
         button_submit.setOnClickListener {
             // Save obstacle type
-            currentObstacle.obs_type = spinner.selectedItem.toString()
-            viewModel.insertObstacle(currentObstacle)
-            findNavController().navigate(
-                R.id.action_obstacleEditFragment_to_obstacleListFragment
-            )
+            Log.d(TAG(), "button submit pressed")
+
+            if (spinner.selectedItem.toString() == "Select type...") {
+                Toast.makeText(context, R.string.toast_type_selection_warning, Toast.LENGTH_SHORT)
+                    .show()
+                ObjectAnimator.ofObject(
+                    spinner,
+                    "backgroundColor",
+                    ArgbEvaluator(),
+                    argb(100, 255, 255, 255),
+                    argb(100, 255, 0, 0),
+                    argb(100, 255, 255, 255)
+                ).setDuration(1000).start()
+            } else {
+                currentObstacle.obs_type = spinner.selectedItem.toString()
+                viewModel.insertObstacle(currentObstacle)
+                findNavController().navigate(
+                    R.id.action_obstacleEditFragment_to_obstacleListFragment
+                )
+            }
         }
 
         button_edit_photo.setOnClickListener {
