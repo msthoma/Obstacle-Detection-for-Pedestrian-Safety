@@ -49,7 +49,7 @@
     <string name="toast_type_selection_warning">Please select the object\'s type</string>
 
     <string-array name="obstacle_types_array">
-        <item>Select type...</item>
+        <item>Select type…</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
