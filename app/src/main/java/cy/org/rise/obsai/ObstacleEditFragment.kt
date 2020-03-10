@@ -84,11 +84,13 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
+        val obstacleTypes = resources.getStringArray(R.array.obstacles_array)
+
         // Setup OnClickListeners for buttons
         button_submit.setOnClickListener {
 
             // Make sure the user has chosen an obstacle type before submitting
-            if (spinner.selectedItem.toString() == "Select type...") {
+            if (spinner.selectedItem.toString() == obstacleTypes[0]) {
                 // Show toast message
                 Toast.makeText(context, R.string.toast_type_selection_warning, Toast.LENGTH_SHORT)
                     .show()
