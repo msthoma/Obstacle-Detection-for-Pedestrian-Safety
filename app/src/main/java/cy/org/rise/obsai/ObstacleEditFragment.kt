@@ -72,7 +72,7 @@ class ObstacleEditFragment : Fragment() {
         // Set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
             context!!, // TODO fix !!
-            R.array.obstacles_array,
+            R.array.obstacle_types_array,
             android.R.layout.simple_spinner_dropdown_item
         ).also { arrayAdapter ->
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -84,7 +84,7 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        val obstacleTypes = resources.getStringArray(R.array.obstacles_array)
+        val obstacleTypes = resources.getStringArray(R.array.obstacle_types_array)
 
         // Setup OnClickListeners for buttons
         button_submit.setOnClickListener {

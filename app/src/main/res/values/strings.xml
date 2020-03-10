@@ -48,7 +48,7 @@
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="toast_type_selection_warning">Please select the object\'s type</string>
 
-    <string-array name="obstacles_array">
+    <string-array name="obstacle_types_array">
         <item>Select type...</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
