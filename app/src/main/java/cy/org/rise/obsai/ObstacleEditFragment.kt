@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
@@ -54,7 +55,15 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // If the photo file exists, set it in image view
-        photoFile?.also { Picasso.get().load(photoFile).into(obstacle_image_view) }
+        photoFile?.also {
+            Picasso.get()
+                .load(photoFile)
+                // If cache is enabled, the photo won't refresh after it's cropped
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                // Resize to screen width, and automatically determine available height
+                .resize(resources.displayMetrics.widthPixels, 0)
+                .into(obstacle_image_view)
+        }
 
         // Set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
@@ -90,16 +99,6 @@ class ObstacleEditFragment : Fragment() {
                 )
             )
         }
-
-        // map configuration - see https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library for details
-//        Configuration.getInstance()
-//            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
-//        mapView.setTileSource(TileSourceFactory.MAPNIK)
-//        // set photo location on map
-//        val mapController: IMapController = mapView.controller
-//        mapController.setZoom(18.5)
-//        val geoPoint = GeoPoint(35.16989, 33.36116)
-//        mapView.setExpectedCenter(geoPoint)
 
         // Setup map view
         mapView = map
