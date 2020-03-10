@@ -46,9 +46,10 @@
     <string name="settings_app_version_title">App version</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
+    <string name="toast_type_selection_warning">Please select the object\'s type</string>
 
     <string-array name="obstacles_array">
-        <item>-</item>
+        <item>Select type...</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
