@@ -86,21 +86,24 @@ class ObstacleEditFragment : Fragment() {
 
         // Setup OnClickListeners for buttons
         button_submit.setOnClickListener {
-            // Save obstacle type
-            Log.d(TAG(), "button submit pressed")
 
+            // Make sure the user has chosen an obstacle type before submitting
             if (spinner.selectedItem.toString() == "Select type...") {
+                // Show toast message
                 Toast.makeText(context, R.string.toast_type_selection_warning, Toast.LENGTH_SHORT)
                     .show()
+                // Highlight spinner with type choices
                 ObjectAnimator.ofObject(
                     spinner,
                     "backgroundColor",
                     ArgbEvaluator(),
-                    argb(100, 255, 255, 255),
-                    argb(100, 255, 0, 0),
-                    argb(100, 255, 255, 255)
+                    // Colors need to be in ARGB form to work with the animator
+                    argb(100, 255, 255, 255), // white
+                    argb(100, 255, 0, 0), // red
+                    argb(100, 255, 255, 255) // white
                 ).setDuration(1000).start()
             } else {
+                // Save obstacle type
                 currentObstacle.obs_type = spinner.selectedItem.toString()
                 viewModel.insertObstacle(currentObstacle)
                 findNavController().navigate(
