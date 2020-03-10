@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
-import kotlinx.android.synthetic.main.text_row_item.view.*
+import kotlinx.android.synthetic.main.row_item.view.*
 import java.io.File
 
 /**
@@ -43,7 +43,7 @@ class CustomAdapter internal constructor() :
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view.
         val v = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.text_row_item, viewGroup, false)
+            .inflate(R.layout.row_item, viewGroup, false)
         return ViewHolder(v)
     }
 
