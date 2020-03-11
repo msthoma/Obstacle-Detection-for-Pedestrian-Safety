@@ -32,7 +32,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // show changelog
         findPreference<Preference>("changelog")?.setOnPreferenceClickListener {
-            ChangelogBuilder().withUseBulletList(true)
+            ChangelogBuilder()
+                .withUseBulletList(true)
+                .withTitle("Changelog")
                 .buildAndShowDialog(activity as AppCompatActivity?, false)
             true
         }
