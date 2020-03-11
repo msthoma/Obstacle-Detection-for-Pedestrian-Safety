@@ -1,0 +1,25 @@
+<changelog>
+    <release
+        date="2020-03-11"
+        versionCode="1"
+        versionName="Version 0.6.0">
+        <new type="summary">Added changelog</new>
+        <bugfix>Fixed up and back navigation by managing the fragment backstack</bugfix>
+    </release>
+    <release
+        date="2020-03-10"
+        versionCode="1"
+        versionName="Version 0.5.10">
+        <new type="summary">This version has a summary item only - no show more button will be shown
+            even if show more buttons are enabled
+        </new>
+    </release>
+    <release
+        date="2020-03-09"
+        versionCode="1"
+        versionName="Version 0.1">
+        <info>Some info</info>
+        <new type="summary">Some improvement</new>
+        <bugfix>Some bugfix</bugfix>
+    </release>
+</changelog>
