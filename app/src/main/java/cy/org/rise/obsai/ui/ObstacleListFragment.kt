@@ -107,7 +107,7 @@ class ObstacleListFragment : Fragment() {
             // Prevents back press on list fragment going back to edit fragment, in case an
             // obstacle was just added
             // TODO is there a better way to handle this with the Navigation component?
-            activity?.finish()
+            requireActivity().finish()
         }
     }
 
