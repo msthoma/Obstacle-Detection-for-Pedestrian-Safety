@@ -31,7 +31,9 @@
         tools:layout="@layout/fragment_camera">
         <action
             android:id="@+id/action_cameraFragment_to_obstacleEditFragment"
-            app:destination="@id/obstacleEditFragment" />
+            app:destination="@id/obstacleEditFragment"
+            app:popUpTo="@id/obstacleListFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/obstacleEditFragment"
@@ -42,7 +44,9 @@
             android:id="@+id/action_obstacleEditFragment_to_obstacleListFragment"
             app:destination="@id/obstacleListFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@+id/obstacleListFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_obstacleEditFragment_to_cropFragment"
             app:destination="@id/cropFragment"
