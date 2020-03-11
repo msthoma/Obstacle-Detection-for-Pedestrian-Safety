@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -147,13 +146,13 @@ class ObstacleEditFragment : Fragment() {
             googleMap.setMinZoomPreference(7.5f)
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            // Handles pressing back in edit fragment, which should go back to the list fragment
-            // instead of the camera
-            findNavController().popBackStack(R.id.obstacleListFragment, false)
-
-            // TODO add discard confirmation dialog here
-        }
+        // Handles pressing back in edit fragment, which should go back to the list fragment
+        // instead of the camera
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+//            findNavController().popBackStack(R.id.obstacleListFragment, false)
+//
+//            // TODO add discard confirmation dialog here
+//        }
     }
 
     override fun onResume() {
