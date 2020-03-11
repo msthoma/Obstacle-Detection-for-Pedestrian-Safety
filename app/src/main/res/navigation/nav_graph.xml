@@ -65,7 +65,9 @@
             android:id="@+id/action_cropFragment_to_obstacleEditFragment"
             app:destination="@id/obstacleEditFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@+id/obstacleEditFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="currentObstacle"
             app:argType="cy.org.rise.obsai.db.Obstacle" />
