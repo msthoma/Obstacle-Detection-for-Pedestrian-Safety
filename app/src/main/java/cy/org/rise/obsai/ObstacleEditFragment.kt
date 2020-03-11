@@ -6,9 +6,7 @@ import android.animation.ObjectAnimator
 import android.graphics.Color.argb
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -42,6 +40,8 @@ class ObstacleEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Set toolbar menu
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
@@ -80,36 +80,6 @@ class ObstacleEditFragment : Fragment() {
             // When coming from crop fragment, if the type was already set, restore its value
             if (currentObstacle.obs_type != "") {
                 spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obs_type))
-            }
-        }
-
-        val obstacleTypes = resources.getStringArray(R.array.obstacle_types_array)
-
-        // Setup OnClickListeners for buttons
-        button_submit.setOnClickListener {
-
-            // Make sure the user has chosen an obstacle type before submitting
-            if (spinner.selectedItem.toString() == obstacleTypes[0]) {
-                // Show toast message
-                Toast.makeText(context, R.string.toast_type_selection_warning, Toast.LENGTH_SHORT)
-                    .show()
-                // Highlight spinner with type choices
-                ObjectAnimator.ofObject(
-                    spinner,
-                    "backgroundColor",
-                    ArgbEvaluator(),
-                    // Colors need to be in ARGB form to work with the animator
-                    argb(100, 255, 255, 255), // white
-                    argb(100, 255, 0, 0), // red
-                    argb(100, 255, 255, 255) // white
-                ).setDuration(1000).start()
-            } else {
-                // Save obstacle type
-                currentObstacle.obs_type = spinner.selectedItem.toString()
-                viewModel.insertObstacle(currentObstacle)
-                findNavController().navigate(
-                    R.id.action_obstacleEditFragment_to_obstacleListFragment
-                )
             }
         }
 
@@ -153,6 +123,55 @@ class ObstacleEditFragment : Fragment() {
 //
 //            // TODO add discard confirmation dialog here
 //        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_edit, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_confirm_edit_photo -> {
+                // get obstacle type array
+                val obstacleTypes = resources.getStringArray(R.array.obstacle_types_array)
+
+                // Make sure the user has chosen an obstacle type before submitting
+                if (spinner.selectedItem.toString() == obstacleTypes[0]) {
+                    // Show toast message
+                    Toast.makeText(
+                            context,
+                            R.string.toast_type_selection_warning,
+                            Toast.LENGTH_SHORT
+                        )
+                        .show()
+                    // Highlight spinner with type choices
+                    ObjectAnimator.ofObject(
+                        spinner,
+                        "backgroundColor",
+                        ArgbEvaluator(),
+                        // Colors need to be in ARGB form to work with the animator
+                        argb(100, 255, 255, 255), // white
+                        argb(100, 255, 0, 0), // red
+                        argb(100, 255, 255, 255) // white
+                    ).setDuration(1000).start()
+                } else {
+                    // Save obstacle type
+                    currentObstacle.obs_type = spinner.selectedItem.toString()
+                    viewModel.insertObstacle(currentObstacle)
+                    findNavController().navigate(
+                        R.id.action_obstacleEditFragment_to_obstacleListFragment
+                    )
+                }
+                true
+            }
+            R.id.action_cancel_edit_photo -> {
+                // TODO implement cancelling
+                Toast.makeText(context, "Not implemented yet", Toast.LENGTH_LONG).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
     }
 
     override fun onResume() {
