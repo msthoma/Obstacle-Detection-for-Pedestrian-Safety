@@ -44,6 +44,7 @@
     <string name="acra_crash_message">Sorry, the application crashed. Please report the crash by clicking OK below (you\'ll be prompted to email a crash file to the developer).</string>
 
     <string name="setting_app_version_title">App version</string>
+    <string name="setting_changelog_summary">What\'s new</string>
     <string name="setting_changelog_title">Changelog</string>
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>

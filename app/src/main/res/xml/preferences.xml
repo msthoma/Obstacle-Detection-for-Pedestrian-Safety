@@ -9,7 +9,8 @@
 
     <Preference
         app:key="changelog"
-        app:title="@string/setting_changelog_title" />
+        app:title="@string/setting_changelog_title"
+        app:summary="@string/setting_changelog_summary"/>
 
     <Preference
         app:key="open_source_libraries"
