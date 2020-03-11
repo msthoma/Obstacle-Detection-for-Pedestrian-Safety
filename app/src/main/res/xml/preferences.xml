@@ -5,7 +5,11 @@
 
     <Preference
         app:key="version"
-        app:title="@string/settings_app_version_title" />
+        app:title="@string/setting_app_version_title" />
+
+    <Preference
+        app:key="changelog"
+        app:title="@string/setting_changelog_title" />
 
     <Preference
         app:key="open_source_libraries"
