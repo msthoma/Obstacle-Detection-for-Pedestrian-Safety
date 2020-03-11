@@ -27,8 +27,9 @@ android {
         // versioning
         versionCode 1
         def versionMajor = 0
-        def versionMinor = 5
-        versionName "${versionMajor}.${versionMinor}.build${buildDate()}"
+        def versionMinor = 6
+        def versionPatch = 0
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
