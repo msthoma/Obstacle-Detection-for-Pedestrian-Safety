@@ -3,8 +3,10 @@ package cy.org.rise.obsai.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.michaelflisar.changelog.ChangelogBuilder
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
@@ -25,6 +27,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
             if (viewClicks == 5) {
                 throw RuntimeException("This crash was intentional!")
             }
+            true
+        }
+
+        // show changelog
+        findPreference<Preference>("changelog")?.setOnPreferenceClickListener {
+            ChangelogBuilder().withUseBulletList(true)
+                .buildAndShowDialog(activity as AppCompatActivity?, false)
             true
         }
 
