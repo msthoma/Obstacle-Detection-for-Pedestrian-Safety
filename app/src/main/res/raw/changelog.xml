@@ -3,23 +3,97 @@
         date="2020-03-11"
         versionCode="1"
         versionName="Version 0.6.0">
+        <info>Fixed up and back navigation by managing the fragment backstack</info>
         <new type="summary">Added changelog</new>
-        <bugfix>Fixed up and back navigation by managing the fragment backstack</bugfix>
+        <new type="summary">Semantic versioning for app version</new>
     </release>
+
     <release
         date="2020-03-10"
         versionCode="1"
-        versionName="Version 0.5.10">
-        <new type="summary">This version has a summary item only - no show more button will be shown
-            even if show more buttons are enabled
-        </new>
+        versionName="Version 0.5.1">
+        <info>Enforce obstacle type selection, by preventing submission if no selection was
+            made
+        </info>
+        <info>Faster loading of obstacle photo in edit fragment</info>
     </release>
+
     <release
         date="2020-03-09"
         versionCode="1"
-        versionName="Version 0.1">
-        <info>Some info</info>
-        <new type="summary">Some improvement</new>
-        <bugfix>Some bugfix</bugfix>
+        versionName="Version 0.5.0">
+        <info>Fixed back navigation in list fragment that went back to edit fragment</info>
+        <new type="summary">Added ACRA crash reporting library</new>
+        <new type="summary">Card layout in list fragment</new>
+    </release>
+
+    <release
+        date="2020-03-06"
+        versionCode="1"
+        versionName="Version 0.4.1">
+        <info>"Delete all" button now only shows up if there are objects in the database</info>
+        <info>Various Google map view fixes, allow map scrolling</info>
+        <new type="summary">New barrier drawable</new>
+    </release>
+
+    <release
+        date="2020-03-05"
+        versionCode="1"
+        versionName="Version 0.4.0">
+        <info>Cropping of photos now works fully, with new UI controls</info>
+        <info>All requests for permission are now handled properly</info>
+        <info>Major rearrangements in the app files, with new structure implemented</info>
+        <new type="summary">New button drawables</new>
+    </release>
+
+    <release
+        date="2020-03-04"
+        versionCode="1"
+        versionName="Version 0.3.0">
+        <info>Expanded obstacle entity fields: added id (UUID), timestamp, type, orientation,
+        location</info>
+        <info>Database now works fully (all actions still happen in the UI thread, however)</info>
+        <info>Obstacles shown in list fragment now originate as LiveData from the database</info>
+        <new type="summary">"Delete all" and "Add mock obstacle" buttons in list fragment</new>
+        <new type="summary">New Settings fragment</new>
+    </release>
+
+    <release
+        date="2020-02-28"
+        versionCode="1"
+        versionName="Version 0.2.4">
+        <new type="summary">Replaced OpenStreetMap view with Google Maps view</new>
+        <new type="summary">Implemented app versioning</new>
+    </release>
+
+    <release
+        date="2020-02-27"
+        versionCode="1"
+        versionName="Version 0.2.3">
+        <info>Removed old camera activity, and Fotoapparat camera library</info>
+        <info>Reworked ViewModel and app Repository to work with injector tools</info>
+    </release>
+
+    <release
+        date="2020-02-25"
+        versionCode="1"
+        versionName="Version 0.2.2">
+        <new type="summary">Added About activity, that lists the open source libraries used in
+            the app</new>
+    </release>
+
+    <release
+        date="2020-02-24"
+        versionCode="1"
+        versionName="Version 0.2.1">
+        <new type="summary">Added user account fragment</new>
+    </release>
+
+    <release
+        date="2020-02-20"
+        versionCode="1"
+        versionName="Version 0.2.0">
+        <new type="summary">Added message and graphic that is shown when the list fragment is
+            empty (no obstacles to show)</new>
     </release>
 </changelog>
