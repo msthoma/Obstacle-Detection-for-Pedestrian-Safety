@@ -15,6 +15,7 @@ import com.afollestad.assent.Permission.CAMERA
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
+import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
@@ -138,8 +139,18 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_delete_all -> {
-                viewModel.deleteAll()
-                Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                MaterialDialog(context!!).show {
+                    title(R.string.dialog_delete_all_title)
+                    message(R.string.dialog_delete_all_msg)
+                    positiveButton(R.string.dialog_delete_all_positive) {
+                        viewModel.deleteAll()
+                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                        dismiss()
+                    }
+                    negativeButton(R.string.dialog_delete_all_negative) {
+                        dismiss()
+                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
