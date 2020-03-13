@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-03-13"
+        versionCode="1"
+        versionName="Version 0.7.0">
+        <info>All database transactions now happen on background threads, using Kotlin
+            coroutines</info>
+        <info>Added "Delete all" confirmation dialog</info>
+    </release>
+
+    <release
         date="2020-03-11"
         versionCode="1"
         versionName="Version 0.6.0">
