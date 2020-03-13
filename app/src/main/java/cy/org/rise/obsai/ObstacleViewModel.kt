@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
+import kotlinx.coroutines.launch
 
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
@@ -19,8 +21,8 @@ class ObstacleViewModel internal constructor(
 
     fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(), "inserting obstacle...")
-        return rep.insertObstacle(obstacle)
+        viewModelScope.launch { rep.insertObstacle(obstacle) }
     }
 
-    fun deleteAll() = rep.deleteAll()
+    fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
 }

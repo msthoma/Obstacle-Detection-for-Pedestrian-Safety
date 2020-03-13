@@ -9,11 +9,11 @@ interface ObstacleDao {
     fun getAllObstacles(): LiveData<List<Obstacle>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertObstacle(obstacle: Obstacle)
+    suspend fun insertObstacle(obstacle: Obstacle)
 
     @Update
-    fun updateObstacle(obstacle: Obstacle)
+    suspend fun updateObstacle(obstacle: Obstacle)
 
     @Query("DELETE FROM obstacle_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

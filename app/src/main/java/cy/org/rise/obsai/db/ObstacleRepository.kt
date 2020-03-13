@@ -9,11 +9,9 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
 
     fun getObstacles() = obstacleDao.getAllObstacles()
 
-    fun insertObstacle(obstacle: Obstacle) {
-        return obstacleDao.insertObstacle(obstacle)
-    }
+    suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
-    fun deleteAll() = obstacleDao.deleteAll()
+    suspend fun deleteAll() = obstacleDao.deleteAll()
 
     companion object {
         // For Singleton instantiation
