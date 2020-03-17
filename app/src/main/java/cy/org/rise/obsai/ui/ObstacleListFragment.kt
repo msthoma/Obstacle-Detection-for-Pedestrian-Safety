@@ -142,6 +142,7 @@ class ObstacleListFragment : Fragment() {
                 MaterialDialog(context!!).show {
                     title(R.string.dialog_delete_all_title)
                     message(R.string.dialog_delete_all_msg)
+                    icon(R.drawable.ic_warning_black_24dp)
                     positiveButton(R.string.dialog_delete_all_positive) {
                         viewModel.deleteAll()
                         Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
