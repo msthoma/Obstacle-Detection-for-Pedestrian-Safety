@@ -189,6 +189,7 @@ dependencies {
 
     // Retrofit https://github.com/square/retrofit
     implementation "com.squareup.retrofit2:retrofit:2.7.2"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.2"
 
     // Changelog https://github.com/MFlisar/changelog
     implementation 'com.github.MFlisar:changelog:1.1.6'
