@@ -25,4 +25,18 @@ class ObstacleViewModel internal constructor(
     }
 
     fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
+
+//    fun ff(path: String) = viewModelScope.launch {
+//        findFaces(path)
+//    }
+//    private suspend fun findFaces(path: String): Array<FaceDetector.Face?> {
+//        val bm = BitmapFactory.decodeFile(path, BitmapFactory.Options().apply {
+//            inPreferredConfig = Bitmap.Config.RGB_565
+//        })
+//        val faceArray = arrayOfNulls<FaceDetector.Face>(10)
+//        val fd = FaceDetector(bm.width, bm.height, 10)
+//        fd.findFaces(bm, faceArray)
+//        Log.d(TAG(), faceArray[0]?.confidence().toString())
+//        return faceArray
+//    }
 }
