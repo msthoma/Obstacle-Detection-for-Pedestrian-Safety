@@ -18,7 +18,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <!--TODO remove usesCleartextTraffic!!!-->
 
         <activity
             android:name=".ui.AboutActivity"
@@ -57,7 +59,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCZ-ZyuKzC55-FZ9RsIuzB6G7-P0m9bHqw"/>
+            android:value="AIzaSyCZ-ZyuKzC55-FZ9RsIuzB6G7-P0m9bHqw" />
     </application>
 
 </manifest>
