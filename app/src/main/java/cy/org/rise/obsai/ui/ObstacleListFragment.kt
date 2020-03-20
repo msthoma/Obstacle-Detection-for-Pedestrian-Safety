@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -18,9 +19,16 @@ import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
+import cy.org.rise.obsai.api.Orion
+import cy.org.rise.obsai.api.OrionService
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
+import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ObstacleListFragment : Fragment() {
 
@@ -139,19 +147,50 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_delete_all -> {
-                MaterialDialog(context!!).show {
-                    title(R.string.dialog_delete_all_title)
-                    message(R.string.dialog_delete_all_msg)
-                    icon(R.drawable.ic_warning_black_24dp)
-                    positiveButton(R.string.dialog_delete_all_positive) {
-                        viewModel.deleteAll()
-                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
-                        dismiss()
+//                MaterialDialog(context!!).show {
+//                    title(R.string.dialog_delete_all_title)
+//                    message(R.string.dialog_delete_all_msg)
+//                    icon(R.drawable.ic_warning_black_24dp)
+//                    positiveButton(R.string.dialog_delete_all_positive) {
+//                        viewModel.deleteAll()
+//                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+//                        dismiss()
+//                    }
+//                    negativeButton(R.string.dialog_delete_all_negative) {
+//                        dismiss()
+//                    }
+//                }
+                Log.d(TAG(), "Delete all pressed")
+
+                val interceptor = HttpLoggingInterceptor()
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+                val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("http://192.168.10.10:1026/")
+                    .client(client)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                val service = retrofit.create(OrionService::class.java)
+                val call = service.getVersion()
+                call.enqueue(object : Callback<Orion> {
+                    override fun onResponse(
+                        call: Call<Orion>,
+                        response: Response<Orion>
+                    ) {
+                        if (response.code() == 200) {
+
+                            Toast.makeText(
+                                context, "version: ${response.body()}", Toast
+                                    .LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                    negativeButton(R.string.dialog_delete_all_negative) {
-                        dismiss()
+
+                    override fun onFailure(call: Call<Orion>, t: Throwable) {
+                        Log.d(TAG(), t.message.toString())
                     }
-                }
+                })
                 true
             }
             else -> super.onOptionsItemSelected(item)
