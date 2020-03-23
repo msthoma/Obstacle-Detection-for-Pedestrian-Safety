@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,10 +15,9 @@ import com.afollestad.assent.Permission.CAMERA
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
-import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.api.Orion
+import cy.org.rise.obsai.api.OrionVersion
 import cy.org.rise.obsai.api.OrionService
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
@@ -171,23 +169,25 @@ class ObstacleListFragment : Fragment() {
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
+
                 val service = retrofit.create(OrionService::class.java)
+
                 val call = service.getVersion()
-                call.enqueue(object : Callback<Orion> {
+
+                call.enqueue(object : Callback<OrionVersion> {
                     override fun onResponse(
-                        call: Call<Orion>,
-                        response: Response<Orion>
+                        call: Call<OrionVersion>,
+                        response: Response<OrionVersion>
                     ) {
                         if (response.code() == 200) {
-
                             Toast.makeText(
-                                context, "version: ${response.body()}", Toast
+                                context, "version: ${response.body()?.orion?.version}", Toast
                                     .LENGTH_SHORT
                             ).show()
                         }
                     }
 
-                    override fun onFailure(call: Call<Orion>, t: Throwable) {
+                    override fun onFailure(call: Call<OrionVersion>, t: Throwable) {
                         Log.d(TAG(), t.message.toString())
                     }
                 })
