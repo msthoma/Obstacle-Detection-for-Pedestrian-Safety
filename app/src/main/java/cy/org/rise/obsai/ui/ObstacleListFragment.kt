@@ -1,7 +1,6 @@
 package cy.org.rise.obsai.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,17 +14,20 @@ import com.afollestad.assent.Permission.CAMERA
 import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
+import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.api.OrionVersion
 import cy.org.rise.obsai.api.OrionService
+import cy.org.rise.obsai.api.OrionVersion
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ObstacleListFragment : Fragment() {
@@ -145,21 +147,22 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_delete_all -> {
-//                MaterialDialog(context!!).show {
-//                    title(R.string.dialog_delete_all_title)
-//                    message(R.string.dialog_delete_all_msg)
-//                    icon(R.drawable.ic_warning_black_24dp)
-//                    positiveButton(R.string.dialog_delete_all_positive) {
-//                        viewModel.deleteAll()
-//                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
-//                        dismiss()
-//                    }
-//                    negativeButton(R.string.dialog_delete_all_negative) {
-//                        dismiss()
-//                    }
-//                }
-                Log.d(TAG(), "Delete all pressed")
-
+                MaterialDialog(context!!).show {
+                    title(R.string.dialog_delete_all_title)
+                    message(R.string.dialog_delete_all_msg)
+                    icon(R.drawable.ic_warning_black_24dp)
+                    positiveButton(R.string.dialog_delete_all_positive) {
+                        viewModel.deleteAll()
+                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                        dismiss()
+                    }
+                    negativeButton(R.string.dialog_delete_all_negative) {
+                        dismiss()
+                    }
+                }
+                true
+            }
+            R.id.action_test_server_connection -> {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
                 val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
@@ -181,14 +184,18 @@ class ObstacleListFragment : Fragment() {
                     ) {
                         if (response.code() == 200) {
                             Toast.makeText(
-                                context, "version: ${response.body()?.orion?.version}", Toast
-                                    .LENGTH_SHORT
+                                context,
+                                "Connection success (v. ${response.body()?.orion?.version})",
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
 
                     override fun onFailure(call: Call<OrionVersion>, t: Throwable) {
-                        Log.d(TAG(), t.message.toString())
+                        Toast.makeText(
+                            context, "Server connection failed", Toast
+                                .LENGTH_SHORT
+                        ).show()
                     }
                 })
                 true
