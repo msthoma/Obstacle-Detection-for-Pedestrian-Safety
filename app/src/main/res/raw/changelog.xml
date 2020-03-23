@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-03-23"
+        versionCode="1"
+        versionName="Version 0.8.0">
+        <info>App now supports basic connections to Fiware's Orion Broker (the functionality
+            is only local for now)</info>
+    </release>
+
+    <release
         date="2020-03-13"
         versionCode="1"
         versionName="Version 0.7.0">
