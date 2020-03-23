@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface OrionService {
     @GET("version")
-    fun getVersion(): Call<Orion>
+    fun getVersion(): Call<OrionVersion>
 }
