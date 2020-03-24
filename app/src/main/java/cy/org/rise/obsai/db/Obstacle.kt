@@ -1,8 +1,10 @@
 package cy.org.rise.obsai.db
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 
@@ -20,10 +22,16 @@ data class Obstacle(
 
     @ColumnInfo var longitude: Double,
 
-    // Orientation axes (best replaced with class or similar)
-    @ColumnInfo var x: Double,
-    @ColumnInfo var y: Double,
-    @ColumnInfo var z: Double,
+    @field:SerializedName("orientation")
+    @field:Embedded(prefix = "orientation_")
+    val orientation: Orientation,
 
     @ColumnInfo var altitude: Double? = null
-) : Serializable
+) : Serializable {
+
+    data class Orientation(
+        @field:SerializedName("x") val x: Double,
+        @field:SerializedName("y") var y: Double,
+        @field:SerializedName("z") var z: Double
+    )
+}

@@ -166,9 +166,11 @@ class CameraFragment : Fragment(), SensorEventListener {
             latitude = currentLocation.latitude,
             longitude = currentLocation.longitude,
             // TODO will these numbers change during saving the obstacle?
-            x = accelerometerReading[0].toDouble(),
-            y = accelerometerReading[1].toDouble(),
-            z = accelerometerReading[2].toDouble()
+            orientation = Obstacle.Orientation(
+                x = accelerometerReading[0].toDouble(),
+                y = accelerometerReading[1].toDouble(),
+                z = accelerometerReading[2].toDouble()
+            )
         )
     }
 

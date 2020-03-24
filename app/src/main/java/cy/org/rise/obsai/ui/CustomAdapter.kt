@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.R
+import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.row_item.view.*
 import java.io.File
@@ -55,8 +55,9 @@ class CustomAdapter internal constructor() :
         val obs = obstacles[position]
         viewHolder.textView.text = "Type:\t${obs.obs_type}\n" +
                 "Location:\t${obs.latitude}, ${obs.longitude}\n" +
-                "Orientation:\tx: ${"%.3f".format(obs.x)}, y: ${"%.3f".format(obs.y)}, " +
-                "z: ${"%.3f".format(obs.z)}\n" +
+                "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
+                "y: ${"%.3f".format(obs.orientation.y)}, " +
+                "z: ${"%.3f".format(obs.orientation.z)}\n" +
                 "${obs.timestamp}"
 
         // Set picture

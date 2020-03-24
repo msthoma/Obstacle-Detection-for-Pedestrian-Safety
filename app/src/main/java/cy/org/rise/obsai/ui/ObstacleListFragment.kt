@@ -138,9 +138,11 @@ class ObstacleListFragment : Fragment() {
                         obs_type = "Mock obstacle",
                         latitude = 35.169160,
                         longitude = 33.361459,
-                        x = 0.0,
-                        y = 0.0,
-                        z = 0.0,
+                        orientation = Obstacle.Orientation(
+                            x = 0.0,
+                            y = 0.0,
+                            z = 0.0
+                        ),
                         photo = "jkdhfak"
                     )
                 )
