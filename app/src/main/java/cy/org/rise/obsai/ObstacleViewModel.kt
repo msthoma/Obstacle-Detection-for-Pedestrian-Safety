@@ -5,10 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cy.org.rise.obsai.api.OrionService
+import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
@@ -25,6 +31,22 @@ class ObstacleViewModel internal constructor(
     }
 
     fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
+
+    fun insertRestObstacle(restObstacle: RestObstacle) = viewModelScope.launch {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.10.10:1026/")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(OrionService::class.java)
+
+        val call = service.insertObstacle(restObstacle)
+    }
 
 //    fun ff(path: String) = viewModelScope.launch {
 //        findFaces(path)
