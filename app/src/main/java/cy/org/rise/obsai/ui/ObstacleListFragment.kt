@@ -15,11 +15,11 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.gson.GsonBuilder
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.OrionService
 import cy.org.rise.obsai.api.OrionVersion
-import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
@@ -30,7 +30,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 class ObstacleListFragment : Fragment() {
 
@@ -174,7 +173,11 @@ class ObstacleListFragment : Fragment() {
                 val retrofit = Retrofit.Builder()
                     .baseUrl("http://192.168.10.10:1026/")
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(
+                        GsonConverterFactory.create(
+                            GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+                        )
+                    )
                     .build()
 
                 val service = retrofit.create(OrionService::class.java)
@@ -203,16 +206,9 @@ class ObstacleListFragment : Fragment() {
                     }
                 })
                 viewModel.insertRestObstacle(
-                    RestObstacle(
-                        id = UUID.randomUUID().toString(),
-                        obstacleType = RestObstacle.ObstacleType("Bench"),
-                        location = RestObstacle.Location(
-                            RestObstacle.Location.Value(
-                                listOf(
-                                    3.4, 5.6
-                                )
-                            )
-                        )
+                    Obstacle(
+                        obs_type = "Bench", photo = "sdfasdf", latitude = 5.3,
+                        longitude = 3.3, orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
                     )
                 )
                 true
