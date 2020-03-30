@@ -97,7 +97,10 @@ class ObstacleEditFragment : Fragment() {
         mapView = map
         mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
         mapView.getMapAsync { googleMap ->
-            val obstaclePosition = LatLng(currentObstacle.latitude, currentObstacle.longitude)
+            val obstaclePosition = LatLng(
+                currentObstacle.location.latitude,
+                currentObstacle.location.longitude
+            )
 
             // Add marker indicating the obstacle
             googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
@@ -139,10 +142,10 @@ class ObstacleEditFragment : Fragment() {
                 if (spinner.selectedItem.toString() == obstacleTypes[0]) {
                     // Show toast message
                     Toast.makeText(
-                            context,
-                            R.string.toast_type_selection_warning,
-                            Toast.LENGTH_SHORT
-                        )
+                        context,
+                        R.string.toast_type_selection_warning,
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                     // Highlight spinner with type choices
                     ObjectAnimator.ofObject(

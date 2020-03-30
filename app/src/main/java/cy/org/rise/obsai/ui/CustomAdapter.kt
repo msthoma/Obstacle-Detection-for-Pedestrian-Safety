@@ -54,7 +54,7 @@ class CustomAdapter internal constructor() :
         // with that element
         val obs = obstacles[position]
         viewHolder.textView.text = "Type:\t${obs.obs_type}\n" +
-                "Location:\t${obs.latitude}, ${obs.longitude}\n" +
+                "Location:\t${obs.location.latitude}, ${obs.location.longitude}\n" +
                 "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
                 "y: ${"%.3f".format(obs.orientation.y)}, " +
                 "z: ${"%.3f".format(obs.orientation.z)}\n" +

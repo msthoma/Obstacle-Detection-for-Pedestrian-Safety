@@ -137,8 +137,10 @@ class ObstacleListFragment : Fragment() {
                 viewModel.insertObstacle(
                     Obstacle(
                         obs_type = "Mock obstacle",
-                        latitude = 35.169160,
-                        longitude = 33.361459,
+                        location = Obstacle.Location(
+                            latitude = 35.169160,
+                            longitude = 33.361459
+                        ),
                         orientation = Obstacle.Orientation(
                             x = 0.0,
                             y = 0.0,
@@ -207,8 +209,13 @@ class ObstacleListFragment : Fragment() {
                 })
                 viewModel.insertRestObstacle(
                     Obstacle(
-                        obs_type = "Bench", photo = "sdfasdf", latitude = 5.3,
-                        longitude = 3.3, orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+                        obs_type = "Bench",
+                        photo = "sdfasdf",
+                        location = Obstacle.Location(
+                            latitude = 5.3,
+                            longitude = 3.3
+                        ),
+                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
                     )
                 )
                 true

@@ -163,8 +163,10 @@ class CameraFragment : Fragment(), SensorEventListener {
         return Obstacle(
             obs_type = "",
             photo = currentPhotoPath,
-            latitude = currentLocation.latitude,
-            longitude = currentLocation.longitude,
+            location = Obstacle.Location(
+                latitude = currentLocation.latitude,
+                longitude = currentLocation.longitude
+            ),
             // TODO will these numbers change during saving the obstacle?
             orientation = Obstacle.Orientation(
                 x = accelerometerReading[0].toDouble(),
