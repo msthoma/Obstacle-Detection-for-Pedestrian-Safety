@@ -19,6 +19,7 @@ import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.OrionService
 import cy.org.rise.obsai.api.OrionVersion
+import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
@@ -29,6 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class ObstacleListFragment : Fragment() {
 
@@ -200,6 +202,12 @@ class ObstacleListFragment : Fragment() {
                         ).show()
                     }
                 })
+                viewModel.insertRestObstacle(
+                    RestObstacle(
+                        id = UUID.randomUUID().toString(), obstacleType =
+                        RestObstacle.ObstacleType(value = "randomObstacle")
+                    )
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
