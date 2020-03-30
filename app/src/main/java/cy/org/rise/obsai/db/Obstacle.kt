@@ -21,7 +21,7 @@ data class Obstacle(
     // not the best name, but obstacleType is taken below, exposed for json serialization
     @ColumnInfo var obs_type: String,
 
-    @ColumnInfo var photo: String,
+    @ColumnInfo var photoPath: String,
 
     @Expose
     @Embedded(prefix = "location_")
