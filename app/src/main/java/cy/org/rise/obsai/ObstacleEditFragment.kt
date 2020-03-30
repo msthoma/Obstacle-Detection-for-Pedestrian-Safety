@@ -51,7 +51,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
-            File(currentObstacle.photo)
+            File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null

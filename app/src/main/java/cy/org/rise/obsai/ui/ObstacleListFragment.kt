@@ -146,7 +146,7 @@ class ObstacleListFragment : Fragment() {
                             y = 0.0,
                             z = 0.0
                         ),
-                        photo = "jkdhfak"
+                        photoPath = "jkdhfak"
                     )
                 )
                 true
@@ -210,7 +210,7 @@ class ObstacleListFragment : Fragment() {
                 viewModel.insertRestObstacle(
                     Obstacle(
                         obs_type = "Bench",
-                        photo = "sdfasdf",
+                        photoPath = "sdfasdf",
                         location = Obstacle.Location(
                             latitude = 5.3,
                             longitude = 3.3

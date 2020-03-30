@@ -62,7 +62,7 @@ class CustomAdapter internal constructor() :
 
         // Set picture
         Picasso.get()
-            .load(File(obs.photo))
+            .load(File(obs.photoPath))
             .placeholder(R.drawable.ic_noun_barrier_2895012)
             .resize(200, 0)
             .centerInside()
