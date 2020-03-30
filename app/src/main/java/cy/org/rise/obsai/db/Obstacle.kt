@@ -2,9 +2,13 @@ package cy.org.rise.obsai.db
 
 import androidx.room.*
 import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
+
+/*
+* parameters with @Ignore are ignored by Room
+* parameters with @Expose are used by Gson, to convert class to json
+* */
 
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
@@ -23,10 +27,11 @@ data class Obstacle(
     @ColumnInfo var longitude: Double,
 
     @Expose
-    @field:Embedded(prefix = "orientation_")
+    @Embedded(prefix = "orientation_")
     val orientation: Orientation,
 
     @ColumnInfo var altitude: Double? = null
+
 ) : Serializable {
 
     @Expose
@@ -67,9 +72,9 @@ data class Obstacle(
     }
 
     data class Orientation(
-        @field:SerializedName("x") val x: Double,
-        @field:SerializedName("y") var y: Double,
-        @field:SerializedName("z") var z: Double
+        val x: Double,
+        var y: Double,
+        var z: Double
     ) {
 
         @Expose
