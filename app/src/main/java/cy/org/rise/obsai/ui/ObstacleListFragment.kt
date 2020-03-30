@@ -204,8 +204,15 @@ class ObstacleListFragment : Fragment() {
                 })
                 viewModel.insertRestObstacle(
                     RestObstacle(
-                        id = UUID.randomUUID().toString(), obstacleType =
-                        RestObstacle.ObstacleType(value = "randomObstacle")
+                        id = UUID.randomUUID().toString(),
+                        obstacleType = RestObstacle.ObstacleType("Bench"),
+                        location = RestObstacle.Location(
+                            RestObstacle.Location.Value(
+                                listOf(
+                                    3.4, 5.6
+                                )
+                            )
+                        )
                     )
                 )
                 true
