@@ -1,16 +1,16 @@
 package cy.org.rise.obsai.db
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
-    @PrimaryKey val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey
+    @Expose
+    val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo val timestamp: Date = Calendar.getInstance().time,
 
@@ -22,16 +22,62 @@ data class Obstacle(
 
     @ColumnInfo var longitude: Double,
 
-    @field:SerializedName("orientation")
+    @Expose
     @field:Embedded(prefix = "orientation_")
     val orientation: Orientation,
 
     @ColumnInfo var altitude: Double? = null
 ) : Serializable {
 
+    @Expose
+    @Ignore
+    val type: String = "Obstacle"
+
+    @Expose
+    @Ignore
+    var location: Location = Location(latitude, longitude)
+
+    @Expose
+    @Ignore
+    var obstacleType = ObstacleType(obs_type)
+
+    data class ObstacleType(
+        @Expose
+        val value: String,
+        @Expose
+        val type: String = "Text"
+    )
+
+    data class Location(
+        var latitude: Double,
+        var longitude: Double
+    ) {
+        @Expose
+        val value: Value = Value(listOf(latitude, longitude))
+
+        @Expose
+        val type: String = "geo:json"
+
+        data class Value(
+            @Expose
+            val coordinates: List<Double>,
+            @Expose
+            val type: String = "Point"
+        )
+    }
+
     data class Orientation(
         @field:SerializedName("x") val x: Double,
         @field:SerializedName("y") var y: Double,
         @field:SerializedName("z") var z: Double
-    )
+    ) {
+
+        @Expose
+        @Ignore
+        var value: String = "x:$x,y:$y,z:$z"
+
+        @Expose
+        @Ignore
+        val type: String = "Text"
+    }
 }
