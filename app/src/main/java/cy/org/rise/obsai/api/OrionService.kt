@@ -1,5 +1,6 @@
 package cy.org.rise.obsai.api
 
+import cy.org.rise.obsai.db.Obstacle
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -11,5 +12,5 @@ interface OrionService {
     fun getVersion(): Call<OrionVersion>
 
     @POST("v2/entities")
-    suspend fun insertObstacle(@Body restObstacle: RestObstacle): Response<Unit>
+    suspend fun insertObstacle(@Body obstacle: Obstacle): Response<Unit>
 }
