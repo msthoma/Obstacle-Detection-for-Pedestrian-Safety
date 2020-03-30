@@ -18,6 +18,7 @@ data class Obstacle(
 
     @ColumnInfo val timestamp: Date = Calendar.getInstance().time,
 
+    // not the best name, but obstacleType is taken below, exposed for json serialization
     @ColumnInfo var obs_type: String,
 
     @ColumnInfo var photo: String,
@@ -36,7 +37,7 @@ data class Obstacle(
 
     @Expose
     @Ignore
-    val type: String = "Obstacle"
+    val type: String = "Obstacle" // required by Orion as entity type
 
     @Expose
     @Ignore
@@ -70,7 +71,7 @@ data class Obstacle(
     }
 
     data class Orientation(
-        val x: Double,
+        var x: Double,
         var y: Double,
         var z: Double
     ) {
