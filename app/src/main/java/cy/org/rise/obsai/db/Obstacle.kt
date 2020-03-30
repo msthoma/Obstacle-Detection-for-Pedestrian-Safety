@@ -7,7 +7,7 @@ import java.util.*
 
 /*
 * parameters with @Ignore are ignored by Room
-* parameters with @Expose are used by Gson, to convert class to json
+* parameters with @Expose are used by Gson, for converting entities to json
 * */
 
 @Entity(tableName = "obstacle_table")
@@ -22,9 +22,9 @@ data class Obstacle(
 
     @ColumnInfo var photo: String,
 
-    @ColumnInfo var latitude: Double,
-
-    @ColumnInfo var longitude: Double,
+    @Expose
+    @Embedded(prefix = "location_")
+    var location: Location,
 
     @Expose
     @Embedded(prefix = "orientation_")
@@ -37,10 +37,6 @@ data class Obstacle(
     @Expose
     @Ignore
     val type: String = "Obstacle"
-
-    @Expose
-    @Ignore
-    var location: Location = Location(latitude, longitude)
 
     @Expose
     @Ignore
@@ -58,9 +54,11 @@ data class Obstacle(
         var longitude: Double
     ) {
         @Expose
+        @Ignore
         val value: Value = Value(listOf(latitude, longitude))
 
         @Expose
+        @Ignore
         val type: String = "geo:json"
 
         data class Value(
@@ -79,7 +77,7 @@ data class Obstacle(
 
         @Expose
         @Ignore
-        var value: String = "x:$x,y:$y,z:$z"
+        var value: List<Double> = listOf(x, y, z)
 
         @Expose
         @Ignore
