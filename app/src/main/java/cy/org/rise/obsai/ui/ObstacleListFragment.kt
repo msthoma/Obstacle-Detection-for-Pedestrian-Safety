@@ -175,17 +175,23 @@ class ObstacleListFragment : Fragment() {
                     Log.d(TAG(), orionVersion.toString())
                 }
 
-                viewModel.insertServerObstacle(
-                    Obstacle(
-                        obs_type = "Bench",
-                        photoPath = "sdfasdf",
-                        location = Obstacle.Location(
-                            latitude = 5.3,
-                            longitude = 3.3
-                        ),
-                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
-                    )
-                )
+//                viewModel.insertServerObstacle(
+//                    Obstacle(
+//                        obs_type = "Bench",
+//                        photoPath = "sdfasdf",
+//                        location = Obstacle.Location(
+//                            latitude = 5.3,
+//                            longitude = 3.3
+//                        ),
+//                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+//                    )
+//                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val list = viewModel.getAllServer()
+                    Log.d(TAG(), list.toString())
+                }
+
                 true
             }
             else -> super.onOptionsItemSelected(item)

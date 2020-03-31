@@ -33,6 +33,8 @@ class ObstacleViewModel internal constructor(
         emit(allObstacles)
     }
 
+    fun getAllServer() = viewModelScope.launch { rep.getAllServerObstacles("Obstacle") }
+
 //    fun ff(path: String) = viewModelScope.launch {
 //        findFaces(path)
 //    }
