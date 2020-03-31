@@ -8,6 +8,13 @@ import java.util.*
 /*
 * parameters with @Ignore are ignored by Room
 * parameters with @Expose are used by Gson, for converting entities to json
+*
+* see these discussions for other strategies of using the same class for both Room and Retrofit:
+* https://stackoverflow.com/q/39199426/3755276
+* https://medium.com/holisticon-consultants/kotlin-data-class-mapping-aa0f9f750ca1
+*
+* Class implements Serializable to be able to be passed between fragments as SafeArg with
+* Navigation components library
 * */
 
 @Entity(tableName = "obstacle_table")
