@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,21 +16,20 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.gson.GsonBuilder
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.api.OrionService
+import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.OrionVersion
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
+import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ObstacleListFragment : Fragment() {
 
@@ -168,23 +168,9 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_connection -> {
-                val interceptor = HttpLoggingInterceptor()
-                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-                val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+                val orionService = FiwareOrionApi.create()
 
-                val retrofit = Retrofit.Builder()
-                    .baseUrl("http://192.168.10.10:1026/")
-                    .client(client)
-                    .addConverterFactory(
-                        GsonConverterFactory.create(
-                            GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-                        )
-                    )
-                    .build()
-
-                val service = retrofit.create(OrionService::class.java)
-
-                val call = service.getVersion()
+                val call = orionService.getVersion()
 
                 call.enqueue(object : Callback<OrionVersion> {
                     override fun onResponse(
@@ -207,6 +193,7 @@ class ObstacleListFragment : Fragment() {
                         ).show()
                     }
                 })
+
                 viewModel.insertRestObstacle(
                     Obstacle(
                         obs_type = "Bench",
@@ -218,6 +205,25 @@ class ObstacleListFragment : Fragment() {
                         orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
                     )
                 )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val callForAll = orionService.getAllObstacles("Obstacle")
+
+                    callForAll.enqueue(object : Callback<List<Obstacle>> {
+                        override fun onFailure(call: Call<List<Obstacle>>, t: Throwable) {
+                            Log.d(TAG(), "failed to get list of obstacles $t")
+                        }
+
+                        override fun onResponse(
+                            call: Call<List<Obstacle>>,
+                            response: Response<List<Obstacle>>
+                        ) {
+                            Log.d(TAG(), "success getting obstacles")
+                            Toast.makeText(context, call.toString(), Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    })
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
