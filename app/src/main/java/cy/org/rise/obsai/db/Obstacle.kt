@@ -23,12 +23,12 @@ data class Obstacle(
     @Expose
     val id: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo val timestamp: Date = Calendar.getInstance().time,
+    @ColumnInfo val time_stamp: Date = Calendar.getInstance().time,
 
     // not the best name, but obstacleType is taken below, exposed for json serialization
     @ColumnInfo var obs_type: String,
 
-    @ColumnInfo var photoPath: String,
+    @ColumnInfo var photo_path: String,
 
     @Expose
     @Embedded(prefix = "location_")
@@ -41,6 +41,28 @@ data class Obstacle(
     @ColumnInfo var altitude: Double? = null
 
 ) : Serializable {
+
+    @Expose
+    @Ignore
+    val timeStamp = TimeStamp(time_stamp)
+
+    data class TimeStamp(
+        @Expose
+        val value: Date,
+        @Expose
+        val type: String = "Date"
+    )
+
+    @Expose
+    @Ignore
+    val photoPath = PhotoPath(photo_path)
+
+    data class PhotoPath(
+        @Expose
+        val value: String,
+        @Expose
+        val type: String = "Text"
+    )
 
     @Expose
     @Ignore
@@ -89,6 +111,6 @@ data class Obstacle(
 
         @Expose
         @Ignore
-        val type: String = "Text"
+        val type: String = "Text" // TODO is there a better type?? list of doubles
     }
 }

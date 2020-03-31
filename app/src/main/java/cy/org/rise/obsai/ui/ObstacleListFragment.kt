@@ -19,7 +19,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
-import cy.org.rise.obsai.api.OrionVersion
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
@@ -27,9 +26,6 @@ import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ObstacleListFragment : Fragment() {
 
@@ -146,7 +142,7 @@ class ObstacleListFragment : Fragment() {
                             y = 0.0,
                             z = 0.0
                         ),
-                        photoPath = "jkdhfak"
+                        photo_path = "jkdhfak"
                     )
                 )
                 true
@@ -175,17 +171,17 @@ class ObstacleListFragment : Fragment() {
                     Log.d(TAG(), orionVersion.toString())
                 }
 
-//                viewModel.insertServerObstacle(
-//                    Obstacle(
-//                        obs_type = "Bench",
-//                        photoPath = "sdfasdf",
-//                        location = Obstacle.Location(
-//                            latitude = 5.3,
-//                            longitude = 3.3
-//                        ),
-//                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
-//                    )
-//                )
+                viewModel.insertServerObstacle(
+                    Obstacle(
+                        obs_type = "Bench",
+                        photo_path = "sdfasdf",
+                        location = Obstacle.Location(
+                            latitude = 5.3,
+                            longitude = 3.3
+                        ),
+                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+                    )
+                )
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val list = viewModel.getAllServer()

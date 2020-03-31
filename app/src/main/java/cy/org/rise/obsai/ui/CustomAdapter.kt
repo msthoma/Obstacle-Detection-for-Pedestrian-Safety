@@ -58,11 +58,11 @@ class CustomAdapter internal constructor() :
                 "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
                 "y: ${"%.3f".format(obs.orientation.y)}, " +
                 "z: ${"%.3f".format(obs.orientation.z)}\n" +
-                "${obs.timestamp}"
+                "${obs.time_stamp}"
 
         // Set picture
         Picasso.get()
-            .load(File(obs.photoPath))
+            .load(File(obs.photo_path))
             .placeholder(R.drawable.ic_noun_barrier_2895012)
             .resize(200, 0)
             .centerInside()

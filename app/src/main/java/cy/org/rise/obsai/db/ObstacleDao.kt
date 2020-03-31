@@ -5,7 +5,7 @@ import androidx.room.*
 
 @Dao
 interface ObstacleDao {
-    @Query("SELECT * from obstacle_table ORDER BY timestamp ASC")
+    @Query("SELECT * from obstacle_table ORDER BY time_stamp ASC")
     fun getAllObstacles(): LiveData<List<Obstacle>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
