@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface OrionService {
+interface FiwareOrionApi {
     @GET("version")
     fun getVersion(): Call<OrionVersion>
 
