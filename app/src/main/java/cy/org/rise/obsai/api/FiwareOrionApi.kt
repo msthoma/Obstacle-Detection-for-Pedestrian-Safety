@@ -7,7 +7,6 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,16 +17,16 @@ import retrofit2.http.Query
 
 interface FiwareOrionApi {
     @GET("version")
-    fun getVersion(): Call<OrionVersion>
+    suspend fun getOrionVersion(): OrionVersion
 
     @GET("v2/entities")
-    fun getAllObstacles(
+    suspend fun getAllServerObstacles(
         @Query("type") type: String,
-        @Query("options") options: String = "keyValues"
-    ): Call<List<Obstacle>>
+        @Query("options") options: String
+    ): List<Obstacle>
 
     @POST("v2/entities")
-    suspend fun insertObstacle(@Body obstacle: Obstacle): Response<Unit>
+    suspend fun insertServerObstacle(@Body obstacle: Obstacle): Response<Unit>
 
     /*
     * Based on this example:
