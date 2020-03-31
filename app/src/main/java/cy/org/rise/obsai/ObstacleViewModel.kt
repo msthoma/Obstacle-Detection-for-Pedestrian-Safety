@@ -1,20 +1,12 @@
 package cy.org.rise.obsai
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.gson.GsonBuilder
-import cy.org.rise.obsai.api.FiwareOrionApi
+import androidx.lifecycle.*
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
@@ -32,22 +24,13 @@ class ObstacleViewModel internal constructor(
 
     fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
 
-    fun insertRestObstacle(obstacle: Obstacle) = viewModelScope.launch {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+    fun insertServerObstacle(obstacle: Obstacle) = viewModelScope.launch {
+        rep.insertServerObstacle(obstacle)
+    }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.10.10:1026/")
-            .client(client)
-            .addConverterFactory(
-                GsonConverterFactory.create(
-                    GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-                )
-            )
-            .build()
-
-        retrofit.create(FiwareOrionApi::class.java).insertObstacle(obstacle)
+    val allServerObstacles = liveData(Dispatchers.IO) {
+        val allObstacles = rep.getAllServerObstacles("Obstacle")
+        emit(allObstacles)
     }
 
 //    fun ff(path: String) = viewModelScope.launch {
