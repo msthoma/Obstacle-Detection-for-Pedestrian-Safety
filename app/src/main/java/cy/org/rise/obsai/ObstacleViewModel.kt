@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
-import cy.org.rise.obsai.api.OrionService
+import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
@@ -47,7 +47,7 @@ class ObstacleViewModel internal constructor(
             )
             .build()
 
-        retrofit.create(OrionService::class.java).insertObstacle(obstacle)
+        retrofit.create(FiwareOrionApi::class.java).insertObstacle(obstacle)
     }
 
 //    fun ff(path: String) = viewModelScope.launch {
