@@ -20,10 +20,7 @@ interface FiwareOrionApi {
     suspend fun getOrionVersion(): OrionVersion
 
     @GET("v2/entities")
-    suspend fun getAllServerObstacles(
-        @Query("type") type: String,
-        @Query("options") options: String
-    ): List<Obstacle>
+    suspend fun getAllServerObstacles(@Query("type") type: String): List<Obstacle>
 
     @POST("v2/entities")
     suspend fun insertServerObstacle(@Body obstacle: Obstacle): Response<Unit>

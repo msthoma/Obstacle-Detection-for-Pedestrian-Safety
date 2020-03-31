@@ -23,8 +23,8 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
     suspend fun insertServerObstacle(obstacle: Obstacle) =
         orionService.insertServerObstacle(obstacle)
 
-    suspend fun getAllServerObstacles(type: String, options: String = "keyValues") =
-        orionService.getAllServerObstacles(type, options)
+    suspend fun getAllServerObstacles(type: String) =
+        orionService.getAllServerObstacles(type)
 
     companion object {
         // For Singleton instantiation
