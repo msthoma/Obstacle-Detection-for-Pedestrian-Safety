@@ -168,33 +168,14 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_connection -> {
-                val orionService = FiwareOrionApi.create()
 
-                val call = orionService.getVersion()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val orionVersion = FiwareOrionApi.create().getOrionVersion()
 
-                call.enqueue(object : Callback<OrionVersion> {
-                    override fun onResponse(
-                        call: Call<OrionVersion>,
-                        response: Response<OrionVersion>
-                    ) {
-                        if (response.code() == 200) {
-                            Toast.makeText(
-                                context,
-                                "Connection success (v. ${response.body()?.orion?.version})",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    Log.d(TAG(), orionVersion.toString())
+                }
 
-                    override fun onFailure(call: Call<OrionVersion>, t: Throwable) {
-                        Toast.makeText(
-                            context, "Server connection failed", Toast
-                                .LENGTH_SHORT
-                        ).show()
-                    }
-                })
-
-                viewModel.insertRestObstacle(
+                viewModel.insertServerObstacle(
                     Obstacle(
                         obs_type = "Bench",
                         photoPath = "sdfasdf",
@@ -205,25 +186,6 @@ class ObstacleListFragment : Fragment() {
                         orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
                     )
                 )
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    val callForAll = orionService.getAllObstacles("Obstacle")
-
-                    callForAll.enqueue(object : Callback<List<Obstacle>> {
-                        override fun onFailure(call: Call<List<Obstacle>>, t: Throwable) {
-                            Log.d(TAG(), "failed to get list of obstacles $t")
-                        }
-
-                        override fun onResponse(
-                            call: Call<List<Obstacle>>,
-                            response: Response<List<Obstacle>>
-                        ) {
-                            Log.d(TAG(), "success getting obstacles")
-                            Toast.makeText(context, call.toString(), Toast.LENGTH_LONG)
-                                .show()
-                        }
-                    })
-                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
