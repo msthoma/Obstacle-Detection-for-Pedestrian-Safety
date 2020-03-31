@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-03-31"
+        versionCode="1"
+        versionName="Version 0.8.1">
+        <info>App can now push obstacle entities to Fiware's Orion (but not their photos yet)</info>
+    </release>
+
+    <release
         date="2020-03-23"
         versionCode="1"
         versionName="Version 0.8.0">
