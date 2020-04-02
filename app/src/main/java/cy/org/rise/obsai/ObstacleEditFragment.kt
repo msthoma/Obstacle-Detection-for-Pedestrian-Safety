@@ -51,7 +51,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
-            File(currentObstacle.photo_path)
+            File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null
@@ -78,14 +78,14 @@ class ObstacleEditFragment : Fragment() {
             spinner.adapter = arrayAdapter
 
             // When coming from crop fragment, if the type was already set, restore its value
-            if (currentObstacle.obs_type != "") {
-                spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obs_type))
+            if (currentObstacle.obstacleType != "") {
+                spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obstacleType))
             }
         }
 
         button_edit_photo.setOnClickListener {
             // Save type before going to the crop fragment
-            currentObstacle.obs_type = spinner.selectedItem.toString()
+            currentObstacle.obstacleType = spinner.selectedItem.toString()
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     currentObstacle
@@ -159,7 +159,7 @@ class ObstacleEditFragment : Fragment() {
                     ).setDuration(1000).start()
                 } else {
                     // Save obstacle type
-                    currentObstacle.obs_type = spinner.selectedItem.toString()
+                    currentObstacle.obstacleType = spinner.selectedItem.toString()
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
                         R.id.action_obstacleEditFragment_to_obstacleListFragment

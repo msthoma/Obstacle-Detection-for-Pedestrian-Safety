@@ -43,7 +43,7 @@ class CropFragment : Fragment() {
 
         // Attempt to read photo file
         val photoFile: File? = try {
-            File(currentObstacle.photo_path)
+            File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null

@@ -53,16 +53,16 @@ class CustomAdapter internal constructor() :
         // Get element from the dataset at this position and replace the contents of the view
         // with that element
         val obs = obstacles[position]
-        viewHolder.textView.text = "Type:\t${obs.obs_type}\n" +
+        viewHolder.textView.text = "Type:\t${obs.obstacleType}\n" +
                 "Location:\t${obs.location.latitude}, ${obs.location.longitude}\n" +
                 "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
                 "y: ${"%.3f".format(obs.orientation.y)}, " +
                 "z: ${"%.3f".format(obs.orientation.z)}\n" +
-                "${obs.time_stamp}"
+                "${obs.timeStamp}"
 
         // Set picture
         Picasso.get()
-            .load(File(obs.photo_path))
+            .load(File(obs.photoPath))
             .placeholder(R.drawable.ic_noun_barrier_2895012)
             .resize(200, 0)
             .centerInside()
