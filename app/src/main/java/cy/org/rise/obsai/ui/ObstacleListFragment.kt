@@ -16,9 +16,11 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.gson.Gson
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
@@ -132,7 +134,7 @@ class ObstacleListFragment : Fragment() {
             R.id.action_add_mock_element -> {
                 viewModel.insertObstacle(
                     Obstacle(
-                        obs_type = "Mock obstacle",
+                        obstacleType = "Mock obstacle",
                         location = Obstacle.Location(
                             latitude = 35.169160,
                             longitude = 33.361459
@@ -142,7 +144,7 @@ class ObstacleListFragment : Fragment() {
                             y = 0.0,
                             z = 0.0
                         ),
-                        photo_path = "jkdhfak"
+                        photoPath = "jkdhfak"
                     )
                 )
                 true
@@ -170,17 +172,25 @@ class ObstacleListFragment : Fragment() {
 
                     Log.d(TAG(), orionVersion.toString())
                 }
+                val obs = Obstacle(
+                    obstacleType = "Bench",
+                    photoPath = "sdfasdf",
+                    location = Obstacle.Location(
+                        latitude = 5.3,
+                        longitude = 3.3
+                    ),
+                    orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+                ).toRestObstacle()
+
+                val obs_json = Gson().toJson(obs)
+                Log.d(TAG(), obs_json)
+                Log.d(
+                    TAG(),
+                    Gson().fromJson(obs_json, RestObstacle::class.java).toObstacle().toString()
+                )
 
                 viewModel.insertServerObstacle(
-                    Obstacle(
-                        obs_type = "Bench",
-                        photo_path = "sdfasdf",
-                        location = Obstacle.Location(
-                            latitude = 5.3,
-                            longitude = 3.3
-                        ),
-                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
-                    )
+                    obs
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {
