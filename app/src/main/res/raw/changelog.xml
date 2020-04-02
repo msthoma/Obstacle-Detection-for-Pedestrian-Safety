@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-04-02"
+        versionCode="1"
+        versionName="Version 0.8.2">
+        <info>Obstacle objects are now successfully serialized to and deserialized from JSON,
+        so communication with server is successful</info>
+    </release>
+
+    <release
         date="2020-03-31"
         versionCode="1"
         versionName="Version 0.8.1">
