@@ -1,7 +1,9 @@
 package cy.org.rise.obsai.db
 
 import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
+import retrofit2.Response
 
 /**
  * Repository module for handling data operations.
@@ -21,8 +23,18 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
         FiwareOrionApi.create()
     }
 
-    suspend fun insertServerObstacle(restObstacle: RestObstacle) =
-        orionService.insertServerObstacle(restObstacle)
+    private val minIOUploader by lazy {
+        MinIOUploader.instance
+    }
+
+    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
+        minIOUploader.uploadPhoto(
+            serverPhotoName = "${restObstacle.id}.jpg",
+            photoPath = restObstacle.photoPath.value,
+            bucket = "rise.test"
+        )
+        return orionService.insertServerObstacle(restObstacle)
+    }
 
     suspend fun getAllServerObstacles(type: String) =
         orionService.getAllServerObstacles(type)
