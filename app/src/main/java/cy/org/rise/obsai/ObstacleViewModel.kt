@@ -2,6 +2,7 @@ package cy.org.rise.obsai
 
 import android.util.Log
 import androidx.lifecycle.*
+import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
@@ -24,12 +25,13 @@ class ObstacleViewModel internal constructor(
 
     fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
 
-    fun insertServerObstacle(obstacle: Obstacle) = viewModelScope.launch {
-        rep.insertServerObstacle(obstacle)
+    fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch {
+        rep.insertServerObstacle(restObstacle)
     }
 
     val allServerObstacles = liveData(Dispatchers.IO) {
-        val allObstacles = rep.getAllServerObstacles("Obstacle")
+        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
+        val allObstacles = allRestObstacles.map { it.toObstacle() }
         emit(allObstacles)
     }
 

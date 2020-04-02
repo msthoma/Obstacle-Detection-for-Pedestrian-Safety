@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.db
 
 import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.api.RestObstacle
 
 /**
  * Repository module for handling data operations.
@@ -20,8 +21,8 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
         FiwareOrionApi.create()
     }
 
-    suspend fun insertServerObstacle(obstacle: Obstacle) =
-        orionService.insertServerObstacle(obstacle)
+    suspend fun insertServerObstacle(restObstacle: RestObstacle) =
+        orionService.insertServerObstacle(restObstacle)
 
     suspend fun getAllServerObstacles(type: String) =
         orionService.getAllServerObstacles(type)
