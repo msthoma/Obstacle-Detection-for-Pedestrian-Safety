@@ -1,8 +1,6 @@
 package cy.org.rise.obsai.api
 
 import android.util.Log
-import com.google.gson.GsonBuilder
-import cy.org.rise.obsai.db.Obstacle
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -20,10 +18,10 @@ interface FiwareOrionApi {
     suspend fun getOrionVersion(): OrionVersion
 
     @GET("v2/entities")
-    suspend fun getAllServerObstacles(@Query("type") type: String): List<Obstacle>
+    suspend fun getAllServerObstacles(@Query("type") type: String): List<RestObstacle>
 
     @POST("v2/entities")
-    suspend fun insertServerObstacle(@Body obstacle: Obstacle): Response<Unit>
+    suspend fun insertServerObstacle(@Body restObstacle: RestObstacle): Response<Unit>
 
     /*
     * Based on this example:
@@ -52,9 +50,7 @@ interface FiwareOrionApi {
                 .baseUrl(httpUrl)
                 .client(client)
                 .addConverterFactory(
-                    GsonConverterFactory.create(
-                        GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-                    )
+                    GsonConverterFactory.create()
                 )
                 .build()
                 .create(FiwareOrionApi::class.java)
