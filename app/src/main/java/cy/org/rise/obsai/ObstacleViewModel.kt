@@ -6,6 +6,8 @@ import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
+import io.minio.errors.MinioException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,7 +22,20 @@ class ObstacleViewModel internal constructor(
 
     fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(), "inserting obstacle...")
-        viewModelScope.launch { rep.insertObstacle(obstacle) }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            // add to local db
+            rep.insertObstacle(obstacle)
+
+            // push to server
+            try {
+                rep.insertServerObstacle(obstacle.toRestObstacle())
+            } catch (e: MinioException) {
+                // TODO here catch other exceptions as well, e.g. for inserting obstacle to
+                //  Fiware, not only uploading photo to Minio
+                Log.e(TAG(), "photo upload failed $e")
+            }
+        }
     }
 
     fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
