@@ -1,7 +1,11 @@
 package cy.org.rise.obsai.db
 
-import androidx.room.*
-import com.google.gson.annotations.Expose
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import cy.org.rise.obsai.api.RestObstacle
+import cy.org.rise.obsai.api.RestObstacle.*
 import java.io.Serializable
 import java.util.*
 
@@ -20,97 +24,42 @@ import java.util.*
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
     @PrimaryKey
-    @Expose
     val id: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo val time_stamp: Date = Calendar.getInstance().time,
+    @ColumnInfo
+    val timeStamp: Date = Calendar.getInstance().time,
 
-    // not the best name, but obstacleType is taken below, exposed for json serialization
-    @ColumnInfo var obs_type: String,
+    @ColumnInfo
+    var obstacleType: String,
 
-    @ColumnInfo var photo_path: String,
+    @ColumnInfo
+    var photoPath: String,
 
-    @Expose
     @Embedded(prefix = "location_")
     var location: Location,
 
-    @Expose
     @Embedded(prefix = "orientation_")
-    val orientation: Orientation,
-
-    @ColumnInfo var altitude: Double? = null
+    val orientation: Orientation
 
 ) : Serializable {
-
-    @Expose
-    @Ignore
-    val timeStamp = TimeStamp(time_stamp)
-
-    data class TimeStamp(
-        @Expose
-        val value: Date,
-        @Expose
-        val type: String = "Date"
-    )
-
-    @Expose
-    @Ignore
-    val photoPath = PhotoPath(photo_path)
-
-    data class PhotoPath(
-        @Expose
-        val value: String,
-        @Expose
-        val type: String = "Text"
-    )
-
-    @Expose
-    @Ignore
-    val type: String = "Obstacle" // required by Orion as entity type
-
-    @Expose
-    @Ignore
-    var obstacleType = ObstacleType(obs_type)
-
-    data class ObstacleType(
-        @Expose
-        val value: String,
-        @Expose
-        val type: String = "Text"
-    )
 
     data class Location(
         var latitude: Double,
         var longitude: Double
-    ) {
-        @Expose
-        @Ignore
-        val value: Value = Value(listOf(latitude, longitude))
-
-        @Expose
-        @Ignore
-        val type: String = "geo:json"
-
-        data class Value(
-            @Expose
-            val coordinates: List<Double>,
-            @Expose
-            val type: String = "Point"
-        )
-    }
+    )
 
     data class Orientation(
         var x: Double,
         var y: Double,
         var z: Double
-    ) {
+    )
 
-        @Expose
-        @Ignore
-        var value: List<Double> = listOf(x, y, z)
-
-        @Expose
-        @Ignore
-        val type: String = "Text" // TODO is there a better type?? list of doubles
-    }
+    fun toRestObstacle(): RestObstacle = RestObstacle(
+        id = id,
+        timeStamp = TimeStamp(timeStamp),
+        obstacleType = ObstacleType(obstacleType),
+        photoPath = PhotoPath(photoPath),
+        location = RestObstacle.Location(location.latitude, location.longitude),
+        orientation = RestObstacle.Orientation(orientation.x, orientation.y, orientation.z)
+    )
 }
