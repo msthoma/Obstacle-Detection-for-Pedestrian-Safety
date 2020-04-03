@@ -1,5 +1,10 @@
 package cy.org.rise.obsai.api
 
+/*
+* Class for getting Orion Broker's version (http://localhost:1026/version)
+* Used only to check connection with broker
+* */
+
 data class OrionVersion(
     val orion: Orion
 ) {
