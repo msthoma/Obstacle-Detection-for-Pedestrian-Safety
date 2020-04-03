@@ -16,11 +16,9 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.gson.Gson
 import cy.org.rise.obsai.ObstacleViewModel
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
-import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
@@ -166,38 +164,26 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_connection -> {
-
+                //TODO move this to view model
                 CoroutineScope(Dispatchers.IO).launch {
                     val orionVersion = FiwareOrionApi.create().getOrionVersion()
 
                     Log.d(TAG(), orionVersion.toString())
                 }
-                val obs = Obstacle(
-                    obstacleType = "Bench",
-                    photoPath = "sdfasdf",
-                    location = Obstacle.Location(
-                        latitude = 5.3,
-                        longitude = 3.3
-                    ),
-                    orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
-                ).toRestObstacle()
-
-                val obs_json = Gson().toJson(obs)
-                Log.d(TAG(), obs_json)
-                Log.d(
-                    TAG(),
-                    Gson().fromJson(obs_json, RestObstacle::class.java).toObstacle().toString()
-                )
-
+                true
+            }
+            R.id.action_test_server_obstacle_input -> {
                 viewModel.insertServerObstacle(
-                    obs
+                    Obstacle(
+                        obstacleType = "Bench",
+                        photoPath = "sdfasdf",
+                        location = Obstacle.Location(
+                            latitude = 5.3,
+                            longitude = 3.3
+                        ),
+                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+                    ).toRestObstacle()
                 )
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    val list = viewModel.getAllServer()
-                    Log.d(TAG(), list.toString())
-                }
-
                 true
             }
             else -> super.onOptionsItemSelected(item)
