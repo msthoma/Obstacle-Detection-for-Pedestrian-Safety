@@ -29,8 +29,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_delete_all"
+        android:id="@+id/action_test_server_obstacle_input"
         android:orderInCategory="500"
+        android:title="@string/action_test_server_obstacle_input"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete_all"
+        android:orderInCategory="600"
         android:title="@string/action_delete_all"
         app:showAsAction="never" />
 </menu>
