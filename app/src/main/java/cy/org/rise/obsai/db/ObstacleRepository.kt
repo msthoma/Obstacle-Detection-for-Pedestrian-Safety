@@ -1,9 +1,12 @@
 package cy.org.rise.obsai.db
 
+import android.util.Log
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
+import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
+import java.net.ConnectException
 
 /**
  * Repository module for handling data operations.
@@ -28,11 +31,15 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
     }
 
     suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
-        minIOUploader.uploadPhoto(
-            serverPhotoName = "${restObstacle.id}.jpg",
-            photoPath = restObstacle.photoPath.value,
-            bucket = "rise.test"
-        )
+        try {
+            minIOUploader.uploadPhoto(
+                serverPhotoName = "${restObstacle.id}.jpg",
+                photoPath = restObstacle.photoPath.value,
+                bucket = "rise.test"
+            )
+        } catch (connectError: ConnectException) {
+            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
+        }
         return orionService.insertServerObstacle(restObstacle)
     }
 
