@@ -7,7 +7,6 @@ import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
 import io.minio.errors.MinioException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,7 +22,7 @@ class ObstacleViewModel internal constructor(
     fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(), "inserting obstacle...")
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch(Dispatchers.IO) {
             // add to local db
             rep.insertObstacle(obstacle)
 
@@ -38,9 +37,9 @@ class ObstacleViewModel internal constructor(
         }
     }
 
-    fun deleteAll() = viewModelScope.launch { rep.deleteAll() }
+    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
-    fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch {
+    fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
         rep.insertServerObstacle(restObstacle)
     }
 
@@ -50,7 +49,7 @@ class ObstacleViewModel internal constructor(
         emit(allObstacles)
     }
 
-    fun getAllServer() = viewModelScope.launch { rep.getAllServerObstacles("Obstacle") }
+//    fun getAllServer() = viewModelScope.launch { rep.getAllServerObstacles("Obstacle") }
 
 //    fun ff(path: String) = viewModelScope.launch {
 //        findFaces(path)
