@@ -25,7 +25,6 @@ class ObstacleRepository private constructor(
 
     // Network operations
     private val orionService by lazy {
-        val accessToken = SessionManager(context).fetchAuthToken()
         FiwareOrionApi.create(
             FiwareOrionApi.ORION_BASE_URL,
             SessionManager(context).fetchAuthToken() ?: ""
