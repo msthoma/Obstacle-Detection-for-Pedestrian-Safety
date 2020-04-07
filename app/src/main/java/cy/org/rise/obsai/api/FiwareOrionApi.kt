@@ -8,10 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface FiwareOrionApi {
     @GET("version")
@@ -23,17 +20,30 @@ interface FiwareOrionApi {
     @POST("v2/entities")
     suspend fun insertServerObstacle(@Body restObstacle: RestObstacle): Response<Unit>
 
+    @FormUrlEncoded
+    @POST("oauth2/token")
+    @Headers("No-AccessToken-Required: true")
+    suspend fun login(
+        @Header("Authorization") authorization: String,
+        @Field("username") username: String,
+        @Field("password") password: String,
+        @Field("grant_type") grant_type: String
+    ): Response<LoginResponse>
+
     /*
     * Based on this example:
     * https://github.com/android/architecture-components-samples/blob/d81da2cb1e3d61e40f052e631bb15883d0f9f637/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/api/RedditApi.kt
     * Essentially allows singleton instantiation of the Retrofit service
     * */
     companion object {
-        private const val BASE_URL = "http://192.168.10.10:1026/"
+        const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
+        const val ORION_BASE_URL = "http://192.168.10.10:1026/"
 
-        fun create(): FiwareOrionApi = create(BASE_URL.toHttpUrlOrNull()!!)
+        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi = create(
+            baseURL.toHttpUrlOrNull()!!, accessToken
+        )
 
-        fun create(httpUrl: HttpUrl): FiwareOrionApi {
+        fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
             // add logger to Retrofit
             val logger = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
@@ -42,8 +52,12 @@ interface FiwareOrionApi {
             })
             logger.level = HttpLoggingInterceptor.Level.BASIC
 
+            val serviceInterceptor = ServiceInterceptor()
+            serviceInterceptor.token = accessToken
+
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)
+                .addInterceptor(serviceInterceptor)
                 .build()
 
             return Retrofit.Builder()
