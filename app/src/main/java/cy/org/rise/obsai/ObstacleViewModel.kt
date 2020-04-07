@@ -1,7 +1,10 @@
 package cy.org.rise.obsai
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
@@ -43,11 +46,11 @@ class ObstacleViewModel internal constructor(
         rep.insertServerObstacle(restObstacle)
     }
 
-    val allServerObstacles = liveData(Dispatchers.IO) {
-        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
-        val allObstacles = allRestObstacles.map { it.toObstacle() }
-        emit(allObstacles)
-    }
+//    val allServerObstacles = liveData(Dispatchers.IO) {
+//        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
+//        val allObstacles = allRestObstacles.map { it.toObstacle() }
+//        emit(allObstacles)
+//    }
 
 //    fun getAllServer() = viewModelScope.launch { rep.getAllServerObstacles("Obstacle") }
 
