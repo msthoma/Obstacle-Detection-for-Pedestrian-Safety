@@ -175,6 +175,9 @@ class ObstacleListFragment : Fragment() {
 
                     val lr = async(Dispatchers.IO) {
                         FiwareOrionApi.create(FiwareOrionApi.LOGIN_BASE_URL).login(
+                            // the authorization header token for logging in is generated as
+                            // described here https://github.com/FIWARE/tutorials.Securing-Access#oauth2-grant-flows
+                            // the Credentials object below does the same as described in the link
                             Credentials.basic(
                                 "tutorial-dckr-site-0000-xpresswebapp",
                                 "tutorial-dckr-site-0000-clientsecret"
@@ -212,13 +215,17 @@ class ObstacleListFragment : Fragment() {
             R.id.action_test_server_obstacle_input -> {
                 viewModel.insertServerObstacle(
                     Obstacle(
-                        obstacleType = "Bench",
-                        photoPath = "sdfasdf",
+                        obstacleType = "Mock obstacle",
                         location = Obstacle.Location(
-                            latitude = 5.3,
-                            longitude = 3.3
+                            latitude = 35.169160,
+                            longitude = 33.361459
                         ),
-                        orientation = Obstacle.Orientation(0.3, 0.4, 9.5)
+                        orientation = Obstacle.Orientation(
+                            x = 0.0,
+                            y = 0.0,
+                            z = 0.0
+                        ),
+                        photoPath = "jkdhfak"
                     ).toRestObstacle()
                 )
                 true
