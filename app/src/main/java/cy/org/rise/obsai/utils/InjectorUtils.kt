@@ -18,7 +18,8 @@ object InjectorUtils {
             ObstacleRoomDatabase.getInstance(
                 context
                     .applicationContext
-            ).obstacleDao()
+            ).obstacleDao(),
+            context.applicationContext
         )
     }
 
