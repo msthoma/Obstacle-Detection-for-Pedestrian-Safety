@@ -1,19 +1,21 @@
 package cy.org.rise.obsai.db
 
-import android.util.Log
+import android.content.Context
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
-import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.SessionManager
 import retrofit2.Response
-import java.net.ConnectException
 
 /**
  * Repository module for handling data operations.
  * https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt
  */
 
-class ObstacleRepository private constructor(private val obstacleDao: ObstacleDao) {
+class ObstacleRepository private constructor(
+    private val obstacleDao: ObstacleDao, private val
+    context: Context
+) {
 
     fun getObstacles() = obstacleDao.getAllObstacles()
 
@@ -23,7 +25,11 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
 
     // Network operations
     private val orionService by lazy {
-        FiwareOrionApi.create()
+        val accessToken = SessionManager(context).fetchAuthToken()
+        FiwareOrionApi.create(
+            FiwareOrionApi.ORION_BASE_URL,
+            SessionManager(context).fetchAuthToken() ?: ""
+        )
     }
 
     private val minIOUploader by lazy {
@@ -31,15 +37,15 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
     }
 
     suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
-        try {
-            minIOUploader.uploadPhoto(
-                serverPhotoName = "${restObstacle.id}.jpg",
-                photoPath = restObstacle.photoPath.value,
-                bucket = "rise.test"
-            )
-        } catch (connectError: ConnectException) {
-            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
-        }
+//        try {
+//            minIOUploader.uploadPhoto(
+//                serverPhotoName = "${restObstacle.id}.jpg",
+//                photoPath = restObstacle.photoPath.value,
+//                bucket = "rise.test"
+//            )
+//        } catch (connectError: ConnectException) {
+//            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
+//        }
         return orionService.insertServerObstacle(restObstacle)
     }
 
@@ -51,10 +57,10 @@ class ObstacleRepository private constructor(private val obstacleDao: ObstacleDa
         @Volatile
         private var instance: ObstacleRepository? = null
 
-        fun getInstance(obstacleDao: ObstacleDao) =
+        fun getInstance(obstacleDao: ObstacleDao, context: Context) =
             instance ?: synchronized(this) {
                 instance
-                    ?: ObstacleRepository(obstacleDao)
+                    ?: ObstacleRepository(obstacleDao, context)
                         .also { instance = it }
             }
     }
