@@ -21,16 +21,20 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
+import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import okhttp3.Credentials
 
 class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
+    private lateinit var sessionManager: SessionManager
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -46,6 +50,8 @@ class ObstacleListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sessionManager = SessionManager(context!!)
 
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -165,10 +171,41 @@ class ObstacleListFragment : Fragment() {
             }
             R.id.action_test_server_connection -> {
                 //TODO move this to view model
-                CoroutineScope(Dispatchers.IO).launch {
-                    val orionVersion = FiwareOrionApi.create().getOrionVersion()
+                CoroutineScope(Dispatchers.Main).launch {
 
-                    Log.d(TAG(), orionVersion.toString())
+                    val lr = async(Dispatchers.IO) {
+                        FiwareOrionApi.create(FiwareOrionApi.LOGIN_BASE_URL).login(
+                            Credentials.basic(
+                                "tutorial-dckr-site-0000-xpresswebapp",
+                                "tutorial-dckr-site-0000-clientsecret"
+                            ),
+                            username = "alice-the-admin@test.com",
+                            password = "test",
+                            grant_type = "password"
+                        )
+                    }
+                    lr.await().also { response ->
+                        if (response.code() == 200) {
+                            response.body()?.accessToken?.let { sessionManager.saveAuthToken(it) }
+                        }
+                        Log.d(TAG(), "accessToken set to ${sessionManager.fetchAuthToken()}")
+                    }
+
+//                    try {
+//
+//                    }
+
+                    Toast.makeText(context, lr.await().code().toString(), Toast.LENGTH_LONG).show()
+                    Log.d(
+                        TAG(), lr.await().toString() + Credentials.basic(
+                            "wirecloud-dckr-site-0000-00000000000",
+                            "wirecloud-docker-000000-clientsecret"
+                        )
+                    )
+//                    lr.await().r
+//                    val orionVersion = FiwareOrionApi.create().getOrionVersion()
+//
+//                    Log.d(TAG(), orionVersion.toString())
                 }
                 true
             }
