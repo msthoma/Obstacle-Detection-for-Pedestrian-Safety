@@ -43,6 +43,8 @@ data class Obstacle(
 
 ) : Serializable {
 
+    // NOTE: Android uses Lat, Long but server Long, Lat, see https://macwright.org/lonlat/
+    // Careful with conversions between the two!
     data class Location(
         var latitude: Double,
         var longitude: Double
@@ -59,7 +61,11 @@ data class Obstacle(
         timeStamp = TimeStamp(timeStamp),
         obstacleType = ObstacleType(obstacleType),
         photoPath = PhotoPath(photoPath),
-        location = RestObstacle.Location(location.latitude, location.longitude),
+        location = RestObstacle.Location(
+            // NOTE REVERSAL OF LAT, LONG -> LONG, LAT
+            longitude = location.longitude,
+            latitude = location.latitude
+        ),
         orientation = RestObstacle.Orientation(orientation.x, orientation.y, orientation.z)
     )
 }

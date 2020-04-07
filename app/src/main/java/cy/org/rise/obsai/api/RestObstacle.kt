@@ -49,12 +49,14 @@ data class RestObstacle(
     )
 
     data class Location(
+        // NOTE: Android uses Lat, Long but server Long, Lat, see https://macwright.org/lonlat/
+        // Careful with conversions between the two!
         @Transient
-        var latitude: Double,
+        var longitude: Double,
         @Transient
-        var longitude: Double
+        var latitude: Double
     ) {
-        val value: Value = Value(listOf(latitude, longitude))
+        val value: Value = Value(listOf(longitude, latitude))
 
         val type: String = "geo:json"
 
@@ -81,7 +83,11 @@ data class RestObstacle(
         timeStamp = timeStamp.value,
         obstacleType = obstacleType.value,
         photoPath = photoPath.value,
-        location = Obstacle.Location(location.value.coordinates[0], location.value.coordinates[1]),
+        location = Obstacle.Location(
+            // NOTE REVERSAL OF LONG, LAT -> LAT, LONG
+            latitude = location.value.coordinates[1],
+            longitude =  location.value.coordinates[0]
+        ),
         orientation = Obstacle.Orientation(
             orientation.value[0],
             orientation.value[1],
