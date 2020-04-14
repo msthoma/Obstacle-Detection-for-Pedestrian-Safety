@@ -28,7 +28,17 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+/**
+ * Fragment used for capturing photos, geo-tagging them, and saving phone orientation at the time of
+ * capture
+ *
+ * The CameraView library is used for interacting with the camera
+ * see [https://github.com/natario1/CameraView]
+ *
+ * For getting location, see documentation at [https://developer.android.com/training/location]
+ *
+ * For getting orientation, see [https://developer.android.com/guide/topics/sensors/sensors_overview]
+ */
 class CameraFragment : Fragment(), SensorEventListener {
     // Camera/photo related vars
     private lateinit var cameraView: CameraView
