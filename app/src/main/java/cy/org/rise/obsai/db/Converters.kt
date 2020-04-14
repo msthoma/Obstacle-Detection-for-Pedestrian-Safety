@@ -4,7 +4,8 @@ import androidx.room.TypeConverter
 import java.util.*
 
 /**
- * Class with Room database [type converters](https://developer.android.com/reference/androidx/room/TypeConverter)
+ * Class with Room database
+ * [type converters](https://developer.android.com/reference/androidx/room/TypeConverter).
  */
 class Converters {
     /**
