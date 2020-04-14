@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import okhttp3.Credentials
 
 /**
- * Displays a list with current obstacles. *
+ * Displays a list with current obstacles.
  */
 class ObstacleListFragment : Fragment() {
 
