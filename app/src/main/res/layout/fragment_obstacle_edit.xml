@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_small"
-    tools:context=".ObstacleEditFragment">
+    tools:context=".ui.ObstacleEditFragment">
 
     <ImageView
         android:id="@+id/obstacle_image_view"

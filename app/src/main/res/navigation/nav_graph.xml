@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/obstacleEditFragment"
-        android:name="cy.org.rise.obsai.ObstacleEditFragment"
+        android:name="cy.org.rise.obsai.ui.ObstacleEditFragment"
         android:label="@string/label_fragment_obstacle_edit"
         tools:layout="@layout/fragment_obstacle_edit">
         <action
