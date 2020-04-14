@@ -8,8 +8,9 @@ import cy.org.rise.obsai.utils.SessionManager
 import retrofit2.Response
 
 /**
- * Repository module for handling data operations.
- * https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt
+ * Repository module for handling data operations, based on
+ * [this](https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt)
+ * example.
  */
 
 class ObstacleRepository private constructor(
@@ -17,10 +18,19 @@ class ObstacleRepository private constructor(
     context: Context
 ) {
 
+    /**
+     * Returns all obstacles saved in local database as LiveData.
+     */
     fun getObstacles() = obstacleDao.getAllObstacles()
 
+    /**
+     * Inserts obstacle in local database.
+     */
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
+    /**
+     * Deletes all obstacles from local database.
+     */
     suspend fun deleteAll() = obstacleDao.deleteAll()
 
     // Network operations
@@ -35,6 +45,12 @@ class ObstacleRepository private constructor(
         MinIOUploader.instance
     }
 
+    /**
+     * Uploads entity to server.
+     *
+     * @param restObstacle entity to be uploaded to the server
+     * @return retrofit2 Response
+     */
     suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
 //        try {
 //            minIOUploader.uploadPhoto(
@@ -48,6 +64,11 @@ class ObstacleRepository private constructor(
         return orionService.insertServerObstacle(restObstacle)
     }
 
+    /**
+     * Gets all obstacles saved on server.
+     *
+     * @param type type of entity required, here should be "Obstacle"
+     */
     suspend fun getAllServerObstacles(type: String) =
         orionService.getAllServerObstacles(type)
 
@@ -56,6 +77,12 @@ class ObstacleRepository private constructor(
         @Volatile
         private var instance: ObstacleRepository? = null
 
+        /**
+         * Returns singleton of Repository.
+         *
+         * @param obstacleDao data access object
+         * @param context Application context, required to read SharedPreferences for access token.
+         */
         fun getInstance(obstacleDao: ObstacleDao, context: Context) =
             instance ?: synchronized(this) {
                 instance
