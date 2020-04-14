@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="cy.org.rise.obsai.CameraFragment"
+        android:name="cy.org.rise.obsai.ui.CameraFragment"
         android:label="@string/label_fragment_camera"
         tools:layout="@layout/fragment_camera">
         <action
