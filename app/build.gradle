@@ -169,9 +169,6 @@ dependencies {
     // Preference manager
     implementation "androidx.preference:preference-ktx:1.1.0"
 
-    // Drawerlayout
-    implementation 'androidx.drawerlayout:drawerlayout:1.1.0-alpha04'
-
     // AboutLibraries library
     implementation "com.mikepenz:aboutlibraries-core:8.0.0-rc01"
     implementation "com.mikepenz:aboutlibraries:8.0.0-rc01"
@@ -185,7 +182,7 @@ dependencies {
     // Retrofit https://github.com/square/retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
 
     // Changelog https://github.com/MFlisar/changelog
     implementation 'com.github.MFlisar:changelog:1.1.6'
