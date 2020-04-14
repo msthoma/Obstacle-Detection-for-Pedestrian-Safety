@@ -18,7 +18,10 @@ import java.io.File
 import java.io.FileOutputStream
 
 /**
- * A simple [Fragment] subclass.
+ * Fragment used for cropping obstacle photos.
+ *
+ * Android Image Cropper library is used for cropping,
+ * see - [https://github.com/ArthurHub/Android-Image-Cropper]
  */
 class CropFragment : Fragment() {
 
