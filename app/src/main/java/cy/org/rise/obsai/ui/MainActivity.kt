@@ -9,6 +9,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import cy.org.rise.obsai.R
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Activity that serves as the home of the nav_host_fragment, which is used by the Navigation
+ * Component library for most of the app's workflow
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
