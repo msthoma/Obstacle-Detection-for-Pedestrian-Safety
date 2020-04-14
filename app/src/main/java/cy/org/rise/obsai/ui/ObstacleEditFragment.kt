@@ -82,7 +82,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Set obstacle label choices in spinner
         ArrayAdapter.createFromResource(
-            context!!, // TODO fix !!
+            context!!,
             R.array.obstacle_types_array,
             android.R.layout.simple_spinner_dropdown_item
         ).also { arrayAdapter ->
