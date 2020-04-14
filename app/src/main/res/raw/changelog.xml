@@ -1,5 +1,15 @@
 <changelog>
     <release
+        date="2020-04-07"
+        versionCode="1"
+        versionName="Version 0.10.0">
+        <info>Added authentication functionality with Fiware Keyrock</info>
+        <info>Fixed issue with GPS coordinates caused by discrepancy of how Android and geo:json
+            store coordinates (Android: [Lat, Long], geo:json: [Long, Lat])
+        </info>
+    </release>
+
+    <release
         date="2020-04-02"
         versionCode="1"
         versionName="Version 0.9.0">
@@ -11,7 +21,8 @@
         versionCode="1"
         versionName="Version 0.8.2">
         <info>Obstacle objects are now successfully serialized to and deserialized from JSON,
-        so communication with server is successful</info>
+            so communication with server is successful
+        </info>
     </release>
 
     <release
@@ -26,7 +37,8 @@
         versionCode="1"
         versionName="Version 0.8.0">
         <info>App now supports basic connections to Fiware's Orion Broker (the functionality
-            is only local for now)</info>
+            is only local for now)
+        </info>
     </release>
 
     <release
@@ -34,7 +46,8 @@
         versionCode="1"
         versionName="Version 0.7.0">
         <info>All database transactions now happen on background threads, using Kotlin
-            coroutines</info>
+            coroutines
+        </info>
         <info>Added "Delete all" confirmation dialog</info>
     </release>
 
@@ -90,7 +103,8 @@
         versionCode="1"
         versionName="Version 0.3.0">
         <info>Expanded obstacle entity fields: added id (UUID), timestamp, type, orientation,
-        location</info>
+            location
+        </info>
         <info>Database now works fully (all actions still happen in the UI thread, however)</info>
         <info>Obstacles shown in list fragment now originate as LiveData from the database</info>
         <new type="summary">"Delete all" and "Add mock obstacle" buttons in list fragment</new>
@@ -118,7 +132,8 @@
         versionCode="1"
         versionName="Version 0.2.2">
         <new type="summary">Added About activity, that lists the open source libraries used in
-            the app</new>
+            the app
+        </new>
     </release>
 
     <release
@@ -133,6 +148,7 @@
         versionCode="1"
         versionName="Version 0.2.0">
         <new type="summary">Added message and graphic that is shown when the list fragment is
-            empty (no obstacles to show)</new>
+            empty (no obstacles to show)
+        </new>
     </release>
 </changelog>
