@@ -11,6 +11,7 @@ import java.util.*
  * The class has essentially the same fields as Obstacle, but each field here is a data class
  * that includes the value as well as the type of the field (e.g. type = "Text") for proper
  * deserialization to JSON, as shown in the example below:
+ *
  * ```
  * "obstacleType": {
  *     "type": "Text",
@@ -43,7 +44,7 @@ data class RestObstacle(
 ) : Serializable {
 
     /**
-     * The type of the entity, here always "Obstacle". Required field by Orion as entity type
+     * The type of the entity, here always "Obstacle". Required field by Fiware Orion for entities
      */
     val type: String = "Obstacle"
 
