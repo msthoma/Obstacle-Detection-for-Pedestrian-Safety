@@ -3,6 +3,9 @@ package cy.org.rise.obsai.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+/**
+ * Interface for data access object, used for defining SQLite commands of Room database.
+ */
 @Dao
 interface ObstacleDao {
     @Query("SELECT * from obstacle_table ORDER BY timeStamp ASC")
