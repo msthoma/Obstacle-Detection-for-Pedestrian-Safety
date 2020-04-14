@@ -6,6 +6,7 @@ import cy.org.rise.obsai.R
 
 /**
  * Session manager to save and fetch data from SharedPreferences
+ *
  * Based on this https://android.jlelse.eu/token-authorization-with-retrofit-android-oauth-2-0-747995c79720
  */
 class SessionManager(context: Context) {
