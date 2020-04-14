@@ -4,18 +4,29 @@ import cy.org.rise.obsai.db.Obstacle
 import java.io.Serializable
 import java.util.*
 
-/*
-* parameters with @Ignore are ignored by Room
-* parameters with @Expose are used by Gson, for converting entities to json
-*
-* see these discussions for other strategies of using the same class for both Room and Retrofit:
-* https://stackoverflow.com/q/39199426/3755276
-* https://medium.com/holisticon-consultants/kotlin-data-class-mapping-aa0f9f750ca1
-*
-* Class implements Serializable to be able to be passed between fragments as SafeArg with
-* Navigation components library
-* */
-
+/**
+ * Data class that allows for proper deserialization of [Obstacle] objects to JSON by the Gson
+ * library. See Obstacle documentation for further information.
+ *
+ * The class has essentially the same fields as Obstacle, but each field here is a data class
+ * that includes the value as well as the type of the field (e.g. type = "Text") for proper
+ * deserialization to JSON, as shown in the example below:
+ * ```
+ * "obstacleType": {
+ *     "type": "Text",
+ *     "value": "Cracked pavement"
+ * }
+ * ```
+ *
+ * Fields annotated with @Transient are ignored during deserialization by Gson.
+ *
+ * @property id
+ * @property timeStamp
+ * @property obstacleType
+ * @property photoPath
+ * @property location
+ * @property orientation
+ */
 data class RestObstacle(
     val id: String,
 
@@ -31,7 +42,10 @@ data class RestObstacle(
 
 ) : Serializable {
 
-    val type: String = "Obstacle" // required by Orion as entity type
+    /**
+     * The type of the entity, here always "Obstacle". Required field by Orion as entity type
+     */
+    val type: String = "Obstacle"
 
     data class TimeStamp(
         val value: Date,
@@ -78,6 +92,11 @@ data class RestObstacle(
         val type: String = "Text" // TODO is there a better type?? list of doubles, or coords
     }
 
+    /**
+     * Converts RestObstacle entity to Obstacle entity.
+     *
+     * @return Obstacle entity
+     */
     fun toObstacle(): Obstacle = Obstacle(
         id = id,
         timeStamp = timeStamp.value,
@@ -86,7 +105,7 @@ data class RestObstacle(
         location = Obstacle.Location(
             // NOTE REVERSAL OF LONG, LAT -> LAT, LONG
             latitude = location.value.coordinates[1],
-            longitude =  location.value.coordinates[0]
+            longitude = location.value.coordinates[0]
         ),
         orientation = Obstacle.Orientation(
             orientation.value[0],
