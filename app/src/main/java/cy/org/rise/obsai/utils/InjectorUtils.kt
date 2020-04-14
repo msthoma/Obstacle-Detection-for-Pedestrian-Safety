@@ -9,7 +9,7 @@ import cy.org.rise.obsai.db.ObstacleRoomDatabase
 /**
  * Static methods used to inject classes needed for Activities and Fragments.
  *
- * https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/utilities/InjectorUtils.kt
+ * Based on this [example](https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/utilities/InjectorUtils.kt).
  */
 
 object InjectorUtils {
