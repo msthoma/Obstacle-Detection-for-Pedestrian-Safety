@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/cropFragment"
-        android:name="cy.org.rise.obsai.CropFragment"
+        android:name="cy.org.rise.obsai.ui.CropFragment"
         android:label="@string/label_fragment_crop"
         tools:layout="@layout/fragment_crop">
         <action

@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.ui
 
 
 import android.graphics.Bitmap
@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.theartofdev.edmodo.cropper.CropImageView
+import cy.org.rise.obsai.ObstacleEditFragmentArgs
+import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_crop.*
@@ -80,7 +82,9 @@ class CropFragment : Fragment() {
 
             // Navigate back to edit fragment
             findNavController().navigate(
-                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
+                    currentObstacle
+                )
             )
         }
     }
@@ -104,7 +108,9 @@ class CropFragment : Fragment() {
             R.id.action_cancel_edit_photo -> {
                 // Cancel by navigating back to edit fragment
                 findNavController().navigate(
-                    CropFragmentDirections.actionCropFragmentToObstacleEditFragment(currentObstacle)
+                    CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
+                        currentObstacle
+                    )
                 )
                 true
             }
