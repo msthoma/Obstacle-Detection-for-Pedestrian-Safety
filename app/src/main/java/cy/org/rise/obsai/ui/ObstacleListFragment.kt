@@ -203,10 +203,6 @@ class ObstacleListFragment : Fragment() {
                             "wirecloud-docker-000000-clientsecret"
                         )
                     )
-//                    lr.await().r
-//                    val orionVersion = FiwareOrionApi.create().getOrionVersion()
-//
-//                    Log.d(TAG(), orionVersion.toString())
                 }
                 true
             }
