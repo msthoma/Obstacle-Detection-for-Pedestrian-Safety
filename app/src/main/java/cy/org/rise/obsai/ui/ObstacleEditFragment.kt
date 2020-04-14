@@ -56,6 +56,8 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // TODO add discard confirmation dialog when pressing back, or using back button
+
         // Get current obstacle
         currentObstacle = args.currentObstacle
 
@@ -128,14 +130,6 @@ class ObstacleEditFragment : Fragment() {
             // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
             googleMap.setMinZoomPreference(7.5f)
         }
-
-        // Handles pressing back in edit fragment, which should go back to the list fragment
-        // instead of the camera
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-//            findNavController().popBackStack(R.id.obstacleListFragment, false)
-//
-//            // TODO add discard confirmation dialog here
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
