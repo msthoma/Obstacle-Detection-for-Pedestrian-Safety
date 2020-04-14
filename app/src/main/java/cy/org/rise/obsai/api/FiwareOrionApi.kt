@@ -57,7 +57,7 @@ interface FiwareOrionApi {
             baseURL.toHttpUrlOrNull()!!, accessToken
         )
 
-        fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
+        private fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
             // add logger to Retrofit
             val logger = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
