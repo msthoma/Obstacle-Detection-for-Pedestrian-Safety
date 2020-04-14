@@ -10,6 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
+/**
+ * Interface for Retrofit requests.
+ */
 interface FiwareOrionApi {
     @GET("version")
     suspend fun getOrionVersion(): OrionVersion
@@ -30,15 +33,26 @@ interface FiwareOrionApi {
         @Field("grant_type") grant_type: String
     ): Response<LoginResponse>
 
-    /*
-    * Based on this example:
-    * https://github.com/android/architecture-components-samples/blob/d81da2cb1e3d61e40f052e631bb15883d0f9f637/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/api/RedditApi.kt
-    * Essentially allows singleton instantiation of the Retrofit service
-    * */
     companion object {
+        /**
+         * Keyrock endpoint, used for authentication.
+         */
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
+
+        /**
+         * Orion Broker endpoint, used for interactions with Fiware.
+         */
         const val ORION_BASE_URL = "http://192.168.10.10:1026/"
 
+        /**
+         * Allows for singleton instantiation of the Retrofit service.
+         *
+         * Based on this [example](https://github.com/android/architecture-components-samples/blob/d81da2cb1e3d61e40f052e631bb15883d0f9f637/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/api/RedditApi.kt).
+         *
+         * @param baseURL
+         * @param accessToken
+         * @return
+         */
         fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi = create(
             baseURL.toHttpUrlOrNull()!!, accessToken
         )
