@@ -11,7 +11,7 @@ import cy.org.rise.obsai.R
 import kotlinx.android.synthetic.main.fragment_account.*
 
 /**
- * A simple [Fragment] subclass.
+ * Fragment that handles user login. Currently only for demonstration purposes
  */
 class AccountFragment : Fragment() {
 

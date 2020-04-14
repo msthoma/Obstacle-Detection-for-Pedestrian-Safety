@@ -7,10 +7,12 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment
 import cy.org.rise.obsai.R
 import kotlinx.android.synthetic.main.activity_about.*
 
+/**
+ * Used to display a list of the Open source libraries used in the app
+ */
 class AboutActivity : AppCompatActivity() {
 
     // TODO override back button to go to settings fragment instead of list fragment
-    // TODO fix activity title to open source libraries
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
