@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @property accessToken token to be used in subsequent connections with server, identifying the
  * user
- * @property expiresIn seconds until token expiry
+ * @property expiresIn seconds until [accessToken] expiry
  * @property refreshToken token that can be used to get a new [accessToken] when it expires
  * @property tokenType something like "Bearer" or "Basic", depends on the server
  */
