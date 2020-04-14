@@ -11,6 +11,9 @@ import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
 
+/**
+ * Fragment that displays the app's settings.
+ */
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
