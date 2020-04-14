@@ -27,6 +27,15 @@ import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import java.io.File
 
+/**
+ * Fragment that displays the recently photographed obstacle, shows its position on the map,
+ * allows editing of the photo, and prompts the user to select the obstacle's type.
+ *
+ * The process of displaying the Google map is quite complicated, see documentation
+ * [here](https://developers.google.com/maps/documentation/android-sdk/map).
+ *
+ * The API key for Google Maps is defined in the AndroidManifest
+ */
 class ObstacleEditFragment : Fragment() {
 
     private lateinit var mapView: MapView
