@@ -13,6 +13,14 @@ import io.minio.errors.MinioException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * App view model.
+ *
+ * @property savedStateHandle
+ * @constructor
+ *
+ * @param obstacleRepository instance of [ObstacleRepository]
+ */
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
     private val savedStateHandle: SavedStateHandle
@@ -20,8 +28,16 @@ class ObstacleViewModel internal constructor(
     ViewModel() {
     private val rep = obstacleRepository
 
+    /**
+     * Live data of obstacles in local db.
+     */
     val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getObstacles()
 
+    /**
+     * Inserts obstacle in Room database.
+     *
+     * @param obstacle object to be inserted into db
+     */
     fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(), "inserting obstacle...")
 
@@ -40,8 +56,16 @@ class ObstacleViewModel internal constructor(
         }
     }
 
+    /**
+     * Deletes all obstacles from local db.
+     */
     fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
+    /**
+     * Inserts obstacle in remote server.
+     *
+     * @param restObstacle object to be inserted into remote server
+     */
     fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
         rep.insertServerObstacle(restObstacle)
     }
