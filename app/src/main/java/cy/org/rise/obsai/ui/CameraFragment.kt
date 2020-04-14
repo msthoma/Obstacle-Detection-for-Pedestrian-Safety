@@ -69,6 +69,9 @@ class CameraFragment : Fragment(), SensorEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO check if GPS is enabled, if not prompt user to enable it, otherwise go back to
+        //  list fragment
+
         // set camera settings
         // most of the other settings for CameraView are set in the activity's xml layout
         cameraView = camera_view
