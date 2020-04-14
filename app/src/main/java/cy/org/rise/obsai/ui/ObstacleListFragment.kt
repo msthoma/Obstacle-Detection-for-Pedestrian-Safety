@@ -29,6 +29,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
 
+/**
+ * Displays a list with current obstacles. *
+ */
 class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
@@ -169,7 +172,7 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_connection -> {
-                //TODO move this to view model
+                // TODO move this to view model
                 CoroutineScope(Dispatchers.Main).launch {
 
                     val lr = async(Dispatchers.IO) {
@@ -192,10 +195,6 @@ class ObstacleListFragment : Fragment() {
                         }
                         Log.d(TAG(), "accessToken set to ${sessionManager.fetchAuthToken()}")
                     }
-
-//                    try {
-//
-//                    }
 
                     Toast.makeText(context, lr.await().code().toString(), Toast.LENGTH_LONG).show()
                     Log.d(
