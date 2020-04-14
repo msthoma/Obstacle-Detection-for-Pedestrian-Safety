@@ -42,7 +42,7 @@ import java.util.*
 class CameraFragment : Fragment(), SensorEventListener {
     // Camera/photo related vars
     private lateinit var cameraView: CameraView
-    lateinit var currentPhotoPath: String
+    private lateinit var currentPhotoPath: String
 
     // Location related vars
     private lateinit var currentLocation: Location
