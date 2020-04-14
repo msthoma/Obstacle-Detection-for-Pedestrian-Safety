@@ -11,9 +11,12 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 // AboutLibraries plugin
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 
+apply plugin: 'org.jetbrains.dokka'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
     defaultConfig {
         applicationId "cy.org.rise.obsai"
         minSdkVersion 21
@@ -50,18 +53,29 @@ android {
             exclude("META-INF/*.kotlin_module")
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/javadoc"
+        configuration {
+            reportUndocumented = true
+        }
     }
 }
 
