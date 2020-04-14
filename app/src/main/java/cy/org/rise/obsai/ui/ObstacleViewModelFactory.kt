@@ -1,4 +1,4 @@
-package cy.org.rise.obsai
+package cy.org.rise.obsai.ui
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
