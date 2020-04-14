@@ -15,13 +15,8 @@ import kotlinx.android.synthetic.main.row_item.view.*
 import java.io.File
 
 /**
- * Provide views to RecyclerView with data from dataSet.
- *
- * Initialize the dataset of the Adapter.
- *
- * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
+ * Provides views to the RecyclerView with obstacle data.
  */
-
 class CustomAdapter internal constructor() :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -74,6 +69,8 @@ class CustomAdapter internal constructor() :
         notifyDataSetChanged()
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    /**
+     * Return the size of your dataset (invoked by the layout manager)
+     */
     override fun getItemCount() = obstacles.size
 }
