@@ -11,6 +11,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 // AboutLibraries plugin
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 
+// for generating Kdocs
 apply plugin: 'org.jetbrains.dokka'
 
 android {
@@ -71,6 +72,7 @@ android {
     }
 
     dokka {
+        // dokka configuration, which allows generating Kdocs (equivalent of Javadocs for Kotlin)
         outputFormat = 'html'
         outputDirectory = "$buildDir/javadoc"
         configuration {
