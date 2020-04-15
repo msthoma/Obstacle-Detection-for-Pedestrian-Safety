@@ -1,14 +1,11 @@
 package cy.org.rise.obsai.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -41,7 +38,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * By overriding this method, custom behaviour is added when navigating up in each fragment.
+     * By overriding this method, custom behaviour is added when navigating up in specific
+     * fragments.
      *
      * @return
      */
@@ -49,18 +47,12 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host_fragment)
 
         return when (navController.currentDestination?.id) {
+            // when Up is pressed in obstacleEditFragment, call onBackPressed instead of
+            // navigateUp, so that an OnBackPressedCallback is received in the fragment, to
+            // display a discard dialog, which should happen for both Up + Back
+            // see https://stackoverflow.com/a/55930024
             R.id.obstacleEditFragment -> {
-                Log.d(TAG(), "back to list")
-
-                MaterialDialog(this).show {
-                    title(R.string.dialog_discard_title)
-                    message(R.string.dialog_discard_msg)
-                    icon(R.drawable.ic_warning_black_24dp)
-                    positiveButton(R.string.dialog_discard_positive) {
-                        navController.navigateUp()
-                    }
-                    negativeButton(R.string.dialog_negative_button) { dismiss() }
-                }
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
             else -> navController.navigateUp()
