@@ -149,7 +149,7 @@ class ObstacleEditFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_confirm_edit_photo -> {
+            R.id.action_confirm_edit_obstacle -> {
                 // get obstacle type array
                 val obstacleTypes = resources.getStringArray(R.array.obstacle_types_array)
 
@@ -182,7 +182,7 @@ class ObstacleEditFragment : Fragment() {
                 }
                 true
             }
-            R.id.action_cancel_edit_photo -> {
+            R.id.action_cancel_edit_obstacle -> {
                 displayDiscardConfirmationDialog()
                 true
             }
