@@ -13,7 +13,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Activity that serves as the home of the nav_host_fragment, which is used by the Navigation
- * Component library for most of the app's workflow
+ * Component library for most of the app's workflow.
+ *
+ * For setting up the toolbar to work with the Navigation component, see the following links,
+ * especially the first:
+ * - [https://stackoverflow.com/a/55930024]
+ * - [https://stackoverflow.com/q/30721664]
+ * - [https://stackoverflow.com/a/55380395]
+ * - [https://developer.android.com/guide/navigation/navigation-ui#action_bar]
  */
 class MainActivity : AppCompatActivity() {
 
@@ -23,14 +30,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Setting up toolbar, see following links
-        // https://stackoverflow.com/q/30721664/3755276
-        // https://stackoverflow.com/a/55380395/3755276
-        // https://developer.android.com/guide/navigation/navigation-ui#action_bar
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
         NavigationUI.setupActionBarWithNavController(
             this,
             navController,
@@ -38,8 +40,14 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * By overriding this method, custom behaviour is added when navigating up in each fragment.
+     *
+     * @return
+     */
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.nav_host_fragment)
+
         return when (navController.currentDestination?.id) {
             R.id.obstacleEditFragment -> {
                 Log.d(TAG(), "back to list")
@@ -56,8 +64,6 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             else -> navController.navigateUp()
-
         }
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
