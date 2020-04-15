@@ -1,9 +1,9 @@
 package cy.org.rise.obsai.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.michaelflisar.changelog.ChangelogBuilder
@@ -44,7 +44,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // click listener for libraries activity
         findPreference<Preference>("open_source_libraries")?.setOnPreferenceClickListener {
-            startActivity(Intent(activity, AboutActivity::class.java))
+            findNavController().navigate(R.id.action_settingsFragment_to_aboutActivity)
             true
         }
     }

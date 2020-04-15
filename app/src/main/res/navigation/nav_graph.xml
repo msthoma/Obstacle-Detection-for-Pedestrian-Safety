@@ -81,5 +81,14 @@
         android:id="@+id/settingsFragment"
         android:name="cy.org.rise.obsai.ui.SettingsFragment"
         android:label="@string/label_fragment_settings"
-        tools:layout="@xml/preferences" />
+        tools:layout="@xml/preferences" >
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutActivity"
+            app:destination="@id/aboutActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/aboutActivity"
+        android:name="cy.org.rise.obsai.ui.AboutActivity"
+        android:label="activity_about"
+        tools:layout="@layout/activity_about" />
 </navigation>
