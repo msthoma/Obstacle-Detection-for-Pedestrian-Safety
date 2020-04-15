@@ -165,9 +165,7 @@ class ObstacleListFragment : Fragment() {
                         Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
                         dismiss()
                     }
-                    negativeButton(R.string.dialog_delete_all_negative) {
-                        dismiss()
-                    }
+                    negativeButton(R.string.dialog_negative_button) { dismiss() }
                 }
                 true
             }
