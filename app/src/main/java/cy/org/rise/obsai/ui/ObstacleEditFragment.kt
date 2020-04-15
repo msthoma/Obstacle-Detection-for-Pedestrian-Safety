@@ -9,10 +9,12 @@ import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
@@ -57,8 +59,6 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // TODO add discard confirmation dialog when pressing back, or using back button
-
         // Get current obstacle
         currentObstacle = args.currentObstacle
 
@@ -133,6 +133,22 @@ class ObstacleEditFragment : Fragment() {
 
             // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
             googleMap.setMinZoomPreference(7.5f)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+
+            context?.let {
+                MaterialDialog(it).show {
+                    title(R.string.dialog_discard_title)
+                    message(R.string.dialog_discard_msg)
+                    icon(R.drawable.ic_warning_black_24dp)
+                    positiveButton(R.string.dialog_discard_positive) {
+                        findNavController().navigate(R.id.obstacleListFragment)
+                        // TODO pop back stack!!!
+                    }
+                    negativeButton(R.string.dialog_negative_button) { dismiss() }
+                }
+            }
         }
     }
 
