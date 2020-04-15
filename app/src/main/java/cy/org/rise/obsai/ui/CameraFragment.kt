@@ -174,6 +174,11 @@ class CameraFragment : Fragment(), SensorEventListener {
     }
 
     private fun createCurrentObstacle(): Obstacle {
+        // make a copy of the accelerometerReading array, in case its components change values while
+        // saving the obstacle below (in the case where accelerometerReading is used directly),
+        // probably unnecessary
+        val currentOrientation = accelerometerReading.copyOf()
+
         return Obstacle(
             obstacleType = "",
             photoPath = currentPhotoPath,
@@ -181,11 +186,10 @@ class CameraFragment : Fragment(), SensorEventListener {
                 latitude = currentLocation.latitude,
                 longitude = currentLocation.longitude
             ),
-            // TODO will these numbers change during saving the obstacle?
             orientation = Obstacle.Orientation(
-                x = accelerometerReading[0].toDouble(),
-                y = accelerometerReading[1].toDouble(),
-                z = accelerometerReading[2].toDouble()
+                x = currentOrientation[0].toDouble(),
+                y = currentOrientation[1].toDouble(),
+                z = currentOrientation[2].toDouble()
             )
         )
     }
@@ -200,7 +204,6 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        // comment //TODO fix
         startLocationUpdates()
 
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
