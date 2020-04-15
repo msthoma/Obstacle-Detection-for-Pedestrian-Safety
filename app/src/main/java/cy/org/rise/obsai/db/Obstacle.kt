@@ -65,7 +65,7 @@ data class Obstacle(
         //
         var latitude: Double,
         var longitude: Double
-    )
+    ) : Serializable
 
     /**
      * Simple data class to store phone orientation in space.
@@ -78,7 +78,7 @@ data class Obstacle(
         var x: Double,
         var y: Double,
         var z: Double
-    )
+    ) : Serializable
 
     /**
      * Converts Obstacle entity to RestObstacle entity.
