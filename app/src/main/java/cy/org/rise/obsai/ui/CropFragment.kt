@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,10 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_crop.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
@@ -73,21 +78,33 @@ class CropFragment : Fragment() {
 
         // Listen for cropped photo
         cropImageView.setOnCropImageCompleteListener { _, result ->
-            // cropImageView.setImageBitmap(result.bitmap)
 
-            // overwrite original photo file https://stackoverflow.com/a/673014/3755276
-            // this action probably happens on the UI thread
-            // TODO move action to background thread
-            result.bitmap.compress(
-                Bitmap.CompressFormat.JPEG, 100, FileOutputStream(photoFile!!)
-            )
-
-            // Navigate back to edit fragment
-            findNavController().navigate(
-                CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
-                    currentObstacle
-                )
-            )
+            // overwrite original photo file (https://stackoverflow.com/a/673014) and navigate back
+            photoFile?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    // save on background thread
+                    withContext(Dispatchers.IO) {
+                        result.bitmap.compress(
+                            Bitmap.CompressFormat.JPEG, 100, FileOutputStream(it)
+                        )
+                    }.let { success ->
+                        Log.d(TAG(), "Saving cropped photo result: $success")
+                        if (!success) {
+                            Toast.makeText(
+                                context,
+                                "Error saving cropped photo, please try again",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        // Navigate back to edit fragment
+                        findNavController().navigate(
+                            CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
+                                currentObstacle
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 
