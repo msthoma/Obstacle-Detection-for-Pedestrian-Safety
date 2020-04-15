@@ -25,7 +25,7 @@
     <string name="label_fragment_settings">Settings</string>
 
     <string name="action_add_mock_element">Add mock obstacle</string>
-    <string name="action_cancel_edit_photo">Cancel</string>
+    <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_delete_all">Delete all</string>
     <string name="action_rotate_photo">Rotate</string>

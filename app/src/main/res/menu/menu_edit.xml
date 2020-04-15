@@ -15,7 +15,7 @@
     <item
         android:id="@+id/action_cancel_edit_obstacle"
         android:orderInCategory="200"
-        android:title="@string/action_cancel_edit_photo"
+        android:title="@string/action_cancel"
         app:showAsAction="never" />
 
 </menu>
