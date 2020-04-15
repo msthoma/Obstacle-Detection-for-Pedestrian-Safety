@@ -34,7 +34,8 @@ import java.io.File
  * The process of displaying the Google map is quite complicated, see documentation
  * [here](https://developers.google.com/maps/documentation/android-sdk/map).
  *
- * The API key for Google Maps is defined in the AndroidManifest
+ * The API key for Google Maps is defined in the AndroidManifest, and needs to be obtained from
+ * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
 
@@ -178,34 +179,51 @@ class ObstacleEditFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onResume() {
         super.onResume()
         mapView.onResume()
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onStart() {
         super.onStart()
         mapView.onStart()
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onStop() {
         super.onStop()
         mapView.onStop()
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
     }
 
+    /**
+     * Override of function required by map view.
+     */
     override fun onPause() {
         super.onPause()
         mapView.onPause()
