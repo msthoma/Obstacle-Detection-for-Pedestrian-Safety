@@ -1,12 +1,14 @@
 package cy.org.rise.obsai.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI
+import com.afollestad.materialdialogs.MaterialDialog
 import cy.org.rise.obsai.R
+import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -28,11 +30,34 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+        NavigationUI.setupActionBarWithNavController(
+            this,
+            navController,
+            appBarConfiguration
+        )
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        val navController = this.findNavController(R.id.nav_host_fragment)
+        return when (navController.currentDestination?.id) {
+            R.id.obstacleEditFragment -> {
+                Log.d(TAG(), "back to list")
+
+                MaterialDialog(this).show {
+                    title(R.string.dialog_discard_title)
+                    message(R.string.dialog_discard_msg)
+                    icon(R.drawable.ic_warning_black_24dp)
+                    positiveButton(R.string.dialog_discard_positive) {
+                        navController.navigateUp()
+                    }
+                    negativeButton(R.string.dialog_negative_button) { dismiss() }
+                }
+                true
+            }
+            else -> navController.navigateUp()
+
+        }
+//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
