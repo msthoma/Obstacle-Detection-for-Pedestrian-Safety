@@ -1,8 +1,10 @@
 package cy.org.rise.obsai.ui
 
 import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -234,6 +236,16 @@ class ObstacleListFragment : Fragment() {
                 )
             } else {
                 Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
+                // TODO this is leaked when shown and the device is rotated, see material
+                //  documentation, there is a mention of lifecycles
+                MaterialDialog(it).show {
+                    title(text = "GPS is disabled on your device.")
+                    message(text = "Enable it now?")
+                    positiveButton(text = "Yes") {
+                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    }
+                    negativeButton(text = "No") { dismiss() }
+                }
             }
         }
     }
