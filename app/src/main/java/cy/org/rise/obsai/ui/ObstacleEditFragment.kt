@@ -136,19 +136,10 @@ class ObstacleEditFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-
-            context?.let {
-                MaterialDialog(it).show {
-                    title(R.string.dialog_discard_title)
-                    message(R.string.dialog_discard_msg)
-                    icon(R.drawable.ic_warning_black_24dp)
-                    positiveButton(R.string.dialog_discard_positive) {
-                        findNavController().navigate(R.id.obstacleListFragment)
-                        // TODO pop back stack!!!
-                    }
-                    negativeButton(R.string.dialog_negative_button) { dismiss() }
-                }
-            }
+            // display discard confirmation dialog on back press, and also on up press (when up
+            // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
+            // up here)
+            displayDiscardConfirmationDialog()
         }
     }
 
@@ -192,11 +183,29 @@ class ObstacleEditFragment : Fragment() {
                 true
             }
             R.id.action_cancel_edit_photo -> {
-                // TODO implement cancelling
-                Toast.makeText(context, "Not implemented yet", Toast.LENGTH_LONG).show()
+                displayDiscardConfirmationDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun displayDiscardConfirmationDialog() {
+        // shows confirmation dialog in the cases of back press, up press, menu cancel option
+        context?.let {
+            MaterialDialog(it).show {
+                title(R.string.dialog_discard_title)
+                message(R.string.dialog_discard_msg)
+                icon(R.drawable.ic_warning_black_24dp)
+                positiveButton(R.string.dialog_discard_positive) {
+                    // by navigating back with the action below, the back stack is popped up to the
+                    // list fragment, and so a back press there does not return the user back here
+                    findNavController().navigate(
+                        R.id.action_obstacleEditFragment_to_obstacleListFragment
+                    )
+                }
+                negativeButton(R.string.dialog_negative_button) { dismiss() }
+            }
         }
     }
 
