@@ -236,6 +236,7 @@ class ObstacleListFragment : Fragment() {
                 )
             } else {
                 Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
+                // TODO try this with google services
                 // TODO this is leaked when shown and the device is rotated, see material
                 //  documentation, there is a mention of lifecycles
                 MaterialDialog(it).show {

@@ -69,6 +69,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO if GPS was just enabled, app may still crash since location may still be null
         // TODO check if GPS is enabled, if not prompt user to enable it, otherwise go back to
         //  list fragment
 
