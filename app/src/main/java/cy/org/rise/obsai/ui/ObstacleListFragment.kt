@@ -1,5 +1,7 @@
 package cy.org.rise.obsai.ui
 
+import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -83,8 +85,7 @@ class ObstacleListFragment : Fragment() {
             // Check whether the relevant permission are granted before launching camera fragment
             if (isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
                 // All permissions granted
-                findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
-
+                initiateObstacleCollectionWorkflow()
             } else {
                 // Show permission rationales
                 val permissionHandler = createDialogRationale(
@@ -107,9 +108,7 @@ class ObstacleListFragment : Fragment() {
                     rationaleHandler = permissionHandler
                 ) { result ->
                     if (result.isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
-                        findNavController().navigate(
-                            R.id.action_obstacleListFragment_to_cameraFragment
-                        )
+                        initiateObstacleCollectionWorkflow()
                     } else {
                         // TODO deal with permission rejections
                     }
@@ -225,4 +224,23 @@ class ObstacleListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun initiateObstacleCollectionWorkflow() {
+        context?.let {
+            // check if GPS is on first
+            if (isGPSEnabled(it)) {
+                findNavController().navigate(
+                    R.id.action_obstacleListFragment_to_cameraFragment
+                )
+            } else {
+                Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // checks if GPS is on
+    private fun isGPSEnabled(context: Context): Boolean =
+        (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(
+            LocationManager.GPS_PROVIDER
+        )
 }
