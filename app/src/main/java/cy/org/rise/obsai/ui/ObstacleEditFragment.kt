@@ -82,19 +82,22 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // Set obstacle label choices in spinner
-        ArrayAdapter.createFromResource(
-            context!!,
-            R.array.obstacle_types_array,
-            android.R.layout.simple_spinner_dropdown_item
-        ).also { arrayAdapter ->
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = arrayAdapter
+        requireContext()
+            .let {
+                ArrayAdapter.createFromResource(
+                    it,
+                    R.array.obstacle_types_array,
+                    android.R.layout.simple_spinner_dropdown_item
+                )
+            }.also { arrayAdapter ->
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = arrayAdapter
 
-            // When coming from crop fragment, if the type was already set, restore its value
-            if (currentObstacle.obstacleType != "") {
-                spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obstacleType))
+                // When coming from crop fragment, if the type was already set, restore its value
+                if (currentObstacle.obstacleType != "") {
+                    spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obstacleType))
+                }
             }
-        }
 
         button_edit_photo.setOnClickListener {
             // Save type before going to the crop fragment
