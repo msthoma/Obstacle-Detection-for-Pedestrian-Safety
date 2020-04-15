@@ -54,9 +54,14 @@
     <string name="toast_type_selection_warning">Please select the object\'s type</string>
 
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
-    <string name="dialog_delete_all_negative">Cancel</string>
     <string name="dialog_delete_all_positive">Delete</string>
     <string name="dialog_delete_all_title">Delete all obstacles?</string>
+
+    <string name="dialog_discard_msg">The obstacle\'s photo will be deleted.</string>
+    <string name="dialog_discard_positive">Discard</string>
+    <string name="dialog_discard_title">Discard obstacle?</string>
+
+    <string name="dialog_negative_button">Cancel</string>
 
     <string-array name="obstacle_types_array">
         <item>Select type…</item>
