@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_about.*
  */
 class AboutActivity : AppCompatActivity() {
 
-    // TODO override back button to go to settings fragment instead of list fragment
+    // back button correctly goes back to settings fragment, but up goes to list fragment instead
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
