@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="/app/src/main/ic_launcher-web.png" alt="Sublime's custom image" width="200px"/>
+  <img src="/app/src/main/ic_launcher-web.png" alt="Obstacles app icon" width="200px"/>
 </p>
+<p align="center">Obstacles app<p align="center">
 
 # Repo information
 The main app code is located at:

@@ -70,8 +70,6 @@ class CameraFragment : Fragment(), SensorEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         // TODO if GPS was just enabled, app may still crash since location may still be null
-        // TODO check if GPS is enabled, if not prompt user to enable it, otherwise go back to
-        //  list fragment
 
         // set camera settings
         // most of the other settings for CameraView are set in the activity's xml layout
@@ -112,7 +110,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // Get last known location (below a service is started that will provide a more up to date
         // location if it becomes available)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             currentLocation = location
             coordinates.text =
@@ -124,7 +122,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // Orientation stuff
         sensorManager =
-            context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager // TODO fix
+            context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -147,7 +145,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     private fun getLocationUpdates() {
         // TODO fix getting location updates (currently only showing last known location)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!) // TODO fix
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
         locationRequest = LocationRequest.create().apply {
             interval = 50000
             fastestInterval = 50000
