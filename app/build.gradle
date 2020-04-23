@@ -100,7 +100,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     // Settings/Preference library
-    implementation "androidx.preference:preference:1.1.0"
+    implementation 'androidx.preference:preference:1.1.1'
 
     // Assent runtime permissions library https://github.com/afollestad/assent
     implementation 'com.afollestad.assent:core:3.0.0-RC4'
@@ -151,7 +151,7 @@ dependencies {
 
 
     // Navigation component library - https://developer.android.com/guide/navigation
-    def nav_version = "2.3.0-alpha04"
+    def nav_version = '2.3.0-alpha05'
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -183,7 +183,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // Preference manager
-    implementation "androidx.preference:preference-ktx:1.1.0"
+    implementation 'androidx.preference:preference-ktx:1.1.1'
 
     // AboutLibraries library
     implementation "com.mikepenz:aboutlibraries-core:8.0.0-rc01"
