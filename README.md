@@ -2,7 +2,8 @@
 The main app code is located at:
 - Business logic:
   [/app/src/main/java/cy/org/rise/obsai/](/app/src/main/java/cy/org/rise/obsai/)
-- Interface xml: [/app/src/main/res/](/app/src/main/res/)
+- Interface XML: [/app/src/main/res/](/app/src/main/res/)
+- App manifest: [/app/src/main/AndroidManifest.xml](/app/src/main/AndroidManifest.xml)
 
 
 # Building the app locally
