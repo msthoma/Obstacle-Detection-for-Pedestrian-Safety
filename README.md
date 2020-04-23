@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="/app/src/main/ic_launcher-web.png" alt="Sublime's custom image" width="200px"/>
+</p>
+
 # Repo information
 The main app code is located at:
 - Business logic:
