@@ -17,5 +17,8 @@ The main code of the app is located at:
 - Use the green "Clone or download" button (up, right) and download the
   app files as a ZIP file
 - Download and install Android Studio
-- Go to File -> Open, and point Android Studio to the path where you
+- Go to File → Open..., and point Android Studio to the path where you
   extracted the ZIP file above
+- Alternatively, you can use New → Project from Version Control... →
+  Git, and point Android Studio to this repo (you'll have to sign in to
+  Github)
