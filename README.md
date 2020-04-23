@@ -7,6 +7,11 @@
 # Obstacles app
 App that allows pedestrians to report road obstacles to the authorities.
 
+[Google Doc](https://docs.google.com/document/d/169LHY5ZmROTPiFGfMDgRNj5UOrf9_nqE8IXEGkCpt7A/edit?usp=sharing) 
+with more information and documentation about the app.
+
+[Google Colab notebook](https://colab.research.google.com/drive/1h4zyow50jhh2MWnp89w38lNbVp3PenAj) with Convolutional Neural Network trained for obstacle recognition.
+
 ## Repo information
 The main code of the app is located at:
 - Business logic:
