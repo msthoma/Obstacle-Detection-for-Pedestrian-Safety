@@ -111,7 +111,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Setup map view
         mapView = map
-        mapView.onCreate(null) // TODO fix passing mapViewBundle instead of null
+        mapView.onCreate(null) // here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
             val obstaclePosition = LatLng(
                 currentObstacle.location.latitude,
