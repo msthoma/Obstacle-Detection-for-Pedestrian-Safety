@@ -15,16 +15,20 @@ with more information and documentation about the app.
 ## Repo information
 The main code of the app is located at:
 - Business logic:
-  [/app/src/main/java/cy/org/rise/obsai/](/app/src/main/java/cy/org/rise/obsai/)
+  [/app/src/main/java/cy/org/rise/obsai/](/app/src/main/java/cy/org/rise/obsai/), in turn split into these directories:
+  - [api](/app/src/main/java/cy/org/rise/obsai/api): Contains logic related to network connections, mostly with FIWARE.
+  - [db](/app/src/main/java/cy/org/rise/obsai/db): Contains logic related to the app's Room database (SQLite), obstacle entity, etc.
+  - [ui](/app/src/main/java/cy/org/rise/obsai/ui): Contains logic related to UI, activities, fragments, View Model etc.
+  - [utils](/app/src/main/java/cy/org/rise/obsai/utils): Contains various helper functions. 
 - Interface XML: [/app/src/main/res/](/app/src/main/res/)
 - App manifest: [/app/src/main/AndroidManifest.xml](/app/src/main/AndroidManifest.xml)
 
 ## Building the app locally
 - Use the green "Clone or download" button (up, right) and download the
-  app files as a ZIP file
-- Download and install Android Studio
+  app files as a ZIP file.
+- Download and install Android Studio.
 - Go to File → Open..., and point Android Studio to the path where you
-  extracted the ZIP file above
+  extracted the ZIP file above.
 - Alternatively, you can use New → Project from Version Control... →
   Git, and point Android Studio to this repo (you'll have to sign in to
-  Github)
+  Github).
