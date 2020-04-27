@@ -46,13 +46,13 @@ class ObstacleViewModel internal constructor(
             rep.insertObstacle(obstacle)
 
             // push to server
-            try {
-                rep.insertServerObstacle(obstacle.toRestObstacle())
-            } catch (e: MinioException) {
-                // TODO here catch other exceptions as well, e.g. for inserting obstacle to
-                //  Fiware, not only uploading photo to Minio
-                Log.e(TAG(), "photo upload failed $e")
-            }
+//            try {
+//                rep.insertServerObstacle(obstacle.toRestObstacle())
+//            } catch (e: MinioException) {
+//                // TODO here catch other exceptions as well, e.g. for inserting obstacle to
+//                //  Fiware, not only uploading photo to Minio
+//                Log.e(TAG(), "photo upload failed $e")
+//            }
         }
     }
 
