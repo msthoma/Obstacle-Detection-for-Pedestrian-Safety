@@ -110,7 +110,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // Get last known location (below a service is started that will provide a more up to date
         // location if it becomes available)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             currentLocation = location
             coordinates.text =
@@ -122,7 +122,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // Orientation stuff
         sensorManager =
-            context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -145,7 +145,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     private fun getLocationUpdates() {
         // TODO fix getting location updates (currently only showing last known location)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
             interval = 50000
             fastestInterval = 50000
