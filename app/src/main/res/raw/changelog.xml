@@ -1,4 +1,13 @@
 <changelog>
+    version 0.10.2
+    <release
+        date="2020-04-27"
+        versionCode="1"
+        versionName="Version 0.10.2">
+        <info>Implemented support for tracking user location changes</info>
+        <info>Closed the majority of TODOs in codebase</info>
+    </release>
+
     <release
         date="2020-04-15"
         versionCode="1"
