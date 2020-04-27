@@ -133,19 +133,8 @@ class ObstacleListFragment : Fragment() {
                             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                             smallestDisplacement = 10f // 10m
                         }
-                        val builder =
-                            LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-
-//                        LocationServices.getSettingsClient(context!!)
-//                            .checkLocationSettings(builder.build())
-//                            .addOnCompleteListener( object :
-//                                OnCompleteListener<LocationSettingsRequest>() {
-//                                override fun onComplete(p0: Task<LocationSettingsRequest>) {
-//                                    TODO("Not yet implemented")
-//                                }
-//                            } )
-
                         initiateObstacleCollectionWorkflow()
+
                     } else {
                         // TODO deal with permission rejections
                     }
@@ -245,8 +234,11 @@ class ObstacleListFragment : Fragment() {
                 )
             } else {
                 Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
-                // TODO try this with google services
-                // TODO this is leaked when shown and the device is rotated, see material
+                // Turning on GPS can be done from within the app using the Settings Client, see
+                // https://developer.android.com/training/location/change-location-settings
+                // which should provide a better experience
+
+                // TODO this dialog is leaked when shown and the device is rotated, see material
                 //  documentation, there is a mention of lifecycles
                 MaterialDialog(context).show {
                     title(text = "GPS is disabled on your device.")
