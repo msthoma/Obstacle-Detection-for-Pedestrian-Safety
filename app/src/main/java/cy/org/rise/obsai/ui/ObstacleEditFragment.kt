@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
@@ -192,8 +193,8 @@ class ObstacleEditFragment : Fragment() {
 
     private fun displayDiscardConfirmationDialog() {
         // shows confirmation dialog in the cases of back press, up press, menu cancel option
-        context?.let {
-            MaterialDialog(it).show {
+        requireContext().let {context ->
+            MaterialDialog(context).show {
                 title(R.string.dialog_discard_title)
                 message(R.string.dialog_discard_msg)
                 icon(R.drawable.ic_warning_black_24dp)
@@ -205,6 +206,7 @@ class ObstacleEditFragment : Fragment() {
                     )
                 }
                 negativeButton(R.string.dialog_negative_button) { dismiss() }
+                lifecycleOwner(viewLifecycleOwner)
             }
         }
     }

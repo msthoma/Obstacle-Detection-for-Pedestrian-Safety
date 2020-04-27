@@ -20,6 +20,7 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
@@ -170,6 +171,7 @@ class ObstacleListFragment : Fragment() {
                             dismiss()
                         }
                         negativeButton(R.string.dialog_negative_button) { dismiss() }
+                        lifecycleOwner(viewLifecycleOwner)
                     }
                 }
                 true
@@ -240,6 +242,7 @@ class ObstacleListFragment : Fragment() {
                         startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     }
                     negativeButton(text = "No") { dismiss() }
+                    lifecycleOwner(viewLifecycleOwner)
                 }
             }
         }
