@@ -44,6 +44,20 @@ class ObstacleListFragment : Fragment() {
     private lateinit var adapter: CustomAdapter
     private lateinit var sessionManager: SessionManager
 
+    private val mockObstacle = Obstacle(
+        obstacleType = "Mock obstacle",
+        location = Obstacle.Location(
+            latitude = 35.169160,
+            longitude = 33.361459
+        ),
+        orientation = Obstacle.Orientation(
+            x = 0.0,
+            y = 0.0,
+            z = 0.0
+        ),
+        photoPath = "photo_path"
+    )
+
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
     }
@@ -59,7 +73,7 @@ class ObstacleListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sessionManager = SessionManager(context!!)
+        sessionManager = SessionManager(requireContext())
 
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -160,21 +174,7 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.insertObstacle(
-                    Obstacle(
-                        obstacleType = "Mock obstacle",
-                        location = Obstacle.Location(
-                            latitude = 35.169160,
-                            longitude = 33.361459
-                        ),
-                        orientation = Obstacle.Orientation(
-                            x = 0.0,
-                            y = 0.0,
-                            z = 0.0
-                        ),
-                        photoPath = "jkdhfak"
-                    )
-                )
+                viewModel.insertObstacle(mockObstacle)
                 true
             }
             R.id.action_delete_all -> {
@@ -194,7 +194,7 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_connection -> {
-                // TODO move this to view model
+                // this is temporary, and should be moved to the view model anyway
                 CoroutineScope(Dispatchers.Main).launch {
 
                     val lr = async(Dispatchers.IO) {
@@ -229,21 +229,7 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_test_server_obstacle_input -> {
-                viewModel.insertServerObstacle(
-                    Obstacle(
-                        obstacleType = "Mock obstacle",
-                        location = Obstacle.Location(
-                            latitude = 35.169160,
-                            longitude = 33.361459
-                        ),
-                        orientation = Obstacle.Orientation(
-                            x = 0.0,
-                            y = 0.0,
-                            z = 0.0
-                        ),
-                        photoPath = "jkdhfak"
-                    ).toRestObstacle()
-                )
+                viewModel.insertServerObstacle(mockObstacle.toRestObstacle())
                 true
             }
             else -> super.onOptionsItemSelected(item)
