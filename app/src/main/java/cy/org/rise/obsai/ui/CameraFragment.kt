@@ -69,8 +69,6 @@ class CameraFragment : Fragment(), SensorEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO if GPS was just enabled, app may still crash since location may still be null
-
         // set camera settings
         // most of the other settings for CameraView are set in the activity's xml layout
         cameraView = camera_view
@@ -81,7 +79,6 @@ class CameraFragment : Fragment(), SensorEventListener {
 
                 val photoFile: File? = try {
                     createImageFile()
-
                 } catch (ex: IOException) {
                     Log.e(TAG(), "Error creating image file")
                     null
@@ -112,12 +109,15 @@ class CameraFragment : Fragment(), SensorEventListener {
         // location if it becomes available)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            currentLocation = location
-            coordinates.text =
-                "Location: Lat:" + location.latitude + ", Long:" + location.longitude
+            location?.let { loc ->
+                currentLocation = loc
+                // location in some cases can be NULL see
+                // https://developer.android.com/training/location/retrieve-current#last-known
+                coordinates.text =
+                    "Location: Lat:" + location.latitude + ", Long:" + location.longitude
+            }
         }
-        // TODO update last known location with any updates from below
-        // TODO basically update currentLocation var if there are updates
+
         getLocationUpdates()
 
         // Orientation stuff
@@ -144,7 +144,9 @@ class CameraFragment : Fragment(), SensorEventListener {
     }
 
     private fun getLocationUpdates() {
-        // TODO fix getting location updates (currently only showing last known location)
+        // this is used to get any updates to the location of the user, in case they change
+        // during taking a photo of an obstacle
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
             interval = 50000
@@ -157,8 +159,12 @@ class CameraFragment : Fragment(), SensorEventListener {
             override fun onLocationResult(locationResult: LocationResult?) {
                 Log.d(TAG(), "location callback")
                 locationResult ?: return
-                for (location in locationResult.locations) {
-                    Log.d(TAG(), "Lat:" + location.latitude + ", Long:" + location.longitude)
+                try {
+                    currentLocation = locationResult.locations[0]
+                    coordinates.text =
+                        "Location: Lat:" + currentLocation.latitude + ", Long:" + currentLocation.longitude
+                } catch (e: Exception) {
+                    Log.e(TAG(), "No coordinates received from locationCallback", e)
                 }
             }
         }
