@@ -21,10 +21,7 @@ import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
@@ -252,9 +249,9 @@ class ObstacleListFragment : Fragment() {
     }
 
     private fun initiateObstacleCollectionWorkflow() {
-        context?.let {
+        context?.let { cntxt ->
             // check if GPS is on first
-            if (isGPSEnabled(it)) {
+            if (isGPSEnabled(cntxt)) {
                 findNavController().navigate(
                     R.id.action_obstacleListFragment_to_cameraFragment
                 )
@@ -263,7 +260,7 @@ class ObstacleListFragment : Fragment() {
                 // TODO try this with google services
                 // TODO this is leaked when shown and the device is rotated, see material
                 //  documentation, there is a mention of lifecycles
-                MaterialDialog(it).show {
+                MaterialDialog(cntxt).show {
                     title(text = "GPS is disabled on your device.")
                     message(text = "Enable it now?")
                     positiveButton(text = "Yes") {
