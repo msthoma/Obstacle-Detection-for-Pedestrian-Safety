@@ -58,6 +58,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!-- API key below is tied to Marios account, should be replaced if app is ever released-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCZ-ZyuKzC55-FZ9RsIuzB6G7-P0m9bHqw" />
