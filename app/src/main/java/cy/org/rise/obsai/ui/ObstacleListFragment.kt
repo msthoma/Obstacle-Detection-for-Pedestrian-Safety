@@ -216,6 +216,7 @@ class ObstacleListFragment : Fragment() {
         }
     }
 
+    // makes sure GPS is on before allowing user to take photo
     private fun initiateObstacleCollectionWorkflow() {
         context?.let { context ->
             // check if GPS is on first
