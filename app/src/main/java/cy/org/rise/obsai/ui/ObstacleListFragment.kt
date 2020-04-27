@@ -42,6 +42,7 @@ class ObstacleListFragment : Fragment() {
     private lateinit var adapter: CustomAdapter
     private lateinit var sessionManager: SessionManager
 
+    // Instance of obstacle for testing purposes
     private val mockObstacle = Obstacle(
         obstacleType = "Mock obstacle",
         location = Obstacle.Location(
