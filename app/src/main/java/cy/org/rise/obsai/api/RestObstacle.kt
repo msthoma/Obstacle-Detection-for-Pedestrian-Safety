@@ -90,7 +90,9 @@ data class RestObstacle(
         var z: Double
     ) {
         var value: List<Double> = listOf(x, y, z)
-        val type: String = "Text" // TODO is there a better type?? list of doubles, or coords
+
+        // Type here should be changed from text to something more appropriate (list of doubles?)
+        val type: String = "Text"
     }
 
     /**
