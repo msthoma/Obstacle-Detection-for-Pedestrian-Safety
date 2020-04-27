@@ -20,8 +20,6 @@ import com.afollestad.assent.isAllGranted
 import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationSettingsRequest
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
@@ -126,17 +124,10 @@ class ObstacleListFragment : Fragment() {
                     rationaleHandler = permissionHandler
                 ) { result ->
                     if (result.isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
-
-                        val locationRequest = LocationRequest.create().apply {
-                            interval = 50000
-                            fastestInterval = 50000
-                            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                            smallestDisplacement = 10f // 10m
-                        }
+                        // function below deals with the case where GPS is off
                         initiateObstacleCollectionWorkflow()
-
                     } else {
-                        // TODO deal with permission rejections
+                        // deal with permission rejections here
                     }
                 }
             }
