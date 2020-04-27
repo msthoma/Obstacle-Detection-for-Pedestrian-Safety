@@ -178,16 +178,18 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_delete_all -> {
-                MaterialDialog(context!!).show {
-                    title(R.string.dialog_delete_all_title)
-                    message(R.string.dialog_delete_all_msg)
-                    icon(R.drawable.ic_warning_black_24dp)
-                    positiveButton(R.string.dialog_delete_all_positive) {
-                        viewModel.deleteAll()
-                        Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
-                        dismiss()
+                requireContext().let { context ->
+                    MaterialDialog(context).show {
+                        title(R.string.dialog_delete_all_title)
+                        message(R.string.dialog_delete_all_msg)
+                        icon(R.drawable.ic_warning_black_24dp)
+                        positiveButton(R.string.dialog_delete_all_positive) {
+                            viewModel.deleteAll()
+                            Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                            dismiss()
+                        }
+                        negativeButton(R.string.dialog_negative_button) { dismiss() }
                     }
-                    negativeButton(R.string.dialog_negative_button) { dismiss() }
                 }
                 true
             }
@@ -249,9 +251,9 @@ class ObstacleListFragment : Fragment() {
     }
 
     private fun initiateObstacleCollectionWorkflow() {
-        context?.let { cntxt ->
+        context?.let { context ->
             // check if GPS is on first
-            if (isGPSEnabled(cntxt)) {
+            if (isGPSEnabled(context)) {
                 findNavController().navigate(
                     R.id.action_obstacleListFragment_to_cameraFragment
                 )
@@ -260,7 +262,7 @@ class ObstacleListFragment : Fragment() {
                 // TODO try this with google services
                 // TODO this is leaked when shown and the device is rotated, see material
                 //  documentation, there is a mention of lifecycles
-                MaterialDialog(cntxt).show {
+                MaterialDialog(context).show {
                     title(text = "GPS is disabled on your device.")
                     message(text = "Enable it now?")
                     positiveButton(text = "Yes") {
