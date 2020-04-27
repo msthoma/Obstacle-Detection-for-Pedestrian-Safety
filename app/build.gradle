@@ -106,7 +106,8 @@ dependencies {
     implementation 'com.afollestad.assent:core:3.0.0-RC4'
     implementation 'com.afollestad.assent:rationales:3.0.0-RC4'
     // Material dialogs library (same author) https://github.com/afollestad/material-dialogs
-    implementation 'com.afollestad.material-dialogs:input:3.3.0'
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    implementation 'com.afollestad.material-dialogs:lifecycle:3.3.0'
 
     // Lifecycle libraries
     def lifecycle_version = "2.2.0"
