@@ -233,8 +233,6 @@ class ObstacleListFragment : Fragment() {
                 // https://developer.android.com/training/location/change-location-settings
                 // which should provide a better experience
 
-                // TODO this dialog is leaked when shown and the device is rotated, see material
-                //  documentation, there is a mention of lifecycles
                 MaterialDialog(context).show {
                     title(text = "GPS is disabled on your device.")
                     message(text = "Enable it now?")
