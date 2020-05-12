@@ -1,5 +1,12 @@
 <changelog>
-    version 0.10.2
+    <release
+        date="2020-05-12"
+        versionCode="1"
+        versionName="Version 0.10.3">
+        <info>Final TODOs closed</info>
+        <info>Removed network tests that were used during development</info>
+    </release>
+
     <release
         date="2020-04-27"
         versionCode="1"
