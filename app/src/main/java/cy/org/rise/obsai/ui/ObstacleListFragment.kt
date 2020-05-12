@@ -176,45 +176,45 @@ class ObstacleListFragment : Fragment() {
                 }
                 true
             }
-            R.id.action_test_server_connection -> {
-                // this is temporary, and should be moved to the view model anyway
-                CoroutineScope(Dispatchers.Main).launch {
-
-                    val lr = async(Dispatchers.IO) {
-                        FiwareOrionApi.create(FiwareOrionApi.LOGIN_BASE_URL).login(
-                            // the authorization header token for logging in is generated as
-                            // described here https://github.com/FIWARE/tutorials.Securing-Access#oauth2-grant-flows
-                            // the Credentials object below does the same as described in the link
-                            Credentials.basic(
-                                "tutorial-dckr-site-0000-xpresswebapp",
-                                "tutorial-dckr-site-0000-clientsecret"
-                            ),
-                            username = "alice-the-admin@test.com",
-                            password = "test",
-                            grant_type = "password"
-                        )
-                    }
-                    lr.await().also { response ->
-                        if (response.code() == 200) {
-                            response.body()?.accessToken?.let { sessionManager.saveAuthToken(it) }
-                        }
-                        Log.d(TAG(), "accessToken set to ${sessionManager.fetchAuthToken()}")
-                    }
-
-                    Toast.makeText(context, lr.await().code().toString(), Toast.LENGTH_LONG).show()
-                    Log.d(
-                        TAG(), lr.await().toString() + Credentials.basic(
-                            "wirecloud-dckr-site-0000-00000000000",
-                            "wirecloud-docker-000000-clientsecret"
-                        )
-                    )
-                }
-                true
-            }
-            R.id.action_test_server_obstacle_input -> {
-                viewModel.insertServerObstacle(mockObstacle.toRestObstacle())
-                true
-            }
+//            R.id.action_test_server_connection -> {
+//                // this is temporary, and should be moved to the view model anyway
+//                CoroutineScope(Dispatchers.Main).launch {
+//
+//                    val lr = async(Dispatchers.IO) {
+//                        FiwareOrionApi.create(FiwareOrionApi.LOGIN_BASE_URL).login(
+//                            // the authorization header token for logging in is generated as
+//                            // described here https://github.com/FIWARE/tutorials.Securing-Access#oauth2-grant-flows
+//                            // the Credentials object below does the same as described in the link
+//                            Credentials.basic(
+//                                "tutorial-dckr-site-0000-xpresswebapp",
+//                                "tutorial-dckr-site-0000-clientsecret"
+//                            ),
+//                            username = "alice-the-admin@test.com",
+//                            password = "test",
+//                            grant_type = "password"
+//                        )
+//                    }
+//                    lr.await().also { response ->
+//                        if (response.code() == 200) {
+//                            response.body()?.accessToken?.let { sessionManager.saveAuthToken(it) }
+//                        }
+//                        Log.d(TAG(), "accessToken set to ${sessionManager.fetchAuthToken()}")
+//                    }
+//
+//                    Toast.makeText(context, lr.await().code().toString(), Toast.LENGTH_LONG).show()
+//                    Log.d(
+//                        TAG(), lr.await().toString() + Credentials.basic(
+//                            "wirecloud-dckr-site-0000-00000000000",
+//                            "wirecloud-docker-000000-clientsecret"
+//                        )
+//                    )
+//                }
+//                true
+//            }
+//            R.id.action_test_server_obstacle_input -> {
+//                viewModel.insertServerObstacle(mockObstacle.toRestObstacle())
+//                true
+//            }
             else -> super.onOptionsItemSelected(item)
         }
     }
