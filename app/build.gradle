@@ -26,8 +26,8 @@ android {
         // versioning - see https://semver.org/
         versionCode 1
         def versionMajor = 0
-        def versionMinor = 10
-        def versionPatch = 4
+        def versionMinor = 11
+        def versionPatch = 0
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
