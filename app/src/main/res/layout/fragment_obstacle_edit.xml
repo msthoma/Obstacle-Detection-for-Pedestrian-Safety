@@ -8,6 +8,26 @@
     android:layout_margin="@dimen/margin_small"
     tools:context=".ui.ObstacleEditFragment">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/select_obstacle_type_text_material"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:hint="Type"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ImageView
         android:id="@+id/obstacle_image_view"
         android:layout_width="match_parent"
@@ -18,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_text_material"
         tools:src="@drawable/example_obs_20190808_102427129">
 
     </ImageView>
@@ -47,8 +67,7 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_small"
-        app:layout_constraintBottom_toTopOf="@id/select_obstacle_type_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/obstacle_image_view"
@@ -68,38 +87,5 @@
         android:text="Location"
         app:layout_constraintStart_toStartOf="@id/map"
         app:layout_constraintTop_toTopOf="@id/map" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/select_obstacle_type_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/map">
-
-        <TextView
-            android:id="@+id/select_obstacle_type_text"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:text="@string/select_obstacle_type"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/spinner"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/select_obstacle_type_text"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

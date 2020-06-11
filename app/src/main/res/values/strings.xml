@@ -51,8 +51,6 @@
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>
 
-    <string name="toast_type_selection_warning">Please select the object\'s type</string>
-
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
     <string name="dialog_delete_all_title">Delete all obstacles?</string>
@@ -60,11 +58,11 @@
     <string name="dialog_discard_msg">The obstacle\'s photo will be deleted.</string>
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
-
     <string name="dialog_negative_button">Cancel</string>
 
+    <string name="error_type_not_selected">Please select obstacle type</string>
+
     <string-array name="obstacle_types_array">
-        <item>Select type…</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
