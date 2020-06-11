@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -70,6 +71,13 @@ class ObstacleEditFragment : Fragment() {
             Log.e(TAG(), "Error getting image file")
             null
         }
+
+        val items = listOf("Material", "Design", "Components", "Android")
+
+        val itemAdapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
+        (select_obstacle_type_text_material.editText as? AutoCompleteTextView)?.setAdapter(
+            itemAdapter
+        )
 
         // If the photo file exists, set it in image view
         photoFile?.also {
@@ -193,7 +201,7 @@ class ObstacleEditFragment : Fragment() {
 
     private fun displayDiscardConfirmationDialog() {
         // shows confirmation dialog in the cases of back press, up press, menu cancel option
-        requireContext().let {context ->
+        requireContext().let { context ->
             MaterialDialog(context).show {
                 title(R.string.dialog_discard_title)
                 message(R.string.dialog_discard_msg)
