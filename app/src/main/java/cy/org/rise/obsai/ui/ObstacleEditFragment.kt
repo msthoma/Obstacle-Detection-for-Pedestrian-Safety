@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -72,14 +71,6 @@ class ObstacleEditFragment : Fragment() {
             null
         }
 
-        val items = listOf("Material", "Design", "Components", "Android")
-
-        val itemAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
-        (select_obstacle_type_text_material.editText as? AutoCompleteTextView)?.setAdapter(
-            itemAdapter
-        )
-
         // If the photo file exists, set it in image view
         photoFile?.also {
             Picasso.get()
@@ -91,27 +82,26 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
-        // Set obstacle label choices in spinner
-        requireContext()
-            .let {
-                ArrayAdapter.createFromResource(
-                    it,
-                    R.array.obstacle_types_array,
-                    android.R.layout.simple_spinner_dropdown_item
-                )
-            }.also { arrayAdapter ->
-                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinner.adapter = arrayAdapter
+        // Set obstacle label choices in autoCompleteTextView
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.obstacle_types_array,
+            android.R.layout.simple_spinner_dropdown_item
+        ).also { arrayAdapter ->
+            edit_text.setAdapter(arrayAdapter)
 
-                // When coming from crop fragment, if the type was already set, restore its value
-                if (currentObstacle.obstacleType != "") {
-                    spinner.setSelection(arrayAdapter.getPosition(currentObstacle.obstacleType))
-                }
+            // When coming from crop fragment, if the type was already set, restore its value
+            if (currentObstacle.obstacleType != "") {
+                edit_text.setText(
+                    arrayAdapter.getItem(arrayAdapter.getPosition(currentObstacle.obstacleType))
+                        .toString(), false
+                )
             }
+        }
 
         button_edit_photo.setOnClickListener {
             // Save type before going to the crop fragment
-            currentObstacle.obstacleType = spinner.selectedItem.toString()
+            currentObstacle.obstacleType = edit_text.text.toString()
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     currentObstacle
@@ -160,31 +150,17 @@ class ObstacleEditFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_confirm_edit_obstacle -> {
-                // get obstacle type array
-                val obstacleTypes = resources.getStringArray(R.array.obstacle_types_array)
-
                 // Make sure the user has chosen an obstacle type before submitting
-                if (spinner.selectedItem.toString() == obstacleTypes[0]) {
+                if (edit_text.text.toString() == "") {
                     // Show toast message
                     Toast.makeText(
                         context,
                         R.string.toast_type_selection_warning,
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    // Highlight spinner with type choices
-                    ObjectAnimator.ofObject(
-                        spinner,
-                        "backgroundColor",
-                        ArgbEvaluator(),
-                        // Colors need to be in ARGB form to work with the animator
-                        argb(100, 255, 255, 255), // white
-                        argb(100, 255, 0, 0), // red
-                        argb(100, 255, 255, 255) // white
-                    ).setDuration(1000).start()
+                    ).show()
                 } else {
                     // Save obstacle type
-                    currentObstacle.obstacleType = spinner.selectedItem.toString()
+                    currentObstacle.obstacleType = edit_text.text.toString()
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
                         R.id.action_obstacleEditFragment_to_obstacleListFragment
