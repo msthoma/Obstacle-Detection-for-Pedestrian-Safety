@@ -38,7 +38,7 @@
         versionName="Version 0.10.0">
         <info>Added authentication functionality with Fiware Keyrock</info>
         <info>Fixed issue with GPS coordinates caused by discrepancy of how Android and geo:json
-            store coordinates (Android: [Lat, Long], geo:json: [Long, Lat])
+            store coordinates: Android: (Lat, Long), geo:json: (Long, Lat)
         </info>
     </release>
 
