@@ -65,7 +65,6 @@
     <string name="error_type_not_selected">Please select obstacle type</string>
 
     <string-array name="obstacle_types_array">
-        <item>Select type…</item>
         <item>Advert. Sign</item>
         <item>Crack</item>
         <item>Hole/Pot-hole</item>
