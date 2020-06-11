@@ -1,9 +1,6 @@
 package cy.org.rise.obsai.ui
 
 
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.graphics.Color.argb
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -99,6 +96,11 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
+        // Clear any error message present when view is clicked
+        edit_text.setOnClickListener {
+            select_obstacle_type_text_material.error = null
+        }
+
         button_edit_photo.setOnClickListener {
             // Save type before going to the crop fragment
             currentObstacle.obstacleType = edit_text.text.toString()
@@ -158,6 +160,7 @@ class ObstacleEditFragment : Fragment() {
                         R.string.toast_type_selection_warning,
                         Toast.LENGTH_SHORT
                     ).show()
+                    select_obstacle_type_text_material.error = "Please select obstacle type"
                 } else {
                     // Save obstacle type
                     currentObstacle.obstacleType = edit_text.text.toString()

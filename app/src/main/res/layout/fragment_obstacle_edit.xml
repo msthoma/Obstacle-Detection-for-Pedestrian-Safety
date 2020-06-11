@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:hint="Type"
+        app:errorEnabled="true"
         app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
         app:layout_constraintTop_toTopOf="parent">
 
