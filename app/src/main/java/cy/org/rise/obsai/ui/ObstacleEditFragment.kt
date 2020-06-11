@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -97,7 +98,7 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // Clear any error message present when view is clicked
-        edit_text.setOnClickListener {
+        edit_text.addTextChangedListener {
             select_obstacle_type_text_material.error = null
         }
 
