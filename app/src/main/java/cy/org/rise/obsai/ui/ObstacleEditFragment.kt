@@ -74,7 +74,8 @@ class ObstacleEditFragment : Fragment() {
 
         val items = listOf("Material", "Design", "Components", "Android")
 
-        val itemAdapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
+        val itemAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
         (select_obstacle_type_text_material.editText as? AutoCompleteTextView)?.setAdapter(
             itemAdapter
         )
