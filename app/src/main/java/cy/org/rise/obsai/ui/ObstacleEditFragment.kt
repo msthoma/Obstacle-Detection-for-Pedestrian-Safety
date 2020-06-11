@@ -155,12 +155,7 @@ class ObstacleEditFragment : Fragment() {
             R.id.action_confirm_edit_obstacle -> {
                 // Make sure the user has chosen an obstacle type before submitting
                 if (edit_text.text.toString() == "") {
-                    // Show toast message
-                    Toast.makeText(
-                        context,
-                        R.string.toast_type_selection_warning,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    // Set error message on edit text that type was not selected
                     select_obstacle_type_text_material.error =
                         getString(R.string.error_type_not_selected)
                 } else {

@@ -51,8 +51,6 @@
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>
 
-    <string name="toast_type_selection_warning">Please select the object\'s type</string>
-
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
     <string name="dialog_delete_all_title">Delete all obstacles?</string>
