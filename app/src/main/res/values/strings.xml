@@ -60,8 +60,9 @@
     <string name="dialog_discard_msg">The obstacle\'s photo will be deleted.</string>
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
-
     <string name="dialog_negative_button">Cancel</string>
+
+    <string name="error_type_not_selected">Please select obstacle type</string>
 
     <string-array name="obstacle_types_array">
         <item>Select type…</item>

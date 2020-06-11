@@ -160,7 +160,8 @@ class ObstacleEditFragment : Fragment() {
                         R.string.toast_type_selection_warning,
                         Toast.LENGTH_SHORT
                     ).show()
-                    select_obstacle_type_text_material.error = "Please select obstacle type"
+                    select_obstacle_type_text_material.error =
+                        getString(R.string.error_type_not_selected)
                 } else {
                     // Save obstacle type
                     currentObstacle.obstacleType = edit_text.text.toString()
