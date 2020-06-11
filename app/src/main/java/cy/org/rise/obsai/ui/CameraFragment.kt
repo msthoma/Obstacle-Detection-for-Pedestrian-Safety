@@ -100,6 +100,12 @@ class CameraFragment : Fragment(), SensorEventListener {
             }
         })
 
+//        cameraView.addFrameProcessor { frame ->
+//            if (frame.dataClass == Image::class.java) {
+//                Log.d(TAG(), "frame: ${frame.size} ${frame.time}")
+//            }
+//        }
+
         camera_button.setOnClickListener {
             Log.d(TAG(), "camera button pressed")
             cameraView.takePicture()
