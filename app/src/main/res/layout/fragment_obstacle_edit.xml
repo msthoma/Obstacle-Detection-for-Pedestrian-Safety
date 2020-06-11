@@ -14,11 +14,12 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/margin_small"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/example_obs_20190808_102427129">
 
     </ImageView>
 
