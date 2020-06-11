@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-06-11"
+        versionCode="1"
+        versionName="Version 0.11.0">
+        <info>Improved obstacle type selection UI</info>
+    </release>
+
+    <release
         date="2020-05-12"
         versionCode="1"
         versionName="Version 0.10.3">
