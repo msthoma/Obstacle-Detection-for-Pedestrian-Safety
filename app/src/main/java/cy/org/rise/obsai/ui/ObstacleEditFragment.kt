@@ -115,35 +115,48 @@ class ObstacleEditFragment : Fragment() {
         mapView = map
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
+
             val obstaclePosition = LatLng(
                 currentObstacle.location.latitude,
                 currentObstacle.location.longitude
             )
 
-            if (obstaclePosition.latitude != 0.0) {
-                // Add marker indicating the obstacle, if location provided is not 0, 0
-                googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
-                // Move camera to appropriate position
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
-            } else {
-                // In case location is empty, move camera above the general area of Nicosia
-                googleMap.moveCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(35.169933, 33.361071),
-                        12f
-                    )
-                )
-            }
-
-            // Add map boundaries
             val CYPRUS = LatLngBounds(
                 LatLng(34.520142, 32.186723), // Southwest corner
                 LatLng(35.738372, 34.644546) // Northeast corner
             )
-            googleMap.setLatLngBoundsForCameraTarget(CYPRUS)
 
-            // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-            googleMap.setMinZoomPreference(7.5f)
+            googleMap.apply {
+                // Add marker and set map camera position
+                if (obstaclePosition.latitude != 0.0) {
+                    // Add marker indicating the obstacle, if location provided is not 0, 0
+                    addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+                    // Move camera to appropriate position
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
+                } else {
+                    // In case location is empty, move camera above the general area of Nicosia
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.169933, 33.361071), 12f))
+                }
+
+                // Add map boundaries
+                setLatLngBoundsForCameraTarget(CYPRUS)
+
+                // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
+                setMinZoomPreference(7.5f)
+
+                // Listen for long clicks on map, which allows user to change location manually
+                setOnMapLongClickListener { latLng ->
+                    // TODO add indication that long click changes position (with overlay?)
+                    clear()
+                    addMarker(MarkerOptions().position(latLng))
+
+                    // Save location indicated by user
+                    currentObstacle.location.apply {
+                        latitude = latLng.latitude
+                        longitude = latLng.longitude
+                    }
+                }
+            }
 
 //            TODO when user clicks my location button, marker should move to location provided
 //             by GPS, but fragment must first be able to get current position, perhaps by moving
@@ -154,19 +167,6 @@ class ObstacleEditFragment : Fragment() {
 //            googleMap.setOnMyLocationButtonClickListener {
 //                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
 //            }
-
-            // listen for long clicks on map, which allows user to change location manually
-            googleMap.setOnMapLongClickListener { latLng ->
-                // TODO add indication that long click changes position (with overlay?)
-                googleMap.apply {
-                    clear()
-                    addMarker(MarkerOptions().position(latLng))
-                }
-                currentObstacle.location.apply {
-                    latitude = latLng.latitude
-                    longitude = latLng.longitude
-                }
-            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
