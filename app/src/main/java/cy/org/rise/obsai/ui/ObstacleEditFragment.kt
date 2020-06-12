@@ -113,7 +113,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Setup map view
         mapView = map
-        mapView.onCreate(null) // here a mapViewBundle should be passed instead of null
+        mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
             val obstaclePosition = LatLng(
                 currentObstacle.location.latitude,
@@ -135,6 +135,27 @@ class ObstacleEditFragment : Fragment() {
 
             // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
             googleMap.setMinZoomPreference(7.5f)
+
+//            TODO when user clicks my location button, marker should move to location provided
+//             by GPS, but fragment must first be able to get current position, perhaps by moving
+//             location tracking logic to view model
+//            googleMap.isMyLocationEnabled = true
+//            googleMap.setOnMyLocationButtonClickListener {
+//                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
+//            }
+
+            // listen for long clicks on map, which allows user to change location manually
+            googleMap.setOnMapLongClickListener { latLng ->
+                // TODO add indication that long click changes position (with overlay?)
+                googleMap.apply {
+                    clear()
+                    addMarker(MarkerOptions().position(latLng))
+                }
+                currentObstacle.location.apply {
+                    latitude = latLng.latitude
+                    longitude = latLng.longitude
+                }
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
