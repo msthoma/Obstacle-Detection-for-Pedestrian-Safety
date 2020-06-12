@@ -190,13 +190,23 @@ class CameraFragment : Fragment(), SensorEventListener {
         // probably unnecessary
         val currentOrientation = accelerometerReading.copyOf()
 
+        // in case location has not been initialized, set position to 0, 0
+        val obsLocation = if (::currentLocation.isInitialized) {
+            Obstacle.Location(
+                latitude = currentLocation.latitude,
+                longitude = currentLocation.longitude
+            )
+        } else {
+            Obstacle.Location(
+                latitude = 0.0,
+                longitude = 0.0
+            )
+        }
+
         return Obstacle(
             obstacleType = "",
             photoPath = currentPhotoPath,
-            location = Obstacle.Location(
-                latitude = currentLocation.latitude,
-                longitude = currentLocation.longitude
-            ),
+            location = obsLocation,
             orientation = Obstacle.Orientation(
                 x = currentOrientation[0].toDouble(),
                 y = currentOrientation[1].toDouble(),
