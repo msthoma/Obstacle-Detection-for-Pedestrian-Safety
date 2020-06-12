@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -86,11 +85,11 @@ class ObstacleEditFragment : Fragment() {
             R.array.obstacle_types_array,
             android.R.layout.simple_spinner_dropdown_item
         ).also { arrayAdapter ->
-            edit_text.setAdapter(arrayAdapter)
+            select_obstacle_type_edit_text.setAdapter(arrayAdapter)
 
             // When coming from crop fragment, if the type was already set, restore its value
             if (currentObstacle.obstacleType != "") {
-                edit_text.setText(
+                select_obstacle_type_edit_text.setText(
                     arrayAdapter.getItem(arrayAdapter.getPosition(currentObstacle.obstacleType))
                         .toString(), false
                 )
@@ -98,13 +97,13 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // Clear any error message present when view is clicked
-        edit_text.addTextChangedListener {
-            select_obstacle_type_text_material.error = null
+        select_obstacle_type_edit_text.addTextChangedListener {
+            select_obstacle_type_layout.error = null
         }
 
         button_edit_photo.setOnClickListener {
             // Save type before going to the crop fragment
-            currentObstacle.obstacleType = edit_text.text.toString()
+            currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     currentObstacle
@@ -154,13 +153,13 @@ class ObstacleEditFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_confirm_edit_obstacle -> {
                 // Make sure the user has chosen an obstacle type before submitting
-                if (edit_text.text.toString() == "") {
+                if (select_obstacle_type_edit_text.text.toString() == "") {
                     // Set error message on edit text that type was not selected
-                    select_obstacle_type_text_material.error =
+                    select_obstacle_type_layout.error =
                         getString(R.string.error_type_not_selected)
                 } else {
                     // Save obstacle type
-                    currentObstacle.obstacleType = edit_text.text.toString()
+                    currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
                         R.id.action_obstacleEditFragment_to_obstacleListFragment

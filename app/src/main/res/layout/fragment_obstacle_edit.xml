@@ -9,7 +9,7 @@
     tools:context=".ui.ObstacleEditFragment">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/select_obstacle_type_text_material"
+        android:id="@+id/select_obstacle_type_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/edit_text"
+            android:id="@+id/select_obstacle_type_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_text_material"
+        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout"
         tools:src="@drawable/example_obs_20190808_102427129">
 
     </ImageView>
