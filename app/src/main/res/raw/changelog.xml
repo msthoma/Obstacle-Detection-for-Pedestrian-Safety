@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-06-12"
+        versionCode="1"
+        versionName="Version 0.12.0">
+        <info>User can now manually specify location on map, or change the position
+            automatically determined by GPS
+        </info>
+    </release>
+
+    <release
         date="2020-06-11"
         versionCode="1"
         versionName="Version 0.11.0">
@@ -28,7 +37,8 @@
         versionName="Version 0.10.1">
         <info>Added check for whether GPS is on, if not now app prompts user to enable it</info>
         <info>Added discard confirmation dialogs when user navigates away before submitting
-            an obstacle</info>
+            an obstacle
+        </info>
         <info>Major rearrangements in codebase, and more complete documentation</info>
     </release>
 

@@ -35,10 +35,10 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:padding="@dimen/margin_small"
-            android:text="@string/element_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Row item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -113,28 +114,60 @@ class ObstacleEditFragment : Fragment() {
 
         // Setup map view
         mapView = map
-        mapView.onCreate(null) // here a mapViewBundle should be passed instead of null
+        mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
+
             val obstaclePosition = LatLng(
                 currentObstacle.location.latitude,
                 currentObstacle.location.longitude
             )
 
-            // Add marker indicating the obstacle
-            googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
-
-            // Move camera to appropriate position
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
-
-            // Add map boundaries
             val CYPRUS = LatLngBounds(
                 LatLng(34.520142, 32.186723), // Southwest corner
                 LatLng(35.738372, 34.644546) // Northeast corner
             )
-            googleMap.setLatLngBoundsForCameraTarget(CYPRUS)
 
-            // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-            googleMap.setMinZoomPreference(7.5f)
+            googleMap.apply {
+                // Add marker and set map camera position
+                if (obstaclePosition.latitude != 0.0) {
+                    // Add marker indicating the obstacle, if location provided is not 0, 0
+                    addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+                    // Move camera to appropriate position
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
+                } else {
+                    // In case location is empty, move camera above the general area of Nicosia
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.169933, 33.361071), 12f))
+                }
+
+                // Add map boundaries
+                setLatLngBoundsForCameraTarget(CYPRUS)
+
+                // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
+                setMinZoomPreference(7.5f)
+
+                // Listen for long clicks on map, which allows user to change location manually
+                setOnMapLongClickListener { latLng ->
+                    // TODO add indication that long click changes position (with overlay?)
+                    clear()
+                    addMarker(MarkerOptions().position(latLng))
+
+                    // Save location indicated by user
+                    currentObstacle.location.apply {
+                        latitude = latLng.latitude
+                        longitude = latLng.longitude
+                    }
+                }
+            }
+
+//            TODO when user clicks my location button, marker should move to location provided
+//             by GPS, but fragment must first be able to get current position, perhaps by moving
+//             location tracking logic to view model
+//             see https://stackoverflow.com/questions/57961791/how-to-use-locationlistener-in-mvvm
+//             https://stackoverflow.com/questions/47619739/how-to-track-current-location-in-android-with-new-architecture-components
+//            googleMap.isMyLocationEnabled = true
+//            googleMap.setOnMyLocationButtonClickListener {
+//                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
+//            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -153,11 +186,7 @@ class ObstacleEditFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_confirm_edit_obstacle -> {
                 // Make sure the user has chosen an obstacle type before submitting
-                if (select_obstacle_type_edit_text.text.toString() == "") {
-                    // Set error message on edit text that type was not selected
-                    select_obstacle_type_layout.error =
-                        getString(R.string.error_type_not_selected)
-                } else {
+                if (allRequiredInfoEntered()) {
                     // Save obstacle type
                     currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
                     viewModel.insertObstacle(currentObstacle)
@@ -177,22 +206,39 @@ class ObstacleEditFragment : Fragment() {
 
     private fun displayDiscardConfirmationDialog() {
         // shows confirmation dialog in the cases of back press, up press, menu cancel option
-        requireContext().let { context ->
-            MaterialDialog(context).show {
-                title(R.string.dialog_discard_title)
-                message(R.string.dialog_discard_msg)
-                icon(R.drawable.ic_warning_black_24dp)
-                positiveButton(R.string.dialog_discard_positive) {
-                    // by navigating back with the action below, the back stack is popped up to the
-                    // list fragment, and so a back press there does not return the user back here
-                    findNavController().navigate(
-                        R.id.action_obstacleEditFragment_to_obstacleListFragment
-                    )
-                }
-                negativeButton(R.string.dialog_negative_button) { dismiss() }
-                lifecycleOwner(viewLifecycleOwner)
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_discard_title)
+            message(R.string.dialog_discard_msg)
+            icon(R.drawable.ic_warning_black_24dp)
+            positiveButton(R.string.dialog_discard_positive) {
+                // by navigating back with the action below, the back stack is popped up to the
+                // list fragment, and so a back press there does not return the user back here
+                findNavController().navigate(
+                    R.id.action_obstacleEditFragment_to_obstacleListFragment
+                )
             }
+            negativeButton(R.string.dialog_negative_button) { dismiss() }
+            lifecycleOwner(viewLifecycleOwner)
         }
+    }
+
+    private fun allRequiredInfoEntered(): Boolean {
+        var allEntered = true
+        // Check if type was selected
+        if (select_obstacle_type_edit_text.text.toString() == "") {
+            allEntered = false
+            select_obstacle_type_layout.error =
+                getString(R.string.error_type_not_selected)
+        }
+        // Check if location was selected
+        if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
+            allEntered = false
+            Toast.makeText(
+                requireContext(), "Please select obstacle location on map",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        return allEntered
     }
 
     /**
