@@ -177,21 +177,19 @@ class ObstacleEditFragment : Fragment() {
 
     private fun displayDiscardConfirmationDialog() {
         // shows confirmation dialog in the cases of back press, up press, menu cancel option
-        requireContext().let { context ->
-            MaterialDialog(context).show {
-                title(R.string.dialog_discard_title)
-                message(R.string.dialog_discard_msg)
-                icon(R.drawable.ic_warning_black_24dp)
-                positiveButton(R.string.dialog_discard_positive) {
-                    // by navigating back with the action below, the back stack is popped up to the
-                    // list fragment, and so a back press there does not return the user back here
-                    findNavController().navigate(
-                        R.id.action_obstacleEditFragment_to_obstacleListFragment
-                    )
-                }
-                negativeButton(R.string.dialog_negative_button) { dismiss() }
-                lifecycleOwner(viewLifecycleOwner)
+        MaterialDialog(requireContext()).show {
+            title(R.string.dialog_discard_title)
+            message(R.string.dialog_discard_msg)
+            icon(R.drawable.ic_warning_black_24dp)
+            positiveButton(R.string.dialog_discard_positive) {
+                // by navigating back with the action below, the back stack is popped up to the
+                // list fragment, and so a back press there does not return the user back here
+                findNavController().navigate(
+                    R.id.action_obstacleEditFragment_to_obstacleListFragment
+                )
             }
+            negativeButton(R.string.dialog_negative_button) { dismiss() }
+            lifecycleOwner(viewLifecycleOwner)
         }
     }
 
