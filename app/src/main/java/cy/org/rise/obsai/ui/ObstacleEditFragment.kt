@@ -120,11 +120,20 @@ class ObstacleEditFragment : Fragment() {
                 currentObstacle.location.longitude
             )
 
-            // Add marker indicating the obstacle
-            googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
-
-            // Move camera to appropriate position
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
+            if (obstaclePosition.latitude != 0.0) {
+                // Add marker indicating the obstacle, if location provided is not 0, 0
+                googleMap.addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+                // Move camera to appropriate position
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
+            } else {
+                // In case location is empty, move camera above the general area of Nicosia
+                googleMap.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(35.169933, 33.361071),
+                        12f
+                    )
+                )
+            }
 
             // Add map boundaries
             val CYPRUS = LatLngBounds(
