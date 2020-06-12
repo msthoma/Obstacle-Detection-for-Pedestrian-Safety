@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -185,11 +186,7 @@ class ObstacleEditFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_confirm_edit_obstacle -> {
                 // Make sure the user has chosen an obstacle type before submitting
-                if (select_obstacle_type_edit_text.text.toString() == "") {
-                    // Set error message on edit text that type was not selected
-                    select_obstacle_type_layout.error =
-                        getString(R.string.error_type_not_selected)
-                } else {
+                if (allRequiredInfoEntered()) {
                     // Save obstacle type
                     currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
                     viewModel.insertObstacle(currentObstacle)
@@ -223,6 +220,25 @@ class ObstacleEditFragment : Fragment() {
             negativeButton(R.string.dialog_negative_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
         }
+    }
+
+    private fun allRequiredInfoEntered(): Boolean {
+        var allEntered = true
+        // Check if type was selected
+        if (select_obstacle_type_edit_text.text.toString() == "") {
+            allEntered = false
+            select_obstacle_type_layout.error =
+                getString(R.string.error_type_not_selected)
+        }
+        // Check if location was selected
+        if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
+            allEntered = false
+            Toast.makeText(
+                requireContext(), "Please select obstacle location on map",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        return allEntered
     }
 
     /**
