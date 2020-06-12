@@ -139,6 +139,8 @@ class ObstacleEditFragment : Fragment() {
 //            TODO when user clicks my location button, marker should move to location provided
 //             by GPS, but fragment must first be able to get current position, perhaps by moving
 //             location tracking logic to view model
+//             see https://stackoverflow.com/questions/57961791/how-to-use-locationlistener-in-mvvm
+//             https://stackoverflow.com/questions/47619739/how-to-track-current-location-in-android-with-new-architecture-components
 //            googleMap.isMyLocationEnabled = true
 //            googleMap.setOnMyLocationButtonClickListener {
 //                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
