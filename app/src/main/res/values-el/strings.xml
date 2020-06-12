@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Obstacles</string>
+    <string name="permission_camera_denied">Η εφαρμογή δεν μπορεί να λειτουργήσει κανονικά χωρίς πρόσβαση στην κάμερα, παρακαλώ παραχωρήστε την άδεια για να συνεχίσετε.</string>
+    <string name="permission_camera_rationale">Η εφαρμογή χρειάζεται πρόσβαση στην κάμερα, παρακαλώ παραχωρήστε την για να συνεχίσετε.</string>
+    <string name="permission_location_rationale">Η εφαρμογή χρειάζεται πρόσβαση στην τοποθεσία σας, παρακαλώ παραχωρήστε την για να συνεχίσετε.</string>
+    <string name="button_sign_in">Σύνδεση</string>
+    <string name="label_fragment_obstacle_list">Εμπόδια</string>
+    <string name="label_fragment_obstacle_edit">Επεξεργασία εμποδίου</string>
+    <string name="label_fragment_camera">Νέο εμπόδιο</string>
+    <string name="label_fragment_settings">Ρυθμίσεις</string>
+    <string name="action_cancel">Ακύρωση</string>
+    <string name="action_confirm">Επιβεβαίωση</string>
+    <string name="action_delete_all">Διαγραφή όλων</string>
+    <string name="action_rotate_photo">Περιστροφή</string>
+    <string name="action_settings">Ρυθμίσεις</string>
+    <string name="action_sign_in">Σύνδεση</string>
+    <string name="dialog_delete_all_msg">Η ενέργεια αυτή δεν είναι αναστρέψιμη.</string>
+    <string name="dialog_delete_all_positive">Διαγραφή</string>
+    <string name="dialog_delete_all_title">Διαγραφή όλων;</string>
+    <string name="dialog_discard_msg">Η φωτογραφία του εμποδίου θα διαγραφεί.</string>
+    <string name="dialog_discard_positive">Απόρριψη</string>
+    <string name="dialog_discard_title">Απόρριψη εμποδίου;</string>
+    <string name="acra_crash_negative_button">Ακύρωση</string>
+    <string name="dialog_negative_button">Ακύρωση</string>
+    <string name="error_type_not_selected">Παρακαλώ επιλέξτε τύπο εμποδίου</string>
+    <string name="setting_changelog_summary">Ιστορικό αλλαγών στην εφαρμογή</string>
+    <string name="permission_rationale_dialog_title">Απαιτείται άδεια</string>
+</resources>
