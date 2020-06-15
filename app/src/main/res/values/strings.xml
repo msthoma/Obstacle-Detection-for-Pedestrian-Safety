@@ -58,6 +58,7 @@
     <string name="dialog_negative_button">Cancel</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
+    <string name="toast_location_required">Please select obstacle location on map</string>
 
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>

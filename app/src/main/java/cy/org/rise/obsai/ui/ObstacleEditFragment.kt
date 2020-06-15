@@ -228,7 +228,7 @@ class ObstacleEditFragment : Fragment() {
         if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
             allEntered = false
             Toast.makeText(
-                requireContext(), "Please select obstacle location on map",
+                requireContext(), getString(R.string.toast_location_required),
                 Toast.LENGTH_LONG
             ).show()
         }
