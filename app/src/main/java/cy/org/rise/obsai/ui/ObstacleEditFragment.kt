@@ -117,10 +117,7 @@ class ObstacleEditFragment : Fragment() {
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
 
-            val obstaclePosition = LatLng(
-                currentObstacle.location.latitude,
-                currentObstacle.location.longitude
-            )
+            val obstaclePosition = currentObstacle.getLocationAsLatLong()
 
             val CYPRUS = LatLngBounds(
                 LatLng(34.520142, 32.186723), // Southwest corner
@@ -152,10 +149,7 @@ class ObstacleEditFragment : Fragment() {
                     addMarker(MarkerOptions().position(latLng))
 
                     // Save location indicated by user
-                    currentObstacle.location.apply {
-                        latitude = latLng.latitude
-                        longitude = latLng.longitude
-                    }
+                    currentObstacle.setLocationFromLatLong(latLng)
                 }
             }
 

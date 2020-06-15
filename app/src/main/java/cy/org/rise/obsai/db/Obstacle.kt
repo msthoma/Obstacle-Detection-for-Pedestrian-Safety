@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.api.RestObstacle.*
 import java.io.Serializable
@@ -97,4 +98,20 @@ data class Obstacle(
         ),
         orientation = RestObstacle.Orientation(orientation.x, orientation.y, orientation.z)
     )
+
+    /**
+     * Sets obstacle location from LatLng object.
+     *
+     * @param latLong Google Maps LatLng object
+     */
+    fun setLocationFromLatLong(latLong: LatLng) {
+        location = Location(latitude = latLong.latitude, longitude = latLong.longitude)
+    }
+
+    /**
+     * Returns obstacle location as LatLng object.
+     *
+     * @return Obstacle location as Google Maps LatLng
+     */
+    fun getLocationAsLatLong(): LatLng = LatLng(location.latitude, location.longitude)
 }
