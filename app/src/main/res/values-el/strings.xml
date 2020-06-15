@@ -26,4 +26,10 @@
     <string name="error_type_not_selected">Παρακαλώ επιλέξτε τύπο εμποδίου</string>
     <string name="setting_changelog_summary">Ιστορικό αλλαγών στην εφαρμογή</string>
     <string name="permission_rationale_dialog_title">Απαιτείται άδεια</string>
+    <string name="title_activity_about">Άδειες λογισμικού ανοικτού κώδικα</string>
+    <string name="setting_open_source_libraries_summary">Λεπτομέρειες άδειας βιβλιοθηκών ανοικτού κώδικα</string>
+    <string name="setting_open_source_libraries_title">Βιβλιοθήκες ανοικτού κώδικα</string>
+    <string name="toast_location_required">Παρακαλώ επιλέξτε την τοποθεσία του εμποδίου στο χάρτη</string>
+    <string name="label_fragment_account">Λογαριασμός χρήστη</string>
+    <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
 </resources>
