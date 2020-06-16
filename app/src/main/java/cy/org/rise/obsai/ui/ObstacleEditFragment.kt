@@ -27,6 +27,7 @@ import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import java.io.File
+import java.io.IOException
 
 /**
  * Fragment that displays the recently photographed obstacle, shows its position on the map,
@@ -204,13 +205,22 @@ class ObstacleEditFragment : Fragment() {
             title(R.string.dialog_discard_title)
             message(R.string.dialog_discard_msg)
             icon(R.drawable.ic_warning_black_24dp)
+
             positiveButton(R.string.dialog_discard_positive) {
+                // first delete photo of obstacle that was taken
+                try {
+                    File(currentObstacle.photoPath).delete()
+                } catch (ex: IOException) {
+                    Log.e(TAG(), "Error deleting obstacle photo", ex)
+                }
+
                 // by navigating back with the action below, the back stack is popped up to the
                 // list fragment, and so a back press there does not return the user back here
                 findNavController().navigate(
                     R.id.action_obstacleEditFragment_to_obstacleListFragment
                 )
             }
+
             negativeButton(R.string.dialog_negative_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
         }
