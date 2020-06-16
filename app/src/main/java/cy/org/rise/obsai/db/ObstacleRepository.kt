@@ -44,7 +44,7 @@ class ObstacleRepository private constructor(
                 File(obstacle.photoPath).delete()
                 Log.d(TAG(), "Deleted photo ${obstacle.photoPath}")
             } catch (ex: IOException) {
-                Log.e(TAG(), "Error deleting photo at ${obstacle.photoPath}")
+                Log.e(TAG(), "Error deleting photo at ${obstacle.photoPath}", ex)
             }
         }
         // delete entries in database
