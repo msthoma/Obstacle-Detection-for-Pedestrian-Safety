@@ -1,11 +1,15 @@
 package cy.org.rise.obsai.db
 
 import android.content.Context
+import android.util.Log
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.utils.SessionManager
+import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
+import java.io.File
+import java.io.IOException
 
 /**
  * Repository module for handling data operations, based on
@@ -21,7 +25,7 @@ class ObstacleRepository private constructor(
     /**
      * Returns all obstacles saved in local database as LiveData.
      */
-    fun getObstacles() = obstacleDao.getAllObstacles()
+    fun getAllObstaclesLive() = obstacleDao.getAllObstaclesLive()
 
     /**
      * Inserts obstacle in local database.
@@ -29,9 +33,23 @@ class ObstacleRepository private constructor(
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
     /**
-     * Deletes all obstacles from local database.
+     * Deletes all obstacles from local database, and their accompanying photo files in loca
+     * storage.
      */
-    suspend fun deleteAll() = obstacleDao.deleteAll()
+    suspend fun deleteAll() {
+        val allObstacles = obstacleDao.getAllObstacles()
+        // delete photo files first
+        allObstacles.forEach { obstacle ->
+            try {
+                File(obstacle.photoPath).delete()
+                Log.d(TAG(), "Deleted photo ${obstacle.photoPath}")
+            } catch (ex: IOException) {
+                Log.e(TAG(), "Error deleting photo at ${obstacle.photoPath}", ex)
+            }
+        }
+        // delete entries in database
+        obstacleDao.deleteAll()
+    }
 
     // Network operations
     private val orionService by lazy {
