@@ -21,7 +21,7 @@ class ObstacleRepository private constructor(
     /**
      * Returns all obstacles saved in local database as LiveData.
      */
-    fun getObstacles() = obstacleDao.getAllObstacles()
+    fun getAllObstaclesLive() = obstacleDao.getAllObstaclesLive()
 
     /**
      * Inserts obstacle in local database.

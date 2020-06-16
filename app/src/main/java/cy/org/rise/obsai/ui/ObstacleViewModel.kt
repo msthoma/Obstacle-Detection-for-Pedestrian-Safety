@@ -9,7 +9,6 @@ import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
-import io.minio.errors.MinioException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -31,7 +30,7 @@ class ObstacleViewModel internal constructor(
     /**
      * Live data of obstacles in local db.
      */
-    val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getObstacles()
+    val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getAllObstaclesLive()
 
     /**
      * Inserts obstacle in Room database.
