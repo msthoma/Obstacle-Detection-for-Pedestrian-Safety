@@ -11,6 +11,9 @@ interface ObstacleDao {
     @Query("SELECT * from obstacle_table ORDER BY timeStamp ASC")
     fun getAllObstaclesLive(): LiveData<List<Obstacle>>
 
+    @Query("SELECT * from obstacle_table")
+    suspend fun getAllObstacles(): List<Obstacle>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertObstacle(obstacle: Obstacle)
 
