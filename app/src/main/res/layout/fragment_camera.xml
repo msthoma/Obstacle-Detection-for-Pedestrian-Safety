@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.CameraFragment">
 
+    <!-- app:cameraExperimental="true" in CameraView below enforces use of Camera2, which should
+    be available in all devices with SDK >= 21, which is the minimum for the app -->
+
     <com.otaliastudios.cameraview.CameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
