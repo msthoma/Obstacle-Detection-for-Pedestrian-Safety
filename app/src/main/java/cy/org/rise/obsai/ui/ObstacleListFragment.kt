@@ -22,41 +22,21 @@ import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import okhttp3.Credentials
 
 /**
  * Displays a list with current obstacles.
  */
+@ExperimentalStdlibApi
 class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
     private lateinit var sessionManager: SessionManager
-
-    // Instance of obstacle for testing purposes
-    private val mockObstacle = Obstacle(
-        obstacleType = "Mock obstacle",
-        location = Obstacle.Location(
-            latitude = 35.169160,
-            longitude = 33.361459
-        ),
-        orientation = Obstacle.Orientation(
-            x = 0.0,
-            y = 0.0,
-            z = 0.0
-        ),
-        photoPath = "photo_path"
-    )
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -156,6 +136,21 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
+                val mockObstacle = Obstacle(
+                    obstacleType = "Mock obstacle",
+                    location = Obstacle.Location(
+                        latitude = 35.169160,
+                        longitude = 33.361459
+                    ),
+                    orientation = Obstacle.Orientation(
+                        x = 0.0,
+                        y = 0.0,
+                        z = 0.0
+                    ),
+                    photoPath = "photo_path",
+                    typeProbabilitiesCNN = generateRandomMap()
+                )
+                Log.d(TAG(), mockObstacle.toString())
                 viewModel.insertObstacle(mockObstacle)
                 true
             }
@@ -251,4 +246,13 @@ class ObstacleListFragment : Fragment() {
         (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(
             LocationManager.GPS_PROVIDER
         )
+
+    private fun generateRandomMap(): Map<String, Float> {
+        val stringArray = resources.getStringArray(R.array.obstacle_types_array)
+        return buildMap {
+            stringArray.forEach { obsType ->
+                this[obsType] = 0.0f
+            }
+        }
+    }
 }
