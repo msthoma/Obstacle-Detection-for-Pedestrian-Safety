@@ -1,6 +1,8 @@
 package cy.org.rise.obsai.db
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.*
 
 /**
@@ -28,5 +30,30 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
+    }
+
+    /**
+     * Converts map of strings and floats to string, based on
+     * [this](https://stackoverflow.com/a/57246287).
+     *
+     * @param value
+     * @return
+     */
+    @TypeConverter
+    fun stringToMap(value: String): Map<String, Float>? {
+        return if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
+                Float>>() {}.type)
+    }
+
+    /**
+     * Converts string to map of strings and floats, based on
+     * [this](https://stackoverflow.com/a/57246287).
+     *
+     * @param value
+     * @return
+     */
+    @TypeConverter
+    fun mapToString(value: Map<String, Float>?): String {
+        return value?.let { Gson().toJson(it) } ?: ""
     }
 }
