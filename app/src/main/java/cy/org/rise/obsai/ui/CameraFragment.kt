@@ -84,6 +84,7 @@ class CameraFragment : Fragment(), SensorEventListener {
                     null
                 }
 
+                // TODO simplify this
                 photoFile?.let {
                     result.run {
                         toFile(it) { file ->
@@ -115,16 +116,7 @@ class CameraFragment : Fragment(), SensorEventListener {
         // location if it becomes available)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let { loc ->
-                currentLocation = loc
-                // location in some cases can be NULL see
-                // https://developer.android.com/training/location/retrieve-current#last-known
-                coordinates.text =
-                    "Location: Lat:" + location.latitude + ", Long:" + location.longitude
-
-                // this saves location in photo's EXIF data
-                cameraView.setLocation(loc.latitude, loc.longitude)
-            }
+            location?.let { updateObstacleLocation(it) }
         }
 
         getLocationUpdates()
@@ -166,16 +158,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                Log.d(TAG(), "location callback")
-                locationResult ?: return
-                try {
-                    currentLocation = locationResult.locations[0]
-                    coordinates.text =
-                        "Location: Lat:" + currentLocation.latitude + ", Long:" + currentLocation.longitude
-                    cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
-                } catch (e: Exception) {
-                    Log.e(TAG(), "No coordinates received from locationCallback", e)
-                }
+                locationResult?.let { updateObstacleLocation(it.lastLocation) }
             }
         }
     }
@@ -217,6 +200,18 @@ class CameraFragment : Fragment(), SensorEventListener {
                 z = currentOrientation[2].toDouble()
             )
         )
+    }
+
+    private fun updateObstacleLocation(location: Location) {
+        currentLocation = location
+
+        // location in some cases can be NULL see
+        // https://developer.android.com/training/location/retrieve-current#last-known
+        coordinates.text =
+            "Location: Lat:" + location.latitude + ", Long:" + location.longitude
+
+        // this saves location in photo's EXIF data
+        cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
     }
 
     override fun onPause() {
