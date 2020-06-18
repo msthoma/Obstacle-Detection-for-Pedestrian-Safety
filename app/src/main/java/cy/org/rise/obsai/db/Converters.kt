@@ -36,8 +36,8 @@ class Converters {
      * Converts map of strings and floats to string, based on
      * [this](https://stackoverflow.com/a/57246287).
      *
-     * @param value
-     * @return
+     * @param value string to convert back to map
+     * @return map of obstacle types and probabilities
      */
     @TypeConverter
     fun stringToMap(value: String): Map<String, Float>? {
@@ -49,8 +49,8 @@ class Converters {
      * Converts string to map of strings and floats, based on
      * [this](https://stackoverflow.com/a/57246287).
      *
-     * @param value
-     * @return
+     * @param value map of obstacle types and probabilities
+     * @return map converted to string
      */
     @TypeConverter
     fun mapToString(value: Map<String, Float>?): String {
