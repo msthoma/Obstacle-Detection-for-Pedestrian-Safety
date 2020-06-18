@@ -30,6 +30,8 @@ import java.util.*
  * @property photoPath where the photo file is located
  * @property location geo coordinates of the obstacle
  * @property orientation orientation of phone in space when obstacle was recorded
+ * @property typeProbabilitiesCNN map of obstacle types with their probabilities as predicted by
+ * the convolutional neural network
  */
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
@@ -49,7 +51,10 @@ data class Obstacle(
     var location: Location,
 
     @Embedded(prefix = "orientation_")
-    val orientation: Orientation
+    val orientation: Orientation,
+
+    @ColumnInfo
+    var typeProbabilitiesCNN: Map<String, Float>? = null
 
 ) : Serializable {
 
