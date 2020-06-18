@@ -122,8 +122,7 @@ class CameraFragment : Fragment(), SensorEventListener {
         getLocationUpdates()
 
         // Orientation stuff
-        sensorManager =
-            requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -134,20 +133,14 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        return File.createTempFile(
-            "JPEG_${timeStamp}",
-            ".jpg",
-            storageDir
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
+        return File.createTempFile("JPEG_${timeStamp}", ".jpg", storageDir).apply {
+            currentPhotoPath = this.absolutePath
         }
     }
 
     private fun getLocationUpdates() {
         // this is used to get any updates to the location of the user, in case they change
         // during taking a photo of an obstacle
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
             interval = 50000
@@ -179,15 +172,9 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // in case location has not been initialized, set position to 0, 0
         val obsLocation = if (::currentLocation.isInitialized) {
-            Obstacle.Location(
-                latitude = currentLocation.latitude,
-                longitude = currentLocation.longitude
-            )
+            Obstacle.Location(currentLocation.latitude, currentLocation.longitude)
         } else {
-            Obstacle.Location(
-                latitude = 0.0,
-                longitude = 0.0
-            )
+            Obstacle.Location(latitude = 0.0, longitude = 0.0)
         }
 
         return Obstacle(
