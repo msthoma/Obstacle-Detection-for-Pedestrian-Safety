@@ -62,11 +62,10 @@ class CropFragment : Fragment() {
             null
         }
 
-        // Get list with all possible Exif tags
-        val tagList = getPossibleExifTags()
-
         // Set photo in crop view
         photoFile?.also { file ->
+            // Get list with all possible Exif tags
+            val tagList = getPossibleExifTags()
 
             val exifInterface = ExifInterface(file)
 
@@ -77,17 +76,6 @@ class CropFragment : Fragment() {
                     }
                 }
             }
-
-            Log.d(TAG(), photoExifTags.toString())
-//            for (prop in ExifInterface::class.members) {
-//                if (prop.name.contains("TAG", ignoreCase = true)) {
-//                    Log.d(
-//                        TAG(),
-//                        "${prop.name} ${prop.name}"
-//                    )
-//                    Log.d(TAG(), exifInterface.javaClass.declaredFields[0].toString())
-//                }
-//            }
 
             context?.also { context ->
                 val photoUri =
