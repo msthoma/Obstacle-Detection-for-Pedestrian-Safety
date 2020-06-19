@@ -80,15 +80,18 @@ class CropFragment : Fragment() {
                 }
             }
 
+            // Attempt to preserve Exif tags of photo, if they exist
             // Get list with all possible Exif tags
-            val tagList = getPossibleExifTags()
+            getPossibleExifTags()?.let { tagList ->
+                // Read Exif tags from photo file
+                val exifInterface = ExifInterface(file)
 
-            val exifInterface = ExifInterface(file)
-
-            photoExifTags = buildMap {
-                tagList?.forEach { tag ->
-                    if (exifInterface.hasAttribute(tag)) {
-                        this[tag] = exifInterface.getAttribute(tag) as String
+                // Create map with any tags the original photo has
+                photoExifTags = buildMap {
+                    tagList.forEach { tag ->
+                        if (exifInterface.hasAttribute(tag)) {
+                            this[tag] = exifInterface.getAttribute(tag) as String
+                        }
                     }
                 }
             }
