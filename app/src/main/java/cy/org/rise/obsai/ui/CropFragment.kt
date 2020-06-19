@@ -27,12 +27,14 @@ import java.io.FileOutputStream
  * Fragment used for cropping obstacle photos.
  *
  * Android Image Cropper library is used for cropping,
- * see - [https://github.com/ArthurHub/Android-Image-Cropper]
+ * see - [https://github.com/ArthurHub/Android-Image-Cropper].
+ *
+ * Any Exif tags in the original photo are preserved in the cropped photo.
  */
 @ExperimentalStdlibApi
 class CropFragment : Fragment() {
 
-    // Arguments from the edit fragment
+    // Arguments from the Edit fragment
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     private lateinit var currentObstacle: Obstacle
@@ -99,15 +101,15 @@ class CropFragment : Fragment() {
 
         // Listen for cropped photo
         cropImageView.setOnCropImageCompleteListener { _, result ->
-            // overwrite original photo file (https://stackoverflow.com/a/673014) and navigate back
+            // Overwrite original photo file (https://stackoverflow.com/a/673014) and navigate back
             photoFile?.let { photo ->
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        // save file on background thread
+                        // Save file on background thread
                         result.bitmap.compress(
                             Bitmap.CompressFormat.JPEG, 100, FileOutputStream(photo)
                         ).also {
-                            // if Exif data existed in the original, write them to the cropped photo
+                            // If Exif data existed in the original, write them to the cropped photo
                             if (::photoExifTags.isInitialized) {
                                 val croppedExifInterface = ExifInterface(photo)
 
@@ -118,6 +120,7 @@ class CropFragment : Fragment() {
                             }
                         }
                     }.let { success ->
+                        // This is back on the Main thread
                         Log.d(TAG(), "Saving cropped photo result: $success")
                         if (!success) {
                             Toast.makeText(
