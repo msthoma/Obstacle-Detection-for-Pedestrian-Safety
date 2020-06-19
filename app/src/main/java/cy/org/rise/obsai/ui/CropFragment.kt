@@ -62,17 +62,8 @@ class CropFragment : Fragment() {
             null
         }
 
-        // Values of all TAGS
-        // https://developer.android.com/reference/kotlin/androidx/exifinterface/media/ExifInterface
-        // https://regex101.com/
-        // Python Regex r"&quot;([a-zA-Z]{2,})&quot;"
-        val ins = requireContext().assets?.open("ExifTags.txt")
-        val tagList = mutableListOf<String>()
-        ins?.bufferedReader()?.forEachLine {
-            tagList.add(it)
-        }
-        ins?.close()
-        tagList.remove("Orientation")
+        // Get list with all possible Exif tags
+        val tagList = getPossibleExifTags()
 
         // Set photo in crop view
         photoFile?.also { file ->
@@ -80,7 +71,7 @@ class CropFragment : Fragment() {
             val exifInterface = ExifInterface(file)
 
             photoExifTags = buildMap {
-                tagList.forEach { tag ->
+                tagList?.forEach { tag ->
                     if (exifInterface.hasAttribute(tag)) {
                         this[tag] = exifInterface.getAttribute(tag) as String
                     }
@@ -136,7 +127,7 @@ class CropFragment : Fragment() {
                         }
                     }.let { success ->
                         Log.d(TAG(), "Saving cropped photo result: $success")
-                        if (success) {
+                        if (!success) {
                             Toast.makeText(
                                 context,
                                 "Error saving cropped photo, please try again",
@@ -181,6 +172,26 @@ class CropFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun getPossibleExifTags(): List<String>? {
+        // Returns a list with the values of all possible Exif tags. The list is read from a .txt
+        // file in Assets. I extracted the list from the source of the following page:
+        // https://developer.android.com/reference/kotlin/androidx/exifinterface/media/ExifInterface
+        // using https://regex101.com/ with the Regex py expression r"&quot;([a-zA-Z]{2,})&quot;"
+        return try {
+            val ins = requireContext().assets?.open("ExifTags.txt")
+            val tagList = mutableListOf<String>()
+            ins?.bufferedReader()?.forEachLine {
+                tagList.add(it)
+            }
+            ins?.close()
+            tagList.remove("Orientation")
+            tagList
+        } catch (e: Exception) {
+            Log.e(TAG(), "Error creating Exif tag list", e)
+            null
         }
     }
 }
