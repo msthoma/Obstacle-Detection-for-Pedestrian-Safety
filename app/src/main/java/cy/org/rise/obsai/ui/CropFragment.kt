@@ -179,6 +179,8 @@ class CropFragment : Fragment() {
                 tagList.add(it)
             }
             ins?.close()
+            // Here I'm removing the Orientation tag, since the cropping library already deals
+            // with it when saving the cropped photo
             tagList.remove("Orientation")
             tagList
         } catch (e: Exception) {
