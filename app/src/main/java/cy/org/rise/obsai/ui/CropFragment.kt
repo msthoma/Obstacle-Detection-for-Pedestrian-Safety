@@ -125,11 +125,11 @@ class CropFragment : Fragment() {
                         if (!success) {
                             Toast.makeText(
                                 context,
-                                "Error saving cropped photo, please try again",
+                                getString(R.string.toast_error_saving_cropped),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                        // Navigate back to edit fragment
+                        // Navigate back to Εdit fragment
                         findNavController().navigate(
                             CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
                                 currentObstacle
