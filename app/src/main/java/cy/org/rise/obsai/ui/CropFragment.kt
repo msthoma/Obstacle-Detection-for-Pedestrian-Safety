@@ -66,16 +66,14 @@ class CropFragment : Fragment() {
         }
 
         photoFile?.also { file ->
-            // Set photo in crop view
+            // Setup crop view
             context?.also { context ->
-                val photoUri =
-                    FileProvider.getUriForFile(
-                        context, "com.example.android.fileprovider", file
-                    )
-
-                // Set crop view properties
                 cropImageView.apply {
-                    setImageUriAsync(photoUri)
+                    setImageUriAsync(
+                        FileProvider.getUriForFile(
+                            context, "com.example.android.fileprovider", file
+                        )
+                    )
                     isAutoZoomEnabled = true
                     scaleType = CropImageView.ScaleType.FIT_CENTER
                     isShowProgressBar = true
