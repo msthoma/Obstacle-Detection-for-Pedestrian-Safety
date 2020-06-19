@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -28,6 +29,7 @@ import java.io.FileOutputStream
  * Android Image Cropper library is used for cropping,
  * see - [https://github.com/ArthurHub/Android-Image-Cropper]
  */
+@ExperimentalStdlibApi
 class CropFragment : Fragment() {
 
     // Arguments from the edit fragment
@@ -35,6 +37,8 @@ class CropFragment : Fragment() {
 
     private lateinit var currentObstacle: Obstacle
     private lateinit var cropImageView: CropImageView
+
+    private lateinit var photoExifTags: Map<String, String>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,12 +62,46 @@ class CropFragment : Fragment() {
             null
         }
 
+        // Values of all TAGS
+        // https://developer.android.com/reference/kotlin/androidx/exifinterface/media/ExifInterface
+        // https://regex101.com/
+        // Python Regex r"&quot;([a-zA-Z]{2,})&quot;"
+        val ins = requireContext().assets?.open("ExifTags.txt")
+        val tagList = mutableListOf<String>()
+        ins?.bufferedReader()?.forEachLine {
+            tagList.add(it)
+        }
+        ins?.close()
+        tagList.remove("Orientation")
+
         // Set photo in crop view
-        photoFile?.also {
+        photoFile?.also { file ->
+
+            val exifInterface = ExifInterface(file)
+
+            photoExifTags = buildMap {
+                tagList.forEach { tag ->
+                    if (exifInterface.hasAttribute(tag)) {
+                        this[tag] = exifInterface.getAttribute(tag) as String
+                    }
+                }
+            }
+
+            Log.d(TAG(), photoExifTags.toString())
+//            for (prop in ExifInterface::class.members) {
+//                if (prop.name.contains("TAG", ignoreCase = true)) {
+//                    Log.d(
+//                        TAG(),
+//                        "${prop.name} ${prop.name}"
+//                    )
+//                    Log.d(TAG(), exifInterface.javaClass.declaredFields[0].toString())
+//                }
+//            }
+
             context?.also { context ->
                 val photoUri =
                     FileProvider.getUriForFile(
-                        context, "com.example.android.fileprovider", it
+                        context, "com.example.android.fileprovider", file
                     )
 
                 // Set crop view properties
@@ -78,18 +116,27 @@ class CropFragment : Fragment() {
 
         // Listen for cropped photo
         cropImageView.setOnCropImageCompleteListener { _, result ->
-
             // overwrite original photo file (https://stackoverflow.com/a/673014) and navigate back
-            photoFile?.let {
+            photoFile?.let { photo ->
                 CoroutineScope(Dispatchers.Main).launch {
-                    // save on background thread
                     withContext(Dispatchers.IO) {
+                        // save file on background thread
                         result.bitmap.compress(
-                            Bitmap.CompressFormat.JPEG, 100, FileOutputStream(it)
-                        )
+                            Bitmap.CompressFormat.JPEG, 100, FileOutputStream(photo)
+                        ).also {
+                            // if Exif data existed in the original, write them to the cropped photo
+                            if (::photoExifTags.isInitialized) {
+                                val croppedExifInterface = ExifInterface(photo)
+
+                                photoExifTags.forEach { (tag, value) ->
+                                    croppedExifInterface.setAttribute(tag, value)
+                                }
+                                croppedExifInterface.saveAttributes()
+                            }
+                        }
                     }.let { success ->
                         Log.d(TAG(), "Saving cropped photo result: $success")
-                        if (!success) {
+                        if (success) {
                             Toast.makeText(
                                 context,
                                 "Error saving cropped photo, please try again",
