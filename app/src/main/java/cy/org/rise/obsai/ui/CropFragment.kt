@@ -51,6 +51,7 @@ class CropFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Initialize crop view
         cropImageView = crop_image_view
+
         // Get obstacle object passed by the edit fragment
         currentObstacle = args.currentObstacle
 
@@ -62,21 +63,8 @@ class CropFragment : Fragment() {
             null
         }
 
-        // Set photo in crop view
         photoFile?.also { file ->
-            // Get list with all possible Exif tags
-            val tagList = getPossibleExifTags()
-
-            val exifInterface = ExifInterface(file)
-
-            photoExifTags = buildMap {
-                tagList?.forEach { tag ->
-                    if (exifInterface.hasAttribute(tag)) {
-                        this[tag] = exifInterface.getAttribute(tag) as String
-                    }
-                }
-            }
-
+            // Set photo in crop view
             context?.also { context ->
                 val photoUri =
                     FileProvider.getUriForFile(
@@ -89,6 +77,19 @@ class CropFragment : Fragment() {
                     isAutoZoomEnabled = true
                     scaleType = CropImageView.ScaleType.FIT_CENTER
                     isShowProgressBar = true
+                }
+            }
+
+            // Get list with all possible Exif tags
+            val tagList = getPossibleExifTags()
+
+            val exifInterface = ExifInterface(file)
+
+            photoExifTags = buildMap {
+                tagList?.forEach { tag ->
+                    if (exifInterface.hasAttribute(tag)) {
+                        this[tag] = exifInterface.getAttribute(tag) as String
+                    }
                 }
             }
         }
