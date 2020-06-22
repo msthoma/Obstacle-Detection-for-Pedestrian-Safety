@@ -34,7 +34,7 @@ class Converters {
     }
 
     /**
-     * Converts map of strings and floats to string, based on
+     * Converts string to map of strings and floats, based on
      * [this](https://stackoverflow.com/a/57246287).
      *
      * @param value string to convert back to map
@@ -47,7 +47,7 @@ class Converters {
     }
 
     /**
-     * Converts string to map of strings and floats, based on
+     * Converts map of strings and floats to string, based on
      * [this](https://stackoverflow.com/a/57246287).
      *
      * @param value map of obstacle types and probabilities
@@ -55,6 +55,31 @@ class Converters {
      */
     @TypeConverter
     fun mapStingFloatToString(value: Map<String, Float>?): String {
+        return value?.let { Gson().toJson(it) } ?: ""
+    }
+
+    // the following two converters could be perhaps incorporated with the two above
+
+    /**
+     * Converts string to map of Exif tags and their values.
+     *
+     * @param value string to convert back to map
+     * @return map of Exif tags and their values
+     */
+    @TypeConverter
+    fun stringToMapOfStringString(value: String): Map<String, String>? {
+        return if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
+                Float>>() {}.type)
+    }
+
+    /**
+     * Converts map of Exif tags and their values to string.
+     *
+     * @param value map of Exif tags and their values
+     * @return map converted to string
+     */
+    @TypeConverter
+    fun mapStingStringToString(value: Map<String, String>?): String {
         return value?.let { Gson().toJson(it) } ?: ""
     }
 }
