@@ -84,18 +84,15 @@ class CameraFragment : Fragment(), SensorEventListener {
                     null
                 }
 
-                // TODO simplify this
-                photoFile?.let {
-                    result.run {
-                        toFile(it) { file ->
-                            file?.let {
-                                val action = CameraFragmentDirections
-                                    .actionCameraFragmentToObstacleEditFragment(
-                                        createCurrentObstacle()
-                                    )
-                                findNavController().navigate(action)
-                            }
-                        }
+                photoFile?.let { tempPhotoFile ->
+                    result.toFile(tempPhotoFile) { finalPhotoFile ->
+                        finalPhotoFile?.let {
+                            val action = CameraFragmentDirections
+                                .actionCameraFragmentToObstacleEditFragment(
+                                    createCurrentObstacle()
+                                )
+                            findNavController().navigate(action)
+                        } ?: throw IOException("Unable to save obstacle photo")
                     }
                 }
             }
