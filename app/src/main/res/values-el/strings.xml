@@ -33,4 +33,5 @@
     <string name="label_fragment_account">Λογαριασμός χρήστη</string>
     <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
+    <string name="hint_obstacle_type">Είδος εμποδίου</string>
 </resources>
