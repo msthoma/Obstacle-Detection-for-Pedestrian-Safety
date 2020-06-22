@@ -54,10 +54,7 @@ data class Obstacle(
     val orientation: Orientation,
 
     @ColumnInfo
-    var typeProbabilitiesCNN: Map<String, Float>? = null,
-
-    @ColumnInfo
-    var exifTags: Map<String, String>? = null
+    var typeProbabilitiesCNN: Map<String, Float>? = null
 
 ) : Serializable {
 

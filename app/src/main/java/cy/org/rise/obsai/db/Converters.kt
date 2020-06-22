@@ -57,29 +57,4 @@ class Converters {
     fun mapStingFloatToString(value: Map<String, Float>?): String {
         return value?.let { Gson().toJson(it) } ?: ""
     }
-
-    // the following two converters could be perhaps incorporated with the two above
-
-    /**
-     * Converts string to map of Exif tags and their values.
-     *
-     * @param value string to convert back to map
-     * @return map of Exif tags and their values
-     */
-    @TypeConverter
-    fun stringToMapOfStringString(value: String): Map<String, String>? {
-        return if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
-                Float>>() {}.type)
-    }
-
-    /**
-     * Converts map of Exif tags and their values to string.
-     *
-     * @param value map of Exif tags and their values
-     * @return map converted to string
-     */
-    @TypeConverter
-    fun mapStingStringToString(value: Map<String, String>?): String {
-        return value?.let { Gson().toJson(it) } ?: ""
-    }
 }
