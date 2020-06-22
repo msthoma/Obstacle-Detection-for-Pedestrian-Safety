@@ -2,6 +2,15 @@
     <release
         date="2020-06-12"
         versionCode="1"
+        versionName="Version 0.12.1">
+        <info>Location information is now saved in Exif tags</info>
+        <info>Exif tags are preserved when photos are cropped</info>
+        <info>Greek translations</info>
+    </release>
+
+    <release
+        date="2020-06-12"
+        versionCode="1"
         versionName="Version 0.12.0">
         <info>User can now manually specify location on map, or change the position
             automatically determined by GPS
