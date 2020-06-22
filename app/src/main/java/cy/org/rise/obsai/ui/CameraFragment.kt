@@ -21,6 +21,7 @@ import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -193,7 +194,8 @@ class CameraFragment : Fragment(), SensorEventListener {
         // https://developer.android.com/training/location/retrieve-current#last-known
 
         if (photo_details.isVisible) {
-            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation.longitude}"
+            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
+                .longitude}\nAltitude ${location.altitude.roundTo(2)}"
         }
 
         // this saves location in photo's EXIF data
@@ -254,8 +256,14 @@ class CameraFragment : Fragment(), SensorEventListener {
                 )
             }
             if (photo_details.isVisible) {
-                accelerometer.text = "Orientation: ${accelerometerReading.asList()}"
-                compass.text = "Compass: ${magnetometerReading.asList()}"
+                val orientationArray = accelerometerReading.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                val compassArray = magnetometerReading.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                accelerometer.text = "Orientation: ${orientationArray}"
+                compass.text = "Compass: ${compassArray}"
             }
         }
     }
