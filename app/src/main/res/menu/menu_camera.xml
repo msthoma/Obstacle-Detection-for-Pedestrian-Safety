@@ -10,10 +10,4 @@
         android:title="@string/action_toggle_camera_details"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_cancel_edit_photo"
-        android:orderInCategory="200"
-        android:title="@string/action_cancel"
-        app:showAsAction="never" />
-
 </menu>
