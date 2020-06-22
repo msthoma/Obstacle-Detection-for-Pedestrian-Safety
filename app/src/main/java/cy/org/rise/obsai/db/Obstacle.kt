@@ -29,6 +29,8 @@ import java.util.*
  * @property obstacleType type of the obstacle, e.g crack, no pavement etc.
  * @property photoPath where the photo file is located
  * @property location geo coordinates of the obstacle
+ * @property locationFromGPS holds a copy of the GPS-determined location, in case user manually
+ * edits location
  * @property orientation orientation of phone in space when obstacle was recorded
  * @property typeProbabilitiesCNN map of obstacle types with their probabilities as predicted by
  * the convolutional neural network
@@ -57,6 +59,9 @@ data class Obstacle(
     var typeProbabilitiesCNN: Map<String, Float>? = null
 
 ) : Serializable {
+
+    @Embedded(prefix = "GPS_")
+    var locationFromGPS: Location = location.copy()
 
     /**
      * Simple data class to store obstacle location.
