@@ -10,9 +10,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -259,5 +257,23 @@ class CameraFragment : Fragment(), SensorEventListener {
                 compass.text = "Compass: ${magnetometerReading.asList()}"
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_toggle_photo_details -> {
+                if (photo_details.isVisible) {
+                    photo_details.visibility = View.GONE
+                } else {
+                    photo_details.visibility = View.VISIBLE
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_camera, menu)
     }
 }
