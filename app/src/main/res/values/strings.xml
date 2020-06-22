@@ -29,6 +29,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_test_server_connection" translatable="false">Test server connection</string>
     <string name="action_test_server_obstacle_input" translatable="false">Test inserting obstacle on server</string>
+    <string name="action_toggle_camera_details" translatable="false">Toggle camera details</string>
 
     <string name="title_activity_about">Open source libraries</string>
 
