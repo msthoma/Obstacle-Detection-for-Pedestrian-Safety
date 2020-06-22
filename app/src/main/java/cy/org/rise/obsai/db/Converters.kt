@@ -7,7 +7,8 @@ import java.util.*
 
 /**
  * Class with Room database
- * [type converters](https://developer.android.com/reference/androidx/room/TypeConverter).
+ * [type converters](https://developer.android.com/reference/androidx/room/TypeConverter), used
+ * for saving complex data in Room DB.
  */
 class Converters {
     /**
@@ -40,7 +41,7 @@ class Converters {
      * @return map of obstacle types and probabilities
      */
     @TypeConverter
-    fun stringToMap(value: String): Map<String, Float>? {
+    fun stringToMapOfStringFloat(value: String): Map<String, Float>? {
         return if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
                 Float>>() {}.type)
     }
@@ -53,7 +54,7 @@ class Converters {
      * @return map converted to string
      */
     @TypeConverter
-    fun mapToString(value: Map<String, Float>?): String {
+    fun mapStingFloatToString(value: Map<String, Float>?): String {
         return value?.let { Gson().toJson(it) } ?: ""
     }
 }
