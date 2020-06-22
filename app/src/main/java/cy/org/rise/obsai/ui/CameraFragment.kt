@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -191,8 +192,10 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // location in some cases can be NULL see
         // https://developer.android.com/training/location/retrieve-current#last-known
-        coordinates.text =
-            "Location: Lat:" + location.latitude + ", Long:" + location.longitude
+
+        if (photo_details.isVisible) {
+            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation.longitude}"
+        }
 
         // this saves location in photo's EXIF data
         cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
@@ -251,7 +254,10 @@ class CameraFragment : Fragment(), SensorEventListener {
                     magnetometerReading.size
                 )
             }
-            orientation.text = "Orientation: " + accelerometerReading.asList().toString()
+            if (photo_details.isVisible) {
+                accelerometer.text = "Orientation: ${accelerometerReading.asList()}"
+                compass.text = "Compass: ${magnetometerReading.asList()}"
+            }
         }
     }
 }

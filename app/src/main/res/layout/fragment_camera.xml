@@ -26,7 +26,7 @@
         app:cameraMode="picture"
         app:cameraPlaySounds="false"
         app:cameraPreview="glSurface"
-        app:layout_constraintBottom_toTopOf="@id/camera_info_views"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,46 +37,43 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toTopOf="@id/camera_info_views"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/camera_button" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/camera_info_views"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/photo_details"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/coordinates"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:background="@android:color/black"
+            android:layout_margin="@dimen/margin_tiny"
             android:text="Getting location..."
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toTopOf="@id/orientation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/orientation"
-            android:layout_width="match_parent"
+            android:id="@+id/accelerometer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:background="@android:color/black"
-            android:text="Device orientation..."
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/coordinates" />
+            android:layout_margin="@dimen/margin_tiny"
+            android:text="Getting orientation..."
+            android:textColor="@android:color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/compass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_tiny"
+            android:text="Getting compass..."
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
