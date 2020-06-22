@@ -47,14 +47,17 @@ data class Obstacle(
     @ColumnInfo
     var photoPath: String,
 
-    @Embedded(prefix = "location_")
+    @Embedded
     var location: Location,
 
-    @Embedded(prefix = "orientation_")
+    @Embedded
     val orientation: Orientation,
 
     @ColumnInfo
-    var typeProbabilitiesCNN: Map<String, Float>? = null
+    var typeProbabilitiesCNN: Map<String, Float>? = null,
+
+    @ColumnInfo
+    var exifTags: Map<String, String>? = null
 
 ) : Serializable {
 
