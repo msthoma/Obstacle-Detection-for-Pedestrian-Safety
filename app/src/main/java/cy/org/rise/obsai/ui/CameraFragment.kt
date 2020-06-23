@@ -141,10 +141,10 @@ class CameraFragment : Fragment(), SensorEventListener {
         // during taking a photo of an obstacle
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
-            interval = 50000
-            fastestInterval = 50000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            smallestDisplacement = 10f // 10m
+            interval = 20000 // 20s
+            fastestInterval = 10000 // 10s
+            smallestDisplacement = 2f // 2m
         }
 
         locationCallback = object : LocationCallback() {
