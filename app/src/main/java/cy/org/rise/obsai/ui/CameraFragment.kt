@@ -30,14 +30,15 @@ import java.util.*
 
 /**
  * Fragment used for capturing photos, geo-tagging them, and saving phone orientation at the time of
- * capture
+ * capture.
  *
  * The CameraView library is used for interacting with the camera
- * see [https://github.com/natario1/CameraView]
+ * see [https://github.com/natario1/CameraView].
  *
- * For getting location, see documentation at [https://developer.android.com/training/location]
+ * For getting location, see documentation at [https://developer.android.com/training/location].
  *
- * For getting orientation, see [https://developer.android.com/guide/topics/sensors/sensors_overview]
+ * For getting orientation, see
+ * [https://developer.android.com/guide/topics/sensors/sensors_overview].
  */
 class CameraFragment : Fragment(), SensorEventListener {
     // Camera/photo related vars
@@ -168,17 +169,23 @@ class CameraFragment : Fragment(), SensorEventListener {
         // probably unnecessary
         val currentOrientation = orientationAngles.copyOf()
 
-        // in case location has not been initialized, set position to 0, 0
-        val obsLocation = if (::currentLocation.isInitialized) {
-            Obstacle.Location(currentLocation.latitude, currentLocation.longitude)
-        } else {
-            Obstacle.Location(latitude = 0.0, longitude = 0.0)
+        // in case location has not been initialized, set location and altitude to zero
+        val obsLocation = Obstacle.Location(latitude = 0.0, longitude = 0.0)
+        var altitude = 0.0
+        // otherwise get values from GPS
+        if (::currentLocation.isInitialized) {
+            obsLocation.apply {
+                latitude = currentLocation.latitude
+                longitude = currentLocation.longitude
+            }
+            altitude = currentLocation.altitude
         }
 
         return Obstacle(
             obstacleType = "",
             photoPath = currentPhotoPath,
             location = obsLocation,
+            altitude = altitude,
             orientation = Obstacle.Orientation(
                 // Note the order of the axes, zxy, NOT xyz
                 z = currentOrientation[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
