@@ -180,10 +180,10 @@ class CameraFragment : Fragment(), SensorEventListener {
             photoPath = currentPhotoPath,
             location = obsLocation,
             orientation = Obstacle.Orientation(
-                // TODO fix
-                x = currentOrientation[0].toDouble(),
-                y = currentOrientation[1].toDouble(),
-                z = currentOrientation[2].toDouble()
+                // Note the order of the axes, zxy, NOT xyz
+                z = currentOrientation[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
+                x = currentOrientation[1].toDouble(), // Pitch (degrees of rotation about the x axis)
+                y = currentOrientation[2].toDouble() // Roll (degrees of rotation about the y axis)
             )
         )
     }
@@ -256,7 +256,8 @@ class CameraFragment : Fragment(), SensorEventListener {
                     magnetometerReading.size
                 )
             }
-            // Calculate device orientation by combining accelerometer and magneticField
+            // Calculate device orientation by combining accelerometer and magneticField, see
+            // https://developer.android.com/guide/topics/sensors/sensors_position#sensors-pos-orient
             // Results may need to be translated using remapCoordinateSystem(), see
             // https://developer.android.com/reference/android/hardware/SensorManager#remapCoordinateSystem(float[],%20int,%20int,%20float[])
             SensorManager.getRotationMatrix(
