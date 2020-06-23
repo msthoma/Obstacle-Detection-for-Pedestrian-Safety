@@ -166,7 +166,7 @@ class CameraFragment : Fragment(), SensorEventListener {
         // make a copy of the accelerometerReading array, in case its components change values while
         // saving the obstacle below (in the case where accelerometerReading is used directly),
         // probably unnecessary
-        val currentOrientation = accelerometerReading.copyOf()
+        val currentOrientation = orientationAngles.copyOf()
 
         // in case location has not been initialized, set position to 0, 0
         val obsLocation = if (::currentLocation.isInitialized) {
@@ -180,6 +180,7 @@ class CameraFragment : Fragment(), SensorEventListener {
             photoPath = currentPhotoPath,
             location = obsLocation,
             orientation = Obstacle.Orientation(
+                // TODO fix
                 x = currentOrientation[0].toDouble(),
                 y = currentOrientation[1].toDouble(),
                 z = currentOrientation[2].toDouble()
@@ -255,8 +256,20 @@ class CameraFragment : Fragment(), SensorEventListener {
                     magnetometerReading.size
                 )
             }
+            // Calculate device orientation by combining accelerometer and magneticField
+            // Results may need to be translated using remapCoordinateSystem(), see
+            // https://developer.android.com/reference/android/hardware/SensorManager#remapCoordinateSystem(float[],%20int,%20int,%20float[])
+            SensorManager.getRotationMatrix(
+                rotationMatrix,
+                null,
+                accelerometerReading,
+                magnetometerReading
+            )
+            SensorManager.getOrientation(rotationMatrix, orientationAngles)
+
+            // Set details in overlay view
             if (photo_details.isVisible) {
-                val orientationArray = accelerometerReading.joinToString(transform = { fl ->
+                val orientationArray = orientationAngles.joinToString(transform = { fl ->
                     fl.roundTo(3).toString()
                 })
                 val compassArray = magnetometerReading.joinToString(transform = { fl ->
