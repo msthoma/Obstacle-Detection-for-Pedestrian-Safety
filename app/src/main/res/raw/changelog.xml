@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-06-23"
+        versionCode="1"
+        versionName="Version 0.12.2">
+        <info>More details about obstacles are now saved (altitude, more orientation
+            information etc.)</info>
+        <info>More Greek translations</info>
+    </release>
+
+    <release
         date="2020-06-22"
         versionCode="1"
         versionName="Version 0.12.1">
