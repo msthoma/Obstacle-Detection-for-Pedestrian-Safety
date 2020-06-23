@@ -29,11 +29,13 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_test_server_connection" translatable="false">Test server connection</string>
     <string name="action_test_server_obstacle_input" translatable="false">Test inserting obstacle on server</string>
+    <string name="action_toggle_camera_details" translatable="false">Toggle camera details</string>
 
     <string name="title_activity_about">Open source libraries</string>
 
     <string name="hint_password" translatable="false">Password</string>
     <string name="hint_username" translatable="false">Username</string>
+    <string name="hint_obstacle_type">Obstacle type</string>
 
     <string name="acra_crash_dialog_title" translatable="false">Obstacles app has crashed</string>
     <string name="acra_crash_input_prompt" translatable="false">You can add a comment here (optional):</string>

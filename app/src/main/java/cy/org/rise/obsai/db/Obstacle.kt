@@ -29,6 +29,8 @@ import java.util.*
  * @property obstacleType type of the obstacle, e.g crack, no pavement etc.
  * @property photoPath where the photo file is located
  * @property location geo coordinates of the obstacle
+ * @property locationFromGPS holds a copy of the GPS-determined location, in case user manually
+ * edits location
  * @property orientation orientation of phone in space when obstacle was recorded
  * @property typeProbabilitiesCNN map of obstacle types with their probabilities as predicted by
  * the convolutional neural network
@@ -47,21 +49,35 @@ data class Obstacle(
     @ColumnInfo
     var photoPath: String,
 
-    @Embedded(prefix = "location_")
+    @Embedded
     var location: Location,
 
-    @Embedded(prefix = "orientation_")
+    @Embedded
     val orientation: Orientation,
+
+    @ColumnInfo
+    var altitude: Double = 0.0,
 
     @ColumnInfo
     var typeProbabilitiesCNN: Map<String, Float>? = null
 
+    // TODO save accelerometer and compass data, perhaps convert Orientation class to a more
+    //  general XYZ class
+//    @Embedded
+//    val accelerometer: Orientation,
+//
+//    @Embedded
+//    val compass: Orientation
+
 ) : Serializable {
+
+    @Embedded(prefix = "GPS_")
+    var locationFromGPS: Location = location.copy()
 
     /**
      * Simple data class to store obstacle location.
      *
-     * NOTE: Android uses Lat, Long but server Long, Lat, see [https://macwright.org/lonlat/].
+     * NOTE: Android uses [Lat, Long] but server [Long, Lat], see [https://macwright.org/lonlat/].
      * Careful with conversions between the two!
      *
      * @property latitude

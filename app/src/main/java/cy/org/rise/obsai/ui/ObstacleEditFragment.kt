@@ -150,6 +150,8 @@ class ObstacleEditFragment : Fragment() {
                     addMarker(MarkerOptions().position(latLng))
 
                     // Save location indicated by user
+                    // TODO here the altitude should be updated as well, does maps provided it
+                    //  somewhere?
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
             }

@@ -10,9 +10,8 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -22,6 +21,7 @@ import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -30,14 +30,15 @@ import java.util.*
 
 /**
  * Fragment used for capturing photos, geo-tagging them, and saving phone orientation at the time of
- * capture
+ * capture.
  *
  * The CameraView library is used for interacting with the camera
- * see [https://github.com/natario1/CameraView]
+ * see [https://github.com/natario1/CameraView].
  *
- * For getting location, see documentation at [https://developer.android.com/training/location]
+ * For getting location, see documentation at [https://developer.android.com/training/location].
  *
- * For getting orientation, see [https://developer.android.com/guide/topics/sensors/sensors_overview]
+ * For getting orientation, see
+ * [https://developer.android.com/guide/topics/sensors/sensors_overview].
  */
 class CameraFragment : Fragment(), SensorEventListener {
     // Camera/photo related vars
@@ -62,6 +63,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
@@ -84,18 +86,15 @@ class CameraFragment : Fragment(), SensorEventListener {
                     null
                 }
 
-                // TODO simplify this
-                photoFile?.let {
-                    result.run {
-                        toFile(it) { file ->
-                            file?.let {
-                                val action = CameraFragmentDirections
-                                    .actionCameraFragmentToObstacleEditFragment(
-                                        createCurrentObstacle()
-                                    )
-                                findNavController().navigate(action)
-                            }
-                        }
+                photoFile?.let { tempPhotoFile ->
+                    result.toFile(tempPhotoFile) { finalPhotoFile ->
+                        finalPhotoFile?.let {
+                            val action = CameraFragmentDirections
+                                .actionCameraFragmentToObstacleEditFragment(
+                                    createCurrentObstacle()
+                                )
+                            findNavController().navigate(action)
+                        } ?: throw IOException("Unable to save obstacle photo")
                     }
                 }
             }
@@ -143,10 +142,10 @@ class CameraFragment : Fragment(), SensorEventListener {
         // during taking a photo of an obstacle
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest.create().apply {
-            interval = 50000
-            fastestInterval = 50000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            smallestDisplacement = 10f // 10m
+            interval = 20000 // 20s
+            fastestInterval = 10000 // 10s
+            smallestDisplacement = 2f // 2m
         }
 
         locationCallback = object : LocationCallback() {
@@ -168,23 +167,30 @@ class CameraFragment : Fragment(), SensorEventListener {
         // make a copy of the accelerometerReading array, in case its components change values while
         // saving the obstacle below (in the case where accelerometerReading is used directly),
         // probably unnecessary
-        val currentOrientation = accelerometerReading.copyOf()
+        val currentOrientation = orientationAngles.copyOf()
 
-        // in case location has not been initialized, set position to 0, 0
-        val obsLocation = if (::currentLocation.isInitialized) {
-            Obstacle.Location(currentLocation.latitude, currentLocation.longitude)
-        } else {
-            Obstacle.Location(latitude = 0.0, longitude = 0.0)
+        // in case location has not been initialized, set location and altitude to zero
+        val obsLocation = Obstacle.Location(latitude = 0.0, longitude = 0.0)
+        var altitude = 0.0
+        // otherwise get values from GPS
+        if (::currentLocation.isInitialized) {
+            obsLocation.apply {
+                latitude = currentLocation.latitude
+                longitude = currentLocation.longitude
+            }
+            altitude = currentLocation.altitude
         }
 
         return Obstacle(
             obstacleType = "",
             photoPath = currentPhotoPath,
             location = obsLocation,
+            altitude = altitude,
             orientation = Obstacle.Orientation(
-                x = currentOrientation[0].toDouble(),
-                y = currentOrientation[1].toDouble(),
-                z = currentOrientation[2].toDouble()
+                // Note the order of the axes, zxy, NOT xyz
+                z = currentOrientation[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
+                x = currentOrientation[1].toDouble(), // Pitch (degrees of rotation about the x axis)
+                y = currentOrientation[2].toDouble() // Roll (degrees of rotation about the y axis)
             )
         )
     }
@@ -194,8 +200,11 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // location in some cases can be NULL see
         // https://developer.android.com/training/location/retrieve-current#last-known
-        coordinates.text =
-            "Location: Lat:" + location.latitude + ", Long:" + location.longitude
+
+        if (photo_details.isVisible) {
+            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
+                .longitude}\nAltitude ${location.altitude.roundTo(2)}"
+        }
 
         // this saves location in photo's EXIF data
         cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
@@ -254,7 +263,47 @@ class CameraFragment : Fragment(), SensorEventListener {
                     magnetometerReading.size
                 )
             }
-            orientation.text = "Orientation: " + accelerometerReading.asList().toString()
+            // Calculate device orientation by combining accelerometer and magneticField, see
+            // https://developer.android.com/guide/topics/sensors/sensors_position#sensors-pos-orient
+            // Results may need to be translated using remapCoordinateSystem(), see
+            // https://developer.android.com/reference/android/hardware/SensorManager#remapCoordinateSystem(float[],%20int,%20int,%20float[])
+            SensorManager.getRotationMatrix(
+                rotationMatrix,
+                null,
+                accelerometerReading,
+                magnetometerReading
+            )
+            SensorManager.getOrientation(rotationMatrix, orientationAngles)
+
+            // Set details in overlay view
+            if (photo_details.isVisible) {
+                val orientationArray = orientationAngles.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                val compassArray = magnetometerReading.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                accelerometer.text = "Orientation: ${orientationArray}"
+                compass.text = "Compass: ${compassArray}"
+            }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_toggle_photo_details -> {
+                if (photo_details.isVisible) {
+                    photo_details.visibility = View.GONE
+                } else {
+                    photo_details.visibility = View.VISIBLE
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_camera, menu)
     }
 }

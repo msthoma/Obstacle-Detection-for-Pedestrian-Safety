@@ -21,6 +21,7 @@ import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.google.gson.Gson
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
@@ -142,15 +143,16 @@ class ObstacleListFragment : Fragment() {
                         latitude = 35.169160,
                         longitude = 33.361459
                     ),
+                    altitude = 31.4,
                     orientation = Obstacle.Orientation(
-                        x = 0.0,
-                        y = 0.0,
-                        z = 0.0
+                        x = 1.0,
+                        y = 2.0,
+                        z = 3.0
                     ),
-                    photoPath = "photo_path",
+                    photoPath = "path/to/photo.jpg",
                     typeProbabilitiesCNN = generateRandomMap()
                 )
-                Log.d(TAG(), mockObstacle.toString())
+                Log.d(TAG(), Gson().toJson(mockObstacle))
                 viewModel.insertObstacle(mockObstacle)
                 true
             }
