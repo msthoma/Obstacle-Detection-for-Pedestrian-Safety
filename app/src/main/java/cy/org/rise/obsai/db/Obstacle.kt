@@ -61,6 +61,14 @@ data class Obstacle(
     @ColumnInfo
     var typeProbabilitiesCNN: Map<String, Float>? = null
 
+    // TODO save accelerometer and compass data, perhaps convert Orientation class to a more
+    //  general XYZ class
+//    @Embedded
+//    val accelerometer: Orientation,
+//
+//    @Embedded
+//    val compass: Orientation
+
 ) : Serializable {
 
     @Embedded(prefix = "GPS_")
