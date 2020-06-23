@@ -56,6 +56,9 @@ data class Obstacle(
     val orientation: Orientation,
 
     @ColumnInfo
+    var altitude: Double = 0.0,
+
+    @ColumnInfo
     var typeProbabilitiesCNN: Map<String, Float>? = null
 
 ) : Serializable {
@@ -66,7 +69,7 @@ data class Obstacle(
     /**
      * Simple data class to store obstacle location.
      *
-     * NOTE: Android uses Lat, Long but server Long, Lat, see [https://macwright.org/lonlat/].
+     * NOTE: Android uses [Lat, Long] but server [Long, Lat], see [https://macwright.org/lonlat/].
      * Careful with conversions between the two!
      *
      * @property latitude
