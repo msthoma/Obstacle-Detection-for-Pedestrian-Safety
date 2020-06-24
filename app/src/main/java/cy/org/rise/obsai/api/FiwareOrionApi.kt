@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.api
 
 import android.util.Log
+import cy.org.rise.obsai.db.Obstacle
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -33,7 +34,7 @@ interface FiwareOrionApi {
         @Field("grant_type") grant_type: String
     ): Response<LoginResponse>
 
-    @POST("post_to_mongo/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
+    @POST("post_obstacles_problems/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
     suspend fun postToiNicosia(
         @Path("id") id: String,
         @Path("type_obs") type_obs: String,
