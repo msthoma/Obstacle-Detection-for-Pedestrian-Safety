@@ -65,9 +65,8 @@ interface FiwareOrionApi {
          * @param accessToken
          * @return
          */
-        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi = create(
-            baseURL.toHttpUrlOrNull()!!, accessToken
-        )
+        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi? = baseURL
+            .toHttpUrlOrNull()?.let { create(it, accessToken) }
 
         private fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
             // add logger to Retrofit
