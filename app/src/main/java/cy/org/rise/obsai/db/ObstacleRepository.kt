@@ -82,6 +82,12 @@ class ObstacleRepository private constructor(
         return orionService?.insertServerObstacle(restObstacle)
     }
 
+    suspend fun postToiNicosia(obstacle: Obstacle): Response<Unit>? = orionService?.postToiNicosia(
+        obstacle.id, "obstacle", obstacle.location.latitude,
+        obstacle.location.longitude, obstacle.obstacleType, obstacle.orientation.x, obstacle
+            .orientation.y, obstacle.photoPath
+    )
+
     /**
      * Gets all obstacles saved on server.
      *
