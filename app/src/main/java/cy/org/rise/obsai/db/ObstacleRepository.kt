@@ -88,6 +88,9 @@ class ObstacleRepository private constructor(
             .orientation.y, obstacle.photoPath
     )
 
+    suspend fun postToiNicosiaJson(obstacle: Obstacle): Response<Unit>? =
+        orionService?.postToiNicosiaJson(obstacle)
+
     /**
      * Gets all obstacles saved on server.
      *

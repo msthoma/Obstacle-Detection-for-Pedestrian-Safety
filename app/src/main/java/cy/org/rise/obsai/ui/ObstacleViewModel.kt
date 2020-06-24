@@ -46,7 +46,7 @@ class ObstacleViewModel internal constructor(
 
             // push to server
             try {
-                rep.postToiNicosia(obstacle)
+                rep.postToiNicosiaJson(obstacle)
             } catch (e: Exception) {
                 // TODO here catch other exceptions as well, e.g. for inserting obstacle to
                 //  Fiware, not only uploading photo to Minio

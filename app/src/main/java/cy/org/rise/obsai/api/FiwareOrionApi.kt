@@ -46,6 +46,9 @@ interface FiwareOrionApi {
         @Path("photopath") photopath: String
     ): Response<Unit>
 
+    @POST("post_obstacles_problems")
+    suspend fun postToiNicosiaJson(@Body obstacle: Obstacle): Response<Unit>
+
     companion object {
         /**
          * Keyrock endpoint, used for authentication.
@@ -76,7 +79,7 @@ interface FiwareOrionApi {
                     Log.d("API", message)
                 }
             })
-            logger.level = HttpLoggingInterceptor.Level.BASIC
+            logger.level = HttpLoggingInterceptor.Level.BODY
 
             val serviceInterceptor = ServiceInterceptor()
             serviceInterceptor.token = accessToken
