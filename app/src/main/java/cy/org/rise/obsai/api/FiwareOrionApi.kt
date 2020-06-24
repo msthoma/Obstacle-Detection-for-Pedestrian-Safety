@@ -33,9 +33,9 @@ interface FiwareOrionApi {
         @Field("grant_type") grant_type: String
     ): Response<LoginResponse>
 
-    @POST("/post_to_mongo/_id={_id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
+    @POST("post_to_mongo/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
     suspend fun postToiNicosia(
-        @Path("_id") id: String,
+        @Path("id") id: String,
         @Path("type_obs") type_obs: String,
         @Path("latitude") latitude: Double,
         @Path("longitude") longitude: Double,

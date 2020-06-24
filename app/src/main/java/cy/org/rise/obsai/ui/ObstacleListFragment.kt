@@ -138,7 +138,7 @@ class ObstacleListFragment : Fragment() {
             }
             R.id.action_add_mock_element -> {
                 val mockObstacle = Obstacle(
-                    obstacleType = "Mock obstacle",
+                    obstacleType = "MockObstacle",
                     location = Obstacle.Location(
                         latitude = 35.169160,
                         longitude = 33.361459
@@ -149,7 +149,7 @@ class ObstacleListFragment : Fragment() {
                         y = 2.0,
                         z = 3.0
                     ),
-                    photoPath = "path/to/photo.jpg",
+                    photoPath = "pathToPhoto",
                     typeProbabilitiesCNN = generateRandomMap()
                 )
                 Log.d(TAG(), Gson().toJson(mockObstacle))
