@@ -69,7 +69,7 @@ class ObstacleRepository private constructor(
      * @param restObstacle entity to be uploaded to the server
      * @return retrofit2 Response
      */
-    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
+    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit>? {
 //        try {
 //            minIOUploader.uploadPhoto(
 //                serverPhotoName = "${restObstacle.id}.jpg",
@@ -79,7 +79,7 @@ class ObstacleRepository private constructor(
 //        } catch (connectError: ConnectException) {
 //            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
 //        }
-        return orionService.insertServerObstacle(restObstacle)
+        return orionService?.insertServerObstacle(restObstacle)
     }
 
     /**
@@ -88,7 +88,7 @@ class ObstacleRepository private constructor(
      * @param type type of entity required, here should be "Obstacle"
      */
     suspend fun getAllServerObstacles(type: String) =
-        orionService.getAllServerObstacles(type)
+        orionService?.getAllServerObstacles(type)
 
     companion object {
         // For Singleton instantiation
