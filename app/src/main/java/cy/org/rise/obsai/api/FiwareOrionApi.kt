@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.api
 
 import android.util.Log
+import cy.org.rise.obsai.db.Obstacle
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -33,6 +34,21 @@ interface FiwareOrionApi {
         @Field("grant_type") grant_type: String
     ): Response<LoginResponse>
 
+    @POST("post_obstacles_problems/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
+    suspend fun postToiNicosia(
+        @Path("id") id: String,
+        @Path("type_obs") type_obs: String,
+        @Path("latitude") latitude: Double,
+        @Path("longitude") longitude: Double,
+        @Path("obstype") obstype: String,
+        @Path("orie1") orie1: Double,
+        @Path("orie2") orie2: Double,
+        @Path("photopath") photopath: String = "pathToPhoto"
+    ): Response<Unit>
+
+    @POST("post_obstacles_problems")
+    suspend fun postToiNicosiaJson(@Body obstacle: Obstacle): Response<Unit>
+
     companion object {
         /**
          * Keyrock endpoint, used for authentication.
@@ -42,7 +58,7 @@ interface FiwareOrionApi {
         /**
          * Orion Broker endpoint, used for interactions with Fiware.
          */
-        const val ORION_BASE_URL = "http://192.168.10.10:1026/"
+        const val iNICOSIA_BASE_URL = "http://7e3fa2d3.ngrok.io/docs/"
 
         /**
          * Allows for singleton instantiation of the Retrofit service.
@@ -53,9 +69,8 @@ interface FiwareOrionApi {
          * @param accessToken
          * @return
          */
-        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi = create(
-            baseURL.toHttpUrlOrNull()!!, accessToken
-        )
+        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi? = baseURL
+            .toHttpUrlOrNull()?.let { create(it, accessToken) }
 
         private fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
             // add logger to Retrofit
@@ -64,7 +79,7 @@ interface FiwareOrionApi {
                     Log.d("API", message)
                 }
             })
-            logger.level = HttpLoggingInterceptor.Level.BASIC
+            logger.level = HttpLoggingInterceptor.Level.BODY
 
             val serviceInterceptor = ServiceInterceptor()
             serviceInterceptor.token = accessToken

@@ -10,6 +10,7 @@ import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import kotlin.math.absoluteValue
 
 /**
  * Repository module for handling data operations, based on
@@ -33,6 +34,11 @@ class ObstacleRepository private constructor(
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
     /**
+     * Updates obstacle already in local database.
+     */
+    suspend fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
+
+    /**
      * Deletes all obstacles from local database, and their accompanying photo files in loca
      * storage.
      */
@@ -54,7 +60,7 @@ class ObstacleRepository private constructor(
     // Network operations
     private val orionService by lazy {
         FiwareOrionApi.create(
-            FiwareOrionApi.ORION_BASE_URL,
+            FiwareOrionApi.iNICOSIA_BASE_URL,
             SessionManager(context).fetchAuthToken() ?: ""
         )
     }
@@ -69,7 +75,7 @@ class ObstacleRepository private constructor(
      * @param restObstacle entity to be uploaded to the server
      * @return retrofit2 Response
      */
-    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit> {
+    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit>? {
 //        try {
 //            minIOUploader.uploadPhoto(
 //                serverPhotoName = "${restObstacle.id}.jpg",
@@ -79,8 +85,28 @@ class ObstacleRepository private constructor(
 //        } catch (connectError: ConnectException) {
 //            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
 //        }
-        return orionService.insertServerObstacle(restObstacle)
+        return orionService?.insertServerObstacle(restObstacle)
     }
+
+    suspend fun postToiNicosia(obstacle: Obstacle): Response<Unit>? {
+        // temporarily filter illegal chars in types to circumvent current API limitations
+        val obsType = obstacle.obstacleType.filterNot {
+            setOf(' ', '(', ')', '.', '-', '/').contains(it)
+        }
+        Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
+
+        return orionService?.postToiNicosia(
+            obstacle.id, "obstacle",
+            obstacle.location.latitude,
+            obstacle.location.longitude,
+            obsType,
+            obstacle.orientation.x.absoluteValue,
+            obstacle.orientation.y.absoluteValue //skip pathPhoto here
+        )
+    }
+
+    suspend fun postToiNicosiaJson(obstacle: Obstacle): Response<Unit>? =
+        orionService?.postToiNicosiaJson(obstacle)
 
     /**
      * Gets all obstacles saved on server.
@@ -88,7 +114,7 @@ class ObstacleRepository private constructor(
      * @param type type of entity required, here should be "Obstacle"
      */
     suspend fun getAllServerObstacles(type: String) =
-        orionService.getAllServerObstacles(type)
+        orionService?.getAllServerObstacles(type)
 
     companion object {
         // For Singleton instantiation

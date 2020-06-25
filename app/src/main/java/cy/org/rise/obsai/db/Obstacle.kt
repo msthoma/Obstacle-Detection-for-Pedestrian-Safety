@@ -59,7 +59,7 @@ data class Obstacle(
     var altitude: Double = 0.0,
 
     @ColumnInfo
-    var typeProbabilitiesCNN: Map<String, Float>? = null
+    var typeProbabilitiesCNN: Map<String, Float>? = null,
 
     // TODO save accelerometer and compass data, perhaps convert Orientation class to a more
     //  general XYZ class
@@ -68,6 +68,9 @@ data class Obstacle(
 //
 //    @Embedded
 //    val compass: Orientation
+
+    @ColumnInfo
+    var uploadStatus: String = "Uploading..."
 
 ) : Serializable {
 

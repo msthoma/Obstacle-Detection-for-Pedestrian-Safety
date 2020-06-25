@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-06-25"
+        versionCode="1"
+        versionName="Version 0.12.3">
+        <info>Rudimentary support for uploading obstacles to the iNicosia platform</info>
+    </release>
+
+    <release
         date="2020-06-23"
         versionCode="1"
         versionName="Version 0.12.2">
