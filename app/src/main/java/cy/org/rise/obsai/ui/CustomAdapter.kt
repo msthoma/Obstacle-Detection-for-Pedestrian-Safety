@@ -27,11 +27,13 @@ class CustomAdapter internal constructor() :
      */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val textView: TextView
+        val uploadStatusView: TextView
 
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
             textView = v.findViewById(R.id.textView)
+            uploadStatusView = v.findViewById(R.id.upload_status_view)
         }
     }
 
@@ -54,6 +56,22 @@ class CustomAdapter internal constructor() :
                 "y: ${"%.3f".format(obs.orientation.y)}, " +
                 "z: ${"%.3f".format(obs.orientation.z)}\n" +
                 "${obs.timeStamp}"
+
+        when (obs.uploadStatus) {
+            "Uploading..." -> viewHolder.uploadStatusView.text = obs.uploadStatus
+            "200" -> {
+                viewHolder.uploadStatusView.apply {
+                    text = "Upload status: Success (${obs.uploadStatus})"
+                    setTextColor(resources.getColor(R.color.colorPrimary))
+                }
+            }
+            else -> {
+                viewHolder.uploadStatusView.apply {
+                    text = "Upload status: Failure (${obs.uploadStatus})"
+                    setTextColor(resources.getColor(R.color.design_default_color_error))
+                }
+            }
+        }
 
         // Set picture
         Picasso.get()
