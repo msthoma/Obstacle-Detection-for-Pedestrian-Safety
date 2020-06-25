@@ -52,10 +52,13 @@ class ObstacleViewModel internal constructor(
                 Log.d("server push res", res.toString())
                 res?.let { response ->
                     obstacle.uploadStatus = response.code().toString()
+                    rep.updateObstacle(obstacle)
                 }
             } catch (e: Exception) {
                 // TODO here catch other exceptions as well, e.g. for inserting obstacle to
                 //  Fiware, not only uploading photo to Minio
+                obstacle.uploadStatus = "Error"
+                rep.updateObstacle(obstacle)
                 Log.e(TAG(), "push to server failed", e)
             }
         }
