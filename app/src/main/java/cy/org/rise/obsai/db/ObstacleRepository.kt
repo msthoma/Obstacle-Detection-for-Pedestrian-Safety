@@ -34,6 +34,11 @@ class ObstacleRepository private constructor(
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
     /**
+     * Updates obstacle already in local database.
+     */
+    suspend fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
+
+    /**
      * Deletes all obstacles from local database, and their accompanying photo files in loca
      * storage.
      */
