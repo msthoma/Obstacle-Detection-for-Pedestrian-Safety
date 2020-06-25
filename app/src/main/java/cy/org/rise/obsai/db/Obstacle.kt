@@ -70,7 +70,7 @@ data class Obstacle(
 //    val compass: Orientation
 
     @ColumnInfo
-    var uploadStatus: String = "Uploading"
+    var uploadStatus: String = "Uploading..."
 
 ) : Serializable {
 
