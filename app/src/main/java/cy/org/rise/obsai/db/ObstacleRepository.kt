@@ -10,6 +10,7 @@ import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import kotlin.math.absoluteValue
 
 /**
  * Repository module for handling data operations, based on
@@ -82,11 +83,22 @@ class ObstacleRepository private constructor(
         return orionService?.insertServerObstacle(restObstacle)
     }
 
-    suspend fun postToiNicosia(obstacle: Obstacle): Response<Unit>? = orionService?.postToiNicosia(
-        obstacle.id, "obstacle", obstacle.location.latitude,
-        obstacle.location.longitude, obstacle.obstacleType, obstacle.orientation.x, obstacle
-            .orientation.y, obstacle.photoPath
-    )
+    suspend fun postToiNicosia(obstacle: Obstacle): Response<Unit>? {
+        // temporarily filter illegal chars in types to circumvent current API limitations
+        val obsType = obstacle.obstacleType.filterNot {
+            setOf(' ', '(', ')', '.', '-', '/').contains(it)
+        }
+        Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
+
+        return orionService?.postToiNicosia(
+            obstacle.id, "obstacle",
+            obstacle.location.latitude,
+            33.361459,
+            obsType,
+            obstacle.orientation.x.absoluteValue,
+            obstacle.orientation.y.absoluteValue //skip pathPhoto here
+        )
+    }
 
     suspend fun postToiNicosiaJson(obstacle: Obstacle): Response<Unit>? =
         orionService?.postToiNicosiaJson(obstacle)
