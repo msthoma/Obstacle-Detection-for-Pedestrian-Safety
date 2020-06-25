@@ -43,7 +43,7 @@ interface FiwareOrionApi {
         @Path("obstype") obstype: String,
         @Path("orie1") orie1: Double,
         @Path("orie2") orie2: Double,
-        @Path("photopath") photopath: String
+        @Path("photopath") photopath: String = "pathToPhoto"
     ): Response<Unit>
 
     @POST("post_obstacles_problems")
