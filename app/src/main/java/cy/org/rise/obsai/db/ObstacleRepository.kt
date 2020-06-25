@@ -98,7 +98,7 @@ class ObstacleRepository private constructor(
         return orionService?.postToiNicosia(
             obstacle.id, "obstacle",
             obstacle.location.latitude,
-            33.361459,
+            obstacle.location.longitude,
             obsType,
             obstacle.orientation.x.absoluteValue,
             obstacle.orientation.y.absoluteValue //skip pathPhoto here
