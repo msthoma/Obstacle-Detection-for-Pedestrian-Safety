@@ -10,6 +10,7 @@ import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 /**
@@ -40,13 +41,18 @@ class ObstacleViewModel internal constructor(
     fun insertObstacle(obstacle: Obstacle) {
         Log.d(TAG(), "inserting obstacle...")
 
-        viewModelScope.launch(Dispatchers.IO) {
+        // see https://stackoverflow.com/q/58341983 for comments on using GlobalScope
+        GlobalScope.launch {
             // add to local db
             rep.insertObstacle(obstacle)
 
             // push to server
             try {
-                rep.postToiNicosia(obstacle)
+                val res = rep.postToiNicosia(obstacle)
+                Log.d("server push res", res.toString())
+                res?.let { response ->
+                    obstacle.uploadStatus = response.code().toString()
+                }
             } catch (e: Exception) {
                 // TODO here catch other exceptions as well, e.g. for inserting obstacle to
                 //  Fiware, not only uploading photo to Minio
