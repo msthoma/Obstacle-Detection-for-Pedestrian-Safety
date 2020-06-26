@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#4CAF50</color>
 
+    <!-- Used this tool https://www.w3schools.com/colors/colors_triadic.asp to create colors -->
     <color name="introColor1">#4631A4</color>
     <color name="introColor2">#C1561C</color>
     <color name="introColor3">#91AA37</color>
