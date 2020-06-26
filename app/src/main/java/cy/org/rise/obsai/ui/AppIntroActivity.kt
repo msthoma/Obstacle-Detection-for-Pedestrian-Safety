@@ -27,17 +27,19 @@ class AppIntroActivity : AppIntro() {
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = "Welcome",
-                description = "App description",
-                imageDrawable = R.drawable.ic_rise_banner,
+                title = "Welcome!",
+                description = "The app allows pedestrians to report road obstacles to the " +
+                        "iNicosia platform.",
+                imageDrawable = R.drawable.ic_noun_barrier_2895012,
                 backgroundColor = resources.getColor(R.color.introColor1)
             )
         )
 
         addSlide(
             AppIntroFragment.newInstance(
-                title = "Permissions",
-                description = "Please grant the permissions",
+                title = "Permissions required",
+                description = "For ease of use, the app requires access to the phone's camera and" +
+                        " GPS sensor, please grant them in the popup that will appear.",
                 imageDrawable = R.drawable.ic_rise_banner,
                 backgroundColor = resources.getColor(R.color.introColor2)
             )
