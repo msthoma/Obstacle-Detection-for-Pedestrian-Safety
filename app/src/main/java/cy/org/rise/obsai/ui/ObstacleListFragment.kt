@@ -156,6 +156,10 @@ class ObstacleListFragment : Fragment() {
                 viewModel.insertObstacle(mockObstacle)
                 true
             }
+            R.id.action_app_intro -> {
+                findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
+                true
+            }
             R.id.action_delete_all -> {
                 requireContext().let { context ->
                     MaterialDialog(context).show {
