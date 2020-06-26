@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_obstacleListFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_obstacleListFragment_to_appIntroActivity"
+            app:destination="@id/appIntroActivity" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -91,4 +94,8 @@
         android:name="cy.org.rise.obsai.ui.AboutActivity"
         android:label="activity_about"
         tools:layout="@layout/activity_about" />
+    <activity
+        android:id="@+id/appIntroActivity"
+        android:name="cy.org.rise.obsai.ui.AppIntroActivity"
+        android:label="AppIntroActivity" />
 </navigation>

@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-06-26"
+        versionCode="1"
+        versionName="Version 0.12.4">
+        <info>Added introductory tutorial explaining the purpose of the app</info>
+        <info>All traffic between the app and the iNicosia platform now happens via HTTPS</info>
+    </release>
+
+    <release
         date="2020-06-25"
         versionCode="1"
         versionName="Version 0.12.3">
@@ -11,7 +19,8 @@
         versionCode="1"
         versionName="Version 0.12.2">
         <info>More details about obstacles are now saved (altitude, more orientation
-            information etc.)</info>
+            information etc.)
+        </info>
         <info>More Greek translations</info>
     </release>
 
@@ -124,8 +133,8 @@
         versionCode="1"
         versionName="Version 0.6.0">
         <info>Fixed up and back navigation by managing the fragment backstack</info>
-        <new type="summary">Added changelog</new>
-        <new type="summary">Semantic versioning for app version</new>
+        <info type="summary">Added changelog</info>
+        <info type="summary">Semantic versioning for app version</info>
     </release>
 
     <release
@@ -143,8 +152,8 @@
         versionCode="1"
         versionName="Version 0.5.0">
         <info>Fixed back navigation in list fragment that went back to edit fragment</info>
-        <new type="summary">Added ACRA crash reporting library</new>
-        <new type="summary">Card layout in list fragment</new>
+        <info type="summary">Added ACRA crash reporting library</info>
+        <info type="summary">Card layout in list fragment</info>
     </release>
 
     <release
@@ -153,7 +162,7 @@
         versionName="Version 0.4.1">
         <info>"Delete all" button now only shows up if there are objects in the database</info>
         <info>Various Google map view fixes, allow map scrolling</info>
-        <new type="summary">New barrier drawable</new>
+        <info type="summary">New barrier drawable</info>
     </release>
 
     <release
@@ -163,7 +172,7 @@
         <info>Cropping of photos now works fully, with new UI controls</info>
         <info>All requests for permission are now handled properly</info>
         <info>Major rearrangements in the app files, with new structure implemented</info>
-        <new type="summary">New button drawables</new>
+        <info type="summary">New button drawables</info>
     </release>
 
     <release
@@ -175,16 +184,16 @@
         </info>
         <info>Database now works fully (all actions still happen in the UI thread, however)</info>
         <info>Obstacles shown in list fragment now originate as LiveData from the database</info>
-        <new type="summary">"Delete all" and "Add mock obstacle" buttons in list fragment</new>
-        <new type="summary">New Settings fragment</new>
+        <info type="summary">"Delete all" and "Add mock obstacle" buttons in list fragment</info>
+        <info type="summary">New Settings fragment</info>
     </release>
 
     <release
         date="2020-02-28"
         versionCode="1"
         versionName="Version 0.2.4">
-        <new type="summary">Replaced OpenStreetMap view with Google Maps view</new>
-        <new type="summary">Implemented app versioning</new>
+        <info type="summary">Replaced OpenStreetMap view with Google Maps view</info>
+        <info type="summary">Implemented app versioning</info>
     </release>
 
     <release
@@ -199,24 +208,24 @@
         date="2020-02-25"
         versionCode="1"
         versionName="Version 0.2.2">
-        <new type="summary">Added About activity, that lists the open source libraries used in
+        <info type="summary">Added About activity, that lists the open source libraries used in
             the app
-        </new>
+        </info>
     </release>
 
     <release
         date="2020-02-24"
         versionCode="1"
         versionName="Version 0.2.1">
-        <new type="summary">Added user account fragment</new>
+        <info type="summary">Added user account fragment</info>
     </release>
 
     <release
         date="2020-02-20"
         versionCode="1"
         versionName="Version 0.2.0">
-        <new type="summary">Added message and graphic that is shown when the list fragment is
+        <info type="summary">Added message and graphic that is shown when the list fragment is
             empty (no obstacles to show)
-        </new>
+        </info>
     </release>
 </changelog>

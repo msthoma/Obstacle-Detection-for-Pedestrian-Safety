@@ -22,17 +22,23 @@
         android:title="@string/action_add_mock_element"
         app:showAsAction="never" />
 
-<!--    <item-->
-<!--        android:id="@+id/action_test_server_connection"-->
-<!--        android:orderInCategory="400"-->
-<!--        android:title="@string/action_test_server_connection"-->
-<!--        app:showAsAction="never" />-->
+    <item
+        android:id="@+id/action_app_intro"
+        android:orderInCategory="300"
+        android:title="@string/action_app_intro"
+        app:showAsAction="never" />
 
-<!--    <item-->
-<!--        android:id="@+id/action_test_server_obstacle_input"-->
-<!--        android:orderInCategory="500"-->
-<!--        android:title="@string/action_test_server_obstacle_input"-->
-<!--        app:showAsAction="never" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/action_test_server_connection"-->
+    <!--        android:orderInCategory="400"-->
+    <!--        android:title="@string/action_test_server_connection"-->
+    <!--        app:showAsAction="never" />-->
+
+    <!--    <item-->
+    <!--        android:id="@+id/action_test_server_obstacle_input"-->
+    <!--        android:orderInCategory="500"-->
+    <!--        android:title="@string/action_test_server_obstacle_input"-->
+    <!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_delete_all"
