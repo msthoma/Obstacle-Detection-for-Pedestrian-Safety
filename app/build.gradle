@@ -152,7 +152,7 @@ dependencies {
 
 
     // Navigation component library - https://developer.android.com/guide/navigation
-    def nav_version = '2.3.0-rc01'
+    def nav_version = '2.3.0'
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -212,4 +212,7 @@ dependencies {
 
     // Library for manipulating EXIF tags
     implementation "androidx.exifinterface:exifinterface:1.2.0"
+
+    // App intro library https://github.com/AppIntro/AppIntro
+    implementation 'com.github.AppIntro:AppIntro:6.0.0'
 }
