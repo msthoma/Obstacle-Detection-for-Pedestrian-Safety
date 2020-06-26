@@ -58,7 +58,7 @@ interface FiwareOrionApi {
         /**
          * Orion Broker endpoint, used for interactions with Fiware.
          */
-        const val iNICOSIA_BASE_URL = "http://7e3fa2d3.ngrok.io/docs/"
+        const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
 
         /**
          * Allows for singleton instantiation of the Retrofit service.
