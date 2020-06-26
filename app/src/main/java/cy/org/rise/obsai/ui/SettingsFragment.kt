@@ -27,7 +27,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         findPreference<Preference>("version")?.setOnPreferenceClickListener {
             viewClicks += 1
             Log.d(TAG(), "$viewClicks view clicks...")
-            if (viewClicks == 5) {
+            if (viewClicks == 10) {
                 throw RuntimeException("This crash was intentional!")
             }
             true
