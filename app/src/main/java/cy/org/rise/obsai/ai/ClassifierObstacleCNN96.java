@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * This TensorFlowLite classifier works with the float MobileNet model.
  */
-public class ClassifierObstacleCNN64 extends Classifier {
+public class ClassifierObstacleCNN96 extends Classifier {
 
     /**
      * Float MobileNet requires additional normalization of the used input.
@@ -46,7 +46,7 @@ public class ClassifierObstacleCNN64 extends Classifier {
      *
      * @param activity
      */
-    public ClassifierObstacleCNN64(Activity activity, Device device, int numThreads)
+    public ClassifierObstacleCNN96(Activity activity, Device device, int numThreads)
             throws IOException {
         super(activity, device, numThreads);
     }
@@ -56,7 +56,7 @@ public class ClassifierObstacleCNN64 extends Classifier {
         // you can download this file from
         // see build.gradle for where to obtain this file. It should be auto
         // downloaded into assets.
-        return "cnn64RGB.tflite";
+        return "cnn96RGB.tflite";
     }
 
     @Override

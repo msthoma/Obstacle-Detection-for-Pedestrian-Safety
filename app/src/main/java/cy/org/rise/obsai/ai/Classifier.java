@@ -146,8 +146,8 @@ public abstract class Classifier {
      */
     public static Classifier create(Activity activity, Model model, Device device, int numThreads)
             throws IOException {
-        if (model == Model.OBSTACLE_CNN_64) {
-            return new ClassifierObstacleCNN64(activity, device, numThreads);
+        if (model == Model.OBSTACLE_CNN_96) {
+            return new ClassifierObstacleCNN96(activity, device, numThreads);
         } else {
             throw new UnsupportedOperationException();
         }
