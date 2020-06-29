@@ -49,6 +49,8 @@ import java.util.PriorityQueue;
 
 /**
  * A classifier specialized to label images using TensorFlow Lite.
+ *
+ * Copied from https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/app/src/main/java/org/tensorflow/lite/examples/classification/tflite/Classifier.java
  */
 public abstract class Classifier {
 //  private static final Logger LOGGER = new Logger();

@@ -24,6 +24,8 @@ import java.io.IOException;
 
 /**
  * This TensorFlowLite classifier works with the float MobileNet model.
+ *
+ * Based on https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/app/src/main/java/org/tensorflow/lite/examples/classification/tflite/ClassifierFloatMobileNet.java
  */
 public class ClassifierObstacleCNN96 extends Classifier {
 
