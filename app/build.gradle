@@ -17,6 +17,7 @@ apply plugin: 'org.jetbrains.dokka'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+    ndkVersion "21.3.6528147"
 
     defaultConfig {
         applicationId "cy.org.rise.obsai"
@@ -27,7 +28,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 12
-        def versionPatch = 4
+        def versionPatch = 5
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -215,4 +216,9 @@ dependencies {
 
     // App intro library https://github.com/AppIntro/AppIntro
     implementation 'com.github.AppIntro:AppIntro:6.0.0'
+
+    // TensorFlow Lite
+    implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
+    implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
 }
