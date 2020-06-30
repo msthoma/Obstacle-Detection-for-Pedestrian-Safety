@@ -13,8 +13,9 @@ import org.acra.annotation.AcraMailSender
 import org.acra.data.StringFormat
 
 /**
- * CustomApplication extends Application, to allow initialization of the ACRA error reporting
- * library
+ * CustomApplication is used to enable:
+ *  - initialization of the ACRA error reporting library
+ *  - custom implementation of getWorkManagerConfiguration()
  */
 @AcraCore(buildConfigClass = BuildConfig::class, reportFormat = StringFormat.JSON)
 @AcraMailSender(mailTo = "msthoma@outlook.com")
@@ -32,6 +33,7 @@ class CustomApplication : Application(), Configuration.Provider {
         ACRA.init(this)
     }
 
+    // see https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration#implement-configuration-provider
     override fun getWorkManagerConfiguration(): Configuration =
         Configuration.Builder()
             .setMinimumLoggingLevel(Log.INFO).build()
