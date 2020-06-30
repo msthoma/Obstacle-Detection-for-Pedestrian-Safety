@@ -17,7 +17,12 @@ apply plugin: 'org.jetbrains.dokka'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-    // todo add explanatation
+
+    // specifying an NDK version is needed temporarily to fix Github CI build issues, see links:
+    // https://stackoverflow.com/q/62566812/
+    // https://stackoverflow.com/q/60404457/
+    // https://issuetracker.google.com/issues/148189425
+    // TODO this should be fixed in Android Studio >= 4.1, test removing once AS updates
     ndkVersion "21.3.6528147"
 
     defaultConfig {
