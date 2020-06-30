@@ -2,6 +2,8 @@ package cy.org.rise.obsai.utils
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import androidx.work.Configuration
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import org.acra.ACRA
@@ -24,9 +26,13 @@ import org.acra.data.StringFormat
     resTheme = R.style.Theme_AppCompat_Dialog,
     resCommentPrompt = R.string.acra_crash_input_prompt
 )
-class CustomApplication : Application() {
+class CustomApplication : Application(), Configuration.Provider {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         ACRA.init(this)
     }
+
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(Log.INFO).build()
 }
