@@ -6,6 +6,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,6 +46,19 @@ interface FiwareOrionApi {
         @Path("orie2") orie2: Double,
         @Path("photopath") photopath: String = "pathToPhoto"
     ): Response<Unit>
+
+    // test not suspending function for Work manager
+    @POST("post_obstacles_problems/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
+    fun postToiNicosiaWM(
+        @Path("id") id: String,
+        @Path("type_obs") type_obs: String,
+        @Path("latitude") latitude: Double,
+        @Path("longitude") longitude: Double,
+        @Path("obstype") obstype: String,
+        @Path("orie1") orie1: Double,
+        @Path("orie2") orie2: Double,
+        @Path("photopath") photopath: String = "pathToPhoto"
+    ): Call<Unit>
 
     @POST("post_obstacles_problems")
     suspend fun postToiNicosiaJson(@Body obstacle: Obstacle): Response<Unit>

@@ -2,6 +2,8 @@ package cy.org.rise.obsai.utils
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import androidx.work.Configuration
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import org.acra.ACRA
@@ -11,8 +13,9 @@ import org.acra.annotation.AcraMailSender
 import org.acra.data.StringFormat
 
 /**
- * CustomApplication extends Application, to allow initialization of the ACRA error reporting
- * library
+ * CustomApplication is used to enable:
+ *  - initialization of the ACRA error reporting library
+ *  - custom implementation of getWorkManagerConfiguration()
  */
 @AcraCore(buildConfigClass = BuildConfig::class, reportFormat = StringFormat.JSON)
 @AcraMailSender(mailTo = "msthoma@outlook.com")
@@ -24,9 +27,14 @@ import org.acra.data.StringFormat
     resTheme = R.style.Theme_AppCompat_Dialog,
     resCommentPrompt = R.string.acra_crash_input_prompt
 )
-class CustomApplication : Application() {
+class CustomApplication : Application(), Configuration.Provider {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         ACRA.init(this)
     }
+
+    // see https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration#implement-configuration-provider
+    override fun getWorkManagerConfiguration(): Configuration =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(Log.INFO).build()
 }
