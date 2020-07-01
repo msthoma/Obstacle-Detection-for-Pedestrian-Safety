@@ -30,7 +30,7 @@ class iNicosiaWorker(appContext: Context, workerParams: WorkerParameters) :
                 obstacle.obstacleType,
                 obstacle.orientation.x,
                 obstacle.orientation.y
-            )
+            )?.execute()
 
             return response?.let {
                 if (!response.isSuccessful) {
