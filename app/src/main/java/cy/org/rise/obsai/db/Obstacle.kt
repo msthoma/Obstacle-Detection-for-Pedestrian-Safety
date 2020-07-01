@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.api.RestObstacle.*
 import java.io.Serializable
@@ -140,4 +141,6 @@ data class Obstacle(
      * @return Obstacle location as Google Maps LatLng
      */
     fun getLocationAsLatLong(): LatLng = LatLng(location.latitude, location.longitude)
+
+    fun toJson(): String = Gson().toJson(this)
 }
