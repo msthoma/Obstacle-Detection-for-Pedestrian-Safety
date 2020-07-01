@@ -6,6 +6,7 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -57,7 +58,7 @@ interface FiwareOrionApi {
         @Path("orie1") orie1: Double,
         @Path("orie2") orie2: Double,
         @Path("photopath") photopath: String = "pathToPhoto"
-    ): Response<Unit>
+    ): Call<Unit>
 
     @POST("post_obstacles_problems")
     suspend fun postToiNicosiaJson(@Body obstacle: Obstacle): Response<Unit>
