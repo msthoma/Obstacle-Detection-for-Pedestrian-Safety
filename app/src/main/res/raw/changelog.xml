@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-07-01"
+        versionCode="1"
+        versionName="Version 0.13.0">
+        <info>Obstacle uploads to iNicosia now only happen over unmetered (e.g. WiFi) connections
+        </info>
+    </release>
+
+    <release
         date="2020-06-30"
         versionCode="1"
         versionName="Version 0.12.5">
