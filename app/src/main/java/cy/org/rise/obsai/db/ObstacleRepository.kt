@@ -2,9 +2,12 @@ package cy.org.rise.obsai.db
 
 import android.content.Context
 import android.util.Log
+import androidx.work.*
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
+import cy.org.rise.obsai.api.iNicosiaWorker
+import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
@@ -103,6 +106,29 @@ class ObstacleRepository private constructor(
             obstacle.orientation.x.absoluteValue,
             obstacle.orientation.y.absoluteValue //skip pathPhoto here
         )
+    }
+
+    fun postToiNicosiaWM(obstacle: Obstacle) {
+        // temporarily filter illegal chars in types to circumvent current API limitations
+        val obsType = obstacle.obstacleType.filterNot {
+            setOf(' ', '(', ')', '.', '-', '/').contains(it)
+        }
+        Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
+
+        val workManager = WorkManager.getInstance(context)
+
+        val uploadConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .build()
+
+        val upload = OneTimeWorkRequestBuilder<iNicosiaWorker>()
+            .setInputData(
+                Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.toJson()).build()
+            )
+            .setConstraints(uploadConstraints)
+            .build()
+
+        workManager.enqueue(upload)
     }
 
     suspend fun postToiNicosiaJson(obstacle: Obstacle): Response<Unit>? =
