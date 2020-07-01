@@ -13,10 +13,12 @@ class iNicosiaWorker(appContext: Context, workerParams: WorkerParameters) :
     override fun doWork(): Result {
         var obstacleToUpload: String? = null
         return try {
-            obstacleToUpload = inputData.getString(Constants.KEY_OBSTACLE_ID)
+            // Get obstacle ID
+            obstacleToUpload = inputData.getString(Constants.KEY_OBSTACLE_JSON)
+
             Result.success() // TODO pass on Response from API Result.success(....)
         } catch (e: Exception) {
-            Log.e(TAG(), "Failed to upload entity with ID $obstacleToUpload")
+            Log.e(TAG(), "Failed to upload entity with ID $obstacleToUpload", e)
             Result.failure() // TODO pass on Response from API Result.failure(....)
         }
     }
