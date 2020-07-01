@@ -142,5 +142,10 @@ data class Obstacle(
      */
     fun getLocationAsLatLong(): LatLng = LatLng(location.latitude, location.longitude)
 
+    /**
+     * Converts obstacle to JSON object using Gson.
+     *
+     * @return JSON string of current obstacle
+     */
     fun toJson(): String = Gson().toJson(this)
 }
