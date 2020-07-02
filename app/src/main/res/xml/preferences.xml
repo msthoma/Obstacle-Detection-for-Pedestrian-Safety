@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.SettingsFragment">
 
-    <Preference
-        app:key="version"
-        app:title="@string/setting_app_version_title" />
+    <PreferenceCategory android:title="Uploads">
+        <SwitchPreferenceCompat
+            app:key="test_pref"
+            app:title="Allow uploads while on mobile data" />
+    </PreferenceCategory>
 
-    <Preference
-        app:key="changelog"
-        app:title="@string/setting_changelog_title"
-        app:summary="@string/setting_changelog_summary"/>
+    <PreferenceCategory android:title="About">
+        <Preference
+            app:key="changelog"
+            app:summary="@string/setting_changelog_summary"
+            app:title="@string/setting_changelog_title" />
+        <Preference
+            app:key="open_source_libraries"
+            app:summary="@string/setting_open_source_libraries_summary"
+            app:title="@string/setting_open_source_libraries_title" />
+        <Preference
+            app:key="version"
+            app:title="@string/setting_app_version_title"
+            tools:summary="1.0.0" />
+    </PreferenceCategory>
 
-    <Preference
-        app:key="open_source_libraries"
-        app:summary="@string/setting_open_source_libraries_summary"
-        app:title="@string/setting_open_source_libraries_title" />
-
-    <SwitchPreferenceCompat
-        app:key="test_pref"
-        app:title="Test toggle setting" />
 
 </PreferenceScreen>
