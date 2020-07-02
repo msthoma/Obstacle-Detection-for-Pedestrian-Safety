@@ -41,7 +41,9 @@ data class Obstacle(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
 
-    // TODO add device id
+    // placeholder for device id, final form TBD soon (will be String for certain)
+    @ColumnInfo
+    val deviceID: String = "d3869c03-6f52-4bcc-991f-a2775d709b5b",
 
     @ColumnInfo
     val timeStamp: Date = Calendar.getInstance().time,
