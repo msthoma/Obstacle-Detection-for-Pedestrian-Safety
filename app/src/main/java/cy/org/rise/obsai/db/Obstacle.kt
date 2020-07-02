@@ -14,8 +14,8 @@ import java.util.*
 /**
  * Data class for obstacles, used for Room database entities.
  *
- * Class implements [Serializable], which is required for passing Obstacle objects as safe args
- * by the Navigation component library.
+ * Class (and its subclasses) implement [Serializable], which is required for passing Obstacle
+ * objects as safe args by the Navigation component library.
  *
  * It is perhaps possible to utilise only one class for both [Obstacle] and [RestObstacle], see
  * Git history for failed attempt to do so. See discussions
@@ -24,6 +24,13 @@ import java.util.*
  * strategies of using the same class for both Room and Retrofit.
  * The [Obstacle.toRestObstacle] and [RestObstacle.toObstacle] methods are used as a compromise for
  * converting between the two.
+ *
+ * For details on accelerometer, compass and orientation data, see docs for
+ * [Position sensors](https://developer.android.com/guide/topics/sensors/sensors_position).
+ *
+ * For details on location data, see docs for
+ * [Location](https://developer.android.com/reference/android/location/Location) and
+ * [LocationManager](https://developer.android.com/reference/android/location/LocationManager).
  *
  * @property accelerometer accelerometer reading at the time the photo was captured
  * @property altitude altitude in meters, at the location of the obstacle
