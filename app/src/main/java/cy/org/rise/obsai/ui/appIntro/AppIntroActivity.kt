@@ -6,10 +6,18 @@ import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroPageTransformerType
 import cy.org.rise.obsai.R
 
+/**
+ * Activity for showing an intro tutorial when the app is launched for the first time.
+ *
+ * Based on the [AppIntro library](https://github.com/AppIntro/AppIntro).
+ */
 class AppIntroActivity : AppIntro() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Do NOT call setContentView here
+
+        // TODO figure out back button
+//        isSystemBackButtonLocked = true
 
         isWizardMode = true
 //        showStatusBar(true)
@@ -47,6 +55,7 @@ class AppIntroActivity : AppIntro() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        // TODO figure out navigation
 //        findNavController().navigate(R.id.action_global_obstacleListFragment)
         finish()
     }
