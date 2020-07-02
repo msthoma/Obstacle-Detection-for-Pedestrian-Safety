@@ -11,8 +11,9 @@ import com.github.appintro.SlideBackgroundColorHolder
 import cy.org.rise.obsai.R
 
 /**
- * Based on AppIntroCustomLayoutFragment of Intro library
+ * Fragment for creating app intro slides with custom layouts and colours.
  *
+ * Based on AppIntroCustomLayoutFragment of Intro library.
  */
 class CustomIntroFragment : Fragment(), SlideBackgroundColorHolder {
 
