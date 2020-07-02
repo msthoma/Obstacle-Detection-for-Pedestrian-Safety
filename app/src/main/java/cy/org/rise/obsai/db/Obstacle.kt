@@ -25,15 +25,20 @@ import java.util.*
  * The [Obstacle.toRestObstacle] and [RestObstacle.toObstacle] methods are used as a compromise for
  * converting between the two.
  *
+ * @property accelerometer accelerometer reading at the time the photo was captured
+ * @property altitude altitude in meters, at the location of the obstacle
+ * @property compass compass reading at the time the photo was captured
+ * @property deviceID an id unique to the device reporting the obstacle (TODO)
  * @property id obstacle id with UUID value, also primary key
- * @property timeStamp date of object creation in millis
- * @property obstacleType type of the obstacle, e.g crack, no pavement etc.
- * @property photoPath where the photo file is located
- * @property location geo coordinates of the obstacle
- * @property locationFromGPS holds a copy of the GPS-determined location, in case user manually
- * edits location
- * @property orientation orientation of phone in space when obstacle was recorded
- * @property typeProbabilitiesCNN map of obstacle types with their probabilities as predicted by
+ * @property locationAccuracy horizontal radial accuracy of the location reading, in meters
+ * @property location coordinates of the obstacle (may be modified by user, original saved below)
+ * @property locationFromGPS holds a copy of the GPS-determined location
+ * @property obstacleType type of the obstacle, as reported by user
+ * @property orientation orientation of phone when photo was taken (calculated by fusing
+ * accelerometer and compass readings)
+ * @property photoPath path to the photo file
+ * @property timeStamp date of object creation
+ * @property typeProbabilitiesCNN map of obstacle types and their probabilities as predicted by
  * the convolutional neural network
  */
 @Entity(tableName = "obstacle_table")
