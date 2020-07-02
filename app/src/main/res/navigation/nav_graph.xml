@@ -84,7 +84,7 @@
         android:id="@+id/settingsFragment"
         android:name="cy.org.rise.obsai.ui.SettingsFragment"
         android:label="@string/label_fragment_settings"
-        tools:layout="@xml/preferences" >
+        tools:layout="@xml/preferences">
         <action
             android:id="@+id/action_settingsFragment_to_aboutActivity"
             app:destination="@id/aboutActivity" />

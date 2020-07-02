@@ -33,5 +33,4 @@
         android:gravity="center"
         android:text="(Here a popup will ask for permissions)\n\nFor ease of use, the app requires access to the phone's camera and GPS sensor, please grant them in the popup that will appear."
         android:textColor="#ffffff" />
-
 </LinearLayout>
