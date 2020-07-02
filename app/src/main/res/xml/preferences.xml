@@ -6,8 +6,8 @@
 
     <PreferenceCategory android:title="Uploads">
         <SwitchPreferenceCompat
-            app:key="test_pref"
-            app:title="Allow uploads while on mobile data" />
+            app:key="allow_mobile_data"
+            app:title="@string/setting_allow_mobile_data" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">
