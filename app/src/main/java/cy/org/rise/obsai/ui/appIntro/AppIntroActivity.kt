@@ -3,7 +3,6 @@ package cy.org.rise.obsai.ui.appIntro
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
-import com.github.appintro.AppIntroFragment
 import com.github.appintro.AppIntroPageTransformerType
 import cy.org.rise.obsai.R
 
@@ -13,7 +12,8 @@ class AppIntroActivity : AppIntro() {
         // Do NOT call setContentView here
 
         isWizardMode = true
-//        showStatusBar(false)
+//        showStatusBar(true)
+//        setStatusBarColorRes(R.color.introColor1)
 //        setImmersiveMode()
         isColorTransitionsEnabled = true
 
@@ -26,31 +26,21 @@ class AppIntroActivity : AppIntro() {
         )
 
         addSlide(
-            AppIntroFragment.newInstance(
-                title = "Welcome!",
-                description = "The app allows pedestrians to report road obstacles to the " +
-                        "iNicosia platform.",
-                imageDrawable = R.drawable.ic_noun_barrier_2895012,
-                backgroundColor = resources.getColor(R.color.introColor1)
+            CustomIntroFragment.newInstance(
+                R.layout.fragment_intro_1,
+                resources.getColor(R.color.introColor1)
             )
         )
-
         addSlide(
-            AppIntroFragment.newInstance(
-                title = "Permissions required",
-                description = "For ease of use, the app requires access to the phone's camera and" +
-                        " GPS sensor, please grant them in the popup that will appear.",
-                imageDrawable = R.drawable.ic_rise_banner,
-                backgroundColor = resources.getColor(R.color.introColor2)
+            CustomIntroFragment.newInstance(
+                R.layout.fragment_intro_2,
+                resources.getColor(R.color.introColor2)
             )
         )
-
         addSlide(
-            AppIntroFragment.newInstance(
-                title = "Privacy policy",
-                description = "Please agree to the policy",
-                imageDrawable = R.drawable.ic_rise_banner,
-                backgroundColor = resources.getColor(R.color.introColor3)
+            CustomIntroFragment.newInstance(
+                R.layout.fragment_intro_3,
+                resources.getColor(R.color.introColor3)
             )
         )
     }
