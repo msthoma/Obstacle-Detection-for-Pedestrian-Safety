@@ -26,7 +26,7 @@
         app switches to https-->
 
         <activity
-            android:name=".ui.AppIntroActivity"
+            android:name=".ui.appIntro.AppIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.AboutActivity"

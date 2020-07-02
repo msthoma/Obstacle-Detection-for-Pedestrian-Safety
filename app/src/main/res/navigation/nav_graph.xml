@@ -96,6 +96,6 @@
         tools:layout="@layout/activity_about" />
     <activity
         android:id="@+id/appIntroActivity"
-        android:name="cy.org.rise.obsai.ui.AppIntroActivity"
+        android:name="cy.org.rise.obsai.ui.appIntro.AppIntroActivity"
         android:label="AppIntroActivity" />
 </navigation>

@@ -1,4 +1,4 @@
-package cy.org.rise.obsai.ui
+package cy.org.rise.obsai.ui.appIntro
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
