@@ -57,22 +57,20 @@ data class Obstacle(
     @Embedded
     var location: Location,
 
-    @Embedded
-    val orientation: Orientation,
+    @Embedded(prefix = "fused_")
+    var orientation: Orientation,
+
+    @Embedded(prefix = "accelerometer_")
+    var accelerometer: Orientation = Orientation(0.0, 0.0, 0.0),
+
+    @Embedded(prefix = "compass_")
+    var compass: Orientation = Orientation(0.0, 0.0, 0.0),
 
     @ColumnInfo
     var altitude: Double = 0.0,
 
     @ColumnInfo
     var typeProbabilitiesCNN: Map<String, Float>? = null,
-
-    // TODO save accelerometer and compass data, perhaps convert Orientation class to a more
-    //  general XYZ class
-//    @Embedded
-//    val accelerometer: Orientation,
-//
-//    @Embedded
-//    val compass: Orientation
 
     @ColumnInfo
     var uploadStatus: String = "Uploading..."
