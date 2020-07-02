@@ -57,6 +57,9 @@ data class Obstacle(
     @Embedded
     var location: Location,
 
+    @ColumnInfo
+    var locationAccuracy: Float = 0.0f,
+
     @Embedded(prefix = "fused_")
     var orientation: Orientation = Orientation(0.0, 0.0, 0.0),
 
