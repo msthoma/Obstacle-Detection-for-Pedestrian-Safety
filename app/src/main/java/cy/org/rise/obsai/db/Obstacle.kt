@@ -14,8 +14,8 @@ import java.util.*
 /**
  * Data class for obstacles, used for Room database entities.
  *
- * Class implements [Serializable], which is required for passing Obstacle objects as safe args
- * by the Navigation component library.
+ * Class (and its subclasses) implement [Serializable], which is required for passing Obstacle
+ * objects as safe args by the Navigation component library.
  *
  * It is perhaps possible to utilise only one class for both [Obstacle] and [RestObstacle], see
  * Git history for failed attempt to do so. See discussions
@@ -25,15 +25,27 @@ import java.util.*
  * The [Obstacle.toRestObstacle] and [RestObstacle.toObstacle] methods are used as a compromise for
  * converting between the two.
  *
+ * For details on accelerometer, compass and orientation data, see docs for
+ * [Position sensors](https://developer.android.com/guide/topics/sensors/sensors_position).
+ *
+ * For details on location data, see docs for
+ * [Location](https://developer.android.com/reference/android/location/Location) and
+ * [LocationManager](https://developer.android.com/reference/android/location/LocationManager).
+ *
+ * @property accelerometer accelerometer reading at the time the photo was captured
+ * @property altitude altitude in meters, at the location of the obstacle
+ * @property compass compass reading at the time the photo was captured
+ * @property deviceID an id unique to the device reporting the obstacle (TODO)
  * @property id obstacle id with UUID value, also primary key
- * @property timeStamp date of object creation in millis
- * @property obstacleType type of the obstacle, e.g crack, no pavement etc.
- * @property photoPath where the photo file is located
- * @property location geo coordinates of the obstacle
- * @property locationFromGPS holds a copy of the GPS-determined location, in case user manually
- * edits location
- * @property orientation orientation of phone in space when obstacle was recorded
- * @property typeProbabilitiesCNN map of obstacle types with their probabilities as predicted by
+ * @property locationAccuracy horizontal radial accuracy of the location reading, in meters
+ * @property location coordinates of the obstacle (may be modified by user, original saved below)
+ * @property locationFromGPS holds a copy of the GPS-determined location
+ * @property obstacleType type of the obstacle, as reported by user
+ * @property orientation orientation of phone when photo was taken (calculated by fusing
+ * accelerometer and compass readings)
+ * @property photoPath path to the photo file
+ * @property timeStamp date of object creation
+ * @property typeProbabilitiesCNN map of obstacle types and their probabilities as predicted by
  * the convolutional neural network
  */
 @Entity(tableName = "obstacle_table")
@@ -41,7 +53,9 @@ data class Obstacle(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
 
-    // TODO add device id
+    // placeholder for device id, final form TBD soon (will be String for certain)
+    @ColumnInfo
+    val deviceID: String = "d3869c03-6f52-4bcc-991f-a2775d709b5b",
 
     @ColumnInfo
     val timeStamp: Date = Calendar.getInstance().time,
@@ -55,22 +69,23 @@ data class Obstacle(
     @Embedded
     var location: Location,
 
-    @Embedded
-    val orientation: Orientation,
+    @ColumnInfo
+    var locationAccuracy: Float = 0.0f,
+
+    @Embedded(prefix = "fused_")
+    var orientation: Orientation = Orientation(0.0, 0.0, 0.0),
+
+    @Embedded(prefix = "accelerometer_")
+    var accelerometer: Orientation = Orientation(0.0, 0.0, 0.0),
+
+    @Embedded(prefix = "compass_")
+    var compass: Orientation = Orientation(0.0, 0.0, 0.0),
 
     @ColumnInfo
     var altitude: Double = 0.0,
 
     @ColumnInfo
     var typeProbabilitiesCNN: Map<String, Float>? = null,
-
-    // TODO save accelerometer and compass data, perhaps convert Orientation class to a more
-    //  general XYZ class
-//    @Embedded
-//    val accelerometer: Orientation,
-//
-//    @Embedded
-//    val compass: Orientation
 
     @ColumnInfo
     var uploadStatus: String = "Uploading..."
