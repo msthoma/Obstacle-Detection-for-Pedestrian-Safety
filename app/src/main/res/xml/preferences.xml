@@ -6,7 +6,9 @@
 
     <PreferenceCategory android:title="Uploads">
         <SwitchPreferenceCompat
+            app:defaultValue="false"
             app:key="allow_mobile_data"
+            app:summary="May use a lot of data"
             app:title="@string/setting_allow_mobile_data" />
     </PreferenceCategory>
 
