@@ -58,7 +58,7 @@ data class Obstacle(
     var location: Location,
 
     @Embedded(prefix = "fused_")
-    var orientation: Orientation,
+    var orientation: Orientation = Orientation(0.0, 0.0, 0.0),
 
     @Embedded(prefix = "accelerometer_")
     var accelerometer: Orientation = Orientation(0.0, 0.0, 0.0),
