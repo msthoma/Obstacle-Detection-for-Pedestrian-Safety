@@ -25,12 +25,24 @@ import java.util.*
  * The [Obstacle.toRestObstacle] and [RestObstacle.toObstacle] methods are used as a compromise for
  * converting between the two.
  *
- * For details on accelerometer, compass and orientation data, see docs for
- * [Position sensors](https://developer.android.com/guide/topics/sensors/sensors_position).
- *
+ * ## Location information
  * For details on location data, see docs for
  * [Location](https://developer.android.com/reference/android/location/Location) and
  * [LocationManager](https://developer.android.com/reference/android/location/LocationManager).
+ *
+ * ## Orientation information
+ * For details on accelerometer, compass and orientation data, see docs for
+ * [Position sensors](https://developer.android.com/guide/topics/sensors/sensors_position).
+ *
+ * ## Notes on Unique identifiers
+ * Using unique identifiers in an app is a complicated subject, the article
+ * [Best practices for unique identifiers](https://developer.android.com/training/articles/user-data-ids)
+ * provides a good summary. Also this [comment](https://stackoverflow.com/a/59093659) (and that
+ * discussion in general) is a good source of information. The linked comment points out that any
+ * use of an identifier that can be linked to an individual has to comply with GDPR
+ * ([link](https://gdpr.eu/eu-gdpr-personal-data/)). In this app a unique identifier is generated
+ * at first launch, and is used for as long as the app remains installed (uninstalling and
+ * reinstalling the app will of course generate a new identifier).
  *
  * @property accelerometer accelerometer reading at the time the photo was captured
  * @property altitude altitude in meters, at the location of the obstacle
