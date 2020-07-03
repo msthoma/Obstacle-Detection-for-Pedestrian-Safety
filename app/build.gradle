@@ -61,7 +61,7 @@ android {
             exclude("META-INF/*.kotlin_module")
         }
 
-        // removes x86, x86_64, and arm32 ABIs from app, which reduces its size quite a bit
+        // removes x86, x86_64, and arm32 Tensorflow ABIs from app, which reduces .apk size quite
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
@@ -90,6 +90,11 @@ android {
         configuration {
             reportUndocumented = true
         }
+    }
+
+    // solves dependency clash with xpp3 in release build variant
+    configurations {
+        all*.exclude group: 'xpp3', module: 'xpp3'
     }
 }
 
