@@ -26,9 +26,11 @@ fun Double.roundTo(n: Int = 3): Double = "%.${n}f".format(Locale.ENGLISH, this).
 fun Float.roundTo(n: Int = 3): Float = "%.${n}f".format(Locale.ENGLISH, this).toFloat()
 
 /**
- * Checks if unique ID for current app install exists, and if not creates one using a random UUID.
+ * Returns a unique ID for current app install - if such as ID does not exist yet, it is
+ * automatically created, using a one-time generated random UUID.
  *
- * The unique ID will persist while the app is installed, but will be reset if app is reinstalled.
+ * The unique app install ID will persist while the app is installed, but will be reset if app is
+ * reinstalled.
  *
  * @return unique ID for current app install
  */
