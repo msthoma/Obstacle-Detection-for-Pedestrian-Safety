@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.api.RestObstacle.*
+import cy.org.rise.obsai.utils.Constants
 import java.io.Serializable
 import java.util.*
 
@@ -48,7 +49,7 @@ import java.util.*
  * @property accelerometer accelerometer reading at the time the photo was captured
  * @property altitude altitude in meters, at the location of the obstacle
  * @property compass compass reading at the time the photo was captured
- * @property deviceID an id unique to the device reporting the obstacle (TODO)
+ * @property appInstallID an id unique to the device reporting the obstacle (TODO)
  * @property id obstacle id with UUID value, also primary key
  * @property locationAccuracy horizontal radial accuracy of the location reading, in meters
  * @property location coordinates of the obstacle (may be modified by user, original saved below)
@@ -66,9 +67,8 @@ data class Obstacle(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
 
-    // placeholder for device id, final form TBD soon (will be String for certain)
     @ColumnInfo
-    val deviceID: String = "d3869c03-6f52-4bcc-991f-a2775d709b5b",
+    var appInstallID: String = Constants.PREF_UNIQUE_ID_EMPTY,
 
     @ColumnInfo
     val timeStamp: Date = Calendar.getInstance().time,
