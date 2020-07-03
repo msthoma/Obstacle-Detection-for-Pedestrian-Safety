@@ -34,7 +34,7 @@ fun Float.roundTo(n: Int = 3): Float = "%.${n}f".format(Locale.ENGLISH, this).to
  *
  * @return unique ID for current app install
  */
-fun Context.getInstallUniqueID(): String {
+fun Context.getUniqueAppInstallID(): String {
     val shPref = this.getSharedPreferences(Constants.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE)
 
     var installUniqueID = shPref.getString(
