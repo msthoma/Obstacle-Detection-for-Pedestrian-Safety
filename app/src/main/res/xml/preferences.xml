@@ -26,6 +26,4 @@
             app:title="@string/setting_app_version_title"
             tools:summary="1.0.0" />
     </PreferenceCategory>
-
-
 </PreferenceScreen>
