@@ -42,14 +42,14 @@ import java.util.*
  * discussion in general) is a good source of information. The linked comment points out that any
  * use of an identifier that can be linked to an individual has to comply with GDPR
  * ([link](https://gdpr.eu/eu-gdpr-personal-data/)). In this app a unique identifier is generated
- * at first launch, see logic in [cy.org.rise.obsai.utils.CustomApplication], and is used for as
- * long as the app remains installed (uninstalling and reinstalling the app will of course
- * generate a new identifier).
+ * for each app install, the first time [cy.org.rise.obsai.utils.getUniqueAppInstallID] is called,
+ * and is used for as long as the app remains installed (uninstalling and reinstalling the app
+ * will of course generate a new identifier).
  *
  * @property accelerometer accelerometer reading at the time the photo was captured
  * @property altitude altitude in meters, at the location of the obstacle
  * @property compass compass reading at the time the photo was captured
- * @property appInstallID an id unique to the device reporting the obstacle (TODO)
+ * @property appInstallID an id unique to the current app install
  * @property id obstacle id with UUID value, also primary key
  * @property locationAccuracy horizontal radial accuracy of the location reading, in meters
  * @property location coordinates of the obstacle (may be modified by user, original saved below)
