@@ -12,5 +12,5 @@ object Constants {
 
     // Keys for device unique ID (actually per install unique id)
     const val PREF_UNIQUE_ID_KEY = "PREF_UNIQUE_ID_KEY"
-    const val PREF_UNIQUE_ID_DEFAULT = "EMPTY"
+    const val PREF_UNIQUE_ID_EMPTY = "EMPTY"
 }
