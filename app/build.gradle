@@ -61,7 +61,7 @@ android {
             exclude("META-INF/*.kotlin_module")
         }
 
-        // removes x86, x86_64, and arm32 Tensorflow ABIs from app, which reduces .apk size quite
+        // removes x86, x86_64, and arm32 Tensorflow ABIs from app, which reduces .apk size
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
@@ -71,6 +71,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // sets names for all variant apks, see answers here https://stackoverflow.com/q/18332474/
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "obstacles-app-${variant.versionName}-${variant.name}.apk"
         }
     }
 
