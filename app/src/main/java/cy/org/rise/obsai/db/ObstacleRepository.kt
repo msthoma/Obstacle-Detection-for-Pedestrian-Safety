@@ -2,6 +2,7 @@ package cy.org.rise.obsai.db
 
 import android.content.Context
 import android.util.Log
+import androidx.preference.PreferenceManager
 import androidx.work.*
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
@@ -116,10 +117,22 @@ class ObstacleRepository private constructor(
         obstacle.obstacleType = obsType
         Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
 
+        // Check if mobile data is allowed by the user
+        val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
+            .getBoolean("allow_mobile_data", false)
+        Log.d(TAG(), "Mobile data allowed: $mobileDataAllowed")
+
         val workManager = WorkManager.getInstance(context)
 
         val uploadConstraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiredNetworkType(
+                // TODO recheck network logic here, as it does it produce the intended behaviour?
+                if (mobileDataAllowed) {
+                    NetworkType.CONNECTED
+                } else {
+                    NetworkType.UNMETERED
+                }
+            )
             .build()
 
         val upload = OneTimeWorkRequestBuilder<iNicosiaWorker>()
