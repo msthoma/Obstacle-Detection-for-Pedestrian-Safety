@@ -5,7 +5,6 @@ import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -21,12 +20,11 @@ import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
-import com.google.gson.Gson
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.SessionManager
-import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.getUniqueAppInstallID
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
 /**
@@ -138,6 +136,7 @@ class ObstacleListFragment : Fragment() {
             }
             R.id.action_add_mock_element -> {
                 val mockObstacle = Obstacle(
+                    appInstallID = requireContext().getUniqueAppInstallID(),
                     obstacleType = "MockObstacle",
                     location = Obstacle.Location(
                         latitude = 35.169160,
@@ -152,7 +151,6 @@ class ObstacleListFragment : Fragment() {
                     photoPath = "pathToPhoto",
                     typeProbabilitiesCNN = generateRandomMap()
                 )
-                Log.d(TAG(), Gson().toJson(mockObstacle))
                 viewModel.insertObstacle(mockObstacle)
                 true
             }
@@ -253,6 +251,7 @@ class ObstacleListFragment : Fragment() {
             LocationManager.GPS_PROVIDER
         )
 
+    // creates a random label-probability map to simulate CNN output
     private fun generateRandomMap(): Map<String, Float> {
         val stringArray = resources.getStringArray(R.array.obstacle_types_array)
         return buildMap {
