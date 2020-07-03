@@ -10,6 +10,7 @@ import com.michaelflisar.changelog.ChangelogBuilder
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.getUniqueAppInstallID
 
 /**
  * Fragment that displays the app's settings.
@@ -20,7 +21,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // set app version
         findPreference<Preference>("version")?.summary =
-            "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+            "${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}\n(app ID: " +
+                    "${requireContext().getUniqueAppInstallID()})"
 
         // intentionally crash app to test crash reporting, triggered by repeated count view clicks
         var viewClicks = 0
