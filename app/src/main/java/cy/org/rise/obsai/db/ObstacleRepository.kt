@@ -113,6 +113,7 @@ class ObstacleRepository private constructor(
         val obsType = obstacle.obstacleType.filterNot {
             setOf(' ', '(', ')', '.', '-', '/').contains(it)
         }
+        obstacle.obstacleType = obsType
         Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
 
         val workManager = WorkManager.getInstance(context)
