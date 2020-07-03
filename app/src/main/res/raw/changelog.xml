@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-07-03"
+        versionCode="1"
+        versionName="Version 0.14.0">
+        <info>Added setting to allow uploads over mobile data connections</info>
+        <info>More information is now saved for each obstacle</info>
+        <info>Settings screen overhaul</info>
+    </release>
+
+    <release
         date="2020-07-01"
         versionCode="1"
         versionName="Version 0.13.0">
