@@ -34,4 +34,31 @@
     <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
+
+<!--    <string-array name="obstacle_types_array">-->
+<!--        <item>Διαφημιστική πινακίδα</item>-->
+<!--        <item>Crack</item>-->
+<!--        <item>Τρύπα/Pot-hole</item>-->
+<!--        <item>Paver (broken)</item>-->
+<!--        <item>Στενό πεζοδρόμιο</item>-->
+<!--        <item>Δεν υπάρχει πεζοδρόμιο</item>-->
+<!--        <item>Παγκάκι</item>-->
+<!--        <item>Light</item>-->
+<!--        <item>Κάδος απορριμμάτων</item>-->
+<!--        <item>Parking Meter</item>-->
+<!--        <item>Γλάστρα</item>-->
+<!--        <item>Δέντρο</item>-->
+<!--        <item>Θάμνος</item>-->
+<!--        <item>Parking Prevention</item>-->
+<!--        <item>Ταχυδρομικό κιβώτιο</item>-->
+<!--        <item>4-wheels</item>-->
+<!--        <item>2-wheels</item>-->
+<!--        <item>Boulder</item>-->
+<!--        <item>Safety Sign</item>-->
+<!--        <item>Fence</item>-->
+<!--        <item>Traffic Cone</item>-->
+<!--        <item>Litter</item>-->
+<!--        <item>Chair</item>-->
+<!--        <item>Table</item>-->
+<!--    </string-array>-->
 </resources>
