@@ -4,13 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RadioGroup
         android:id="@+id/types_radio_group"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:orientation="vertical" />
 
     <TextView
         android:id="@+id/show_more_types"
