@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.core.view.updateMargins
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -88,24 +89,16 @@ class ObstacleEditFragment : Fragment() {
                 scrollable = true
             )
 
-            val rg = RadioGroup(context)
-            shuffledTypeList().sliceArray(IntRange(1, 5)).forEach { obsType ->
-                rg.addView(RadioButton(context).also { it.text = obsType })
-            }
             val customDialogView = dialog.getCustomView() as LinearLayout
 
-            val radioGroupView = customDialogView.findViewById<LinearLayout>(R.id.types_radio_group)
+            val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
 
-            radioGroupView.addView(rg)
+            val obsTypeArray = shuffledTypeList()
+
+            populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
             customDialogView.findViewById<TextView>(R.id.show_more_types).setOnClickListener {
-                radioGroupView.removeAllViews()
-
-                val rgAll = RadioGroup(context)
-                shuffledTypeList().forEach { obsType ->
-                    rgAll.addView(RadioButton(context).also { it.text = obsType })
-                }
-                radioGroupView.addView(rgAll)
+                populateRadioGroupTypeList(radioGroup, obsTypeArray)
             }
 
             dialog.show()
@@ -275,6 +268,29 @@ class ObstacleEditFragment : Fragment() {
             ).show()
         }
         return allEntered
+    }
+
+    private fun populateRadioGroupTypeList(
+        radioGroup: RadioGroup, obsTypeArray: Array<String>,
+        listLimit: Int = obsTypeArray.size
+    ) {
+        // make sure any previous entries are removed
+        radioGroup.removeAllViews()
+
+        // create view params
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.updateMargins(20, 20, 20, 20)
+
+        // populate radio group, respecting any limits on number of items required
+        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
+            radioGroup.addView(RadioButton(context).also { rb ->
+                rb.text = obsType
+                rb.layoutParams = layoutParams
+            })
+        }
     }
 
     private fun shuffledTypeList(): Array<String> =
