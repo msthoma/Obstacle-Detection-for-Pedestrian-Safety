@@ -89,7 +89,7 @@ class ObstacleEditFragment : Fragment() {
             )
 
             val rg = RadioGroup(context)
-            shuffledTypeList().forEach { obsType ->
+            shuffledTypeList().sliceArray(IntRange(1, 5)).forEach { obsType ->
                 rg.addView(RadioButton(context).also { it.text = obsType })
             }
             val customDialogView = dialog.getCustomView() as LinearLayout
@@ -97,6 +97,17 @@ class ObstacleEditFragment : Fragment() {
             val radioGroupView = customDialogView.findViewById<LinearLayout>(R.id.types_radio_group)
 
             radioGroupView.addView(rg)
+
+            customDialogView.findViewById<TextView>(R.id.show_more_types).setOnClickListener {
+                radioGroupView.removeAllViews()
+
+                val rgAll = RadioGroup(context)
+                shuffledTypeList().forEach { obsType ->
+                    rgAll.addView(RadioButton(context).also { it.text = obsType })
+                }
+                radioGroupView.addView(rgAll)
+            }
+
             dialog.show()
         }
 
