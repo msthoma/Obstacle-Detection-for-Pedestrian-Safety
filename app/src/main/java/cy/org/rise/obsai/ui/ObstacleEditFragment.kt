@@ -4,8 +4,7 @@ package cy.org.rise.obsai.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -13,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
@@ -79,6 +80,24 @@ class ObstacleEditFragment : Fragment() {
                 // Resize to screen width, and automatically determine available height
                 .resize(resources.displayMetrics.widthPixels, 0)
                 .into(obstacle_image_view)
+        }
+
+        obstacle_image_view.setOnClickListener {
+            val dialog = MaterialDialog(requireContext()).customView(
+                R.layout.type_selection_dialog,
+                scrollable = true
+            )
+
+            val rg = RadioGroup(context)
+            shuffledTypeList().forEach { obsType ->
+                rg.addView(RadioButton(context).also { it.text = obsType })
+            }
+            val customDialogView = dialog.getCustomView() as LinearLayout
+
+            val radioGroupView = customDialogView.findViewById<LinearLayout>(R.id.types_radio_group)
+
+            radioGroupView.addView(rg)
+            dialog.show()
         }
 
         // Set obstacle label choices in autoCompleteTextView
@@ -246,6 +265,9 @@ class ObstacleEditFragment : Fragment() {
         }
         return allEntered
     }
+
+    private fun shuffledTypeList(): Array<String> =
+        resources.getStringArray(R.array.obstacle_types_array).toList().shuffled().toTypedArray()
 
     /**
      * Override of function required by map view.
