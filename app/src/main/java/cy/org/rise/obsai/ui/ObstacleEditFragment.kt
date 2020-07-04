@@ -99,9 +99,11 @@ class ObstacleEditFragment : Fragment() {
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
             // if More textview is clicked, show all possible types
-            customDialogView.findViewById<TextView>(R.id.show_more_types).setOnClickListener {
-                populateRadioGroupTypeList(radioGroup, obsTypeArray)
-            }
+            customDialogView.findViewById<TextView>(R.id.show_more_types)
+                .setOnClickListener { showMoreView ->
+                    populateRadioGroupTypeList(radioGroup, obsTypeArray)
+                    showMoreView.visibility = View.GONE
+                }
 
             dialog.show()
         }
@@ -279,12 +281,13 @@ class ObstacleEditFragment : Fragment() {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
 
-        // create view params
+        // create view params for individual Radio Buttons
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        layoutParams.updateMargins(20, 20, 20, 20)
+        val margin = 6
+        layoutParams.updateMargins(margin, margin, margin, margin)
 
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
