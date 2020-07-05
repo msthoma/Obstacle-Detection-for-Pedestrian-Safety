@@ -33,10 +33,11 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/show_more_types"
+    <Button
+        android:id="@+id/button_show_more_types"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show more..." />
+        android:text="More..." />
 
 </LinearLayout>
