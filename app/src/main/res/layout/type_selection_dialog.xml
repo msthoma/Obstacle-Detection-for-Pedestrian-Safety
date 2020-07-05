@@ -6,9 +6,32 @@
 
     <RadioGroup
         android:id="@+id/types_radio_group"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/type_custom_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/type_custom_input_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/type_custom_input_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:hint="Specify other type"
+            android:inputType="textCapSentences"
+            android:maxLength="40"
+            android:maxLines="1" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/show_more_types"
