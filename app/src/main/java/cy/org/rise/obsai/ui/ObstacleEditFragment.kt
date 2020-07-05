@@ -106,6 +106,8 @@ class ObstacleEditFragment : Fragment() {
                     showMoreView.visibility = View.GONE
                 }
 
+            dialog.positiveButton(text = "OK")
+
             dialog.show()
         }
 
