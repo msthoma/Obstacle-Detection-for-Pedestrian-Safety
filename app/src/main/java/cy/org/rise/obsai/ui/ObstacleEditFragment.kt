@@ -107,6 +107,7 @@ class ObstacleEditFragment : Fragment() {
                 }
 
             dialog.apply {
+                title(text = "Select type")
                 positiveButton(text = "OK")
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
