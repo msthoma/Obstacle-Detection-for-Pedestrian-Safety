@@ -106,9 +106,11 @@ class ObstacleEditFragment : Fragment() {
                     showMoreView.visibility = View.GONE
                 }
 
-            dialog.positiveButton(text = "OK")
-
-            dialog.show()
+            dialog.apply {
+                positiveButton(text = "OK")
+                lifecycleOwner(viewLifecycleOwner)
+                dialog.show()
+            }
         }
 
         // Set obstacle label choices in autoCompleteTextView
