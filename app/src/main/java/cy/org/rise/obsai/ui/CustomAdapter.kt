@@ -57,21 +57,21 @@ class CustomAdapter internal constructor() :
                 "z: ${"%.3f".format(obs.orientation.z)}\n" +
                 "${obs.timeStamp}"
 
-        when (obs.uploadStatus) {
-            "Uploading..." -> viewHolder.uploadStatusView.text = obs.uploadStatus
-            "200" -> {
-                viewHolder.uploadStatusView.apply {
-                    text = "Upload status: Success (${obs.uploadStatus})"
-                    setTextColor(resources.getColor(R.color.colorPrimary))
-                }
-            }
-            else -> {
-                viewHolder.uploadStatusView.apply {
-                    text = "Upload status: Failure (${obs.uploadStatus})"
-                    setTextColor(resources.getColor(R.color.design_default_color_error))
-                }
-            }
-        }
+//        when (obs.uploadStatus) {
+//            "Uploading..." -> viewHolder.uploadStatusView.text = obs.uploadStatus
+//            "200" -> {
+//                viewHolder.uploadStatusView.apply {
+//                    text = "Upload status: Success (${obs.uploadStatus})"
+//                    setTextColor(resources.getColor(R.color.colorPrimary))
+//                }
+//            }
+//            else -> {
+//                viewHolder.uploadStatusView.apply {
+//                    text = "Upload status: Failure (${obs.uploadStatus})"
+//                    setTextColor(resources.getColor(R.color.design_default_color_error))
+//                }
+//            }
+//        }
 
         // Set picture
         Picasso.get()

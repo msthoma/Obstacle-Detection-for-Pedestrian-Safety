@@ -4,8 +4,7 @@ package cy.org.rise.obsai.ui
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -13,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
@@ -79,6 +80,40 @@ class ObstacleEditFragment : Fragment() {
                 // Resize to screen width, and automatically determine available height
                 .resize(resources.displayMetrics.widthPixels, 0)
                 .into(obstacle_image_view)
+        }
+
+        obstacle_image_view.setOnClickListener {
+            val dialog = MaterialDialog(requireContext()).customView(
+                R.layout.type_selection_dialog,
+                scrollable = true
+            )
+
+            val customDialogView = dialog.getCustomView() as LinearLayout
+
+            val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
+
+            val obsTypeArray = shuffledTypeList()
+
+            // initially populate with 5 most likely types, as determined by the CNN
+            populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
+
+            // if show more button is clicked, show all possible types
+            customDialogView.findViewById<TextView>(R.id.button_show_more_types)
+                .setOnClickListener { showMoreButton ->
+                    populateRadioGroupTypeList(radioGroup, obsTypeArray)
+                    // hide show more button
+                    showMoreButton.visibility = View.GONE
+                    // show custom type edittext
+                    customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
+                        .visibility = View.VISIBLE
+                }
+
+            dialog.apply {
+                title(text = getString(R.string.dialog_select_type_title))
+                positiveButton(text = getString(R.string.dialog_OK_button))
+                lifecycleOwner(viewLifecycleOwner)
+                dialog.show()
+            }
         }
 
         // Set obstacle label choices in autoCompleteTextView
@@ -223,7 +258,7 @@ class ObstacleEditFragment : Fragment() {
                 )
             }
 
-            negativeButton(R.string.dialog_negative_button) { dismiss() }
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
         }
     }
@@ -246,6 +281,33 @@ class ObstacleEditFragment : Fragment() {
         }
         return allEntered
     }
+
+    private fun populateRadioGroupTypeList(
+        radioGroup: RadioGroup, obsTypeArray: Array<String>,
+        listLimit: Int = obsTypeArray.size
+    ) {
+        // make sure any previous entries are removed
+        radioGroup.removeAllViews()
+
+        // create view params for individual Radio Buttons
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+//        val margin = 40
+        layoutParams.bottomMargin = 12
+
+        // populate radio group, respecting any limits on number of items required
+        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
+            radioGroup.addView(RadioButton(context).also { rb ->
+                rb.text = obsType
+                rb.layoutParams = layoutParams
+            })
+        }
+    }
+
+    private fun shuffledTypeList(): Array<String> =
+        resources.getStringArray(R.array.obstacle_types_array).toList().shuffled().toTypedArray()
 
     /**
      * Override of function required by map view.

@@ -21,8 +21,7 @@
     <string name="dialog_discard_msg">Η φωτογραφία του εμποδίου θα διαγραφεί.</string>
     <string name="dialog_discard_positive">Απόρριψη</string>
     <string name="dialog_discard_title">Απόρριψη εμποδίου;</string>
-    <string name="acra_crash_negative_button">Ακύρωση</string>
-    <string name="dialog_negative_button">Ακύρωση</string>
+    <string name="dialog_cancel_button">Ακύρωση</string>
     <string name="error_type_not_selected">Παρακαλώ επιλέξτε τύπο εμποδίου</string>
     <string name="setting_changelog_summary">Ιστορικό αλλαγών στην εφαρμογή</string>
     <string name="permission_rationale_dialog_title">Απαιτείται άδεια</string>
@@ -34,4 +33,32 @@
     <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
+    <string name="dialog_select_type_title">Επιλογή τύπου εμποδίου</string>
+
+    <!--    <string-array name="obstacle_types_array">-->
+<!--        <item>Διαφημιστική πινακίδα</item>-->
+<!--        <item>Crack</item>-->
+<!--        <item>Τρύπα/Pot-hole</item>-->
+<!--        <item>Paver (broken)</item>-->
+<!--        <item>Στενό πεζοδρόμιο</item>-->
+<!--        <item>Δεν υπάρχει πεζοδρόμιο</item>-->
+<!--        <item>Παγκάκι</item>-->
+<!--        <item>Light</item>-->
+<!--        <item>Κάδος απορριμμάτων</item>-->
+<!--        <item>Parking Meter</item>-->
+<!--        <item>Γλάστρα</item>-->
+<!--        <item>Δέντρο</item>-->
+<!--        <item>Θάμνος</item>-->
+<!--        <item>Parking Prevention</item>-->
+<!--        <item>Ταχυδρομικό κιβώτιο</item>-->
+<!--        <item>4-wheels</item>-->
+<!--        <item>2-wheels</item>-->
+<!--        <item>Boulder</item>-->
+<!--        <item>Safety Sign</item>-->
+<!--        <item>Fence</item>-->
+<!--        <item>Traffic Cone</item>-->
+<!--        <item>Litter</item>-->
+<!--        <item>Chair</item>-->
+<!--        <item>Table</item>-->
+<!--    </string-array>-->
 </resources>
