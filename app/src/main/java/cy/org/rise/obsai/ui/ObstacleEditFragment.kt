@@ -103,9 +103,43 @@ class ObstacleEditFragment : Fragment() {
                     populateRadioGroupTypeList(radioGroup, obsTypeArray)
                     // hide show more button
                     showMoreButton.visibility = View.GONE
-                    // show custom type edittext
+
                     customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
-                        .visibility = View.VISIBLE
+                        .also { customTypeEditText ->
+                            // reveal layout with custom type edittext and radio button
+                            customTypeEditText.visibility = View.VISIBLE
+
+                            val editText = customTypeEditText
+                                .findViewById<EditText>(R.id.type_custom_input_edittext)
+                            val radioButton = customTypeEditText
+                                .findViewById<RadioButton>(R.id.type_custom_input_radio)
+
+                            customTypeEditText.setOnClickListener {
+                                Log.d(TAG(), "customTypeEditText onclick")
+                                radioButton.isChecked = true
+                            }
+                            //
+                            editText.setOnClickListener {
+                                Log.d(TAG(), "EditText onclick")
+                                radioButton.isChecked = true
+                                radioGroup.clearCheck()
+                            }
+
+                            radioGroup.setOnCheckedChangeListener { group, checkedId ->
+                                Log.d(TAG(), "radioGroup setOnCheckedChange checkedId = $checkedId")
+                                if (checkedId != -1) {
+                                    // -1 means that clearCheck() was called on radioGroup
+                                    radioButton.isChecked = false
+                                }
+                                // clear focus from edit text
+                            }
+
+                            radioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                                Log.d(TAG(), "radioButton setOnCheckedChange isChecked $isChecked")
+                                if (isChecked)
+                                    radioGroup.clearCheck()
+                            }
+                        }
                 }
 
             dialog.apply {
