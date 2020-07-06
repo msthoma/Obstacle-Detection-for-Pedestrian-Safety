@@ -42,8 +42,6 @@
 
     <string name="acra_crash_dialog_title" translatable="false">Obstacles app has crashed</string>
     <string name="acra_crash_input_prompt" translatable="false">You can add a comment here (optional):</string>
-    <string name="acra_crash_positive_button" translatable="false">OK</string>
-    <string name="acra_crash_negative_button">Cancel</string>
     <string name="acra_crash_message" translatable="false">Sorry, the application crashed. Please report the crash by clicking OK below (you\'ll be prompted to email a crash file to the developer).</string>
 
     <string name="setting_app_version_title" translatable="false">App version</string>
@@ -62,8 +60,8 @@
 
     <string name="dialog_select_type_title">Select type</string>
 
-    <string name="dialog_negative_button">Cancel</string>
-    <string name="dialog_OK_button">OK</string>
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_OK_button" translatable="false">OK</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
 

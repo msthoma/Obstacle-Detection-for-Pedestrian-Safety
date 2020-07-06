@@ -258,7 +258,7 @@ class ObstacleEditFragment : Fragment() {
                 )
             }
 
-            negativeButton(R.string.dialog_negative_button) { dismiss() }
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
         }
     }

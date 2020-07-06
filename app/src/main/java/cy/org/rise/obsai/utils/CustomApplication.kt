@@ -21,8 +21,8 @@ import org.acra.data.StringFormat
 @AcraMailSender(mailTo = "msthoma@outlook.com")
 @AcraDialog(
     resTitle = R.string.acra_crash_dialog_title,
-    resPositiveButtonText = R.string.acra_crash_positive_button,
-    resNegativeButtonText = R.string.acra_crash_negative_button,
+    resPositiveButtonText = R.string.dialog_OK_button,
+    resNegativeButtonText = R.string.dialog_cancel_button,
     resText = R.string.acra_crash_message,
     resTheme = R.style.Theme_AppCompat_Dialog,
     resCommentPrompt = R.string.acra_crash_input_prompt
