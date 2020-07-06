@@ -98,12 +98,15 @@ class ObstacleEditFragment : Fragment() {
             // initially populate with 5 most likely types, as determined by the CNN
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
-            // if Show more textview is clicked, show all possible types
+            // if show more button is clicked, show all possible types
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
-                .setOnClickListener { showMoreView ->
+                .setOnClickListener { showMoreButton ->
                     populateRadioGroupTypeList(radioGroup, obsTypeArray)
-                    // hide Show more textview
-                    showMoreView.visibility = View.GONE
+                    // hide show more button
+                    showMoreButton.visibility = View.GONE
+                    // show custom type edittext
+                    customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
+                        .visibility = View.VISIBLE
                 }
 
             dialog.apply {
