@@ -98,7 +98,7 @@ class ObstacleEditFragment : Fragment() {
             // initially populate with 5 most likely types, as determined by the CNN
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
-            // if show more button is clicked, show all possible types
+            // show more button is clicked
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
                     populateRadioGroupTypeList(radioGroup, obsTypeArray)
@@ -288,7 +288,8 @@ class ObstacleEditFragment : Fragment() {
 
     private fun populateRadioGroupTypeList(
         radioGroup: RadioGroup, obsTypeArray: Array<String>,
-        listLimit: Int = obsTypeArray.size
+        listLimit: Int = obsTypeArray.size,
+        addEmptyRadioButtonAtBottom: Boolean = false
     ) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
@@ -306,6 +307,13 @@ class ObstacleEditFragment : Fragment() {
             radioGroup.addView(RadioButton(context).also { rb ->
                 rb.text = obsType
                 rb.layoutParams = layoutParams
+            })
+        }
+
+        if (addEmptyRadioButtonAtBottom) {
+            radioGroup.addView(RadioButton(context).apply {
+                // empty text
+                this.layoutParams = layoutParams
             })
         }
     }
