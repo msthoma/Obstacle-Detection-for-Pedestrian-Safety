@@ -111,8 +111,8 @@ class CameraFragment : Fragment(), SensorEventListener {
             cameraView.takePicture()
         }
 
-        // Get last known location (below a service is started that will provide a more up to date
-        // location if it becomes available)
+        // Get last known location (below in getLocationUpdates() a service is started that will
+        // provide a more up to date location if it becomes available)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             location?.let { updateObstacleLocation(it) }
