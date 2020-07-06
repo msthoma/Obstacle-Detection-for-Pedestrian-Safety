@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-07-06"
+        versionCode="1"
+        versionName="Version 0.14.1">
+        <info>Preparation for incorporating convolutional neural network results in the UI</info>
+        <info>Bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-03"
         versionCode="1"
         versionName="Version 0.14.0">
