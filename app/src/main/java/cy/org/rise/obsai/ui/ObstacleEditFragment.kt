@@ -295,8 +295,8 @@ class ObstacleEditFragment : Fragment() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        val margin = 6
-        layoutParams.updateMargins(margin, margin, margin, margin)
+//        val margin = 40
+        layoutParams.bottomMargin = 12
 
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
