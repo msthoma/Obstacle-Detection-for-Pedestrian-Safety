@@ -33,8 +33,9 @@
     <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
+    <string name="dialog_select_type_title">Επιλογή τύπου εμποδίου</string>
 
-<!--    <string-array name="obstacle_types_array">-->
+    <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
 <!--        <item>Crack</item>-->
 <!--        <item>Τρύπα/Pot-hole</item>-->
