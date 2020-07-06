@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.addCallback
-import androidx.core.view.updateMargins
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -110,8 +109,8 @@ class ObstacleEditFragment : Fragment() {
                 }
 
             dialog.apply {
-                title(text = "Select type")
-                positiveButton(text = "OK")
+                title(text = getString(R.string.dialog_select_type_title))
+                positiveButton(text = getString(R.string.dialog_OK_button))
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
             }

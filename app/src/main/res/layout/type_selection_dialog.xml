@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:hint="Specify other type"
+            android:hint="@string/hint_specify_custom_type"
             android:inputType="textCapSentences"
             android:maxLength="40"
             android:maxLines="1" />
@@ -44,6 +44,6 @@
         android:layout_width="match_parent"
         android:gravity="center|start"
         android:layout_height="wrap_content"
-        android:text="More..." />
+        android:text="@string/button_show_more_types" />
 
 </LinearLayout>

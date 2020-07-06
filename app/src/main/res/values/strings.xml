@@ -9,6 +9,7 @@
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
     <string name="button_ext_camera">Ext.camera</string>
+    <string name="button_show_more_types">More…</string>
     <string name="button_sign_in">Sign in</string>
 
     <string name="account_fragment_title">Sign in to your account</string>
@@ -37,6 +38,7 @@
     <string name="hint_password" translatable="false">Password</string>
     <string name="hint_username" translatable="false">Username</string>
     <string name="hint_obstacle_type">Obstacle type</string>
+    <string name="hint_specify_custom_type">Specify other type</string>
 
     <string name="acra_crash_dialog_title" translatable="false">Obstacles app has crashed</string>
     <string name="acra_crash_input_prompt" translatable="false">You can add a comment here (optional):</string>
@@ -57,7 +59,11 @@
     <string name="dialog_discard_msg">The obstacle\'s photo will be deleted.</string>
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
+
+    <string name="dialog_select_type_title">Select type</string>
+
     <string name="dialog_negative_button">Cancel</string>
+    <string name="dialog_OK_button">OK</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
 
