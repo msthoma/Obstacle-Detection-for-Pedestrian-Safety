@@ -29,6 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible">
 
+        <!-- The RadioButton button below only serves as a placeholder to shift EditText below so
+        that it aligns with empty RadioButton added programmatically -->
         <RadioButton
             android:id="@+id/type_custom_input_radio"
             android:layout_width="wrap_content"
