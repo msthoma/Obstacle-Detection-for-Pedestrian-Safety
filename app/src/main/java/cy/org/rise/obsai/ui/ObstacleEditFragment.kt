@@ -348,7 +348,7 @@ class ObstacleEditFragment : Fragment() {
 
         // create view params for individual Radio Buttons
         val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 //        val margin = 40
