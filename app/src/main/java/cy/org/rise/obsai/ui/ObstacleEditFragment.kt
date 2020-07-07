@@ -150,6 +150,7 @@ class ObstacleEditFragment : Fragment() {
 
             // finally, display the dialog
             dialog.apply {
+                noAutoDismiss()
                 title(text = getString(R.string.dialog_select_type_title))
                 positiveButton(text = getString(R.string.dialog_OK_button)) {
                     val checkedId = radioGroup.checkedRadioButtonId
