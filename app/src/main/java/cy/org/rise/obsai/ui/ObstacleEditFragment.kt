@@ -27,6 +27,8 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.hideKeyboard
+import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import java.io.File
 import java.io.IOException
@@ -101,15 +103,46 @@ class ObstacleEditFragment : Fragment() {
             // show more button is clicked
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
-                    populateRadioGroupTypeList(radioGroup, obsTypeArray)
+                    // show all possible types
+                    // also add empty radio button at the end of list, for custom editText input
+                    populateRadioGroupTypeList(
+                        radioGroup, obsTypeArray,
+                        addEmptyRadioButtonAtBottom = true
+                    )
+
                     // hide show more button
                     showMoreButton.visibility = View.GONE
 
-                    customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
-                        .also { customTypeEditText ->
-                            // reveal layout with custom type edittext and radio button
-                            customTypeEditText.visibility = View.VISIBLE
+                    // show custom editText
+                    val customTypeLL =
+                        customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
+                    customTypeLL.visibility = View.VISIBLE
+
+                    val customEditText =
+                        customTypeLL.findViewById<EditText>(R.id.type_custom_input_edittext)
+
+                    val lastEmptyRadioButton =
+                        radioGroup.getChildAt(obsTypeArray.size) as RadioButton
+
+                    customEditText.setOnFocusChangeListener { v, hasFocus ->
+                        Log.d(TAG(), "customEditText hasFocus $hasFocus")
+                        if (hasFocus) lastEmptyRadioButton.isChecked = true
+                    }
+                    customEditText.setOnClickListener {
+                        Log.d(TAG(), "customEditText onclick")
+                        lastEmptyRadioButton.isChecked = true
+                    }
+                    radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                        if (checkedId != lastEmptyRadioButton.id) {
+                            customEditText.clearFocus()
+                            customEditText.hideKeyboard()
+                        } else {
+                            // when checkedId == lastEmptyRadioButton.id it means editText should
+                            // be selected
+                            customEditText.requestFocus()
+                            customEditText.showKeyboard()
                         }
+                    }
                 }
 
             dialog.apply {
