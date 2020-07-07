@@ -163,14 +163,18 @@ class ObstacleEditFragment : Fragment() {
                 positiveButton(R.string.dialog_OK_button) {
                     val checkedId = radioGroup.checkedRadioButtonId
                     if (checkedId != -1) {
-                        typeEditText.setText(currentObstacle.obstacleType)
                         Log.d(
                             TAG(), "current selection ${radioGroup.findViewById<RadioButton>
                                 (checkedId).text}"
                         )
-                        dismiss()
+                        if (checkedId == lastEmptyRadioButton.id) {
+                            TODO("Check if input is OK")
+                        } else {
+                            typeEditText.setText(currentObstacle.obstacleType)
+                            dismiss()
+                        }
                     } else {
-                        // none selected (-1)
+                        // -1 means none selected
                         Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
                             .show()
                     }
