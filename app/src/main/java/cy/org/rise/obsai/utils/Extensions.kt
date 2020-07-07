@@ -1,6 +1,11 @@
 package cy.org.rise.obsai.utils
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
+import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import java.util.*
 
 /**
@@ -52,4 +57,12 @@ fun Context.getUniqueAppInstallID(): String {
     }
 
     return installUniqueID
+}
+
+fun View.hideKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+    .hideSoftInputFromWindow(windowToken, 0)
+
+fun View.showKeyboard() {
+    val inputMethodManager = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY)
 }
