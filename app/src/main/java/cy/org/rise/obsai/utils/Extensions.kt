@@ -59,9 +59,25 @@ fun Context.getUniqueAppInstallID(): String {
     return installUniqueID
 }
 
+/**
+ * Extension function that hides soft keyboard.
+ *
+ * See following links for sources:
+ * - https://stackoverflow.com/a/59780666
+ * - https://stackoverflow.com/a/58559801
+ * - https://stackoverflow.com/a/59758327
+ * */
 fun View.hideKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
     .hideSoftInputFromWindow(windowToken, 0)
 
+/**
+ * Extension function that displays soft keyboard.
+ *
+ * See following links for sources:
+ * - https://stackoverflow.com/a/59780666
+ * - https://stackoverflow.com/a/58559801
+ * - https://stackoverflow.com/a/59758327
+ * */
 fun View.showKeyboard() {
     val inputMethodManager = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY)
