@@ -86,18 +86,20 @@ class ObstacleEditFragment : Fragment() {
         }
 
         obstacle_image_view.setOnClickListener {
+            // create custom dialog
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
             )
 
+            // get references to views on dialog that are of interest
             val customDialogView = dialog.getCustomView() as ConstraintLayout
 
             val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
 
             val obsTypeArray = shuffledTypeList()
 
-            // initially populate with 5 most likely types, as determined by the CNN
+            // initially populate dialog with 5 most likely types, as determined by the CNN
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
             // show more button is clicked
@@ -118,33 +120,37 @@ class ObstacleEditFragment : Fragment() {
                         customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
                     customTypeLL.visibility = View.VISIBLE
 
+                    // get references to editText and last radio button
                     val customEditText =
                         customTypeLL.findViewById<EditText>(R.id.type_custom_input_edittext)
-
                     val lastEmptyRadioButton =
                         radioGroup.getChildAt(obsTypeArray.size) as RadioButton
 
-                    customEditText.setOnFocusChangeListener { v, hasFocus ->
-                        Log.d(TAG(), "customEditText hasFocus $hasFocus")
+                    // set listeners to all to regulate their behaviour
+                    customEditText.setOnFocusChangeListener { _, hasFocus ->
                         if (hasFocus) lastEmptyRadioButton.isChecked = true
                     }
                     customEditText.setOnClickListener {
-                        Log.d(TAG(), "customEditText onclick")
                         lastEmptyRadioButton.isChecked = true
                     }
                     radioGroup.setOnCheckedChangeListener { _, checkedId ->
                         if (checkedId != lastEmptyRadioButton.id) {
-                            customEditText.clearFocus()
-                            customEditText.hideKeyboard()
+                            customEditText.apply {
+                                clearFocus()
+                                hideKeyboard()
+                            }
                         } else {
                             // when checkedId == lastEmptyRadioButton.id it means editText should
                             // be selected
-                            customEditText.requestFocus()
-                            customEditText.showKeyboard()
+                            customEditText.apply {
+                                requestFocus()
+                                showKeyboard()
+                            }
                         }
                     }
                 }
 
+            // finally, display the dialog
             dialog.apply {
                 title(text = getString(R.string.dialog_select_type_title))
                 positiveButton(text = getString(R.string.dialog_OK_button))
