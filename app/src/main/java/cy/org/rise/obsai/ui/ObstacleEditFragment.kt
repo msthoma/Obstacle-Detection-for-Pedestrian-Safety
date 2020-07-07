@@ -152,7 +152,7 @@ class ObstacleEditFragment : Fragment() {
             dialog.apply {
                 noAutoDismiss()
                 title(text = getString(R.string.dialog_select_type_title))
-                positiveButton(text = getString(R.string.dialog_OK_button)) {
+                positiveButton(R.string.dialog_OK_button) {
                     val checkedId = radioGroup.checkedRadioButtonId
                     if (checkedId != -1) {
                         Log.d(
@@ -166,6 +166,7 @@ class ObstacleEditFragment : Fragment() {
                             .show()
                     }
                 }
+                negativeButton(R.string.dialog_cancel_button) { dismiss() }
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
             }
