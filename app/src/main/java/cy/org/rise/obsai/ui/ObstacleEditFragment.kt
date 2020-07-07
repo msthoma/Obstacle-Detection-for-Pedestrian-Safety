@@ -85,8 +85,8 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
+        // Create custom dialog for obstacle type selection
         obstacle_image_view.setOnClickListener {
-            // create custom dialog
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
