@@ -88,6 +88,8 @@ class ObstacleEditFragment : Fragment() {
 
         typeEditText = select_obstacle_type_edit_text
 
+        val obsTypeArray = shuffledTypeList()
+
         // Create custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
             val dialog = MaterialDialog(requireContext()).customView(
@@ -99,8 +101,6 @@ class ObstacleEditFragment : Fragment() {
             val customDialogView = dialog.getCustomView() as ConstraintLayout
 
             val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
-
-            val obsTypeArray = shuffledTypeList()
 
             // initially populate dialog with 5 most likely types, as determined by the CNN
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
