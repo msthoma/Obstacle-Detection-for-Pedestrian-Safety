@@ -47,6 +47,7 @@ class ObstacleEditFragment : Fragment() {
 
     private lateinit var mapView: MapView
     private lateinit var currentObstacle: Obstacle
+    private lateinit var typeEditText: EditText
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     private val viewModel: ObstacleViewModel by viewModels {
@@ -85,8 +86,10 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
+        typeEditText = select_obstacle_type_edit_text
+
         // Create custom dialog for obstacle type selection
-        obstacle_image_view.setOnClickListener {
+        typeEditText.setOnClickListener {
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
@@ -101,6 +104,15 @@ class ObstacleEditFragment : Fragment() {
 
             // initially populate dialog with 5 most likely types, as determined by the CNN
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
+
+            // clickListener for initial short Radio Button list, if More is clicked, another
+            // clickListener takes over below
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    currentObstacle.obstacleType = rb.text.toString()
+                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                }
+            }
 
             // show more button is clicked
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
@@ -133,6 +145,12 @@ class ObstacleEditFragment : Fragment() {
                     }
                     radioGroup.setOnCheckedChangeListener { _, checkedId ->
                         if (checkedId != lastEmptyRadioButton.id) {
+                            // capture current selection
+                            radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                                currentObstacle.obstacleType = rb.text.toString()
+                                Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                            }
+                            // clear any focus on customEditText
                             customEditText.apply {
                                 clearFocus()
                                 hideKeyboard()
@@ -155,6 +173,7 @@ class ObstacleEditFragment : Fragment() {
                 positiveButton(R.string.dialog_OK_button) {
                     val checkedId = radioGroup.checkedRadioButtonId
                     if (checkedId != -1) {
+                        typeEditText.setText(currentObstacle.obstacleType)
                         Log.d(
                             TAG(), "current selection ${radioGroup.findViewById<RadioButton>
                                 (checkedId).text}"
@@ -169,23 +188,6 @@ class ObstacleEditFragment : Fragment() {
                 negativeButton(R.string.dialog_cancel_button) { dismiss() }
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
-            }
-        }
-
-        // Set obstacle label choices in autoCompleteTextView
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.obstacle_types_array,
-            android.R.layout.simple_spinner_dropdown_item
-        ).also { arrayAdapter ->
-            select_obstacle_type_edit_text.setAdapter(arrayAdapter)
-
-            // When coming from crop fragment, if the type was already set, restore its value
-            if (currentObstacle.obstacleType != "") {
-                select_obstacle_type_edit_text.setText(
-                    arrayAdapter.getItem(arrayAdapter.getPosition(currentObstacle.obstacleType))
-                        .toString(), false
-                )
             }
         }
 
