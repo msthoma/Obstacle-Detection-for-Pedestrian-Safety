@@ -88,9 +88,10 @@ class ObstacleEditFragment : Fragment() {
 
         typeEditText = select_obstacle_type_edit_text
 
+        // Create shuffled type array mimicking results from CNN
         val obsTypeArray = shuffledTypeList()
 
-        // Create custom dialog for obstacle type selection
+        // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
@@ -102,69 +103,58 @@ class ObstacleEditFragment : Fragment() {
 
             val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
 
-            // initially populate dialog with 5 most likely types, as determined by the CNN
+            // initially only show 5 most likely types, as determined by the CNN (hide the rest)
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
-            // clickListener for initial short Radio Button list, if More is clicked, another
-            // clickListener takes over below
-            radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                    currentObstacle.obstacleType = rb.text.toString()
-                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
-                }
-            }
+            // get references to last radio button and customEditText
+            val customEditText =
+                customDialogView.findViewById<EditText>(R.id.type_custom_input_edittext)
+            // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
+            val lastEmptyRadioButton =
+                radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
 
             // show more button is clicked
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
-                    // show all possible types
-                    // also add empty radio button at the end of list, for custom editText input
-                    populateRadioGroupTypeList(
-                        radioGroup, obsTypeArray,
-                        addEmptyRadioButtonAtBottom = true
-                    )
+                    // reveal all possible types
+                    for (i in 0..obsTypeArray.size + 1)
+                        radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
 
                     // hide show more button
                     showMoreButton.visibility = View.GONE
 
                     // show custom editText
-                    val customEditText =
-                        customDialogView.findViewById<EditText>(R.id.type_custom_input_edittext)
                     customEditText.visibility = View.VISIBLE
+                }
 
-                    // get reference to last radio button
-                    val lastEmptyRadioButton =
-                        radioGroup.getChildAt(obsTypeArray.size) as RadioButton
-
-                    // set listeners to all to regulate their behaviour
-                    customEditText.setOnFocusChangeListener { _, hasFocus ->
-                        if (hasFocus) lastEmptyRadioButton.isChecked = true
+            // set listeners to all to regulate their behaviour
+            customEditText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) lastEmptyRadioButton.isChecked = true
+            }
+            customEditText.setOnClickListener {
+                lastEmptyRadioButton.isChecked = true
+            }
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                if (checkedId != lastEmptyRadioButton.id) {
+                    // capture current selection
+                    radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                        currentObstacle.obstacleType = rb.text.toString()
+                        Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
                     }
-                    customEditText.setOnClickListener {
-                        lastEmptyRadioButton.isChecked = true
+                    // clear any focus on customEditText
+                    customEditText.apply {
+                        clearFocus()
+                        hideKeyboard()
                     }
-                    radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                        if (checkedId != lastEmptyRadioButton.id) {
-                            // capture current selection
-                            radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                                currentObstacle.obstacleType = rb.text.toString()
-                                Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
-                            }
-                            // clear any focus on customEditText
-                            customEditText.apply {
-                                clearFocus()
-                                hideKeyboard()
-                            }
-                        } else {
-                            // when checkedId == lastEmptyRadioButton.id it means editText should
-                            // be selected
-                            customEditText.apply {
-                                requestFocus()
-                                showKeyboard()
-                            }
-                        }
+                } else {
+                    // when checkedId == lastEmptyRadioButton.id it means editText should
+                    // be selected
+                    customEditText.apply {
+                        requestFocus()
+                        showKeyboard()
                     }
                 }
+            }
 
             // finally, display the dialog
             dialog.apply {
@@ -343,7 +333,7 @@ class ObstacleEditFragment : Fragment() {
     private fun populateRadioGroupTypeList(
         radioGroup: RadioGroup, obsTypeArray: Array<String>,
         listLimit: Int = obsTypeArray.size,
-        addEmptyRadioButtonAtBottom: Boolean = false
+        addEmptyRadioButtonAtBottom: Boolean = true
     ) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
@@ -353,21 +343,31 @@ class ObstacleEditFragment : Fragment() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-//        val margin = 40
+
         layoutParams.bottomMargin = 12
 
         // populate radio group, respecting any limits on number of items required
-        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
+        obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
-                rb.text = obsType
+                rb.id = 1000 + i
+                rb.text = "$i $obsType"
                 rb.layoutParams = layoutParams
+                if (i >= listLimit) rb.visibility = View.GONE
             })
         }
+//        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
+//            radioGroup.addView(RadioButton(context).also { rb ->
+//                rb.text = obsType
+//                rb.layoutParams = layoutParams
+//            })
+//        }
 
         if (addEmptyRadioButtonAtBottom) {
-            radioGroup.addView(RadioButton(context).apply {
+            radioGroup.addView(RadioButton(context).also { rb ->
                 // empty text
-                this.layoutParams = layoutParams
+                rb.id = 1000 + obsTypeArray.size + 1
+                rb.layoutParams = layoutParams
+                rb.visibility = View.GONE
             })
         }
     }
