@@ -116,13 +116,11 @@ class ObstacleEditFragment : Fragment() {
                     showMoreButton.visibility = View.GONE
 
                     // show custom editText
-                    val customTypeLL =
-                        customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
-                    customTypeLL.visibility = View.VISIBLE
-
-                    // get references to editText and last radio button
                     val customEditText =
-                        customTypeLL.findViewById<EditText>(R.id.type_custom_input_edittext)
+                        customDialogView.findViewById<EditText>(R.id.type_custom_input_edittext)
+                    customEditText.visibility = View.VISIBLE
+
+                    // get reference to last radio button
                     val lastEmptyRadioButton =
                         radioGroup.getChildAt(obsTypeArray.size) as RadioButton
 
@@ -153,7 +151,20 @@ class ObstacleEditFragment : Fragment() {
             // finally, display the dialog
             dialog.apply {
                 title(text = getString(R.string.dialog_select_type_title))
-                positiveButton(text = getString(R.string.dialog_OK_button))
+                positiveButton(text = getString(R.string.dialog_OK_button)) {
+                    val checkedId = radioGroup.checkedRadioButtonId
+                    if (checkedId != -1) {
+                        Log.d(
+                            TAG(), "current selection ${radioGroup.findViewById<RadioButton>
+                                (checkedId).text}"
+                        )
+                        dismiss()
+                    } else {
+                        // none selected (-1)
+                        Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
             }
