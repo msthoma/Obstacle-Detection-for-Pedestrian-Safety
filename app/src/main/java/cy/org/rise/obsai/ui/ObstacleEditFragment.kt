@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -30,8 +31,13 @@ import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.common.TensorProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.IOException
+import kotlin.properties.Delegates
 
 /**
  * Fragment that displays the recently photographed obstacle, shows its position on the map,
@@ -49,6 +55,22 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var currentObstacle: Obstacle
     private lateinit var typeEditText: EditText
     private val args: ObstacleEditFragmentArgs by navArgs()
+
+    // TFLite related vars
+    private val IMAGE_MEAN = 0.0f
+    private val IMAGE_STD = 255.0f
+    private val PROBABILITY_MEAN = 0.0f
+    private val PROBABILITY_STD = 1.0f
+    private lateinit var tflite: Interpreter
+    private lateinit var rgbBitmap: Bitmap
+    private lateinit var inputImageBuffer: TensorImage
+    private lateinit var outputProbabilityBuffer: TensorBuffer
+    private lateinit var probabilityProcessor: TensorProcessor
+    private lateinit var labels: List<String>
+    private var imageSizeX by Delegates.notNull<Int>()
+    private var imageSizeY by Delegates.notNull<Int>()
+    private val yuvBytes = arrayOfNulls<ByteArray>(3)
+    private var rgbBytes: IntArray? = null
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
