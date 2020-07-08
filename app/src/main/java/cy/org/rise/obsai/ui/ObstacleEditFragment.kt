@@ -1,6 +1,8 @@
 package cy.org.rise.obsai.ui
 
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -30,8 +32,25 @@ import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.common.FileUtil
+import org.tensorflow.lite.support.common.TensorProcessor
+import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeOp
+import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
+import org.tensorflow.lite.support.image.ops.Rot90Op
+import org.tensorflow.lite.support.label.TensorLabel
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.IOException
+import kotlin.math.min
+import kotlin.properties.Delegates
 
 /**
  * Fragment that displays the recently photographed obstacle, shows its position on the map,
@@ -49,6 +68,21 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var currentObstacle: Obstacle
     private lateinit var typeEditText: EditText
     private val args: ObstacleEditFragmentArgs by navArgs()
+
+    // TFLite related vars
+    private val IMAGE_MEAN = 0.0f
+    private val IMAGE_STD = 255.0f
+    private val PROBABILITY_MEAN = 0.0f
+    private val PROBABILITY_STD = 1.0f
+    private lateinit var tflite: Interpreter
+    private lateinit var inputImageBuffer: TensorImage
+    private lateinit var outputProbabilityBuffer: TensorBuffer
+    private lateinit var probabilityProcessor: TensorProcessor
+    private lateinit var labels: List<String>
+    private var imageSizeX by Delegates.notNull<Int>()
+    private var imageSizeY by Delegates.notNull<Int>()
+
+    private lateinit var cnnResults: Array<String>
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -86,13 +120,94 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
-        typeEditText = select_obstacle_type_edit_text
+        // Setup all required for TFLite
+        CoroutineScope(Dispatchers.Main).launch {
 
-        // Create shuffled type array mimicking results from CNN
-        val obsTypeArray = shuffledTypeList()
+            withContext(Dispatchers.IO) {
+
+                val tfliteModel = FileUtil.loadMappedFile(requireContext(), "cnn128RGB.tflite")
+                tflite = Interpreter(tfliteModel, Interpreter.Options())
+
+                labels = FileUtil.loadLabels(requireContext(), "cnnRGB_labels.txt")
+
+                val imageTensorIndex = 0
+                val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
+                imageSizeY = imageShape[1]
+                imageSizeX = imageShape[2]
+
+                val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
+                val probabilityTensorIndex = 0
+                val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
+                val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
+
+                inputImageBuffer = TensorImage(imageDataType)
+
+                outputProbabilityBuffer =
+                    TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
+
+                probabilityProcessor =
+                    TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD))
+                        .build()
+
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                val bitmap = BitmapFactory.decodeFile(photoFile?.path, options)
+
+                bitmap?.let { bm ->
+                    val cropSize = min(bm.width, bm.height)
+                    Log.d(TAG(), "cropSize $cropSize")
+
+                    inputImageBuffer.load(bm)
+                    val imageProcessor = ImageProcessor.Builder()
+                        .add(ResizeWithCropOrPadOp(cropSize, cropSize))
+                        .add(
+                            ResizeOp(
+                                imageSizeX, imageSizeY,
+                                ResizeOp.ResizeMethod.NEAREST_NEIGHBOR
+                            )
+                        )
+                        .add(Rot90Op(1))
+                        .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
+                        .build()
+                    inputImageBuffer = imageProcessor.process(inputImageBuffer)
+
+                    // run classification
+                    tflite.run(
+                        inputImageBuffer.buffer,
+                        outputProbabilityBuffer.buffer.rewind()
+                    )
+
+                    // map labels and their predicted probabilities
+                    return@withContext TensorLabel(
+                        labels,
+                        probabilityProcessor.process(outputProbabilityBuffer)
+                    ).mapWithFloatValue
+                }
+            }.also { result ->
+                tflite.close()
+                val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
+
+                Log.d(TAG(), sorted.toString())
+                val rs = sorted?.keys?.reversed()?.toTypedArray()
+
+                rs?.let { cnnResults = it }
+            }
+        }
+
+        // Setup type selection dialog
+        typeEditText = select_obstacle_type_edit_text
 
         // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
+            // get type array either from CNN results, or from resources if CNN classification
+            // didn't work
+            val obsTypeArray = if (::cnnResults.isInitialized) {
+                if (cnnResults.isNotEmpty()) cnnResults
+                else getAlphabeticalTypeArray()
+            } else {
+                getAlphabeticalTypeArray()
+            }
+
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
@@ -389,8 +504,8 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    private fun shuffledTypeList(): Array<String> =
-        resources.getStringArray(R.array.obstacle_types_array).toList().shuffled().toTypedArray()
+    private fun getAlphabeticalTypeArray(): Array<String> =
+        resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
     /**
      * Override of function required by map view.

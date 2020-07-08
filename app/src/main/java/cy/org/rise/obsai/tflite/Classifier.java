@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package cy.org.rise.obsai.ai;
+package cy.org.rise.obsai.tflite;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -49,7 +49,7 @@ import java.util.PriorityQueue;
 
 /**
  * A classifier specialized to label images using TensorFlow Lite.
- *
+ * <p>
  * Copied from https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/app/src/main/java/org/tensorflow/lite/examples/classification/tflite/Classifier.java
  */
 public abstract class Classifier {
@@ -148,8 +148,8 @@ public abstract class Classifier {
      */
     public static Classifier create(Activity activity, Model model, Device device, int numThreads)
             throws IOException {
-        if (model == Model.OBSTACLE_CNN_96) {
-            return new ClassifierObstacleCNN96(activity, device, numThreads);
+        if (model == Model.OBSTACLE_CNN_128) {
+            return new ClassifierObstacleCNN128(activity, device, numThreads);
         } else {
             throw new UnsupportedOperationException();
         }

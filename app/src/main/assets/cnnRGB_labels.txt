@@ -1,15 +1,15 @@
-B01 Hole Pot-hole
-B10 Narrow pavement
-B11 No pavement 
-B21 Light
-B22 Bin
-B23 Parking meter
-B24 Plant pot
-B30 Tree
-B31 Shrub
-B33 Parking prevention barrier
-B50 4 wheel - Vehicle
-B51 2 wheel - Motorbike
-B62 Safety sign
-B63 Fence
-B64 Traffic cone
+Hole/Pot-hole
+Narrow Pavement
+No Pavement
+Light
+Bin
+Parking Meter
+Plant Pot
+Tree
+Shrub
+Parking Prevention Barrier
+4 wheel - Vehicle
+2 wheel - Motorbike
+Safety Sign
+Fence
+Traffic Cone

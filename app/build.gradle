@@ -33,8 +33,8 @@ android {
         // versioning - see https://semver.org/
         versionCode 1
         def versionMajor = 0
-        def versionMinor = 14
-        def versionPatch = 2
+        def versionMinor = 15
+        def versionPatch = 0
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -102,6 +102,12 @@ android {
     // solves dependency clash with xpp3 in release build variant
     configurations {
         all*.exclude group: 'xpp3', module: 'xpp3'
+    }
+
+    // required so .tflite model files are not compressed
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
     }
 }
 
