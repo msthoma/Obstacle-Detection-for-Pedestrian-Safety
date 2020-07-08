@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-07-08"
+        versionCode="1"
+        versionName="Version 0.14.2">
+        <info>Revamped type selection UI</info>
+    </release>
+
+    <release
         date="2020-07-06"
         versionCode="1"
         versionName="Version 0.14.1">
