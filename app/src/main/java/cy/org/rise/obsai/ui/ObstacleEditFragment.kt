@@ -202,8 +202,13 @@ class ObstacleEditFragment : Fragment() {
             // get type array either from CNN results, or from resources if CNN classification
             // didn't work
             val obsTypeArray = if (::cnnResults.isInitialized) {
-                if (cnnResults.isNotEmpty()) cnnResults
-                else getAlphabeticalTypeArray()
+                if (cnnResults.isNotEmpty()) {
+                    // add types that are not part of the CNN
+                    val diff = getAlphabeticalTypeArray().filterNot {
+                        cnnResults.toSet().contains(it)
+                    }.sorted().toTypedArray()
+                    cnnResults + diff
+                } else getAlphabeticalTypeArray()
             } else {
                 getAlphabeticalTypeArray()
             }
