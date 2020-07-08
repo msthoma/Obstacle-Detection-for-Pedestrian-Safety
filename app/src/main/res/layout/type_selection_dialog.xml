@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:paddingStart="24dp"
     android:paddingEnd="24dp">
 
@@ -11,39 +11,62 @@
         android:id="@+id/types_radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/button_show_more_types"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/type_custom_input_layout"
+        <!-- Mock RadioButton 1 -->
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:text="Choice 1"
+            tools:visibility="visible" />
+
+        <!-- Mock RadioButton 2 -->
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:text="Choice 2"
+            tools:visibility="visible" />
+
+        <!-- Mock empty RadioButton -->
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/type_custom_input_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="40dp"
+        android:hint="@string/hint_specify_custom_type"
+        android:inputType="textCapSentences"
+        android:maxLength="40"
+        android:maxLines="1"
         android:visibility="gone"
-        tools:visibility="visible">
-
-        <RadioButton
-            android:id="@+id/type_custom_input_radio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/type_custom_input_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/hint_specify_custom_type"
-            android:inputType="textCapSentences"
-            android:maxLength="40"
-            android:maxLines="1" />
-
-    </LinearLayout>
+        app:layout_constraintBottom_toBottomOf="@id/types_radio_group"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/button_show_more_types"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:gravity="center|start"
         android:layout_height="wrap_content"
-        android:text="@string/button_show_more_types" />
+        android:gravity="center|start"
+        android:text="@string/button_show_more_types"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/types_radio_group" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

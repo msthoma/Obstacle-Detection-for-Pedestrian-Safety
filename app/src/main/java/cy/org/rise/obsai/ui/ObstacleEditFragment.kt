@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,6 +27,8 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.hideKeyboard
+import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import java.io.File
 import java.io.IOException
@@ -44,6 +47,7 @@ class ObstacleEditFragment : Fragment() {
 
     private lateinit var mapView: MapView
     private lateinit var currentObstacle: Obstacle
+    private lateinit var typeEditText: EditText
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     private val viewModel: ObstacleViewModel by viewModels {
@@ -82,58 +86,125 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
-        obstacle_image_view.setOnClickListener {
+        typeEditText = select_obstacle_type_edit_text
+
+        // Create shuffled type array mimicking results from CNN
+        val obsTypeArray = shuffledTypeList()
+
+        // Show custom dialog for obstacle type selection
+        typeEditText.setOnClickListener {
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
             )
 
-            val customDialogView = dialog.getCustomView() as LinearLayout
+            // get references to views on dialog that are of interest
+            val customDialogView = dialog.getCustomView() as ConstraintLayout
 
             val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
 
-            val obsTypeArray = shuffledTypeList()
-
-            // initially populate with 5 most likely types, as determined by the CNN
+            // initially only show 5 most likely types, as determined by the CNN (hide the rest)
             populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
 
-            // if show more button is clicked, show all possible types
+            // get references to last radio button and customEditText
+            val customEditText =
+                customDialogView.findViewById<EditText>(R.id.type_custom_input_edittext)
+            // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
+            val lastEmptyRadioButton =
+                radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
+
+            // show more button is clicked
             customDialogView.findViewById<TextView>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
-                    populateRadioGroupTypeList(radioGroup, obsTypeArray)
+                    // reveal all possible types
+                    for (i in 0..obsTypeArray.size + 1)
+                        radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
+
                     // hide show more button
                     showMoreButton.visibility = View.GONE
-                    // show custom type edittext
-                    customDialogView.findViewById<LinearLayout>(R.id.type_custom_input_layout)
-                        .visibility = View.VISIBLE
+
+                    // show custom editText
+                    customEditText.visibility = View.VISIBLE
                 }
 
+            // set listeners to all to regulate their behaviour
+            customEditText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) lastEmptyRadioButton.isChecked = true
+            }
+            customEditText.setOnClickListener {
+                lastEmptyRadioButton.isChecked = true
+            }
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                if (checkedId != lastEmptyRadioButton.id) {
+                    // capture current selection
+                    radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                        currentObstacle.obstacleType = rb.text.toString()
+                        Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                    }
+                    // clear any focus on customEditText
+                    customEditText.apply {
+                        clearFocus()
+                        hideKeyboard()
+                    }
+                } else {
+                    // when checkedId == lastEmptyRadioButton.id it means editText should
+                    // be selected
+                    customEditText.apply {
+                        requestFocus()
+                        showKeyboard()
+                    }
+                }
+            }
+
+            // finally, display the dialog
             dialog.apply {
+                noAutoDismiss()
                 title(text = getString(R.string.dialog_select_type_title))
-                positiveButton(text = getString(R.string.dialog_OK_button))
+                positiveButton(R.string.dialog_OK_button) {
+                    val checkedId = radioGroup.checkedRadioButtonId
+                    if (checkedId != -1) {
+                        Log.d(
+                            TAG(), "current selection ${radioGroup.findViewById<RadioButton>
+                                (checkedId).text}"
+                        )
+                        if (checkedId == lastEmptyRadioButton.id) {
+                            // customEditText selected, make sure text is not too short or empty
+                            val currentText = customEditText.editableText.toString()
+                            if (currentText.length > 2) {
+                                Log.d(TAG(), "current custom text $currentText")
+                                currentObstacle.obstacleType = currentText
+                                typeEditText.setText(currentObstacle.obstacleType)
+                                dismiss()
+                            } else {
+                                // text provided too short/empty
+                                Toast.makeText(
+                                    context, "Please provide a valid type", Toast
+                                        .LENGTH_SHORT
+                                ).show()
+                                // focus on editText
+                                lastEmptyRadioButton.parent
+                                    .requestChildFocus(lastEmptyRadioButton, lastEmptyRadioButton)
+                                // TODO change to material.textfield.TextInputEditText to show
+                                //  errors
+                            }
+                        } else {
+                            // selection is from predefined list, good to go
+                            typeEditText.setText(currentObstacle.obstacleType)
+                            dismiss()
+                        }
+                    } else {
+                        // -1 means none selected
+                        Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                negativeButton(R.string.dialog_cancel_button) { dismiss() }
                 lifecycleOwner(viewLifecycleOwner)
                 dialog.show()
             }
         }
 
-        // Set obstacle label choices in autoCompleteTextView
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.obstacle_types_array,
-            android.R.layout.simple_spinner_dropdown_item
-        ).also { arrayAdapter ->
-            select_obstacle_type_edit_text.setAdapter(arrayAdapter)
-
-            // When coming from crop fragment, if the type was already set, restore its value
-            if (currentObstacle.obstacleType != "") {
-                select_obstacle_type_edit_text.setText(
-                    arrayAdapter.getItem(arrayAdapter.getPosition(currentObstacle.obstacleType))
-                        .toString(), false
-                )
-            }
-        }
-
-        // Clear any error message present when view is clicked
+        // Clear any error message present editText value changes
         select_obstacle_type_edit_text.addTextChangedListener {
             select_obstacle_type_layout.error = null
         }
@@ -165,7 +236,7 @@ class ObstacleEditFragment : Fragment() {
                 if (obstaclePosition.latitude != 0.0) {
                     // Add marker indicating the obstacle, if location provided is not 0, 0
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
-                    // Move camera to appropriate position
+                    // Move map camera to above obstacle position
                     moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
@@ -284,24 +355,36 @@ class ObstacleEditFragment : Fragment() {
 
     private fun populateRadioGroupTypeList(
         radioGroup: RadioGroup, obsTypeArray: Array<String>,
-        listLimit: Int = obsTypeArray.size
+        listLimit: Int = obsTypeArray.size,
+        addEmptyRadioButtonAtBottom: Boolean = true
     ) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
 
         // create view params for individual Radio Buttons
         val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-//        val margin = 40
+
         layoutParams.bottomMargin = 12
 
         // populate radio group, respecting any limits on number of items required
-        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
+        obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
+                rb.id = 1000 + i
                 rb.text = obsType
                 rb.layoutParams = layoutParams
+                if (i >= listLimit) rb.visibility = View.GONE
+            })
+        }
+
+        if (addEmptyRadioButtonAtBottom) {
+            radioGroup.addView(RadioButton(context).also { rb ->
+                // empty text
+                rb.id = 1000 + obsTypeArray.size + 1
+                rb.layoutParams = layoutParams
+                rb.visibility = View.GONE
             })
         }
     }

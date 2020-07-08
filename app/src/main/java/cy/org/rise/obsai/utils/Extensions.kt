@@ -1,6 +1,11 @@
 package cy.org.rise.obsai.utils
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
+import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import java.util.*
 
 /**
@@ -53,3 +58,25 @@ fun Context.getUniqueAppInstallID(): String {
 
     return installUniqueID
 }
+
+/**
+ * Extension function that hides soft keyboard.
+ *
+ * See following links for sources:
+ * - https://stackoverflow.com/a/59780666
+ * - https://stackoverflow.com/a/58559801
+ * - https://stackoverflow.com/a/59758327
+ * */
+fun View.hideKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+    .hideSoftInputFromWindow(windowToken, 0)
+
+/**
+ * Extension function that displays soft keyboard.
+ *
+ * See following links for sources:
+ * - https://stackoverflow.com/a/59780666
+ * - https://stackoverflow.com/a/58559801
+ * - https://stackoverflow.com/a/59758327
+ * */
+fun View.showKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+    .toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY)
