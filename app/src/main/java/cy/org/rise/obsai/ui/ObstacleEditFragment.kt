@@ -202,7 +202,8 @@ class ObstacleEditFragment : Fragment() {
             // get type array either from CNN results, or from resources if CNN classification
             // didn't work
             val obsTypeArray = if (::cnnResults.isInitialized) {
-                cnnResults
+                if (cnnResults.isNotEmpty()) cnnResults
+                else getAlphabeticalTypeArray()
             } else {
                 getAlphabeticalTypeArray()
             }
