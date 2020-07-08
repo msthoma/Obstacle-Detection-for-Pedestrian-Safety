@@ -236,7 +236,7 @@ class ObstacleEditFragment : Fragment() {
                 if (obstaclePosition.latitude != 0.0) {
                     // Add marker indicating the obstacle, if location provided is not 0, 0
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
-                    // Move camera to appropriate position
+                    // Move map camera to above obstacle position
                     moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
@@ -373,17 +373,11 @@ class ObstacleEditFragment : Fragment() {
         obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
                 rb.id = 1000 + i
-                rb.text = "$i $obsType"
+                rb.text = obsType
                 rb.layoutParams = layoutParams
                 if (i >= listLimit) rb.visibility = View.GONE
             })
         }
-//        obsTypeArray.sliceArray(IntRange(0, listLimit - 1)).forEach { obsType ->
-//            radioGroup.addView(RadioButton(context).also { rb ->
-//                rb.text = obsType
-//                rb.layoutParams = layoutParams
-//            })
-//        }
 
         if (addEmptyRadioButtonAtBottom) {
             radioGroup.addView(RadioButton(context).also { rb ->
