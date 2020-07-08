@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cy.org.rise.obsai.ui.MainActivity">
 
-    <item
-        android:id="@+id/action_sign_in"
-        android:icon="@drawable/ic_user_white_24dp"
-        android:orderInCategory="100"
-        android:title="@string/action_sign_in"
-        app:showAsAction="ifRoom" />
+<!--    <item-->
+<!--        android:id="@+id/action_sign_in"-->
+<!--        android:icon="@drawable/ic_user_white_24dp"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="@string/action_sign_in"-->
+<!--        app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/action_settings"
