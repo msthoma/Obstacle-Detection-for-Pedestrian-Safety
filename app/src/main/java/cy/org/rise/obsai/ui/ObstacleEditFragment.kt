@@ -197,11 +197,16 @@ class ObstacleEditFragment : Fragment() {
         // Setup type selection dialog
         typeEditText = select_obstacle_type_edit_text
 
-        // Create shuffled type array mimicking results from CNN
-        val obsTypeArray = alphabeticalTypeList()
-
         // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
+            // get type array either from CNN results, or from resources if CNN classification
+            // didn't work
+            val obsTypeArray = if (::cnnResults.isInitialized) {
+                cnnResults
+            } else {
+                getAlphabeticalTypeArray()
+            }
+
             val dialog = MaterialDialog(requireContext()).customView(
                 R.layout.type_selection_dialog,
                 scrollable = true
@@ -498,7 +503,7 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    private fun alphabeticalTypeList(): Array<String> =
+    private fun getAlphabeticalTypeArray(): Array<String> =
         resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
     /**
