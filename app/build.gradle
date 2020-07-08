@@ -103,6 +103,12 @@ android {
     configurations {
         all*.exclude group: 'xpp3', module: 'xpp3'
     }
+
+    // required so .tflite model files are not compressed
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
