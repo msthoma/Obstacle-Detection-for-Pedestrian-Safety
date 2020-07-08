@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * Based on https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/app/src/main/java/org/tensorflow/lite/examples/classification/tflite/ClassifierFloatMobileNet.java
  */
-public class ClassifierObstacleCNN96 extends Classifier {
+public class ClassifierObstacleCNN128 extends Classifier {
 
     /**
      * Float MobileNet requires additional normalization of the used input.
@@ -48,7 +48,7 @@ public class ClassifierObstacleCNN96 extends Classifier {
      *
      * @param activity
      */
-    public ClassifierObstacleCNN96(Activity activity, Device device, int numThreads)
+    public ClassifierObstacleCNN128(Activity activity, Device device, int numThreads)
             throws IOException {
         super(activity, device, numThreads);
     }
