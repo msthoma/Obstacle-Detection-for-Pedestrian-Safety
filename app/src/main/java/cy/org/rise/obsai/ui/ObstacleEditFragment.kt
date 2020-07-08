@@ -168,8 +168,27 @@ class ObstacleEditFragment : Fragment() {
                                 (checkedId).text}"
                         )
                         if (checkedId == lastEmptyRadioButton.id) {
-                            TODO("Check if input is OK")
+                            // customEditText selected, make sure text is not too short or empty
+                            val currentText = customEditText.editableText.toString()
+                            if (currentText.length > 2) {
+                                Log.d(TAG(), "current custom text $currentText")
+                                currentObstacle.obstacleType = currentText
+                                typeEditText.setText(currentObstacle.obstacleType)
+                                dismiss()
+                            } else {
+                                // text provided too short/empty
+                                Toast.makeText(
+                                    context, "Please provide a valid type", Toast
+                                        .LENGTH_SHORT
+                                ).show()
+                                // focus on editText
+                                lastEmptyRadioButton.parent
+                                    .requestChildFocus(lastEmptyRadioButton, lastEmptyRadioButton)
+                                // TODO change to material.textfield.TextInputEditText to show
+                                //  errors
+                            }
                         } else {
+                            // selection is from predefined list, good to go
                             typeEditText.setText(currentObstacle.obstacleType)
                             dismiss()
                         }
@@ -185,7 +204,7 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        // Clear any error message present when view is clicked
+        // Clear any error message present editText value changes
         select_obstacle_type_edit_text.addTextChangedListener {
             select_obstacle_type_layout.error = null
         }
