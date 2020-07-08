@@ -130,10 +130,10 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
                 true
             }
-            R.id.action_sign_in -> {
-                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
-                true
-            }
+//            R.id.action_sign_in -> {
+//                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
+//                true
+//            }
             R.id.action_add_mock_element -> {
                 val mockObstacle = Obstacle(
                     appInstallID = requireContext().getUniqueAppInstallID(),
