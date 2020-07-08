@@ -185,7 +185,7 @@ class ObstacleEditFragment : Fragment() {
                 }
             }.also { result ->
                 tflite.close()
-                val sorted = result?.toList()?.sortedBy { (key, value) -> value }?.toMap()
+                val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
 
                 Log.d(TAG(), sorted.toString())
                 val rs = sorted?.keys?.reversed()?.toTypedArray()
@@ -198,7 +198,7 @@ class ObstacleEditFragment : Fragment() {
         typeEditText = select_obstacle_type_edit_text
 
         // Create shuffled type array mimicking results from CNN
-        val obsTypeArray = shuffledTypeList()
+        val obsTypeArray = alphabeticalTypeList()
 
         // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
@@ -498,8 +498,8 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    private fun shuffledTypeList(): Array<String> =
-        resources.getStringArray(R.array.obstacle_types_array).toList().shuffled().toTypedArray()
+    private fun alphabeticalTypeList(): Array<String> =
+        resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
     /**
      * Override of function required by map view.
