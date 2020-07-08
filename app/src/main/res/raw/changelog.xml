@@ -2,6 +2,15 @@
     <release
         date="2020-07-08"
         versionCode="1"
+        versionName="Version 0.15.0">
+        <info>App now uses image classification by a convolutional neural network to speed up
+            obstacle type selection
+        </info>
+    </release>
+
+    <release
+        date="2020-07-08"
+        versionCode="1"
         versionName="Version 0.14.2">
         <info>Revamped type selection UI</info>
     </release>
@@ -36,7 +45,8 @@
         versionCode="1"
         versionName="Version 0.12.5">
         <info>First implementation of convolutional neural network for automatic obstacle
-            recognition</info>
+            recognition
+        </info>
     </release>
 
     <release
