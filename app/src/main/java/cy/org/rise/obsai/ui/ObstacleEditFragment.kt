@@ -32,7 +32,9 @@ import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.TensorProcessor
+import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
@@ -108,6 +110,32 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
+        // Setup all required for TFLite
+        val tfliteModel = FileUtil.loadMappedFile(requireContext(), "cnn128RGB.tflite")
+        tflite = Interpreter(tfliteModel, Interpreter.Options())
+
+        labels = FileUtil.loadLabels(requireContext(), "cnnRGB_labels.txt")
+
+        val imageTensorIndex = 0
+        val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
+        imageSizeY = imageShape[1]
+        imageSizeX = imageShape[2]
+
+        val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
+        val probabilityTensorIndex = 0
+        val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
+        val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
+
+        inputImageBuffer = TensorImage(imageDataType)
+
+        outputProbabilityBuffer =
+            TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
+
+        probabilityProcessor =
+            TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD)).build()
+
+
+        // Setup type selection dialog
         typeEditText = select_obstacle_type_edit_text
 
         // Create shuffled type array mimicking results from CNN
