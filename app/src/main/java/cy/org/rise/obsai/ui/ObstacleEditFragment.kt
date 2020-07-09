@@ -190,11 +190,15 @@ class ObstacleEditFragment : Fragment() {
                 val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
                 Log.d(TAG(), sorted.toString())
 
-                // save CNN results in obstacle
-                currentObstacle.typeProbabilitiesCNN = sorted
-
                 // reverse results (only keys) for displaying in input dialog
                 sorted?.keys?.reversed()?.toTypedArray()?.let { cnnResults = it }
+
+                // save CNN results in obstacle, first sanitize keys
+                currentObstacle.typeProbabilitiesCNN = sorted?.map { (k, v) ->
+                    k.filterNot {
+                        setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                    } to v
+                }?.toMap()
             }
         }
 
@@ -417,6 +421,7 @@ class ObstacleEditFragment : Fragment() {
                     // Save obstacle type
                     // TODO not needed?
                     currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
+                    Log.d(TAG(), currentObstacle.toJson())
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
                         R.id.action_obstacleEditFragment_to_obstacleListFragment
