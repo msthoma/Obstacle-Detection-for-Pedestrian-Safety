@@ -248,8 +248,10 @@ class ObstacleEditFragment : Fragment() {
                     for (i in 0..obsTypeArray.size + 1)
                         radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
 
-                    // hide show more button
+                    // hide more button and CNN explanation
                     showMoreButton.visibility = View.GONE
+                    customDialogView.findViewById<TextView>(R.id.cnn_explanation)?.visibility =
+                        View.GONE
 
                     // show custom editText
                     customEditText.visibility = View.VISIBLE
