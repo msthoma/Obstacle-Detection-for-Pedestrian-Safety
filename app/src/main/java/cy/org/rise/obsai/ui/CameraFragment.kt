@@ -21,6 +21,7 @@ import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.getUniqueAppInstallID
 import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
@@ -180,6 +181,7 @@ class CameraFragment : Fragment(), SensorEventListener {
         }
 
         return Obstacle(
+            appInstallID = requireContext().getUniqueAppInstallID(),
             obstacleType = "",
             photoPath = currentPhotoPath,
             location = obsLocation,
