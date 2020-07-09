@@ -169,23 +169,21 @@ class CameraFragment : Fragment(), SensorEventListener {
         // probably unnecessary
         val currentOrientation = orientationAngles.copyOf()
 
-        // in case location has not been initialized, set location and altitude to zero
-        val obsLocation = Obstacle.Location(latitude = 0.0, longitude = 0.0)
-        var altitude = 0.0
-        // otherwise get values from GPS
-        if (::currentLocation.isInitialized) {
-            obsLocation.apply {
-                latitude = currentLocation.latitude
+        // in case location has not been initialized, set location to zero
+        val obsLocation = if (::currentLocation.isInitialized) {
+            Obstacle.Location(
+                latitude = currentLocation.latitude,
                 longitude = currentLocation.longitude
-            }
-            altitude = currentLocation.altitude
+            )
+        } else {
+            Obstacle.Location(latitude = 0.0, longitude = 0.0)
         }
 
         return Obstacle(
             obstacleType = "",
             photoPath = currentPhotoPath,
             location = obsLocation,
-            altitude = altitude,
+            altitude = if (::currentLocation.isInitialized) currentLocation.altitude else 0.0,
             orientation = Obstacle.Orientation(
                 // Note the order of the axes, zxy, NOT xyz
                 z = currentOrientation[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
