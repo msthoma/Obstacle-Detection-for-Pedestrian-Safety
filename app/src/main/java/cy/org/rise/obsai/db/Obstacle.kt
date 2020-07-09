@@ -67,7 +67,7 @@ data class Obstacle(
     val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo @Expose
-    var appInstallID: String = Constants.PREF_UNIQUE_ID_EMPTY,
+    val appInstallID: String = Constants.PREF_UNIQUE_ID_EMPTY,
 
     @ColumnInfo @Expose
     val timeStamp: Date = Calendar.getInstance().time,
