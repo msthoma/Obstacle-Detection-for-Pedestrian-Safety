@@ -68,6 +68,7 @@
     <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
     <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
+    <string name="cnn_explanation">5 most likely types as determined by a neural network:</string>
 
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>
