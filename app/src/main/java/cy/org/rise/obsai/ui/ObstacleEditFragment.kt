@@ -186,15 +186,15 @@ class ObstacleEditFragment : Fragment() {
             }.also { result ->
                 tflite.close()
 
+                // sort CNN results (smallest to largest)
                 val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
-
-                currentObstacle.typeProbabilitiesCNN = sorted
-
                 Log.d(TAG(), sorted.toString())
 
-                val rs = sorted?.keys?.reversed()?.toTypedArray()
+                // save CNN results in obstacle
+                currentObstacle.typeProbabilitiesCNN = sorted
 
-                rs?.let { cnnResults = it }
+                // reverse results (only keys) for displaying in input dialog
+                sorted?.keys?.reversed()?.toTypedArray()?.let { cnnResults = it }
             }
         }
 
