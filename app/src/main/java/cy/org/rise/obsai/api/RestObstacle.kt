@@ -21,9 +21,6 @@ import java.util.*
  *
  * Fields annotated with @Transient are ignored during deserialization by Gson.
  *
- * The class up to commit 633d0e61 (08/07/20) was build for Fiware Orion Broker, afterwards it
- * was modified to work with iNicosia API.
- *
  * @property id
  * @property timeStamp
  * @property obstacleType
