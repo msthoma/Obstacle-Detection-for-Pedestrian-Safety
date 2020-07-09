@@ -7,6 +7,18 @@
     android:paddingStart="24dp"
     android:paddingEnd="24dp">
 
+    <TextView
+        android:id="@+id/cnn_explanation"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:text="5 most likely types as determined by a neural network:"
+        app:layout_constraintBottom_toTopOf="@id/types_radio_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RadioGroup
         android:id="@+id/types_radio_group"
         android:layout_width="match_parent"
@@ -15,7 +27,7 @@
         app:layout_constraintBottom_toTopOf="@id/button_show_more_types"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/cnn_explanation">
 
         <!-- Mock RadioButton 1 -->
         <RadioButton
