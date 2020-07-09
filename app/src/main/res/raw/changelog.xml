@@ -1,5 +1,18 @@
 <changelog>
     <release
+        date="2020-07-09"
+        versionCode="1"
+        versionName="Version 0.15.1">
+        <info>Modifications to the upload mechanism so it conforms with the updated iNicosia
+            API
+        </info>
+        <info>Added explanation that the suggestions are the results of image classification
+            with neural network
+        </info>
+        <info>Numerous bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-08"
         versionCode="1"
         versionName="Version 0.15.0">
