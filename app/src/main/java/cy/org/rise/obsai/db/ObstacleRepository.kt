@@ -93,13 +93,6 @@ class ObstacleRepository private constructor(
     }
 
     fun postToiNicosiaWM(obstacle: Obstacle) {
-        // temporarily filter illegal chars in types to circumvent current API limitations
-        val obsType = obstacle.obstacleType.filterNot {
-            setOf(' ', '(', ')', '.', '-', '/').contains(it)
-        }
-        obstacle.obstacleType = obsType
-        Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
-
         // Check if mobile data is allowed by the user
         val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean("allow_mobile_data", false)
