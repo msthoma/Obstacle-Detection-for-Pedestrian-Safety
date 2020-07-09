@@ -92,23 +92,6 @@ class ObstacleRepository private constructor(
         return orionService?.insertServerObstacle(restObstacle)
     }
 
-    suspend fun postToiNicosia(obstacle: Obstacle): Response<Unit>? {
-        // temporarily filter illegal chars in types to circumvent current API limitations
-        val obsType = obstacle.obstacleType.filterNot {
-            setOf(' ', '(', ')', '.', '-', '/').contains(it)
-        }
-        Log.d("Type conversion", "${obstacle.obstacleType} -> $obsType")
-
-        return orionService?.postToiNicosia(
-            obstacle.id, "obstacle",
-            obstacle.location.latitude,
-            obstacle.location.longitude,
-            obsType,
-            obstacle.orientation.x.absoluteValue,
-            obstacle.orientation.y.absoluteValue //skip pathPhoto here
-        )
-    }
-
     fun postToiNicosiaWM(obstacle: Obstacle) {
         // temporarily filter illegal chars in types to circumvent current API limitations
         val obsType = obstacle.obstacleType.filterNot {
@@ -144,9 +127,6 @@ class ObstacleRepository private constructor(
 
         workManager.enqueue(upload)
     }
-
-    suspend fun postToiNicosiaJson(obstacle: Obstacle): Response<Unit>? =
-        orionService?.postToiNicosiaJson(obstacle)
 
     /**
      * Gets all obstacles saved on server.
