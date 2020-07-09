@@ -182,7 +182,7 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         return Obstacle(
             appInstallID = requireContext().getUniqueAppInstallID(),
-            obstacleType = "",
+            obstacleType = "", // filled later by user
             photoPath = currentPhotoPath,
             location = obsLocation,
             altitude = if (::currentLocation.isInitialized) currentLocation.altitude else 0.0,
