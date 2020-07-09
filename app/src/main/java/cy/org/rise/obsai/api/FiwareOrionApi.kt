@@ -62,7 +62,7 @@ interface FiwareOrionApi {
 
     @Headers("obstacle")
     @POST("post_obstacles_problems")
-    suspend fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
+    fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
 
     companion object {
         /**
