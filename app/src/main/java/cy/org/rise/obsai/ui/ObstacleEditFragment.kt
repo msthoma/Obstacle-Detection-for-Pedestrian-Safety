@@ -242,7 +242,7 @@ class ObstacleEditFragment : Fragment() {
                 radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
 
             // show more button is clicked
-            customDialogView.findViewById<TextView>(R.id.button_show_more_types)
+            customDialogView.findViewById<Button>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
                     // reveal all possible types
                     for (i in 0..obsTypeArray.size + 1)
