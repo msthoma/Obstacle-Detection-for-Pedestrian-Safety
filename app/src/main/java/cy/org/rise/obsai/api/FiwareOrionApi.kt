@@ -60,7 +60,7 @@ interface FiwareOrionApi {
         @Path("photopath") photopath: String = "pathToPhoto"
     ): Call<Unit>
 
-    @Headers("obstacle")
+    @Headers("Content-Type: application/json")
     @POST("post_obstacles_problems")
     fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
 
