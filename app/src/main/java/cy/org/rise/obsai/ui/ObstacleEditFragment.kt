@@ -185,9 +185,13 @@ class ObstacleEditFragment : Fragment() {
                 }
             }.also { result ->
                 tflite.close()
+
                 val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
 
+                currentObstacle.typeProbabilitiesCNN = sorted
+
                 Log.d(TAG(), sorted.toString())
+
                 val rs = sorted?.keys?.reversed()?.toTypedArray()
 
                 rs?.let { cnnResults = it }
@@ -411,6 +415,7 @@ class ObstacleEditFragment : Fragment() {
                 // Make sure the user has chosen an obstacle type before submitting
                 if (allRequiredInfoEntered()) {
                     // Save obstacle type
+                    // TODO not needed?
                     currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
