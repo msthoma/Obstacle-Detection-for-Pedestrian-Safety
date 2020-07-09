@@ -34,7 +34,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 15
-        def versionPatch = 0
+        def versionPatch = 1
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -69,7 +69,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

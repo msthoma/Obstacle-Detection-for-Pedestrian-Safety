@@ -34,6 +34,7 @@
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
     <string name="dialog_select_type_title">Επιλογή τύπου εμποδίου</string>
+    <string name="cnn_explanation">5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->

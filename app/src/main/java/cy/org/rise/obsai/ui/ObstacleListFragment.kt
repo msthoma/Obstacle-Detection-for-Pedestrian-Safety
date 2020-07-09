@@ -256,7 +256,10 @@ class ObstacleListFragment : Fragment() {
         val stringArray = resources.getStringArray(R.array.obstacle_types_array)
         return buildMap {
             stringArray.forEach { obsType ->
-                this[obsType] = 0.0f
+                val filtered = obsType.filterNot {
+                    setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                }
+                this[filtered] = 0.0f
             }
         }
     }

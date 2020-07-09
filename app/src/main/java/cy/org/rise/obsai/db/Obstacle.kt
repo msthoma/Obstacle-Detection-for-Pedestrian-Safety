@@ -1,11 +1,10 @@
 package cy.org.rise.obsai.db
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.google.android.gms.maps.model.LatLng
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.api.RestObstacle.*
 import cy.org.rise.obsai.utils.Constants
@@ -64,40 +63,40 @@ import java.util.*
  */
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
-    @PrimaryKey
+    @PrimaryKey @SerializedName("_id") @Expose
     val id: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo
-    var appInstallID: String = Constants.PREF_UNIQUE_ID_EMPTY,
+    @ColumnInfo @Expose
+    val appInstallID: String = Constants.PREF_UNIQUE_ID_EMPTY,
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     val timeStamp: Date = Calendar.getInstance().time,
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     var obstacleType: String,
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     var photoPath: String,
 
-    @Embedded
+    @Embedded @Expose
     var location: Location,
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     var locationAccuracy: Float = 0.0f,
 
-    @Embedded(prefix = "fused_")
+    @Embedded(prefix = "fused_") @Expose
     var orientation: Orientation = Orientation(0.0, 0.0, 0.0),
 
-    @Embedded(prefix = "accelerometer_")
+    @Embedded(prefix = "accelerometer_") @Expose
     var accelerometer: Orientation = Orientation(0.0, 0.0, 0.0),
 
-    @Embedded(prefix = "compass_")
+    @Embedded(prefix = "compass_") @Expose
     var compass: Orientation = Orientation(0.0, 0.0, 0.0),
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     var altitude: Double = 0.0,
 
-    @ColumnInfo
+    @ColumnInfo @Expose
     var typeProbabilitiesCNN: Map<String, Float>? = null,
 
     @ColumnInfo
@@ -106,22 +105,23 @@ data class Obstacle(
 ) : Serializable {
 
     @Embedded(prefix = "GPS_")
+    @Expose
     var locationFromGPS: Location = location.copy()
 
     /**
      * Simple data class to store obstacle location.
      *
-     * NOTE: Android uses [Lat, Long] but server [Long, Lat], see [https://macwright.org/lonlat/].
-     * Careful with conversions between the two!
-     *
      * @property latitude
      * @property longitude
      */
     data class Location(
-        //
         var latitude: Double,
         var longitude: Double
-    ) : Serializable
+    ) : Serializable {
+        @Expose
+        @Ignore
+        var coordinates = listOf(latitude, longitude)
+    }
 
     /**
      * Simple data class to store phone orientation in space.
@@ -131,9 +131,9 @@ data class Obstacle(
      * @property z
      */
     data class Orientation(
-        var x: Double,
-        var y: Double,
-        var z: Double
+        @Expose var x: Double,
+        @Expose var y: Double,
+        @Expose var z: Double
     ) : Serializable
 
     /**
@@ -175,5 +175,6 @@ data class Obstacle(
      *
      * @return JSON string of current obstacle
      */
-    fun toJson(): String = Gson().toJson(this)
+    fun toJson(): String =
+        GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this)
 }

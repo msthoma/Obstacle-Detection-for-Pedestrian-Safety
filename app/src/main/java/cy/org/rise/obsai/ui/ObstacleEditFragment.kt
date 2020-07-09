@@ -185,12 +185,20 @@ class ObstacleEditFragment : Fragment() {
                 }
             }.also { result ->
                 tflite.close()
+
+                // sort CNN results (smallest to largest)
                 val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
-
                 Log.d(TAG(), sorted.toString())
-                val rs = sorted?.keys?.reversed()?.toTypedArray()
 
-                rs?.let { cnnResults = it }
+                // reverse results (only keys) for displaying in input dialog
+                sorted?.keys?.reversed()?.toTypedArray()?.let { cnnResults = it }
+
+                // save CNN results in obstacle, first sanitize keys
+                currentObstacle.typeProbabilitiesCNN = sorted?.map { (k, v) ->
+                    k.filterNot {
+                        setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                    } to v
+                }?.toMap()
             }
         }
 
@@ -234,14 +242,16 @@ class ObstacleEditFragment : Fragment() {
                 radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
 
             // show more button is clicked
-            customDialogView.findViewById<TextView>(R.id.button_show_more_types)
+            customDialogView.findViewById<Button>(R.id.button_show_more_types)
                 .setOnClickListener { showMoreButton ->
                     // reveal all possible types
                     for (i in 0..obsTypeArray.size + 1)
                         radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
 
-                    // hide show more button
+                    // hide more button and CNN explanation
                     showMoreButton.visibility = View.GONE
+                    customDialogView.findViewById<TextView>(R.id.cnn_explanation)?.visibility =
+                        View.GONE
 
                     // show custom editText
                     customEditText.visibility = View.VISIBLE
@@ -411,7 +421,9 @@ class ObstacleEditFragment : Fragment() {
                 // Make sure the user has chosen an obstacle type before submitting
                 if (allRequiredInfoEntered()) {
                     // Save obstacle type
+                    // TODO not needed?
                     currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
+                    Log.d(TAG(), currentObstacle.toJson())
                     viewModel.insertObstacle(currentObstacle)
                     findNavController().navigate(
                         R.id.action_obstacleEditFragment_to_obstacleListFragment

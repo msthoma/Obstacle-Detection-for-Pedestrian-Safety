@@ -17,20 +17,14 @@ class iNicosiaWorker(appContext: Context, workerParams: WorkerParameters) :
         return try {
             // Get obstacle JSON
             obstacleJson = inputData.getString(Constants.KEY_OBSTACLE_JSON)
-            // Convert back to Obstacle entity
-            val obstacle = Gson().fromJson<Obstacle>(obstacleJson, Obstacle::class.java)
 
             val api = FiwareOrionApi.create(FiwareOrionApi.iNICOSIA_BASE_URL)
 
-            val response = api?.postToiNicosiaWM(
-                obstacle.id,
-                obstacle.obstacleType,
-                obstacle.location.latitude,
-                obstacle.location.longitude,
-                obstacle.obstacleType,
-                obstacle.orientation.x,
-                obstacle.orientation.y
-            )?.execute()
+            // Convert back to Obstacle entity
+            // TODO fix conversion, or find way to pass obstacle class straight to worker
+            val obstacle = Gson().fromJson<Obstacle>(obstacleJson, Obstacle::class.java)
+
+            val response = api?.postToiNicosiaJson(obstacle)?.execute()
 
             return response?.let {
                 if (!response.isSuccessful) {
