@@ -175,5 +175,6 @@ data class Obstacle(
      *
      * @return JSON string of current obstacle
      */
-    fun toJson(): String = Gson().toJson(this)
+    fun toJson(): String =
+        GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(this)
 }
