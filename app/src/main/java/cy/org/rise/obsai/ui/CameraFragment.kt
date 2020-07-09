@@ -164,10 +164,10 @@ class CameraFragment : Fragment(), SensorEventListener {
     }
 
     private fun createCurrentObstacle(): Obstacle {
-        // make a copy of the accelerometerReading array, in case its components change values while
-        // saving the obstacle below (in the case where accelerometerReading is used directly),
-        // probably unnecessary
-        val currentOrientation = orientationAngles.copyOf()
+        // make a copies of the orientation arrays, just to be safe (probably unnecessary)
+        val orientationAnglesCopy = orientationAngles.copyOf()
+        val accelerometerReadingCopy = accelerometerReading.copyOf()
+        val magnetometerReadingCopy = magnetometerReading.copyOf()
 
         // in case location has not been initialized, set location to zero
         val obsLocation = if (::currentLocation.isInitialized) {
@@ -184,11 +184,23 @@ class CameraFragment : Fragment(), SensorEventListener {
             photoPath = currentPhotoPath,
             location = obsLocation,
             altitude = if (::currentLocation.isInitialized) currentLocation.altitude else 0.0,
+            locationAccuracy = if (::currentLocation.isInitialized) currentLocation.accuracy else
+                0.0f,
             orientation = Obstacle.Orientation(
                 // Note the order of the axes, zxy, NOT xyz
-                z = currentOrientation[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
-                x = currentOrientation[1].toDouble(), // Pitch (degrees of rotation about the x axis)
-                y = currentOrientation[2].toDouble() // Roll (degrees of rotation about the y axis)
+                z = orientationAnglesCopy[0].toDouble(), // Azimuth (degrees of rotation about the -z axis)
+                x = orientationAnglesCopy[1].toDouble(), // Pitch (degrees of rotation about the x axis)
+                y = orientationAnglesCopy[2].toDouble() // Roll (degrees of rotation about the y axis)
+            ),
+            accelerometer = Obstacle.Orientation(
+                x = accelerometerReadingCopy[0].toDouble(),
+                y = accelerometerReadingCopy[1].toDouble(),
+                z = accelerometerReadingCopy[2].toDouble()
+            ),
+            compass = Obstacle.Orientation(
+                x = magnetometerReadingCopy[0].toDouble(),
+                y = magnetometerReadingCopy[1].toDouble(),
+                z = magnetometerReadingCopy[2].toDouble()
             )
         )
     }
