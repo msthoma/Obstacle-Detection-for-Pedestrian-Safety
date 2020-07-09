@@ -35,31 +35,6 @@ interface FiwareOrionApi {
         @Field("grant_type") grant_type: String
     ): Response<LoginResponse>
 
-    @POST("post_obstacles_problems/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
-    suspend fun postToiNicosia(
-        @Path("id") id: String,
-        @Path("type_obs") type_obs: String,
-        @Path("latitude") latitude: Double,
-        @Path("longitude") longitude: Double,
-        @Path("obstype") obstype: String,
-        @Path("orie1") orie1: Double,
-        @Path("orie2") orie2: Double,
-        @Path("photopath") photopath: String = "pathToPhoto"
-    ): Response<Unit>
-
-    // test not suspending function for Work manager
-    @POST("post_obstacles_problems/_id={id}/type_obs={type_obs}/latitude={latitude}/longitude={longitude}/obstype={obstype}/orie1={orie1}/orie2={orie2}/photopath={photopath}")
-    fun postToiNicosiaWM(
-        @Path("id") id: String,
-        @Path("type_obs") type_obs: String,
-        @Path("latitude") latitude: Double,
-        @Path("longitude") longitude: Double,
-        @Path("obstype") obstype: String,
-        @Path("orie1") orie1: Double,
-        @Path("orie2") orie2: Double,
-        @Path("photopath") photopath: String = "pathToPhoto"
-    ): Call<Unit>
-
     @Headers("Content-Type: application/json")
     @POST("post_obstacles_problems")
     fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
