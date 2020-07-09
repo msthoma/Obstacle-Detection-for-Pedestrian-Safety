@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.api.RestObstacle.*
 import cy.org.rise.obsai.utils.Constants
@@ -65,6 +66,7 @@ import java.util.*
 @Entity(tableName = "obstacle_table")
 data class Obstacle(
     @PrimaryKey
+    @SerializedName("_id")
     val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo
