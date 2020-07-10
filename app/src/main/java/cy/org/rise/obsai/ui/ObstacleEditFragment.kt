@@ -271,6 +271,11 @@ class ObstacleEditFragment : Fragment() {
                 // Shrink FAB when user is moving the map around
                 setOnCameraMoveStartedListener {
                     fabSubmit.shrink()
+                    lifecycleScope.launch {
+                        // TODO add more checks here
+                        delay(8000)
+                        fabSubmit.extend()
+                    }
                 }
             }
 
