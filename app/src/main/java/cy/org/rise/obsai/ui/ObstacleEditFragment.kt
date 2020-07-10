@@ -272,15 +272,17 @@ class ObstacleEditFragment : Fragment() {
                     customEditTextLayout.visibility = View.VISIBLE
                 }
 
-            // set listeners to all to regulate their behaviour
-            customEditText.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) lastEmptyRadioButton.isChecked = true
-            }
-            customEditText.setOnClickListener {
-                lastEmptyRadioButton.isChecked = true
-            }
-            customEditText.addTextChangedListener { currentText ->
-                if (currentText.toString().length > 2) customEditTextLayout.error = null
+            // set listeners to all views to regulate their behaviour
+            customEditText.apply {
+                setOnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) lastEmptyRadioButton.isChecked = true
+                }
+                setOnClickListener {
+                    lastEmptyRadioButton.isChecked = true
+                }
+                addTextChangedListener { currentText ->
+                    if (currentText.toString().length > 2) customEditTextLayout.error = null
+                }
             }
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
                 if (checkedId != lastEmptyRadioButton.id) {
