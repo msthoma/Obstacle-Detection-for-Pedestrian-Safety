@@ -21,8 +21,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // set app version
         findPreference<Preference>("version")?.summary =
-            "${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}\n(app ID: " +
-                    "${requireContext().getUniqueAppInstallID()})"
+            "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         // intentionally crash app to test crash reporting, triggered by repeated count view clicks
         var viewClicks = 0
