@@ -475,10 +475,7 @@ class ObstacleEditFragment : Fragment() {
     private fun checkAndSubmitObstacle() {
         // Make sure the user has chosen an obstacle type before submitting
         if (allRequiredInfoEntered()) {
-            // Save obstacle type
-            // TODO not needed?
-            currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
-            Log.d(TAG(), currentObstacle.toJson())
+            // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
             findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
