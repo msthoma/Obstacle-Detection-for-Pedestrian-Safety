@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
@@ -32,10 +33,8 @@ import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.android.synthetic.main.type_selection_dialog.view.*
+import kotlinx.coroutines.*
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.TensorProcessor
@@ -228,7 +227,8 @@ class ObstacleEditFragment : Fragment() {
 
             // get references to views on dialog that are of interest
             val customDialogView = dialog.getCustomView() as ConstraintLayout
-
+            val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
+            val dialogContents = customDialogView.dialog_contents
             val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
 
             // initially only show 5 most likely types, as determined by the CNN (hide the rest)
@@ -240,6 +240,12 @@ class ObstacleEditFragment : Fragment() {
             // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
             val lastEmptyRadioButton =
                 radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
+
+            lifecycleScope.launch {
+                delay((1000..1500).random().toLong())
+                dialogAnalysisIndicator.visibility = View.GONE
+                dialogContents.visibility = View.VISIBLE
+            }
 
             // show more button is clicked
             customDialogView.findViewById<Button>(R.id.button_show_more_types)
