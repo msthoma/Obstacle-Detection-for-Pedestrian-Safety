@@ -63,7 +63,7 @@
     <string name="dialog_analysis_indicator_text">Analysing photo…</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_OK_button" translatable="false">OK</string>
-    <string name="dialog_select_type_title">What kind of obstacle?</string>
+    <string name="dialog_select_type_title">Select obstacle type</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
     <string name="error_type_not_valid">Please provide a valid type</string>
