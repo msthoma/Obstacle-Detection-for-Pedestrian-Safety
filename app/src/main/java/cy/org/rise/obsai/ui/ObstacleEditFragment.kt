@@ -434,17 +434,7 @@ class ObstacleEditFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_confirm_edit_obstacle -> {
-                // Make sure the user has chosen an obstacle type before submitting
-                if (allRequiredInfoEntered()) {
-                    // Save obstacle type
-                    // TODO not needed?
-                    currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
-                    Log.d(TAG(), currentObstacle.toJson())
-                    viewModel.insertObstacle(currentObstacle)
-                    findNavController().navigate(
-                        R.id.action_obstacleEditFragment_to_obstacleListFragment
-                    )
-                }
+                checkAndSubmitObstacle()
                 true
             }
             R.id.action_cancel_edit_obstacle -> {
@@ -479,6 +469,20 @@ class ObstacleEditFragment : Fragment() {
 
             negativeButton(R.string.dialog_cancel_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
+        }
+    }
+
+    private fun checkAndSubmitObstacle() {
+        // Make sure the user has chosen an obstacle type before submitting
+        if (allRequiredInfoEntered()) {
+            // Save obstacle type
+            // TODO not needed?
+            currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
+            Log.d(TAG(), currentObstacle.toJson())
+            viewModel.insertObstacle(currentObstacle)
+            findNavController().navigate(
+                R.id.action_obstacleEditFragment_to_obstacleListFragment
+            )
         }
     }
 
