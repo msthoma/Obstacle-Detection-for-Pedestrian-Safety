@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="32dp"
             android:hint="@string/hint_specify_custom_type"
             android:visibility="gone"
             app:errorEnabled="true"
