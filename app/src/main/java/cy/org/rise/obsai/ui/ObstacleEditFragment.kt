@@ -399,15 +399,15 @@ class ObstacleEditFragment : Fragment() {
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
-                    // TODO add indication that long click changes position (with overlay?)
                     clear()
                     addMarker(MarkerOptions().position(latLng))
 
                     // Save location indicated by user
                     // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere?
+                    //  somewhere? Or perhaps set it to 0
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
+
             }
 
 //            TODO when user clicks my location button, marker should move to location provided
