@@ -35,15 +35,15 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.3" />
+                android:layout_weight="1" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center|bottom"
-                android:text="The app aims to automate the reporting process as effortless as possible. Computer vision algorithms capable of recognising common types of obstacles are employed to make reporting the obstacle's type quicker, while other relevant details about the obstacle, such as geographic location, are automatically gathered using the mobile's available sensors. "
+                android:gravity="center"
+                android:text="The app aims to automate the reporting process as effortless as possible.\n\nComputer vision algorithms are employed to make reporting the obstacle's type faster.\n\nOther relevant details about the obstacle are automatically gathered using the device's available sensors."
                 android:textColor="#ffffff" />
 
         </LinearLayout>
