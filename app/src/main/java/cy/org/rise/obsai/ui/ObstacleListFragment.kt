@@ -134,26 +134,26 @@ class ObstacleListFragment : Fragment() {
 //                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
 //                true
 //            }
-            R.id.action_add_mock_element -> {
-                val mockObstacle = Obstacle(
-                    appInstallID = requireContext().getUniqueAppInstallID(),
-                    obstacleType = "MockObstacle",
-                    location = Obstacle.Location(
-                        latitude = 35.169160,
-                        longitude = 33.361459
-                    ),
-                    altitude = 31.4,
-                    orientation = Obstacle.Orientation(
-                        x = 1.0,
-                        y = 2.0,
-                        z = 3.0
-                    ),
-                    photoPath = "pathToPhoto",
-                    typeProbabilitiesCNN = generateRandomMap()
-                )
-                viewModel.insertObstacle(mockObstacle)
-                true
-            }
+//            R.id.action_add_mock_element -> {
+//                val mockObstacle = Obstacle(
+//                    appInstallID = requireContext().getUniqueAppInstallID(),
+//                    obstacleType = "MockObstacle",
+//                    location = Obstacle.Location(
+//                        latitude = 35.169160,
+//                        longitude = 33.361459
+//                    ),
+//                    altitude = 31.4,
+//                    orientation = Obstacle.Orientation(
+//                        x = 1.0,
+//                        y = 2.0,
+//                        z = 3.0
+//                    ),
+//                    photoPath = "pathToPhoto",
+//                    typeProbabilitiesCNN = generateRandomMap()
+//                )
+//                viewModel.insertObstacle(mockObstacle)
+//                true
+//            }
             R.id.action_app_intro -> {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
                 true

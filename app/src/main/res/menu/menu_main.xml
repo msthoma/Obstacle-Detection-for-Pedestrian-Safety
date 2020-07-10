@@ -16,11 +16,11 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_add_mock_element"
-        android:orderInCategory="300"
-        android:title="@string/action_add_mock_element"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/action_add_mock_element"-->
+<!--        android:orderInCategory="300"-->
+<!--        android:title="@string/action_add_mock_element"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_app_intro"
