@@ -328,9 +328,9 @@ class ObstacleEditFragment : Fragment() {
                                 ).show()
                                 // focus on editText
                                 lastEmptyRadioButton.parent
-                                    .requestChildFocus(lastEmptyRadioButton, lastEmptyRadioButton)
-                                // TODO change to material.textfield.TextInputEditText to show
-                                //  errors
+                                    .requestChildFocus(customEditTextLayout, customEditTextLayout)
+                                customEditTextLayout.error =
+                                    getString(R.string.error_type_not_valid)
                             }
                         } else {
                             // selection is from predefined list, good to go

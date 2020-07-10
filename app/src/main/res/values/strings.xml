@@ -64,6 +64,7 @@
     <string name="dialog_OK_button" translatable="false">OK</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
+    <string name="error_type_not_valid">Please provide a valid type</string>
 
     <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
