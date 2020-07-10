@@ -40,6 +40,9 @@
     <string name="hint_specify_custom_type">Άλλο είδος</string>
     <string name="field_required">*Υποχρεωτικό</string>
     <string name="error_type_not_valid">Μη έγκυρο είδος</string>
+    <string name="setting_app_version_title">Έκδοση εφαρμογής</string>
+    <string name="setting_changelog_title">Ιστορικό αλλαγών</string>
+    <string name="setting_allow_mobile_data">Χρήση δεδομένων κινητής για μεταφορτώσεις</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
