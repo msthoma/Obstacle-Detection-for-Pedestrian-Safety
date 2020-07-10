@@ -30,6 +30,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="(Short app description)\n\nThe app allows pedestrians to report road obstacles to the iNicosia platform."
+        android:text="The aim of this app is to enable pedestrians to report any obstacles they encounter to the authorities, which will hopefully increase pedestrian safety by allowing the authorities to deal with the obstructions more quickly."
         android:textColor="#ffffff" />
 </LinearLayout>
