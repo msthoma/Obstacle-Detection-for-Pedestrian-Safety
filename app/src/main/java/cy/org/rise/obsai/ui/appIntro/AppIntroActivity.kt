@@ -27,7 +27,7 @@ class AppIntroActivity : AppIntro() {
 
         setTransformer(
             AppIntroPageTransformerType.Parallax(
-                titleParallaxFactor = 1.0,
+                titleParallaxFactor = 2.0,
                 imageParallaxFactor = -1.0,
                 descriptionParallaxFactor = 2.0
             )
