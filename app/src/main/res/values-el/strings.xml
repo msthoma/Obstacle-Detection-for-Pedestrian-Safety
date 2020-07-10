@@ -34,7 +34,7 @@
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
     <string name="dialog_select_type_title">Επιλέξτε το είδος εμποδίου</string>
-    <string name="cnn_explanation">5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
+    <string name="dialog_cnn_explanation">Οι 5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
     <string name="dialog_analysis_indicator_text">Ανάλυση φωτογραφίας…</string>
     <string name="button_show_more_types">Άλλα είδη…</string>
     <string name="hint_specify_custom_type">Άλλο είδος</string>

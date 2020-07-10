@@ -62,6 +62,8 @@
 
     <string name="dialog_analysis_indicator_text">Analysing photo…</string>
     <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_cnn_explanation">The 5 most likely types as determined by a neural
+        network:</string>
     <string name="dialog_OK_button" translatable="false">OK</string>
     <string name="dialog_select_type_title">Select obstacle type</string>
 
@@ -71,7 +73,6 @@
     <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
 
-    <string name="cnn_explanation">5 most likely types as determined by a neural network:</string>
     <string name="field_required">*Required</string>
     <string name="title_location_map">Location (long click on map to edit)</string>
     <string name="title_obstacle_photo">Obstacle photo</string>
