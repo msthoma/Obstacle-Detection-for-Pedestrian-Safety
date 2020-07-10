@@ -72,17 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_photo_related_elements"
-        tools:src="@drawable/example_obs_20190808_102427129">
-
-    </ImageView>
-
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/button_edit_photo"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/ic_edit_white_24dp"-->
-    <!--        app:layout_constraintEnd_toEndOf="@id/obstacle_image_view"-->
-    <!--        app:layout_constraintTop_toTopOf="@id/obstacle_image_view" />-->
+        tools:src="@drawable/example_obs_20190808_102427129" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
