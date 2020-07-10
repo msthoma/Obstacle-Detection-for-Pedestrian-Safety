@@ -408,6 +408,10 @@ class ObstacleEditFragment : Fragment() {
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
 
+                // Shrink FAB when user is moving the map around
+                setOnCameraMoveStartedListener {
+                    fabSubmit.shrink()
+                }
             }
 
 //            TODO when user clicks my location button, marker should move to location provided
