@@ -6,7 +6,7 @@
     <string name="permission_location_rationale">Η εφαρμογή χρειάζεται πρόσβαση στην τοποθεσία σας, παρακαλώ παραχωρήστε την για να συνεχίσετε.</string>
     <string name="button_sign_in">Σύνδεση</string>
     <string name="label_fragment_obstacle_list">Εμπόδια</string>
-    <string name="label_fragment_obstacle_edit">Επεξεργασία εμποδίου</string>
+    <string name="label_fragment_obstacle_edit">Επεξ. εμποδίου</string>
     <string name="label_fragment_camera">Νέο εμπόδιο</string>
     <string name="label_fragment_settings">Ρυθμίσεις</string>
     <string name="action_cancel">Ακύρωση</string>
