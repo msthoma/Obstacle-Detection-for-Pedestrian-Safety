@@ -279,6 +279,9 @@ class ObstacleEditFragment : Fragment() {
             customEditText.setOnClickListener {
                 lastEmptyRadioButton.isChecked = true
             }
+            customEditText.addTextChangedListener { currentText ->
+                if (currentText.toString().length > 2) customEditTextLayout.error = null
+            }
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
                 if (checkedId != lastEmptyRadioButton.id) {
                     // capture current selection
@@ -290,6 +293,7 @@ class ObstacleEditFragment : Fragment() {
                     customEditText.apply {
                         clearFocus()
                         hideKeyboard()
+                        customEditTextLayout.error = null
                     }
                 } else {
                     // when checkedId == lastEmptyRadioButton.id it means editText should
@@ -326,7 +330,7 @@ class ObstacleEditFragment : Fragment() {
                                     context, "Please provide a valid type", Toast
                                         .LENGTH_SHORT
                                 ).show()
-                                // focus on editText
+                                // focus on editText and set error
                                 lastEmptyRadioButton.parent
                                     .requestChildFocus(customEditTextLayout, customEditTextLayout)
                                 customEditTextLayout.error =
