@@ -3,6 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#4CAF50</color>
+    <color name="colorLightGray">#ECECEC</color>
 
     <!-- Used this tool https://www.w3schools.com/colors/colors_triadic.asp to create colors -->
     <color name="introColor1">#4631A4</color>
