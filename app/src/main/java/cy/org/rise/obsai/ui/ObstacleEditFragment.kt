@@ -521,13 +521,15 @@ class ObstacleEditFragment : Fragment() {
             radioGroup.addView(RadioButton(context).also { rb ->
                 rb.id = 1000 + i
                 rb.text = obsType
+                // add more margin for last non-empty rb
+                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
                 if (i >= listLimit) rb.visibility = View.GONE
             })
         }
 
-        // larger margin for last RB, to accommodate editText
-        layoutParams.bottomMargin = 80
+        // larger margin for last empty rb, to accommodate editText
+        layoutParams.bottomMargin = 75
 
         if (addEmptyRadioButtonAtBottom) {
             radioGroup.addView(RadioButton(context).also { rb ->
