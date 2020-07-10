@@ -70,6 +70,7 @@
     <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
     <string name="cnn_explanation">5 most likely types as determined by a neural network:</string>
     <string name="dialog_analysis_indicator_text">Analysing photo…</string>
+    <string name="field_required">*Required</string>
 
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>

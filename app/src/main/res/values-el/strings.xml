@@ -38,6 +38,7 @@
     <string name="dialog_analysis_indicator_text">Ανάλυση φωτογραφίας…</string>
     <string name="button_show_more_types">Άλλα είδη…</string>
     <string name="hint_specify_custom_type">Άλλο είδος</string>
+    <string name="field_required">*Υποχρεωτικό</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
