@@ -383,7 +383,7 @@ class ObstacleEditFragment : Fragment() {
                     // Add marker indicating the obstacle, if location provided is not 0, 0
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 12f))
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 16f))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
                     moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.169933, 33.361071), 12f))
