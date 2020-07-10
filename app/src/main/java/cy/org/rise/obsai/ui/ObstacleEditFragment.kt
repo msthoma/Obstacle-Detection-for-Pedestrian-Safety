@@ -355,9 +355,8 @@ class ObstacleEditFragment : Fragment() {
             select_obstacle_type_layout.error = null
         }
 
+        // Go to photo editing fragment
         button_edit_photo.setOnClickListener {
-            // Save type before going to the crop fragment
-            currentObstacle.obstacleType = select_obstacle_type_edit_text.text.toString()
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     currentObstacle
