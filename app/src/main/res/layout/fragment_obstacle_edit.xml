@@ -18,7 +18,7 @@
         app:errorEnabled="true"
         app:helperText="@string/field_required"
         app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
+        app:layout_constraintBottom_toTopOf="@id/layout_photo_related_elements"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -29,20 +29,6 @@
             android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/obstacle_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_small"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout"
-        tools:src="@drawable/example_obs_20190808_102427129">
-
-    </ImageView>
 
     <LinearLayout
         android:id="@+id/layout_photo_related_elements"
@@ -63,15 +49,30 @@
             android:layout_weight="1"
             android:background="@android:color/white"
             android:padding="2dp"
-            android:text="Obstacle photo" />
+            android:text="Obstacle" />
 
         <Button
             android:id="@+id/button_edit_photo"
+            android:background="?selectableItemBackground"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit photo" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/obstacle_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_photo_related_elements"
+        tools:src="@drawable/example_obs_20190808_102427129">
+
+    </ImageView>
 
     <!--    <ImageButton-->
     <!--        android:id="@+id/button_edit_photo"-->
