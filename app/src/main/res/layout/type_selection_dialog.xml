@@ -97,6 +97,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/hint_specify_custom_type"
+            android:importantForAutofill="no"
             android:visibility="gone"
             app:boxBackgroundColor="@color/colorLightGray"
             app:errorEnabled="true"
