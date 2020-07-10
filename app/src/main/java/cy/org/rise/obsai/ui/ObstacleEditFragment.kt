@@ -66,6 +66,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var currentObstacle: Obstacle
     private lateinit var typeEditText: EditText
+    private var analysisIndicatorNotShown = true
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     // TFLite related vars
@@ -241,8 +242,14 @@ class ObstacleEditFragment : Fragment() {
             val lastEmptyRadioButton =
                 radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
 
-            lifecycleScope.launch {
-                delay((1000..1500).random().toLong())
+            if (analysisIndicatorNotShown) {
+                analysisIndicatorNotShown = false
+                lifecycleScope.launch {
+                    delay((1500..2000).random().toLong())
+                    dialogAnalysisIndicator.visibility = View.GONE
+                    dialogContents.visibility = View.VISIBLE
+                }
+            } else {
                 dialogAnalysisIndicator.visibility = View.GONE
                 dialogContents.visibility = View.VISIBLE
             }
