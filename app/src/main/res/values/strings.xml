@@ -70,8 +70,9 @@
     <string name="error_type_not_selected">Please select obstacle type</string>
     <string name="error_type_not_valid">Please provide a valid type</string>
 
-    <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
+    <string name="toast_location_required">Please select obstacle location on map</string>
+    <string name="toast_provide_valid_type">Please provide a valid type</string>
 
     <string name="field_required">*Required</string>
     <string name="title_location_map">Location (long click on map to edit)</string>

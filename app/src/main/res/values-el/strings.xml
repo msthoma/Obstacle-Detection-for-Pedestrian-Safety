@@ -50,6 +50,7 @@
     <string name="title_location_map">Τοποθεσία (long click στο χάρτη για αλλαγή)</string>
     <string name="title_obstacle_photo">Φωτογ. εμποδίου</string>
     <string name="press_plus_to_report_obstacle">Πιέστε + για αναφορά εμποδίου</string>
+    <string name="toast_provide_valid_type">Παρακαλώ καταχωρίστε ένα έγκυρο είδος</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->

@@ -324,7 +324,7 @@ class ObstacleEditFragment : Fragment() {
                             } else {
                                 // text provided too short/empty
                                 Toast.makeText(
-                                    context, "Please provide a valid type", Toast
+                                    context, getString(R.string.toast_provide_valid_type), Toast
                                         .LENGTH_SHORT
                                 ).show()
                                 // focus on editText and set error
