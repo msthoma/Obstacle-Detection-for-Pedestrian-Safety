@@ -215,14 +215,17 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        // Show custom dialog for obstacle type selection
-        typeEditText.setOnClickListener {
-            showTypeSelectionDialog()
-        }
+        // Add listerners on editText
+        typeEditText.apply {
+            // Show custom dialog for obstacle type selection
+            setOnClickListener {
+                showTypeSelectionDialog()
+            }
 
-        // Clear any error message present editText value changes
-        select_obstacle_type_edit_text.addTextChangedListener {
-            select_obstacle_type_layout.error = null
+            // Clear any error message present editText value changes
+            addTextChangedListener {
+                select_obstacle_type_layout.error = null
+            }
         }
 
         // Go to photo editing fragment
