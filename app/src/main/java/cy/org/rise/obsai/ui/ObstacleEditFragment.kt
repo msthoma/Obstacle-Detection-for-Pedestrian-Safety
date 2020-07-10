@@ -238,7 +238,6 @@ class ObstacleEditFragment : Fragment() {
             // get references to last radio button and customEditText
             val customEditTextLayout = customDialogView.type_custom_input_layout
             val customEditText = customDialogView.type_custom_input_edittext
-//                customDialogView.findViewById<EditText>(R.id.type_custom_input_edittext)
             // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
             val lastEmptyRadioButton =
                 radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
@@ -247,7 +246,7 @@ class ObstacleEditFragment : Fragment() {
             if (analysisIndicatorNotShown) {
                 analysisIndicatorNotShown = false
                 lifecycleScope.launch {
-                    delay((1500..2000).random().toLong())
+                    delay((1200..1800).random().toLong())
                     dialogAnalysisIndicator.visibility = View.GONE
                     dialogContents.visibility = View.VISIBLE
                 }
