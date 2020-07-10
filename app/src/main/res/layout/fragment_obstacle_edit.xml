@@ -38,7 +38,6 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout"
         tools:src="@drawable/example_obs_20190808_102427129">
