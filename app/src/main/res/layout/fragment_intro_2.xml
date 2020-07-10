@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/custom_intro_fragment_layout"
     android:layout_width="match_parent"
@@ -9,28 +10,56 @@
     android:padding="@dimen/margin_medium"
     tools:background="@color/introColor2">
 
-    <TextView
-        style="@style/TextAppearance.AppCompat.Display1"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Permissions required"
-        android:textColor="#FFFFFF" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:src="@drawable/ic_rise_banner"
-        android:tint="#FFFFFF" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="(Here a popup will ask for permissions)\n\nFor ease of use, the app requires access to the phone's camera and GPS sensor, please grant them in the popup that will appear."
-        android:textColor="#ffffff" />
+            <TextView
+                style="@style/TextAppearance.AppCompat.Display1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="App functionality"
+                android:textColor="#FFFFFF" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center|bottom"
+                android:text="The app aims to automate the reporting process as effortless as possible. Computer vision algorithms capable of recognising common types of obstacles are employed to make reporting the obstacle's type quicker, while other relevant details about the obstacle, such as geographic location, are automatically gathered using the mobile's available sensors. "
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/cnnexplanation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.42"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </LinearLayout>
