@@ -51,12 +51,14 @@
             android:padding="2dp"
             android:text="Obstacle" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_edit_photo"
-            android:background="?selectableItemBackground"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
             android:text="Edit photo" />
     </LinearLayout>
 
