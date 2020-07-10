@@ -418,6 +418,10 @@ class ObstacleEditFragment : Fragment() {
 //            }
         }
 
+        fab_submit.setOnClickListener {
+            checkAndSubmitObstacle()
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             // display discard confirmation dialog on back press, and also on up press (when up
             // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
