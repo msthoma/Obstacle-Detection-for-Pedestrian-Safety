@@ -49,6 +49,10 @@
     <string name="setting_changelog_title">Changelog</string>
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>
+    <string name="setting_uploads_category">Uploads</string>
+    <string name="setting_allow_mobile_data_summary">May lead to increased data usage</string>
+    <string name="setting_about_category">About</string>
+    <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
 
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
@@ -58,19 +62,18 @@
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
 
-    <string name="dialog_select_type_title">What kind of obstacle?</string>
-
+    <string name="dialog_analysis_indicator_text">Analysing photo…</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_OK_button" translatable="false">OK</string>
+    <string name="dialog_select_type_title">What kind of obstacle?</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
     <string name="error_type_not_valid">Please provide a valid type</string>
 
     <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
-    <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
+
     <string name="cnn_explanation">5 most likely types as determined by a neural network:</string>
-    <string name="dialog_analysis_indicator_text">Analysing photo…</string>
     <string name="field_required">*Required</string>
 
     <string-array name="obstacle_types_array">

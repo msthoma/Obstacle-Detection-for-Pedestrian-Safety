@@ -43,6 +43,9 @@
     <string name="setting_app_version_title">Έκδοση εφαρμογής</string>
     <string name="setting_changelog_title">Ιστορικό αλλαγών</string>
     <string name="setting_allow_mobile_data">Χρήση δεδομένων κινητής για μεταφορτώσεις</string>
+    <string name="setting_uploads_category">Μεταφορτώσεις</string>
+    <string name="setting_allow_mobile_data_summary">Ενδέχεται να χρησιμοποιηθεί μεγάλος όγκος δεδομένων</string>
+    <string name="setting_about_category">Σχετικά</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
