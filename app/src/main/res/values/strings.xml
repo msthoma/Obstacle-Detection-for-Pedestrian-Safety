@@ -14,7 +14,7 @@
 
     <string name="label_fragment_obstacle_list">Obstacles</string>
     <string name="label_fragment_camera">Add new obstacle</string>
-    <string name="label_fragment_obstacle_edit">Edit obstacle</string>
+    <string name="label_fragment_obstacle_edit">Obstacle details</string>
     <string name="label_fragment_crop">Edit image</string>
     <string name="label_fragment_account">User account</string>
     <string name="label_fragment_settings">Settings</string>
