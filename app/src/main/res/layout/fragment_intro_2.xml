@@ -14,43 +14,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="App functionality"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="The app aims to automate the reporting process as effortless as possible."
+            android:textColor="#ffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Display1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="App functionality"
-                android:textColor="#FFFFFF" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="The app aims to automate the reporting process as effortless as possible.\n\nComputer vision algorithms are employed to make reporting the obstacle's type faster.\n\nOther relevant details about the obstacle are automatically gathered using the device's available sensors."
-                android:textColor="#ffffff" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <ImageView
+            android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
             android:src="@drawable/cnnexplanation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1"
@@ -58,6 +51,18 @@
             app:layout_constraintHeight_percent="0.42"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Computer vision algorithms are employed to make reporting the obstacle's type faster.\n\nOther relevant details about the obstacle are automatically gathered using the device's available sensors, with minimal user interaction."
+            android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
