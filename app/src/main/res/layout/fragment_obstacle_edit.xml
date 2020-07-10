@@ -68,24 +68,11 @@
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/margin_small"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintBottom_toTopOf="@id/map_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_photo_related_elements"
         tools:src="@drawable/example_obs_20190808_102427129" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view"
-        map:mapType="normal"
-        map:uiRotateGestures="false"
-        map:uiScrollGestures="true"
-        map:uiTiltGestures="false" />
 
     <TextView
         android:id="@+id/map_title"
@@ -96,7 +83,21 @@
         android:background="@android:color/white"
         android:padding="2dp"
         android:text="Location (long click to change)"
-        app:layout_constraintStart_toStartOf="@id/map"
-        app:layout_constraintTop_toTopOf="@id/map" />
+        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map_title"
+        map:mapType="normal"
+        map:uiRotateGestures="false"
+        map:uiScrollGestures="true"
+        map:uiTiltGestures="false" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
