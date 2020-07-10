@@ -210,147 +210,7 @@ class ObstacleEditFragment : Fragment() {
 
         // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
-            // get type array either from CNN results, or from resources if CNN classification
-            // didn't work
-            val obsTypeArray = if (::cnnResults.isInitialized) {
-                if (cnnResults.isNotEmpty()) {
-                    // add types that are not part of the CNN
-                    val diff = getAlphabeticalTypeArray().filterNot {
-                        cnnResults.toSet().contains(it)
-                    }.sorted().toTypedArray()
-                    cnnResults + diff
-                } else getAlphabeticalTypeArray()
-            } else {
-                getAlphabeticalTypeArray()
-            }
-
-            val dialog = MaterialDialog(requireContext()).customView(
-                R.layout.type_selection_dialog,
-                scrollable = true
-            )
-
-            // get references to views on dialog that are of interest
-            val customDialogView = dialog.getCustomView() as ConstraintLayout
-            val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
-            val dialogContents = customDialogView.dialog_contents
-            val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
-
-            // initially only show 5 most likely types, as determined by the CNN (hide the rest)
-            populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
-
-            // get references to last radio button and customEditText
-            val customEditTextLayout = customDialogView.type_custom_input_layout
-            val customEditText = customDialogView.type_custom_input_edittext
-            // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
-            val lastEmptyRadioButton =
-                radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
-
-            // show analysis indicator when first launched
-            if (analysisIndicatorNotShown) {
-                analysisIndicatorNotShown = false
-                lifecycleScope.launch {
-                    delay((1200..1800).random().toLong())
-                    dialogAnalysisIndicator.visibility = View.GONE
-                    dialogContents.visibility = View.VISIBLE
-                }
-            } else {
-                dialogAnalysisIndicator.visibility = View.GONE
-                dialogContents.visibility = View.VISIBLE
-            }
-
-            // show more button is clicked
-            customDialogView.findViewById<Button>(R.id.button_show_more_types)
-                .setOnClickListener { showMoreButton ->
-                    // reveal all possible types
-                    for (i in 0..obsTypeArray.size + 1)
-                        radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
-
-                    // hide more button and CNN explanation
-                    showMoreButton.visibility = View.GONE
-                    customDialogView.findViewById<TextView>(R.id.cnn_explanation)?.visibility =
-                        View.GONE
-
-                    // show custom editText
-                    customEditTextLayout.visibility = View.VISIBLE
-                }
-
-            // set listeners to all views to regulate their behaviour
-            customEditText.apply {
-                setOnFocusChangeListener { _, hasFocus ->
-                    if (hasFocus) lastEmptyRadioButton.isChecked = true
-                }
-                setOnClickListener {
-                    lastEmptyRadioButton.isChecked = true
-                }
-                addTextChangedListener { currentText ->
-                    if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
-                }
-            }
-            radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                if (checkedId != lastEmptyRadioButton.id) {
-                    // capture current selection
-                    radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                        currentObstacle.obstacleType = rb.text.toString()
-                        Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
-                    }
-                    // clear any focus on customEditText
-                    customEditText.apply {
-                        clearFocus()
-                        hideKeyboard()
-                        customEditTextLayout.error = null
-                    }
-                } else {
-                    // when checkedId == lastEmptyRadioButton.id it means editText should
-                    // be selected
-                    customEditText.apply {
-                        requestFocus()
-                        showKeyboard()
-                    }
-                }
-            }
-
-            // finally, display the dialog
-            dialog.apply {
-                noAutoDismiss()
-                title(text = getString(R.string.dialog_select_type_title))
-                positiveButton(R.string.dialog_OK_button) {
-                    val checkedId = radioGroup.checkedRadioButtonId
-                    if (checkedId != -1) {
-                        if (checkedId == lastEmptyRadioButton.id) {
-                            // customEditText selected, make sure text is not too short or empty
-                            val currentText = customEditText.editableText.toString().trim()
-                            if (currentText.length > 2) {
-                                Log.d(TAG(), "current custom text $currentText")
-                                currentObstacle.obstacleType = currentText
-                                typeEditText.setText(currentObstacle.obstacleType)
-                                dismiss()
-                            } else {
-                                // text provided too short/empty
-                                Toast.makeText(
-                                    context, getString(R.string.toast_provide_valid_type), Toast
-                                        .LENGTH_SHORT
-                                ).show()
-                                // focus on editText and set error
-                                lastEmptyRadioButton.parent
-                                    .requestChildFocus(customEditTextLayout, customEditTextLayout)
-                                customEditTextLayout.error =
-                                    getString(R.string.error_type_not_valid)
-                            }
-                        } else {
-                            // selection is from predefined list, good to go
-                            typeEditText.setText(currentObstacle.obstacleType)
-                            dismiss()
-                        }
-                    } else {
-                        // -1 means none selected
-                        Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-                negativeButton(R.string.dialog_cancel_button) { dismiss() }
-                lifecycleOwner(viewLifecycleOwner)
-                dialog.show()
-            }
+            showTypeSelectionDialog()
         }
 
         // Clear any error message present editText value changes
@@ -452,6 +312,150 @@ class ObstacleEditFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showTypeSelectionDialog() {
+        // get type array either from CNN results, or from resources if CNN classification
+        // didn't work
+        val obsTypeArray = if (::cnnResults.isInitialized) {
+            if (cnnResults.isNotEmpty()) {
+                // add types that are not part of the CNN
+                val diff = getAlphabeticalTypeArray().filterNot {
+                    cnnResults.toSet().contains(it)
+                }.sorted().toTypedArray()
+                cnnResults + diff
+            } else getAlphabeticalTypeArray()
+        } else {
+            getAlphabeticalTypeArray()
+        }
+
+        val dialog = MaterialDialog(requireContext()).customView(
+            R.layout.type_selection_dialog,
+            scrollable = true
+        )
+
+        // get references to views on dialog that are of interest
+        val customDialogView = dialog.getCustomView() as ConstraintLayout
+        val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
+        val dialogContents = customDialogView.dialog_contents
+        val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
+
+        // initially only show 5 most likely types, as determined by the CNN (hide the rest)
+        populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
+
+        // get references to last radio button and customEditText
+        val customEditTextLayout = customDialogView.type_custom_input_layout
+        val customEditText = customDialogView.type_custom_input_edittext
+        // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
+        val lastEmptyRadioButton =
+            radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
+
+        // show analysis indicator when first launched
+        if (analysisIndicatorNotShown) {
+            analysisIndicatorNotShown = false
+            lifecycleScope.launch {
+                delay((1200..1800).random().toLong())
+                dialogAnalysisIndicator.visibility = View.GONE
+                dialogContents.visibility = View.VISIBLE
+            }
+        } else {
+            dialogAnalysisIndicator.visibility = View.GONE
+            dialogContents.visibility = View.VISIBLE
+        }
+
+        // show more button is clicked
+        customDialogView.findViewById<Button>(R.id.button_show_more_types)
+            .setOnClickListener { showMoreButton ->
+                // reveal all possible types
+                for (i in 0..obsTypeArray.size + 1)
+                    radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
+
+                // hide more button and CNN explanation
+                showMoreButton.visibility = View.GONE
+                customDialogView.findViewById<TextView>(R.id.cnn_explanation)?.visibility =
+                    View.GONE
+
+                // show custom editText
+                customEditTextLayout.visibility = View.VISIBLE
+            }
+
+        // set listeners to all views to regulate their behaviour
+        customEditText.apply {
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) lastEmptyRadioButton.isChecked = true
+            }
+            setOnClickListener {
+                lastEmptyRadioButton.isChecked = true
+            }
+            addTextChangedListener { currentText ->
+                if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
+            }
+        }
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId != lastEmptyRadioButton.id) {
+                // capture current selection
+                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    currentObstacle.obstacleType = rb.text.toString()
+                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                }
+                // clear any focus on customEditText
+                customEditText.apply {
+                    clearFocus()
+                    hideKeyboard()
+                    customEditTextLayout.error = null
+                }
+            } else {
+                // when checkedId == lastEmptyRadioButton.id it means editText should
+                // be selected
+                customEditText.apply {
+                    requestFocus()
+                    showKeyboard()
+                }
+            }
+        }
+
+        // finally, display the dialog
+        dialog.apply {
+            noAutoDismiss()
+            title(text = getString(R.string.dialog_select_type_title))
+            positiveButton(R.string.dialog_OK_button) {
+                val checkedId = radioGroup.checkedRadioButtonId
+                if (checkedId != -1) {
+                    if (checkedId == lastEmptyRadioButton.id) {
+                        // customEditText selected, make sure text is not too short or empty
+                        val currentText = customEditText.editableText.toString().trim()
+                        if (currentText.length > 2) {
+                            Log.d(TAG(), "current custom text $currentText")
+                            currentObstacle.obstacleType = currentText
+                            typeEditText.setText(currentObstacle.obstacleType)
+                            dismiss()
+                        } else {
+                            // text provided too short/empty
+                            Toast.makeText(
+                                context, getString(R.string.toast_provide_valid_type), Toast
+                                    .LENGTH_SHORT
+                            ).show()
+                            // focus on editText and set error
+                            lastEmptyRadioButton.parent
+                                .requestChildFocus(customEditTextLayout, customEditTextLayout)
+                            customEditTextLayout.error =
+                                getString(R.string.error_type_not_valid)
+                        }
+                    } else {
+                        // selection is from predefined list, good to go
+                        typeEditText.setText(currentObstacle.obstacleType)
+                        dismiss()
+                    }
+                } else {
+                    // -1 means none selected
+                    Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
+            lifecycleOwner(viewLifecycleOwner)
+            dialog.show()
         }
     }
 
