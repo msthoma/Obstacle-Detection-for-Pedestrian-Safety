@@ -16,6 +16,8 @@
         android:layout_marginBottom="@dimen/margin_small"
         android:hint="@string/hint_obstacle_type"
         app:errorEnabled="true"
+        app:helperText="*Required"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
         app:layout_constraintTop_toTopOf="parent">
 
