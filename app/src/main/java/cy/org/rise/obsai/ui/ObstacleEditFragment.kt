@@ -104,12 +104,14 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Get current obstacle
-        currentObstacle = args.currentObstacle
-
         // Get views of interest
         typeEditText = select_obstacle_type_edit_text
         fabSubmit = fab_submit
+
+        // Get current obstacle
+        currentObstacle = args.currentObstacle
+        // If type is already available, set it in editText
+        if (currentObstacle.obstacleType != "") typeEditText.setText(currentObstacle.obstacleType)
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
