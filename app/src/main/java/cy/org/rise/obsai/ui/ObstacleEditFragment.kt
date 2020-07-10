@@ -24,6 +24,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
@@ -66,6 +67,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var currentObstacle: Obstacle
     private lateinit var typeEditText: EditText
+    private lateinit var fabSubmit: ExtendedFloatingActionButton
     private var analysisIndicatorNotShown = true
     private val args: ObstacleEditFragmentArgs by navArgs()
 
@@ -100,6 +102,10 @@ class ObstacleEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get current obstacle
         currentObstacle = args.currentObstacle
+
+        // Get views of interest
+        typeEditText = select_obstacle_type_edit_text
+        fabSubmit = fab_submit
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
@@ -201,9 +207,6 @@ class ObstacleEditFragment : Fragment() {
                 }?.toMap()
             }
         }
-
-        // Setup type selection dialog
-        typeEditText = select_obstacle_type_edit_text
 
         // Show custom dialog for obstacle type selection
         typeEditText.setOnClickListener {
@@ -418,7 +421,7 @@ class ObstacleEditFragment : Fragment() {
 //            }
         }
 
-        fab_submit.setOnClickListener {
+        fabSubmit.setOnClickListener {
             checkAndSubmitObstacle()
         }
 
