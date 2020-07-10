@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_small"
+    android:layout_margin="@dimen/margin_tiny"
     tools:context=".ui.ObstacleEditFragment">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -13,7 +13,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_tiny"
         android:hint="@string/hint_obstacle_type"
         app:errorEnabled="true"
         app:helperText="@string/field_required"
@@ -35,6 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="@dimen/margin_tiny"
         app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,11 +44,10 @@
 
         <TextView
             android:id="@+id/photo_title"
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="2dp"
             android:text="Obstacle photo" />
 
         <com.google.android.material.button.MaterialButton
@@ -65,7 +66,7 @@
         android:id="@+id/obstacle_image_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_tiny"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/map_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +79,8 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="@dimen/margin_tiny"
         android:text="Location (long click to change)"
         app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintStart_toStartOf="parent"
