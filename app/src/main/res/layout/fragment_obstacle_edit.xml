@@ -45,17 +45,17 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:layout_weight="1"
             android:background="@android:color/white"
             android:padding="2dp"
-            android:text="Obstacle" />
+            android:text="Obstacle photo" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_edit_photo"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="0dp"
