@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Privacy policy"
+        android:text="Thank you for helping us evaluate this app!"
         android:textColor="#FFFFFF" />
 
     <ImageView
@@ -25,13 +25,22 @@
         android:src="@drawable/ic_rise_banner"
         android:tint="#FFFFFF" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
+    <TextView
         style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:buttonTint="#FFFFFF"
-        android:text="I have read and accept the privacy policy"
-        android:textColor="#FFFFFF" />
+        android:gravity="center"
+        android:text="Important Notes\n\n- This is a prototype of the application intended for evaluation purposes, and it is not officially distributed yet. Hence, only a subset of the application features are deployed at this point.\n\n- All information collected during this trial will remain anonymous. No information about the identity of the user is collected during the app trial or the questionnaire."
+        android:textColor="#ffffff" />
+
+    <!--    <CheckBox-->
+    <!--        android:id="@+id/checkBox"-->
+    <!--        style="@style/TextAppearance.AppCompat.Medium"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:buttonTint="#FFFFFF"-->
+    <!--        android:text="I have read and accept the privacy policy"-->
+    <!--        android:textColor="#FFFFFF" />-->
 </LinearLayout>
