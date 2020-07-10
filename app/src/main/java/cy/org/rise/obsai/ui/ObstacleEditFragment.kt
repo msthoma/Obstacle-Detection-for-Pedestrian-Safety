@@ -514,7 +514,7 @@ class ObstacleEditFragment : Fragment() {
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        layoutParams.bottomMargin = 12
+        layoutParams.bottomMargin = 20
 
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.forEachIndexed { i, obsType ->
@@ -525,6 +525,9 @@ class ObstacleEditFragment : Fragment() {
                 if (i >= listLimit) rb.visibility = View.GONE
             })
         }
+
+        // larger margin for last RB, to accommodate editText
+        layoutParams.bottomMargin = 80
 
         if (addEmptyRadioButtonAtBottom) {
             radioGroup.addView(RadioButton(context).also { rb ->
