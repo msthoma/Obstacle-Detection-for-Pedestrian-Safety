@@ -88,19 +88,28 @@
 
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/type_custom_input_edittext"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_custom_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="40dp"
             android:hint="@string/hint_specify_custom_type"
-            android:inputType="textCapSentences"
-            android:maxLength="40"
-            android:maxLines="1"
             android:visibility="gone"
+            app:errorEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/types_radio_group"
-            tools:visibility="visible" />
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type_custom_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:maxLength="40"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button_show_more_types"
