@@ -49,6 +49,7 @@
     <string name="button_edit_photo">Επεξ. φωτογ.</string>
     <string name="title_location_map">Τοποθεσία (long click στο χάρτη για αλλαγή)</string>
     <string name="title_obstacle_photo">Φωτογ. εμποδίου</string>
+    <string name="press_plus_to_report_obstacle">Πιέστε + για αναφορά εμποδίου</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
