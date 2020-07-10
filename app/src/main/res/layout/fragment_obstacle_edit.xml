@@ -48,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Obstacle photo" />
+            android:text="@string/title_obstacle_photo" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_edit_photo"
@@ -59,7 +59,7 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="0dp"
-            android:text="Edit photo" />
+            android:text="@string/button_edit_photo" />
     </LinearLayout>
 
     <ImageView
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="2dp"
         android:paddingBottom="@dimen/margin_tiny"
-        android:text="Location (long click to change)"
+        android:text="@string/title_location_map"
         app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/obstacle_image_view" />

@@ -46,6 +46,9 @@
     <string name="setting_uploads_category">Μεταφορτώσεις</string>
     <string name="setting_allow_mobile_data_summary">Ενδέχεται να χρησιμοποιηθεί μεγάλος όγκος δεδομένων</string>
     <string name="setting_about_category">Σχετικά</string>
+    <string name="button_edit_photo">Επεξ. φωτογ.</string>
+    <string name="title_location_map">Τοποθεσία (long click στο χάρτη για αλλαγή)</string>
+    <string name="title_obstacle_photo">Φωτογ. εμποδίου</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->
