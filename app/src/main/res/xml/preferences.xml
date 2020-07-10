@@ -8,8 +8,10 @@
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="allow_mobile_data"
-            app:summary="@string/setting_allow_mobile_data_summary"
+            app:singleLineTitle="false"
             app:title="@string/setting_allow_mobile_data" />
+        <!--TODO set summary warning only when setting is on-->
+        <!--app:summary="@string/setting_allow_mobile_data_summary"-->
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/setting_about_category">
