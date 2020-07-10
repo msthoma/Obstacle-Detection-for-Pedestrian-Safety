@@ -58,7 +58,7 @@
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
 
-    <string name="dialog_select_type_title">Select type</string>
+    <string name="dialog_select_type_title">What kind of obstacle?</string>
 
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_OK_button" translatable="false">OK</string>
