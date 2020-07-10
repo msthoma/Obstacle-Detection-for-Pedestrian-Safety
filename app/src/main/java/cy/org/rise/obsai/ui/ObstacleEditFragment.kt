@@ -280,7 +280,7 @@ class ObstacleEditFragment : Fragment() {
                     lastEmptyRadioButton.isChecked = true
                 }
                 addTextChangedListener { currentText ->
-                    if (currentText.toString().length > 2) customEditTextLayout.error = null
+                    if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
                 }
             }
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -313,13 +313,9 @@ class ObstacleEditFragment : Fragment() {
                 positiveButton(R.string.dialog_OK_button) {
                     val checkedId = radioGroup.checkedRadioButtonId
                     if (checkedId != -1) {
-                        Log.d(
-                            TAG(), "current selection ${radioGroup.findViewById<RadioButton>
-                                (checkedId).text}"
-                        )
                         if (checkedId == lastEmptyRadioButton.id) {
                             // customEditText selected, make sure text is not too short or empty
-                            val currentText = customEditText.editableText.toString()
+                            val currentText = customEditText.editableText.toString().trim()
                             if (currentText.length > 2) {
                                 Log.d(TAG(), "current custom text $currentText")
                                 currentObstacle.obstacleType = currentText
