@@ -36,6 +36,7 @@
     <string name="dialog_select_type_title">Τι είδος εμποδίου;</string>
     <string name="cnn_explanation">5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
     <string name="dialog_analysis_indicator_text">Ανάλυση φωτογραφίας…</string>
+    <string name="button_show_more_types">Άλλα είδη…</string>
 
     <!--    <string-array name="obstacle_types_array">-->
 <!--        <item>Διαφημιστική πινακίδα</item>-->

@@ -9,7 +9,7 @@
     <string name="button_allow">Yes</string>
     <string name="button_deny">No</string>
     <string name="button_ext_camera">Ext.camera</string>
-    <string name="button_show_more_types">More…</string>
+    <string name="button_show_more_types">More options…</string>
     <string name="button_sign_in">Sign in</string>
 
     <string name="account_fragment_title">Sign in to your account</string>
