@@ -83,6 +83,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:visibility="invisible"
                 tools:visibility="visible" />
 
@@ -90,13 +91,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/type_custom_input_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/hint_specify_custom_type"
             android:visibility="gone"
+            app:boxBackgroundColor="@color/colorLightGray"
             app:errorEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/types_radio_group"
             tools:visibility="visible">
