@@ -38,7 +38,7 @@
     <string name="hint_password" translatable="false">Password</string>
     <string name="hint_username" translatable="false">Username</string>
     <string name="hint_obstacle_type">Obstacle type</string>
-    <string name="hint_specify_custom_type">Specify other type</string>
+    <string name="hint_specify_custom_type">Custom type</string>
 
     <string name="acra_crash_dialog_title" translatable="false">Obstacles app has crashed</string>
     <string name="acra_crash_input_prompt" translatable="false">You can add a comment here (optional):</string>
