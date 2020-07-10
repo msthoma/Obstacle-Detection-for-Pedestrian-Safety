@@ -205,6 +205,13 @@ class ObstacleEditFragment : Fragment() {
                         setOf(' ', '(', ')', '.', '-', '/').contains(it)
                     } to v
                 }?.toMap()
+
+                // Automatically show dialog when results become available
+                if (currentObstacle.obstacleType == "") {
+                    if (::cnnResults.isInitialized) {
+                        if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
+                    }
+                }
             }
         }
 
