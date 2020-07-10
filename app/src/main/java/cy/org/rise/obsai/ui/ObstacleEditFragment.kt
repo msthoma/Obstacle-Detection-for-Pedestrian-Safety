@@ -68,6 +68,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var currentObstacle: Obstacle
     private lateinit var typeEditText: EditText
     private lateinit var fabSubmit: ExtendedFloatingActionButton
+    private var fragCreationTime by Delegates.notNull<Long>()
     private var analysisIndicatorNotShown = true
     private val args: ObstacleEditFragmentArgs by navArgs()
 
@@ -96,6 +97,9 @@ class ObstacleEditFragment : Fragment() {
     ): View? {
         // Set toolbar menu
         setHasOptionsMenu(true)
+        // save create time
+        fragCreationTime = System.currentTimeMillis()
+
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
@@ -206,16 +210,19 @@ class ObstacleEditFragment : Fragment() {
                     } to v
                 }?.toMap()
 
+                val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
+                // todo save in obstacle
+                Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
+
                 // Automatically show dialog when results become available
-                if (currentObstacle.obstacleType == "") {
-                    if (::cnnResults.isInitialized) {
-                        if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-                    }
-                }
+                if (timeUntilCnnResults <= 5000)
+                    if (currentObstacle.obstacleType == "")
+                        if (::cnnResults.isInitialized)
+                            if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
             }
         }
 
-        // Add listerners on editText
+        // Add listeners on editText
         typeEditText.apply {
             // Show custom dialog for obstacle type selection
             setOnClickListener {
