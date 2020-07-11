@@ -54,6 +54,12 @@ class AppIntroActivity : AppIntro() {
                 resources.getColor(R.color.introColor3)
             )
         )
+        addSlide(
+            CustomIntroFragment.newInstance(
+                R.layout.fragment_intro_4,
+                resources.getColor(R.color.introColor4)
+            )
+        )
     }
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
