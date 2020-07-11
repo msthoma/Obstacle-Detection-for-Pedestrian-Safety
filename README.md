@@ -1,4 +1,4 @@
-![Android Pull Request & Master CI](https://github.com/msthoma/ObsAI/workflows/Android%20Pull%20Request%20&%20Master%20CI/badge.svg?branch=master)
+![master build](https://github.com/msthoma/ObsAI/workflows/master%20build/badge.svg?branch=master&event=status)
 
 <p align="center">
   <img src="/app/src/main/ic_launcher-web.png" alt="Obstacles app icon" width="200px"/>
