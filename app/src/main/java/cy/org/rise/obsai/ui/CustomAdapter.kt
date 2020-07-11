@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.row_item.view.*
 import java.io.File
 
@@ -26,14 +27,18 @@ class CustomAdapter internal constructor() :
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val textView: TextView
-        val uploadStatusView: TextView
+        //        val textView: TextView
+//        val uploadStatusView: TextView
+        val typeView: TextView
+        val locationView: TextView
+        val timeView: TextView
 
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
-            textView = v.findViewById(R.id.textView)
-            uploadStatusView = v.findViewById(R.id.upload_status_view)
+            typeView = v.type_view
+            locationView = v.location_view
+            timeView = v.time_view
         }
     }
 
@@ -50,12 +55,19 @@ class CustomAdapter internal constructor() :
         // Get element from the dataset at this position and replace the contents of the view
         // with that element
         val obs = obstacles[position]
-        viewHolder.textView.text = "Type:\t${obs.obstacleType}\n" +
-                "Location:\t${obs.location.latitude}, ${obs.location.longitude}\n" +
-                "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
-                "y: ${"%.3f".format(obs.orientation.y)}, " +
-                "z: ${"%.3f".format(obs.orientation.z)}\n" +
-                "${obs.timeStamp}"
+
+        viewHolder.apply {
+            typeView.text = "Type: ${obs.obstacleType}"
+            locationView.text =
+                "Location: ${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
+            timeView.text = obs.timeStamp.toString()
+        }
+//        viewHolder.textView.text = "Type:\t${obs.obstacleType}\n" +
+//                "Location:\t${obs.location.latitude}, ${obs.location.longitude}\n" +
+//                "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
+//                "y: ${"%.3f".format(obs.orientation.y)}, " +
+//                "z: ${"%.3f".format(obs.orientation.z)}\n" +
+//                "${obs.timeStamp}"
 
 //        when (obs.uploadStatus) {
 //            "Uploading..." -> viewHolder.uploadStatusView.text = obs.uploadStatus
