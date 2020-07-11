@@ -60,6 +60,7 @@ class CustomAdapter internal constructor() :
             typeView.text = "Type: ${obs.obstacleType}"
             locationView.text =
                 "Location: ${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
+            // TODO: 11/07/20 format dates to locale strings, add ThreeTenABP
             timeView.text = obs.timeStamp.toString()
         }
 //        viewHolder.textView.text = "Type:\t${obs.obstacleType}\n" +
