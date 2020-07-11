@@ -23,7 +23,7 @@
             android:text="Thank you for helping us evaluate this app!"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,11 +44,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
-            android:text="Important Notes\n\n- This is a prototype of the application intended for evaluation purposes, and it is not officially distributed yet. Hence, only a subset of the application features are deployed at this point.\n\n- All information collected during this trial will remain anonymous. No information about the identity of the user is collected during the app trial or the questionnaire."
+            android:text="Important Notes\n\n- This is a prototype of the application intended for evaluation purposes, and it is not officially distributed yet. Hence, only a subset of the application features are deployed at this point.\n\n- All information collected during this trial will remain anonymous. No information about the identity of the user is collected during the app trial or the questionnaire.\n\n\n(You can return to this Intro any time by clicking 'Show App Intro' in Settings)"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintTop_toBottomOf="@id/image"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
