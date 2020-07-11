@@ -88,6 +88,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_aboutActivity"
             app:destination="@id/aboutActivity" />
+        <action
+            android:id="@+id/action_settingsFragment_to_appIntroActivity"
+            app:destination="@id/appIntroActivity" />
     </fragment>
     <activity
         android:id="@+id/aboutActivity"
