@@ -256,4 +256,7 @@ dependencies {
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
     implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
     implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
+
+    // TouchImageView https://github.com/MikeOrtiz/TouchImageView
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
 }
