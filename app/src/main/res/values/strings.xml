@@ -12,7 +12,7 @@
 
     <string name="account_fragment_title">Sign in to your account</string>
 
-    <string name="label_fragment_obstacle_list">Obstacles</string>
+    <string name="label_fragment_obstacle_list">Obstacle Reporter</string>
     <string name="label_fragment_camera">Add new obstacle</string>
     <string name="label_fragment_obstacle_edit">Obstacle details</string>
     <string name="label_fragment_crop">Edit image</string>
