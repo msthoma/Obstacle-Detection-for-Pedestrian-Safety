@@ -516,6 +516,12 @@ class ObstacleEditFragment : Fragment() {
         if (allRequiredInfoEntered()) {
             // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
+            try {
+                // TODO: 11/07/20 is this necessary?
+                Toast.makeText(requireContext(), "Obstacle submitted!", Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                Log.e(TAG(), "Exception while trying to show toast", e)
+            }
             findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
             )
