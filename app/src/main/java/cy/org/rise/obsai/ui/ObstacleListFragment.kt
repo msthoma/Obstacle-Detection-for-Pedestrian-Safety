@@ -21,10 +21,9 @@ import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import cy.org.rise.obsai.R
-import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.SessionManager
-import cy.org.rise.obsai.utils.getUniqueAppInstallID
+import cy.org.rise.obsai.utils.introStatus
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
 /**
@@ -51,6 +50,10 @@ class ObstacleListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // On first launch redirect to the Intro
+        if (!requireContext().introStatus())
+            findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
 
         sessionManager = SessionManager(requireContext())
 
