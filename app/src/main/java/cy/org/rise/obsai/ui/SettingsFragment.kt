@@ -10,7 +10,6 @@ import com.michaelflisar.changelog.ChangelogBuilder
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.getUniqueAppInstallID
 
 /**
  * Fragment that displays the app's settings.
@@ -31,6 +30,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
             if (viewClicks == 20) {
                 throw RuntimeException("This crash was intentional!")
             }
+            true
+        }
+
+        // navigate to intro
+        findPreference<Preference>("appIntro")?.setOnPreferenceClickListener {
+            // TODO: 11/07/20 figure out intro navigation
+            findNavController().navigate(R.id.action_settingsFragment_to_appIntroActivity)
             true
         }
 
