@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/margin_medium"
-    tools:background="@color/introColor3">
+    tools:background="@color/introColor4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
