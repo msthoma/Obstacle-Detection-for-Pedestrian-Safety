@@ -3,24 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cy.org.rise.obsai.ui.MainActivity">
 
-<!--    <item-->
-<!--        android:id="@+id/action_sign_in"-->
-<!--        android:icon="@drawable/ic_user_white_24dp"-->
-<!--        android:orderInCategory="100"-->
-<!--        android:title="@string/action_sign_in"-->
-<!--        app:showAsAction="ifRoom" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/action_sign_in"-->
+    <!--        android:icon="@drawable/ic_user_white_24dp"-->
+    <!--        android:orderInCategory="100"-->
+    <!--        android:title="@string/action_sign_in"-->
+    <!--        app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic__settings_24dp"
         android:orderInCategory="200"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_add_mock_element"
-        android:orderInCategory="300"
-        android:title="@string/action_add_mock_element"
-        app:showAsAction="never" />
+    <!--    <item-->
+    <!--        android:id="@+id/action_add_mock_element"-->
+    <!--        android:orderInCategory="300"-->
+    <!--        android:title="@string/action_add_mock_element"-->
+    <!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_app_intro"

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_small"
+    android:layout_margin="@dimen/margin_tiny"
     tools:context=".ui.ObstacleEditFragment">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -13,10 +13,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_tiny"
         android:hint="@string/hint_obstacle_type"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
+        app:helperText="@string/field_required"
+        app:helperTextEnabled="true"
+        app:layout_constraintBottom_toTopOf="@id/layout_photo_related_elements"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -28,40 +30,61 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_photo_related_elements"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="@dimen/margin_tiny"
+        app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout">
+
+        <TextView
+            android:id="@+id/photo_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/title_obstacle_photo" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_edit_photo"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            android:text="@string/button_edit_photo" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/obstacle_image_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_tiny"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintBottom_toTopOf="@id/map_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout"
-        tools:src="@drawable/example_obs_20190808_102427129">
-
-    </ImageView>
+        app:layout_constraintTop_toBottomOf="@id/layout_photo_related_elements"
+        tools:src="@drawable/example_obs_20190808_102427129" />
 
     <TextView
-        android:id="@+id/photo_title"
-        style="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/map_title"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@android:color/white"
-        android:padding="2dp"
-        android:text="Obstacle photo"
-        app:layout_constraintStart_toStartOf="@id/obstacle_image_view"
-        app:layout_constraintTop_toTopOf="@id/obstacle_image_view" />
-
-    <ImageButton
-        android:id="@+id/button_edit_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_white_24dp"
-        app:layout_constraintEnd_toEndOf="@id/obstacle_image_view"
-        app:layout_constraintTop_toTopOf="@id/obstacle_image_view" />
+        android:paddingTop="2dp"
+        android:paddingBottom="@dimen/margin_tiny"
+        android:text="@string/title_location_map"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
@@ -70,22 +93,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view"
+        app:layout_constraintTop_toBottomOf="@id/map_title"
         map:mapType="normal"
         map:uiRotateGestures="false"
         map:uiScrollGestures="true"
         map:uiTiltGestures="false" />
 
-    <TextView
-        android:id="@+id/map_title"
-        style="@style/TextAppearance.AppCompat.Medium"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@android:color/white"
-        android:padding="2dp"
-        android:text="Location (long click to change)"
-        app:layout_constraintStart_toStartOf="@id/map"
-        app:layout_constraintTop_toTopOf="@id/map" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:text="Submit"
+        app:icon="@drawable/ic_check_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

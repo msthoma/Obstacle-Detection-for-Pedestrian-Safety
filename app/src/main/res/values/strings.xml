@@ -6,23 +6,21 @@
     <string name="permission_location_rationale">The app requires access to your location to function, please grant it to proceed.</string>
     <string name="permission_rationale_dialog_title">Permission required</string>
 
-    <string name="button_allow">Yes</string>
-    <string name="button_deny">No</string>
-    <string name="button_ext_camera">Ext.camera</string>
-    <string name="button_show_more_types">More…</string>
+    <string name="button_edit_photo">Edit photo</string>
+    <string name="button_show_more_types">More options…</string>
     <string name="button_sign_in">Sign in</string>
 
     <string name="account_fragment_title">Sign in to your account</string>
 
-    <string name="label_fragment_obstacle_list">Obstacles</string>
+    <string name="label_fragment_obstacle_list">Obstacle Reporter</string>
     <string name="label_fragment_camera">Add new obstacle</string>
-    <string name="label_fragment_obstacle_edit">Edit obstacle</string>
+    <string name="label_fragment_obstacle_edit">Obstacle details</string>
     <string name="label_fragment_crop">Edit image</string>
     <string name="label_fragment_account">User account</string>
     <string name="label_fragment_settings">Settings</string>
 
     <string name="action_add_mock_element" translatable="false">Add mock obstacle</string>
-    <string name="action_app_intro" translatable="false">App intro</string>
+    <string name="action_app_intro">Show App Intro</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_delete_all">Delete all</string>
@@ -38,17 +36,23 @@
     <string name="hint_password" translatable="false">Password</string>
     <string name="hint_username" translatable="false">Username</string>
     <string name="hint_obstacle_type">Obstacle type</string>
-    <string name="hint_specify_custom_type">Specify other type</string>
+    <string name="hint_specify_custom_type">Custom type</string>
 
     <string name="acra_crash_dialog_title" translatable="false">Obstacles app has crashed</string>
     <string name="acra_crash_input_prompt" translatable="false">You can add a comment here (optional):</string>
     <string name="acra_crash_message" translatable="false">Sorry, the application crashed. Please report the crash by clicking OK below (you\'ll be prompted to email a crash file to the developer).</string>
 
-    <string name="setting_app_version_title" translatable="false">App version</string>
+    <string name="setting_app_version_title">App version</string>
     <string name="setting_changelog_summary">Timeline of changes in the app</string>
-    <string name="setting_changelog_title" translatable="false">Changelog</string>
+    <string name="setting_changelog_title">Changelog</string>
     <string name="setting_open_source_libraries_summary">Links to the open source libraries used in this app</string>
     <string name="setting_open_source_libraries_title">Open source libraries</string>
+    <string name="setting_uploads_category">Uploads</string>
+    <string name="setting_allow_mobile_data_summary">May lead to increased data usage</string>
+    <string name="setting_about_category">About</string>
+    <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
+    <string name="setting_app_intro_title">App Intro</string>
+    <string name="setting_app_intro_summary">Show initial introductory tutorial again</string>
 
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
@@ -58,17 +62,24 @@
     <string name="dialog_discard_positive">Discard</string>
     <string name="dialog_discard_title">Discard obstacle?</string>
 
-    <string name="dialog_select_type_title">Select type</string>
-
+    <string name="dialog_analysis_indicator_text">Analysing photo…</string>
     <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_cnn_explanation">The 5 most likely types as determined by a neural
+        network:</string>
     <string name="dialog_OK_button" translatable="false">OK</string>
+    <string name="dialog_select_type_title">Select obstacle type</string>
 
     <string name="error_type_not_selected">Please select obstacle type</string>
+    <string name="error_type_not_valid">Please provide a valid type</string>
 
-    <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
-    <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
-    <string name="cnn_explanation">5 most likely types as determined by a neural network:</string>
+    <string name="toast_location_required">Please select obstacle location on map</string>
+    <string name="toast_provide_valid_type">Please provide a valid type</string>
+
+    <string name="field_required">*Required</string>
+    <string name="title_location_map">Location (long click on map to edit)</string>
+    <string name="title_obstacle_photo">Obstacle photo</string>
+    <string name="press_plus_to_report_obstacle">Press + to report an obstacle</string>
 
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>

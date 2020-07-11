@@ -4,15 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.SettingsFragment">
 
-    <PreferenceCategory android:title="Uploads">
+    <PreferenceCategory android:title="@string/setting_uploads_category">
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="allow_mobile_data"
-            app:summary="May use a lot of data"
+            app:singleLineTitle="false"
             app:title="@string/setting_allow_mobile_data" />
+        <!--TODO set summary warning only when setting is on-->
+        <!--app:summary="@string/setting_allow_mobile_data_summary"-->
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="@string/setting_about_category">
+        <Preference
+            app:key="appIntro"
+            app:summary="@string/setting_app_intro_summary"
+            app:title="@string/setting_app_intro_title" />
         <Preference
             app:key="changelog"
             app:summary="@string/setting_changelog_summary"

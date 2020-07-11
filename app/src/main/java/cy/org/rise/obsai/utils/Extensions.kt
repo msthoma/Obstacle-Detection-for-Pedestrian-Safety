@@ -59,6 +59,26 @@ fun Context.getUniqueAppInstallID(): String {
     return installUniqueID
 }
 
+// TODO: 11/07/20 add javadoc
+fun Context.introStatus(setToShown: Boolean = false): Boolean {
+    val shPref = this.getSharedPreferences(Constants.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE)
+
+    // makes sure pref is created if it does not exist yet
+    if (!shPref.contains(Constants.INTRO_SHOWN_KEY))
+        with(shPref.edit()) {
+            putBoolean(Constants.INTRO_SHOWN_KEY, false)
+            apply()
+        }
+
+    if (setToShown)
+        with(shPref.edit()) {
+            putBoolean(Constants.INTRO_SHOWN_KEY, true)
+            apply()
+        }
+
+    return shPref.getBoolean(Constants.INTRO_SHOWN_KEY, false)
+}
+
 /**
  * Extension function that hides soft keyboard.
  *

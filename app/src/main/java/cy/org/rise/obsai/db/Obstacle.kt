@@ -99,6 +99,9 @@ data class Obstacle(
     @ColumnInfo @Expose
     var typeProbabilitiesCNN: Map<String, Float>? = null,
 
+    @ColumnInfo @Expose
+    var timeUntilCnnResults: Long = 0,
+
     @ColumnInfo
     var uploadStatus: String = "Uploading..."
 

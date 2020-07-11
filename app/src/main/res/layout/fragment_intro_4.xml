@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/margin_medium"
-    tools:background="@color/introColor2">
+    tools:background="@color/introColor4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,51 +20,46 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
-            android:text="App functionality"
+            android:text="Thank you for helping us evaluate this app!"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="The app aims to automate the reporting process, and make it as quick and effortless as possible."
-            android:textColor="#ffffff"
-            app:layout_constraintBottom_toTopOf="@id/image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="@dimen/margin_medium"
-            android:src="@drawable/cnnexplanation"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/ic_rise_banner"
+            android:tint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
+
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="Computer vision algorithms are employed to make reporting the obstacles' type faster.\n\nOther relevant details about the obstacles are automatically gathered using the device's available sensors, requiring minimal user interaction."
+            android:text="Important Notes\n\n- This is a prototype of the application intended for evaluation purposes, and it is not officially distributed yet. Hence, only a subset of the application features are deployed at this point.\n\n- All information collected during this trial will remain anonymous. No information about the identity of the user is collected during the app trial or in the questionnaire.\n\n\n(You can return to this Intro any time by clicking 'Show App Intro' in Settings)"
             android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image" />
+            app:layout_constraintTop_toBottomOf="@id/image"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <!--    <CheckBox-->
+    <!--        android:id="@+id/checkBox"-->
+    <!--        style="@style/TextAppearance.AppCompat.Medium"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_weight="1"-->
+    <!--        android:buttonTint="#FFFFFF"-->
+    <!--        android:text="I have read and accept the privacy policy"-->
+    <!--        android:textColor="#FFFFFF" />-->
 </LinearLayout>

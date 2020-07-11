@@ -5,8 +5,9 @@
     <string name="permission_camera_rationale">Η εφαρμογή χρειάζεται πρόσβαση στην κάμερα, παρακαλώ παραχωρήστε την για να συνεχίσετε.</string>
     <string name="permission_location_rationale">Η εφαρμογή χρειάζεται πρόσβαση στην τοποθεσία σας, παρακαλώ παραχωρήστε την για να συνεχίσετε.</string>
     <string name="button_sign_in">Σύνδεση</string>
+    <!--    todo fix label below-->
     <string name="label_fragment_obstacle_list">Εμπόδια</string>
-    <string name="label_fragment_obstacle_edit">Επεξεργασία εμποδίου</string>
+    <string name="label_fragment_obstacle_edit">Στοιχεία εμποδίου</string>
     <string name="label_fragment_camera">Νέο εμπόδιο</string>
     <string name="label_fragment_settings">Ρυθμίσεις</string>
     <string name="action_cancel">Ακύρωση</string>
@@ -15,7 +16,7 @@
     <string name="action_rotate_photo">Περιστροφή</string>
     <string name="action_settings">Ρυθμίσεις</string>
     <string name="action_sign_in">Σύνδεση</string>
-    <string name="dialog_delete_all_msg">Η ενέργεια αυτή δεν είναι αναστρέψιμη.</string>
+    <string name="dialog_delete_all_msg">Η ενέργεια αυτή είναι μη αναστρέψιμη.</string>
     <string name="dialog_delete_all_positive">Διαγραφή</string>
     <string name="dialog_delete_all_title">Διαγραφή όλων;</string>
     <string name="dialog_discard_msg">Η φωτογραφία του εμποδίου θα διαγραφεί.</string>
@@ -33,33 +34,52 @@
     <string name="label_fragment_crop">Επεξεργασία φωτογραφίας</string>
     <string name="toast_error_saving_cropped">Σφάλμα κατά την αποθήκευση της περικομμένης φωτογραφίας, παρακαλώ δοκιμάστε ξανά</string>
     <string name="hint_obstacle_type">Είδος εμποδίου</string>
-    <string name="dialog_select_type_title">Επιλογή τύπου εμποδίου</string>
-    <string name="cnn_explanation">5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
+    <string name="dialog_select_type_title">Επιλέξτε το είδος εμποδίου</string>
+    <string name="dialog_cnn_explanation">Οι 5 πιο πιθανοί τύποι με βάση νευρωνικό δίκτυο:</string>
+    <string name="dialog_analysis_indicator_text">Ανάλυση φωτογραφίας…</string>
+    <string name="button_show_more_types">Άλλα είδη…</string>
+    <string name="hint_specify_custom_type">Άλλο είδος</string>
+    <string name="field_required">*Υποχρεωτικό</string>
+    <string name="error_type_not_valid">Μη έγκυρο είδος</string>
+    <string name="setting_app_version_title">Έκδοση εφαρμογής</string>
+    <string name="setting_changelog_title">Ιστορικό αλλαγών</string>
+    <string name="setting_allow_mobile_data">Χρήση δεδομένων κινητής για μεταφορτώσεις</string>
+    <string name="setting_uploads_category">Μεταφορτώσεις</string>
+    <string name="setting_allow_mobile_data_summary">Ενδέχεται να χρησιμοποιηθεί μεγάλος όγκος δεδομένων</string>
+    <string name="setting_about_category">Σχετικά</string>
+    <string name="button_edit_photo">Επεξ. φωτογ.</string>
+    <string name="title_location_map">Τοποθεσία (long click στο χάρτη για αλλαγή)</string>
+    <string name="title_obstacle_photo">Φωτογ. εμποδίου</string>
+    <string name="press_plus_to_report_obstacle">Πιέστε + για αναφορά εμποδίου</string>
+    <string name="toast_provide_valid_type">Παρακαλώ καταχωρίστε ένα έγκυρο είδος</string>
+    <!-- todo translate these -->
+    <string name="setting_app_intro_title">Show App Intro</string>
+    <string name="setting_app_intro_summary">Show initial introductory tutorial again</string>
 
     <!--    <string-array name="obstacle_types_array">-->
-<!--        <item>Διαφημιστική πινακίδα</item>-->
-<!--        <item>Crack</item>-->
-<!--        <item>Τρύπα/Pot-hole</item>-->
-<!--        <item>Paver (broken)</item>-->
-<!--        <item>Στενό πεζοδρόμιο</item>-->
-<!--        <item>Δεν υπάρχει πεζοδρόμιο</item>-->
-<!--        <item>Παγκάκι</item>-->
-<!--        <item>Light</item>-->
-<!--        <item>Κάδος απορριμμάτων</item>-->
-<!--        <item>Parking Meter</item>-->
-<!--        <item>Γλάστρα</item>-->
-<!--        <item>Δέντρο</item>-->
-<!--        <item>Θάμνος</item>-->
-<!--        <item>Parking Prevention</item>-->
-<!--        <item>Ταχυδρομικό κιβώτιο</item>-->
-<!--        <item>4-wheels</item>-->
-<!--        <item>2-wheels</item>-->
-<!--        <item>Boulder</item>-->
-<!--        <item>Safety Sign</item>-->
-<!--        <item>Fence</item>-->
-<!--        <item>Traffic Cone</item>-->
-<!--        <item>Litter</item>-->
-<!--        <item>Chair</item>-->
-<!--        <item>Table</item>-->
-<!--    </string-array>-->
+    <!--        <item>Διαφημιστική πινακίδα</item>-->
+    <!--        <item>Crack</item>-->
+    <!--        <item>Τρύπα/Pot-hole</item>-->
+    <!--        <item>Paver (broken)</item>-->
+    <!--        <item>Στενό πεζοδρόμιο</item>-->
+    <!--        <item>Δεν υπάρχει πεζοδρόμιο</item>-->
+    <!--        <item>Παγκάκι</item>-->
+    <!--        <item>Light</item>-->
+    <!--        <item>Κάδος απορριμμάτων</item>-->
+    <!--        <item>Parking Meter</item>-->
+    <!--        <item>Γλάστρα</item>-->
+    <!--        <item>Δέντρο</item>-->
+    <!--        <item>Θάμνος</item>-->
+    <!--        <item>Parking Prevention</item>-->
+    <!--        <item>Ταχυδρομικό κιβώτιο</item>-->
+    <!--        <item>4-wheels</item>-->
+    <!--        <item>2-wheels</item>-->
+    <!--        <item>Boulder</item>-->
+    <!--        <item>Safety Sign</item>-->
+    <!--        <item>Fence</item>-->
+    <!--        <item>Traffic Cone</item>-->
+    <!--        <item>Litter</item>-->
+    <!--        <item>Chair</item>-->
+    <!--        <item>Table</item>-->
+    <!--    </string-array>-->
 </resources>

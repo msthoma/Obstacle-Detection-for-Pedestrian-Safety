@@ -10,7 +10,6 @@ import com.michaelflisar.changelog.ChangelogBuilder
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.getUniqueAppInstallID
 
 /**
  * Fragment that displays the app's settings.
@@ -21,17 +20,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // set app version
         findPreference<Preference>("version")?.summary =
-            "${BuildConfig.VERSION_NAME}_${BuildConfig.VERSION_CODE}\n(app ID: " +
-                    "${requireContext().getUniqueAppInstallID()})"
+            "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         // intentionally crash app to test crash reporting, triggered by repeated count view clicks
         var viewClicks = 0
         findPreference<Preference>("version")?.setOnPreferenceClickListener {
             viewClicks += 1
             Log.d(TAG(), "$viewClicks view clicks...")
-            if (viewClicks == 10) {
+            if (viewClicks == 20) {
                 throw RuntimeException("This crash was intentional!")
             }
+            true
+        }
+
+        // navigate to intro
+        findPreference<Preference>("appIntro")?.setOnPreferenceClickListener {
+            // TODO: 11/07/20 figure out intro navigation
+            findNavController().navigate(R.id.action_settingsFragment_to_appIntroActivity)
             true
         }
 
