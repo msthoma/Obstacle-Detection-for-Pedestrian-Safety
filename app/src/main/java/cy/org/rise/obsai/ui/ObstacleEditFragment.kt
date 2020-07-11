@@ -213,7 +213,8 @@ class ObstacleEditFragment : Fragment() {
                 }?.toMap()
 
                 val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
-                // todo save in obstacle
+
+                currentObstacle.timeUntilCnnResults = timeUntilCnnResults
                 Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
 
                 // Automatically show dialog when results become available
