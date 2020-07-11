@@ -16,6 +16,10 @@
 
     <PreferenceCategory android:title="@string/setting_about_category">
         <Preference
+            app:key="appIntro"
+            app:summary="@string/setting_app_intro_summary"
+            app:title="@string/setting_app_intro_title" />
+        <Preference
             app:key="changelog"
             app:summary="@string/setting_changelog_summary"
             app:title="@string/setting_changelog_title" />

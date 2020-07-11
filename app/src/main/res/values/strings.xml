@@ -51,6 +51,8 @@
     <string name="setting_allow_mobile_data_summary">May lead to increased data usage</string>
     <string name="setting_about_category">About</string>
     <string name="setting_allow_mobile_data">Allow uploads while on mobile data</string>
+    <string name="setting_app_intro_title">App Intro</string>
+    <string name="setting_app_intro_summary">Show initial introductory tutorial again</string>
 
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
