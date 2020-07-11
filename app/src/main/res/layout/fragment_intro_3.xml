@@ -19,13 +19,26 @@
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center"
+            android:gravity="center|bottom"
+            android:paddingBottom="@dimen/margin_small"
             android:text="Tutorial"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintHeight_percent="0.18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pinch_to_zoom"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="(You can pinch to zoom on the screenshots below)"
+            android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <com.ortiz.touchview.TouchImageView
             android:id="@+id/image"
@@ -33,16 +46,16 @@
             android:layout_height="0dp"
             android:src="@drawable/appintrotutorial"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintHeight_percent="0.55"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            app:layout_constraintTop_toBottomOf="@id/pinch_to_zoom" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:text="Steps:\n- Launch the app and "
+            android:gravity="center|top"
+            android:text="Steps to report an obstacle:\n\n- Launch the app and click +\n- Take a photo of it\n- Select its type (the embedded neural network suggests the most likely types)\n-Click the Submit button and you are done!"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
