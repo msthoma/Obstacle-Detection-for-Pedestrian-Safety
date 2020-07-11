@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 /**
  * Abstract class for Room database.
  */
-@Database(entities = [Obstacle::class], version = 1, exportSchema = false)
+@Database(entities = [Obstacle::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ObstacleRoomDatabase : RoomDatabase() {
     abstract fun obstacleDao(): ObstacleDao
@@ -30,15 +30,16 @@ abstract class ObstacleRoomDatabase : RoomDatabase() {
             // if it is, then create the database
             return INSTANCE
                 ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                    val instance = Room.databaseBuilder(
                         context.applicationContext,
                         ObstacleRoomDatabase::class.java,
                         "obstacle_db"
                     )
-                    .build()
-                INSTANCE = instance
-                instance
-            }
+                        .fallbackToDestructiveMigration() // FIXME: 11/07/20 migrations
+                        .build()
+                    INSTANCE = instance
+                    instance
+                }
         }
     }
 }
