@@ -1,5 +1,20 @@
 <changelog>
     <release
+        date="2020-07-11"
+        versionCode="1"
+        versionName="Version 0.16.0">
+        <info>App intro tutorial is now shown on app's first launch (can be accessed again
+            from Settings)
+        </info>
+        <info>Added information about the app evaluation in App intro</info>
+        <info>General UI improvements, analysis indicator while waiting for results from neural
+            network, new app colors
+        </info>
+        <info>Many more Greek translations</info>
+        <info>Numerous bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-09"
         versionCode="1"
         versionName="Version 0.15.1">
