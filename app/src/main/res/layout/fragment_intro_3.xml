@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center|top"
-            android:text="Steps to report an obstacle:\n\n- Launch the app and click +\n- Take a photo of it\n- Select its type (the embedded neural network suggests the most likely types)\n-Click the Submit button and you are done!"
+            android:text="Steps to report an obstacle:\n\n- Launch the app and click +\n- Take a photo of the obstacle\n- Select its type (the embedded neural network suggests the most likely types)\n- Click the Submit button and you are done!"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
