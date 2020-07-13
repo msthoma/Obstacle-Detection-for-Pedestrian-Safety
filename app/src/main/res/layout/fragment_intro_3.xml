@@ -36,11 +36,12 @@
             android:gravity="center"
             android:text="(You can pinch to zoom on the screenshots below)"
             android:textColor="#ffffff"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <com.ortiz.touchview.TouchImageView
+        <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -48,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.55"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pinch_to_zoom" />
+            app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Medium"
