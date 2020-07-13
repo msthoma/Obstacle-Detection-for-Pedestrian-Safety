@@ -34,7 +34,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 16
-        def versionPatch = 0
+        def versionPatch = 1
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -258,5 +258,5 @@ dependencies {
     implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
 
     // TouchImageView https://github.com/MikeOrtiz/TouchImageView
-    implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
+    // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
 }
