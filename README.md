@@ -1,4 +1,4 @@
-![master build](https://github.com/msthoma/ObsAI/workflows/master%20build/badge.svg?branch=master&event=status)
+![master build](https://github.com/msthoma/ObsAI/workflows/master%20build/badge.svg)
 
 <p align="center">
   <img src="/app/src/main/ic_launcher-web.png" alt="Obstacles app icon" width="200px"/>
