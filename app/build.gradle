@@ -235,7 +235,7 @@ dependencies {
     // Retrofit https://github.com/square/retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
 
     // Changelog https://github.com/MFlisar/changelog
     implementation 'com.github.MFlisar:changelog:1.1.6'

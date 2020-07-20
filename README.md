@@ -3,7 +3,6 @@
 <p align="center">
   <img src="/app/src/main/ic_launcher-web.png" alt="Obstacles app icon" width="200px"/>
 </p>
-<!--<p align="center">Obstacles app<p align="center">-->
 
 # Obstacles app
 App that allows pedestrians to report road obstacles to the authorities.
