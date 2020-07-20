@@ -11,7 +11,7 @@
     <string name="label_fragment_camera">Νέο εμπόδιο</string>
     <string name="label_fragment_settings">Ρυθμίσεις</string>
     <string name="action_cancel">Ακύρωση</string>
-    <string name="action_confirm">Επιβεβαίωση</string>
+    <string name="action_confirm_crop_photo">Επιβεβαίωση</string>
     <string name="action_delete_all">Διαγραφή όλων</string>
     <string name="action_rotate_photo">Περιστροφή</string>
     <string name="action_settings">Ρυθμίσεις</string>
