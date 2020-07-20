@@ -364,7 +364,7 @@ class ObstacleEditFragment : Fragment() {
         val customDialogView = dialog.getCustomView() as ConstraintLayout
         val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
         val dialogContents = customDialogView.dialog_contents
-        val radioGroup = customDialogView.findViewById<RadioGroup>(R.id.types_radio_group)
+        val radioGroup = customDialogView.types_radio_group
 
         // initially only show 5 most likely types, as determined by the CNN (hide the rest)
         populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
@@ -390,20 +390,18 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // show more button is clicked
-        customDialogView.findViewById<Button>(R.id.button_show_more_types)
-            .setOnClickListener { showMoreButton ->
-                // reveal all possible types
-                for (i in 0..obsTypeArray.size + 1)
-                    radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
+        customDialogView.button_show_more_types?.setOnClickListener { showMoreButton ->
+            // reveal all possible types
+            for (i in 0..obsTypeArray.size + 1)
+                radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
 
-                // hide more button and CNN explanation
-                showMoreButton.visibility = View.GONE
-                customDialogView.findViewById<TextView>(R.id.cnn_explanation)?.visibility =
-                    View.GONE
+            // hide more button and CNN explanation
+            showMoreButton.visibility = View.GONE
+            customDialogView.cnn_explanation?.visibility = View.GONE
 
-                // show custom editText
-                customEditTextLayout.visibility = View.VISIBLE
-            }
+            // show custom editText
+            customEditTextLayout.visibility = View.VISIBLE
+        }
 
         // set listeners to all views to regulate their behaviour
         customEditText.apply {
