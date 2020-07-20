@@ -21,6 +21,7 @@
 
     <string name="action_add_mock_element" translatable="false">Add mock obstacle</string>
     <string name="action_app_intro">Show App Intro</string>
+    <string name="action_button_submit">Submit</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_delete_all">Delete all</string>

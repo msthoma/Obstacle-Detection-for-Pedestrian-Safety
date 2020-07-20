@@ -55,6 +55,7 @@
     <!-- todo translate these -->
     <string name="setting_app_intro_title">Show App Intro</string>
     <string name="setting_app_intro_summary">Show initial introductory tutorial again</string>
+    <string name="action_button_submit">Υποβολή</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->
