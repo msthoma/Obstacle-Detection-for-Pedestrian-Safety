@@ -81,7 +81,7 @@ class ObstacleListFragment : Fragment() {
             activity?.invalidateOptionsMenu()
         })
 
-        fab.setOnClickListener {
+        fab_add_new.setOnClickListener {
             // Check whether the relevant permission are granted before launching camera fragment
             if (isAllGranted(CAMERA, ACCESS_FINE_LOCATION)) {
                 // All permissions granted
