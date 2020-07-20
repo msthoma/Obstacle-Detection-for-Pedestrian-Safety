@@ -328,7 +328,7 @@ class ObstacleEditFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_confirm_edit_obstacle -> {
+            R.id.action_submit_obstacle -> {
                 checkAndSubmitObstacle()
                 true
             }

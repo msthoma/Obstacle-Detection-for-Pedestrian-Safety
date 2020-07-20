@@ -5,10 +5,10 @@
     tools:context="cy.org.rise.obsai.ui.MainActivity">
 
     <item
-        android:id="@+id/action_confirm_edit_obstacle"
+        android:id="@+id/action_submit_obstacle"
         android:icon="@drawable/ic_check_white_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_confirm"
+        android:title="@string/action_button_submit"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
