@@ -21,9 +21,11 @@
 
     <string name="action_add_mock_element" translatable="false">Add mock obstacle</string>
     <string name="action_app_intro">Show App Intro</string>
+    <string name="action_button_submit">Submit</string>
     <string name="action_cancel">Cancel</string>
-    <string name="action_confirm">Confirm</string>
+    <string name="action_confirm_crop_photo">Confirm</string>
     <string name="action_delete_all">Delete all</string>
+    <string name="action_new_obstacle">New obstacle</string>
     <string name="action_rotate_photo">Rotate</string>
     <string name="action_settings">Settings</string>
     <string name="action_sign_in">Sign in</string>

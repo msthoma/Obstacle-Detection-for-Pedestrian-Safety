@@ -11,15 +11,17 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/select_obstacle_type_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_tiny"
         android:hint="@string/hint_obstacle_type"
+        android:paddingEnd="@dimen/margin_small"
         app:errorEnabled="true"
         app:helperText="@string/field_required"
         app:helperTextEnabled="true"
-        app:layout_constraintBottom_toTopOf="@id/layout_photo_related_elements"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/select_obstacle_type_edit_text"
@@ -32,15 +34,15 @@
 
     <LinearLayout
         android:id="@+id/layout_photo_related_elements"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="2dp"
         android:paddingBottom="@dimen/margin_tiny"
         app:layout_constraintBottom_toTopOf="@id/obstacle_image_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5">
 
         <TextView
             android:id="@+id/photo_title"
@@ -64,14 +66,13 @@
 
     <ImageView
         android:id="@+id/obstacle_image_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_tiny"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/map_title"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_photo_related_elements"
+        app:layout_constraintWidth_percent="0.5"
         tools:src="@drawable/example_obs_20190808_102427129" />
 
     <TextView
@@ -84,16 +85,17 @@
         android:text="@string/title_location_map"
         app:layout_constraintBottom_toTopOf="@id/map"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/obstacle_image_view" />
+        app:layout_constraintTop_toBottomOf="@id/select_obstacle_type_layout" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingEnd="@dimen/margin_small"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/map_title"
+        app:layout_constraintWidth_percent="0.5"
         map:mapType="normal"
         map:uiRotateGestures="false"
         map:uiScrollGestures="true"
