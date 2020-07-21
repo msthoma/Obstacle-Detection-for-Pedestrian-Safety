@@ -10,10 +10,20 @@
     <!-- app:cameraExperimental="true" in CameraView below enforces use of Camera2, which should
     be available in all devices with SDK >= 21, which is the minimum for the app -->
 
+    <!-- for setting camera to take square photos-->
+    <!-- app:cameraPictureSizeAspectRatio="1:1"
+            app:cameraPictureSizeBiggest="true"
+            app:cameraPictureSizeMaxArea="50000000"
+            app:cameraPictureSizeMaxHeight="3000"
+            app:cameraPictureSizeMaxWidth="3000"
+            app:cameraPictureSizeMinArea="10000000"
+            app:cameraPictureSizeMinHeight="100"
+            app:cameraPictureSizeMinWidth="100"-->
+
     <com.otaliastudios.cameraview.CameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:keepScreenOn="true"
         app:cameraAudio="off"
         app:cameraEngine="camera2"
