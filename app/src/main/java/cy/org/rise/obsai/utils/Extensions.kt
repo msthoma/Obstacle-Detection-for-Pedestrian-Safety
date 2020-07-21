@@ -11,8 +11,11 @@ import java.util.*
 /**
  * Returns activity name for logging purposes, see discussions
  * [1](https://stackoverflow.com/a/52956934) and  [2](https://stackoverflow.com/a/57123619).
+ *
+ * @param msg string for displaying next to current class name
  */
-inline fun <reified T> T.TAG(): String = T::class.java.simpleName
+inline fun <reified T> T.TAG(msg: String = ""): String =
+    T::class.java.simpleName + if (msg.isNotEmpty()) " ($msg)" else ""
 
 /**
  * Rounds double to specified decimal points, see [discussion](https://stackoverflow.com/a/59513133).
