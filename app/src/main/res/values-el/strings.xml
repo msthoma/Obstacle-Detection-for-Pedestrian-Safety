@@ -57,6 +57,7 @@
     <string name="action_button_submit">Υποβολή</string>
     <string name="action_new_obstacle">Νέο εμπόδιο</string>
     <string name="toast_make_selection">Παρακαλώ επιλέξτε το είδος</string>
+    <string name="toast_obstacle_submitted">Το εμπόδιο υποβλήθηκε!</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->

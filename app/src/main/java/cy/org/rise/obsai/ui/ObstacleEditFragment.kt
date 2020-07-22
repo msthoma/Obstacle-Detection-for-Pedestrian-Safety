@@ -523,7 +523,7 @@ class ObstacleEditFragment : Fragment() {
             viewModel.insertObstacle(currentObstacle)
             try {
                 // TODO: 11/07/20 is this necessary?
-                Toast.makeText(requireContext(), "Obstacle submitted!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e(TAG(), "Exception while trying to show toast", e)
             }
