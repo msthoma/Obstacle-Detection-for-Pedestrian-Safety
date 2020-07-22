@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-07-22"
+        versionCode="1"
+        versionName="Version 0.16.2">
+        <info>Significantly reduced app file size, by using a quantized CNN model</info>
+        <info>Greek translations</info>
+        <info>Bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-13"
         versionCode="1"
         versionName="Version 0.16.1">
