@@ -355,6 +355,9 @@ class ObstacleEditFragment : Fragment() {
             getAlphabeticalTypeArray()
         }
 
+        if (currentObstacle.obstacleType.isNotBlank())
+            Log.d(TAG("Index of current"), "${obsTypeArray.indexOf(currentObstacle.obstacleType)}")
+
         val dialog = MaterialDialog(requireContext()).customView(
             R.layout.type_selection_dialog,
             scrollable = true
@@ -472,7 +475,11 @@ class ObstacleEditFragment : Fragment() {
                     }
                 } else {
                     // -1 means none selected
-                    Toast.makeText(context, "Please make a selection", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        context,
+                        getString(R.string.toast_make_selection),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -516,7 +523,7 @@ class ObstacleEditFragment : Fragment() {
             viewModel.insertObstacle(currentObstacle)
             try {
                 // TODO: 11/07/20 is this necessary?
-                Toast.makeText(requireContext(), "Obstacle submitted!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e(TAG(), "Exception while trying to show toast", e)
             }

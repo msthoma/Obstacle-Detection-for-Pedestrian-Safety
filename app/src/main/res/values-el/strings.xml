@@ -52,11 +52,17 @@
     <string name="title_obstacle_photo">Φωτογ. εμποδίου</string>
     <string name="press_plus_to_report_obstacle">Πιέστε + για αναφορά εμποδίου</string>
     <string name="toast_provide_valid_type">Παρακαλώ καταχωρίστε ένα έγκυρο είδος</string>
-    <!-- todo translate these -->
-    <string name="setting_app_intro_title">Show App Intro</string>
-    <string name="setting_app_intro_summary">Show initial introductory tutorial again</string>
+    <string name="setting_app_intro_title">Προβολή App Intro</string>
+    <string name="setting_app_intro_summary">Προβολή αρχικού tutorial εφαρμογής ξανά</string>
     <string name="action_button_submit">Υποβολή</string>
     <string name="action_new_obstacle">Νέο εμπόδιο</string>
+    <string name="toast_make_selection">Παρακαλώ επιλέξτε το είδος</string>
+    <string name="toast_obstacle_submitted">Το εμπόδιο υποβλήθηκε!</string>
+    <string name="action_app_intro">Προβολή αρχικού tutorial</string>
+    <string name="action_toggle_camera_details">Προβολή επιπρ. πληρ.</string>
+    <string name="acra_crash_dialog_title">Η εφαρμογή παρουσίασε σφάλμα</string>
+    <string name="acra_crash_input_prompt">Προσθήκη σχολίου (προαιρετικά):</string>
+    <string name="acra_crash_message">"Λυπούμαστε, η εφαρμογή παρουσίασε κάποιο σφάλμα.\n\nΠαρακαλούμε όπως αναφέρετε το σφάλμα πατώντας OK πιο κάτω (θα σας ζητηθεί να στείλετε ένα αρχείο σφάλματος μέσω email στον προγραμματιστή της εφαρμογής)."</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->

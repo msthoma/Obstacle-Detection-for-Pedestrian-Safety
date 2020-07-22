@@ -34,7 +34,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 16
-        def versionPatch = 1
+        def versionPatch = 2
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -48,17 +48,10 @@ android {
         }
 
         // solves "More than one file was found with OS independent path 'META-INF/core.kotlin_module'"
+        // originates from the AboutLibraries library
         // see here https://stackoverflow.com/q/44342455
         packagingOptions {
-            exclude 'META-INF/DEPENDENCIES'
-            exclude 'META-INF/LICENSE'
-            exclude 'META-INF/LICENSE.txt'
-            exclude 'META-INF/license.txt'
-            exclude 'META-INF/NOTICE'
-            exclude 'META-INF/NOTICE.txt'
-            exclude 'META-INF/notice.txt'
-            exclude 'META-INF/ASL2.0'
-            exclude("META-INF/*.kotlin_module")
+            exclude 'META-INF/core.kotlin_module'
         }
 
         // removes x86, x86_64, and arm32 Tensorflow ABIs from app, which reduces .apk size
@@ -223,8 +216,8 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
     // AboutLibraries library
-    implementation "com.mikepenz:aboutlibraries-core:8.0.0-rc01"
-    implementation "com.mikepenz:aboutlibraries:8.0.0-rc01"
+    implementation "com.mikepenz:aboutlibraries-core:8.3.0"
+    implementation "com.mikepenz:aboutlibraries:8.3.0"
 
     // ACRA crash reporting library https://github.com/ACRA/acra
     def acraVersion = '5.1.3'
