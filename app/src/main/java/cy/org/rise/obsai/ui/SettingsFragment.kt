@@ -44,7 +44,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         findPreference<Preference>("changelog")?.setOnPreferenceClickListener {
             ChangelogBuilder()
                 .withUseBulletList(true)
-                .withTitle("Changelog")
+                .withTitle(getString(R.string.setting_changelog_title))
                 .buildAndShowDialog(activity as AppCompatActivity?, false)
             true
         }
