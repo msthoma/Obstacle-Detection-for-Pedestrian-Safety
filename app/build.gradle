@@ -223,8 +223,8 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
     // AboutLibraries library
-    implementation "com.mikepenz:aboutlibraries-core:8.0.0-rc01"
-    implementation "com.mikepenz:aboutlibraries:8.0.0-rc01"
+    implementation "com.mikepenz:aboutlibraries-core:8.3.0"
+    implementation "com.mikepenz:aboutlibraries:8.3.0"
 
     // ACRA crash reporting library https://github.com/ACRA/acra
     def acraVersion = '5.1.3'
