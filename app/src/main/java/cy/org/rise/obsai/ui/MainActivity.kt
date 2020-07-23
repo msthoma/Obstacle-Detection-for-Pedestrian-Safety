@@ -1,5 +1,6 @@
 package cy.org.rise.obsai.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -57,5 +58,16 @@ class MainActivity : AppCompatActivity() {
             }
             else -> navController.navigateUp()
         }
+    }
+
+    /**
+     * Overriding this method allows to pass on onActivityResults to fragments
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        supportFragmentManager
+            .primaryNavigationFragment?.childFragmentManager?.fragments?.forEach { fragment ->
+                fragment.onActivityResult(requestCode, resultCode, data)
+            }
     }
 }

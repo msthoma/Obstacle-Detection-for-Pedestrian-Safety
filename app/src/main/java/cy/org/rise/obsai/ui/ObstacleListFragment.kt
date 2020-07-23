@@ -1,10 +1,12 @@
 package cy.org.rise.obsai.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,9 +22,14 @@ import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.SessionManager
+import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
@@ -37,7 +44,7 @@ class ObstacleListFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this)
+        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
     }
 
     override fun onCreateView(
@@ -223,29 +230,67 @@ class ObstacleListFragment : Fragment() {
 
     // makes sure GPS is on before allowing user to take photo
     private fun initiateObstacleCollectionWorkflow() {
-        context?.let { context ->
-            // check if GPS is on first
-            if (isGPSEnabled(context)) {
-                findNavController().navigate(
-                    R.id.action_obstacleListFragment_to_cameraFragment
-                )
-            } else {
-                Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
-                // Turning on GPS can be done from within the app using the Settings Client, see
-                // https://developer.android.com/training/location/change-location-settings
-                // which should provide a better experience
+        // Use SettingsClient from Google APIs to check, and if GPS is off, show dialog to enable it
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        val locationRequestBuilder = LocationSettingsRequest.Builder()
+            .addLocationRequest(
+                LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            )
+        val result = LocationServices.getSettingsClient(requireContext())
+            .checkLocationSettings(locationRequestBuilder.build())
 
-                MaterialDialog(context).show {
-                    title(text = "GPS is disabled on your device.")
-                    message(text = "Enable it now?")
-                    positiveButton(text = "Yes") {
-                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        result.addOnCompleteListener { task: Task<LocationSettingsResponse> ->
+            try {
+                // All location settings are satisfied
+                val response = task.getResult(ApiException::class.java)
+                Log.d(TAG(), "responce $response")
+                findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
+            } catch (exception: ApiException) {
+                when (exception.statusCode) {
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->
+                        try {
+                            // Show the dialog to enable GPS by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            val resolvable = exception as ResolvableApiException
+                            resolvable.startResolutionForResult(activity, REQUEST_ENABLE_GPS)
+                        } catch (e: IntentSender.SendIntentException) {
+                            // ignore
+                        } catch (e: ClassCastException) {
+                            // ignore
+                        }
+
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                        // Location settings are not satisfied
+                        // TODO Maybe show commented dialog below so user can manually switch GPS
+                        //  on?
+                        Log.d(TAG(), "Location settings code SETTINGS_CHANGE_UNAVAILABLE")
                     }
-                    negativeButton(text = "No") { dismiss() }
-                    lifecycleOwner(viewLifecycleOwner)
                 }
             }
         }
+//        context?.let { context ->
+//            // check if GPS is on first
+//            if (isGPSEnabled(context)) {
+//                findNavController().navigate(
+//                    R.id.action_obstacleListFragment_to_cameraFragment
+//                )
+//            } else {
+//                Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
+//                // Turning on GPS can be done from within the app using the Settings Client, see
+//                // https://developer.android.com/training/location/change-location-settings
+//                // which should provide a better experience
+//
+//                MaterialDialog(context).show {
+//                    title(text = "GPS is disabled on your device.")
+//                    message(text = "Enable it now?")
+//                    positiveButton(text = "Yes") {
+//                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//                    }
+//                    negativeButton(text = "No") { dismiss() }
+//                    lifecycleOwner(viewLifecycleOwner)
+//                }
+//            }
+//        }
     }
 
     // checks if GPS is on
@@ -255,6 +300,7 @@ class ObstacleListFragment : Fragment() {
         )
 
     // creates a random label-probability map to simulate CNN output
+    // TODO: 23/07/20 remove
     private fun generateRandomMap(): Map<String, Float> {
         val stringArray = resources.getStringArray(R.array.obstacle_types_array)
         return buildMap {
@@ -265,5 +311,26 @@ class ObstacleListFragment : Fragment() {
                 this[filtered] = 0.0f
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_ENABLE_GPS -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    // GPS was successfully turned on
+                    findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
+                }
+                Activity.RESULT_CANCELED -> {
+                    Log.d(TAG(), "RESULT_CANCELED")
+                    // The user was asked to change settings, but chose not to
+                    // TODO: 23/07/20 show snackbar? or ask if they want to proceed without GPS
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val REQUEST_ENABLE_GPS = 314
     }
 }
