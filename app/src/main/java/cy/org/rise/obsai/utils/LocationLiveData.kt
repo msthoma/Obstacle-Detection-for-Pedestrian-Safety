@@ -3,18 +3,28 @@ package cy.org.rise.obsai.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
+/**
+ * Class that provides location data as LiveData. Tracking is only active as long as there is an
+ * observer, when it becomes inactive the tracking stops.
+ *
+ * Based on [this example](https://github.com/mayowa-egbewunmi/LocationUpdateWithLiveData/blob/master/app/src/main/java/com/mayowa/android/locationwithlivedata/LocationLiveData.kt).
+ *
+ * @param context application context
+ */
 class LocationLiveData(context: Context) : LiveData<Location>() {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     @SuppressLint("MissingPermission")
     override fun onActive() {
         super.onActive()
+        Log.d(TAG(), "location tracking started")
         fusedLocationClient.apply {
             // first get last known location
             lastLocation.addOnSuccessListener { location ->
@@ -28,6 +38,7 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
 
     override fun onInactive() {
         super.onInactive()
+        Log.d(TAG(), "location tracking ended")
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
@@ -38,6 +49,7 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
     }
 
     private fun setLocation(location: Location) {
+        Log.d(TAG(), "location set to [${location.latitude}, ${location.longitude}]")
         value = location
     }
 
