@@ -266,4 +266,8 @@ class ObstacleListFragment : Fragment() {
             }
         }
     }
+
+    companion object {
+        const val REQUEST_ENABLE_GPS = 314
+    }
 }
