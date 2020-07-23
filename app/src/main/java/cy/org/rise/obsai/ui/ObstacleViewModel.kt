@@ -1,9 +1,10 @@
 package cy.org.rise.obsai.ui
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
@@ -23,9 +24,10 @@ import kotlinx.coroutines.launch
  */
 class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
+    application: Application,
     private val savedStateHandle: SavedStateHandle
 ) :
-    ViewModel() {
+    AndroidViewModel(application) {
     private val rep = obstacleRepository
 
     /**

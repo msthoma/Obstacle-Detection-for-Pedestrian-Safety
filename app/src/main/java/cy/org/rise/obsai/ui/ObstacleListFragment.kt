@@ -43,7 +43,7 @@ class ObstacleListFragment : Fragment() {
     private lateinit var sessionManager: SessionManager
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this)
+        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
     }
 
     override fun onCreateView(
@@ -287,6 +287,7 @@ class ObstacleListFragment : Fragment() {
         )
 
     // creates a random label-probability map to simulate CNN output
+    // TODO: 23/07/20 remove
     private fun generateRandomMap(): Map<String, Float> {
         val stringArray = resources.getStringArray(R.array.obstacle_types_array)
         return buildMap {

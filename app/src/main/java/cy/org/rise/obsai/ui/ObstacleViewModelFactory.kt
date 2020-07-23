@@ -1,5 +1,6 @@
 package cy.org.rise.obsai.ui
 
+import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
@@ -14,6 +15,7 @@ import cy.org.rise.obsai.db.ObstacleRepository
  */
 class ObstacleViewModelFactory(
     private val repository: ObstacleRepository,
+    private val application: Application,
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle? = null
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
@@ -24,6 +26,6 @@ class ObstacleViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        return ObstacleViewModel(repository, handle) as T
+        return ObstacleViewModel(repository, application, handle) as T
     }
 }
