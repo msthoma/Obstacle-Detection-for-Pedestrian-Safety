@@ -1,5 +1,6 @@
 package cy.org.rise.obsai.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -229,6 +230,8 @@ class ObstacleListFragment : Fragment() {
 
     // makes sure GPS is on before allowing user to take photo
     private fun initiateObstacleCollectionWorkflow() {
+        // Use SettingsClient from Google APIs to check, and if GPS is off, show dialog to enable it
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
         val locationRequestBuilder = LocationSettingsRequest.Builder()
             .addLocationRequest(
                 LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -238,18 +241,29 @@ class ObstacleListFragment : Fragment() {
 
         result.addOnCompleteListener { task: Task<LocationSettingsResponse> ->
             try {
+                // All location settings are satisfied
                 val response = task.getResult(ApiException::class.java)
                 Log.d(TAG(), "responce $response")
+                findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
             } catch (exception: ApiException) {
-                Log.d(TAG(), "exception $exception")
                 when (exception.statusCode) {
-                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
-                        val resolvable = exception as ResolvableApiException
-                        resolvable.startResolutionForResult(activity, REQUEST_ENABLE_GPS)
-                    } catch (e: IntentSender.SendIntentException) {
-                        // ignore
-                    } catch (e: ClassCastException) {
-                        // ignore
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->
+                        try {
+                            // Show the dialog to enable GPS by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            val resolvable = exception as ResolvableApiException
+                            resolvable.startResolutionForResult(activity, REQUEST_ENABLE_GPS)
+                        } catch (e: IntentSender.SendIntentException) {
+                            // ignore
+                        } catch (e: ClassCastException) {
+                            // ignore
+                        }
+
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                        // Location settings are not satisfied
+                        // TODO Maybe show commented dialog below so user can manually switch GPS
+                        //  on?
+                        Log.d(TAG(), "Location settings code SETTINGS_CHANGE_UNAVAILABLE")
                     }
                 }
             }
@@ -267,7 +281,6 @@ class ObstacleListFragment : Fragment() {
 //                // which should provide a better experience
 //
 //                MaterialDialog(context).show {
-//                    // TODO: 23/07/20 extract strings
 //                    title(text = "GPS is disabled on your device.")
 //                    message(text = "Enable it now?")
 //                    positiveButton(text = "Yes") {
@@ -302,7 +315,19 @@ class ObstacleListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG(), "onActivityResult fragment")
+        when (requestCode) {
+            REQUEST_ENABLE_GPS -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    // GPS was successfully turned on
+                    findNavController().navigate(R.id.action_obstacleListFragment_to_cameraFragment)
+                }
+                Activity.RESULT_CANCELED -> {
+                    Log.d(TAG(), "RESULT_CANCELED")
+                    // The user was asked to change settings, but chose not to
+                    // TODO: 23/07/20 show snackbar? or ask if they want to proceed without GPS
+                }
+            }
+        }
     }
 
     companion object {
