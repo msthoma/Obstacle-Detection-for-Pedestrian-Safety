@@ -15,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.*
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
@@ -50,9 +49,6 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     // Location related vars
     private lateinit var currentLocation: Location
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     // Sensor related vars
     private lateinit var sensorManager: SensorManager
@@ -112,14 +108,10 @@ class CameraFragment : Fragment(), SensorEventListener {
             cameraView.takePicture()
         }
 
-        // Get last known location (below in getLocationUpdates() a service is started that will
-        // provide a more up to date location if it becomes available)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let { updateObstacleLocation(it) }
-        }
-
-        getLocationUpdates()
+        // Get last known location and subscribe to location updates
+        viewModel.locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            updateObstacleLocation(it)
+        })
 
         // Orientation stuff
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -136,32 +128,6 @@ class CameraFragment : Fragment(), SensorEventListener {
         return File.createTempFile("JPEG_${timeStamp}", ".jpg", storageDir).apply {
             currentPhotoPath = this.absolutePath
         }
-    }
-
-    private fun getLocationUpdates() {
-        // this is used to get any updates to the location of the user, in case they change
-        // during taking a photo of an obstacle
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 20000 // 20s
-            fastestInterval = 10000 // 10s
-            smallestDisplacement = 2f // 2m
-        }
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.let { updateObstacleLocation(it.lastLocation) }
-            }
-        }
-    }
-
-    private fun startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun createCurrentObstacle(): Obstacle {
@@ -224,16 +190,12 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     override fun onPause() {
         super.onPause()
-        stopLocationUpdates()
-
         // Don't receive any more updates from orientation sensors
         sensorManager.unregisterListener(this)
     }
 
     override fun onResume() {
         super.onResume()
-        startLocationUpdates()
-
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
             sensorManager.registerListener(
                 this,
