@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
+import cy.org.rise.obsai.utils.LocationLiveData
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,9 +27,10 @@ class ObstacleViewModel internal constructor(
     obstacleRepository: ObstacleRepository,
     application: Application,
     private val savedStateHandle: SavedStateHandle
-) :
-    AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     private val rep = obstacleRepository
+
+    val locationLiveData by lazy { LocationLiveData(application) }
 
     /**
      * Live data of obstacles in local db.
