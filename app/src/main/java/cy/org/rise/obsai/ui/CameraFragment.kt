@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.otaliastudios.cameraview.CameraListener
@@ -20,6 +21,7 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.getUniqueAppInstallID
 import cy.org.rise.obsai.utils.roundTo
@@ -61,6 +63,10 @@ class CameraFragment : Fragment(), SensorEventListener {
 
     private var sensor: Sensor? = null
 
+    private val viewModel: ObstacleViewModel by viewModels {
+        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -100,12 +106,6 @@ class CameraFragment : Fragment(), SensorEventListener {
                 }
             }
         })
-
-//        cameraView.addFrameProcessor { frame ->
-//            if (frame.dataClass == Image::class.java) {
-//                Log.d(TAG(), "frame: ${frame.size} ${frame.time}")
-//            }
-//        }
 
         camera_button.setOnClickListener {
             Log.d(TAG(), "camera button pressed")
