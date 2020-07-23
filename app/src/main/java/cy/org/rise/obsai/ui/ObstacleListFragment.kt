@@ -267,6 +267,11 @@ class ObstacleListFragment : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG(), "onActivityResult fragment")
+    }
+
     companion object {
         const val REQUEST_ENABLE_GPS = 314
     }
