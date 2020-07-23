@@ -2,9 +2,10 @@ package cy.org.rise.obsai.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,9 +21,14 @@ import com.afollestad.assent.rationale.createDialogRationale
 import com.afollestad.assent.runWithPermissions
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.SessionManager
+import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
@@ -223,29 +229,55 @@ class ObstacleListFragment : Fragment() {
 
     // makes sure GPS is on before allowing user to take photo
     private fun initiateObstacleCollectionWorkflow() {
-        context?.let { context ->
-            // check if GPS is on first
-            if (isGPSEnabled(context)) {
-                findNavController().navigate(
-                    R.id.action_obstacleListFragment_to_cameraFragment
-                )
-            } else {
-                Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
-                // Turning on GPS can be done from within the app using the Settings Client, see
-                // https://developer.android.com/training/location/change-location-settings
-                // which should provide a better experience
+        val locationRequestBuilder = LocationSettingsRequest.Builder()
+            .addLocationRequest(
+                LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            )
+        val result = LocationServices.getSettingsClient(requireContext())
+            .checkLocationSettings(locationRequestBuilder.build())
 
-                MaterialDialog(context).show {
-                    title(text = "GPS is disabled on your device.")
-                    message(text = "Enable it now?")
-                    positiveButton(text = "Yes") {
-                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        result.addOnCompleteListener { task: Task<LocationSettingsResponse> ->
+            try {
+                val response = task.getResult(ApiException::class.java)
+                Log.d(TAG(), "responce $response")
+            } catch (exception: ApiException) {
+                Log.d(TAG(), "exception $exception")
+                when (exception.statusCode) {
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
+                        val resolvable = exception as ResolvableApiException
+                        resolvable.startResolutionForResult(activity, REQUEST_ENABLE_GPS)
+                    } catch (e: IntentSender.SendIntentException) {
+                        // ignore
+                    } catch (e: ClassCastException) {
+                        // ignore
                     }
-                    negativeButton(text = "No") { dismiss() }
-                    lifecycleOwner(viewLifecycleOwner)
                 }
             }
         }
+//        context?.let { context ->
+//            // check if GPS is on first
+//            if (isGPSEnabled(context)) {
+//                findNavController().navigate(
+//                    R.id.action_obstacleListFragment_to_cameraFragment
+//                )
+//            } else {
+//                Toast.makeText(context, "GPS is off", Toast.LENGTH_SHORT).show()
+//                // Turning on GPS can be done from within the app using the Settings Client, see
+//                // https://developer.android.com/training/location/change-location-settings
+//                // which should provide a better experience
+//
+//                MaterialDialog(context).show {
+//                    // TODO: 23/07/20 extract strings
+//                    title(text = "GPS is disabled on your device.")
+//                    message(text = "Enable it now?")
+//                    positiveButton(text = "Yes") {
+//                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//                    }
+//                    negativeButton(text = "No") { dismiss() }
+//                    lifecycleOwner(viewLifecycleOwner)
+//                }
+//            }
+//        }
     }
 
     // checks if GPS is on
