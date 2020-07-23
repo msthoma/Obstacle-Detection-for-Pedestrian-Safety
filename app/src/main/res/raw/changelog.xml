@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-07-23"
+        versionCode="1"
+        versionName="Version 0.16.3">
+        <info>When GPS is off, the user can now turn it on from within the app</info>
+    </release>
+
+    <release
         date="2020-07-22"
         versionCode="1"
         versionName="Version 0.16.2">
