@@ -15,7 +15,10 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.utils.*
+import cy.org.rise.obsai.utils.InjectorUtils
+import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.formatAsStr
+import cy.org.rise.obsai.utils.getUniqueAppInstallID
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -98,9 +101,12 @@ class CameraFragment : Fragment() {
                 // https://developer.android.com/training/location/retrieve-current#last-known
                 currentLocation = newLoc
 
+                // Set location in overlay view
                 if (photo_details.isVisible) {
-                    coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
-                        .longitude}\nAltitude ${newLoc.altitude.roundTo(2)}"
+                    location.text = getString(
+                        R.string.detail_location,
+                        "${currentLocation.latitude}, ${currentLocation.longitude}"
+                    )
                 }
 
                 // this saves location in photo's EXIF data
@@ -116,9 +122,11 @@ class CameraFragment : Fragment() {
                 // Set details in overlay view
                 if (photo_details.isVisible) {
                     accelerometer.text =
-                        getString(R.string.detail_orientation, accelerometerReading.formatAsStr())
+                        getString(R.string.detail_accelerometer, accelerometerReading.formatAsStr())
                     compass.text =
                         getString(R.string.detail_compass, magnetometerReading.formatAsStr())
+                    orientation.text =
+                        getString(R.string.detail_orientation, orientationAngles.formatAsStr())
                 }
             })
         }
