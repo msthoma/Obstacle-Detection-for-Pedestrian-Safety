@@ -1,3 +1,7 @@
+# Action to periodically remove old artifacts created by master build checks, so storage limits
+# are not exceeded
+# Source: https://github.com/c-hive/gha-remove-artifacts
+
 name: Remove old artifacts
 
 on:
