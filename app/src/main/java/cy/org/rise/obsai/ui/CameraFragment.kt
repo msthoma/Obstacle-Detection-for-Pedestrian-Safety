@@ -1,11 +1,6 @@
 package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Environment
@@ -37,7 +32,7 @@ import java.util.*
  * The CameraView library is used for interacting with the camera
  * see [https://github.com/natario1/CameraView].
  */
-class CameraFragment : Fragment(), SensorEventListener {
+class CameraFragment : Fragment() {
     // Camera/photo related vars
     private lateinit var cameraView: CameraView
     private lateinit var currentPhotoPath: String
@@ -46,13 +41,9 @@ class CameraFragment : Fragment(), SensorEventListener {
     private lateinit var currentLocation: Location
 
     // Sensor related vars
-    private lateinit var sensorManager: SensorManager
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
-
-    private var sensor: Sensor? = null
+    private var accelerometerReading = FloatArray(3)
+    private var magnetometerReading = FloatArray(3)
+    private var orientationAngles = FloatArray(3)
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -108,8 +99,24 @@ class CameraFragment : Fragment(), SensorEventListener {
             updateObstacleLocation(it)
         })
 
-        // Orientation stuff
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        // Track orientation
+        viewModel.orientationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            accelerometerReading = it.accelerometer
+            magnetometerReading = it.compass
+            orientationAngles = it.orientation
+
+            // Set details in overlay view
+            if (photo_details.isVisible) {
+                val orientationArray = orientationAngles.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                val compassArray = magnetometerReading.joinToString(transform = { fl ->
+                    fl.roundTo(3).toString()
+                })
+                accelerometer.text = "Orientation: ${orientationArray}"
+                compass.text = "Compass: ${compassArray}"
+            }
+        })
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -181,81 +188,6 @@ class CameraFragment : Fragment(), SensorEventListener {
 
         // this saves location in photo's EXIF data
         cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Don't receive any more updates from orientation sensors
-        sensorManager.unregisterListener(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
-            sensorManager.registerListener(
-                this,
-                accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
-            sensorManager.registerListener(
-                this,
-                magneticField,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        Log.d(TAG(), "Sensor accuracy changed to $accuracy")
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        event?.let {
-            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    accelerometerReading,
-                    0,
-                    accelerometerReading.size
-                )
-            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    magnetometerReading,
-                    0,
-                    magnetometerReading.size
-                )
-            }
-            // Calculate device orientation by combining accelerometer and magneticField, see
-            // https://developer.android.com/guide/topics/sensors/sensors_position#sensors-pos-orient
-            // Results may need to be translated using remapCoordinateSystem(), see
-            // https://developer.android.com/reference/android/hardware/SensorManager#remapCoordinateSystem(float[],%20int,%20int,%20float[])
-            SensorManager.getRotationMatrix(
-                rotationMatrix,
-                null,
-                accelerometerReading,
-                magnetometerReading
-            )
-            SensorManager.getOrientation(rotationMatrix, orientationAngles)
-
-            // Set details in overlay view
-            if (photo_details.isVisible) {
-                val orientationArray = orientationAngles.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                val compassArray = magnetometerReading.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                accelerometer.text = "Orientation: ${orientationArray}"
-                compass.text = "Compass: ${compassArray}"
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
