@@ -60,6 +60,7 @@
         android:background="@color/colorBlackTransparent"
         android:backgroundTintMode="screen"
         android:orientation="vertical"
+        android:padding="@dimen/margin_small"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
