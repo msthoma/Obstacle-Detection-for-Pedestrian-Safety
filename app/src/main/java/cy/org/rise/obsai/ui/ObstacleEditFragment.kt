@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -297,17 +298,21 @@ class ObstacleEditFragment : Fragment() {
                         fabSubmit.extend()
                     }
                 }
-            }
 
-//            TODO when user clicks my location button, marker should move to location provided
-//             by GPS, but fragment must first be able to get current position, perhaps by moving
-//             location tracking logic to view model
-//             see https://stackoverflow.com/questions/57961791/how-to-use-locationlistener-in-mvvm
-//             https://stackoverflow.com/questions/47619739/how-to-track-current-location-in-android-with-new-architecture-components
-//            googleMap.isMyLocationEnabled = true
-//            googleMap.setOnMyLocationButtonClickListener {
-//                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
-//            }
+                viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
+                    clear()
+                    addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                })
+
+                // Enable myLocation layer and button
+                isMyLocationEnabled = true
+                setOnMyLocationButtonClickListener {
+                    false
+                }
+                setOnMyLocationClickListener {
+                    Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         fabSubmit.setOnClickListener {
