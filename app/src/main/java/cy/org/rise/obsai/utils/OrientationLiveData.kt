@@ -8,6 +8,14 @@ import android.hardware.SensorManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 
+/**
+ * Class that provides orientation data as LiveData. Tracking is only active as long as there is an
+ * observer, when it becomes inactive the tracking stops.
+ *
+ * For orientation sensor information, see [Android dev topic](https://developer.android.com/guide/topics/sensors/sensors_overview).
+ *
+ * @param context application context
+ */
 class OrientationLiveData(context: Context) : LiveData<OrientationReadings>(), SensorEventListener {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
