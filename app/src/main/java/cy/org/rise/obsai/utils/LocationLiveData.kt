@@ -14,6 +14,8 @@ import com.google.android.gms.location.LocationServices
  * Class that provides location data as LiveData. Tracking is only active as long as there is an
  * observer, when it becomes inactive the tracking stops.
  *
+ * For getting location, see [documentation](https://developer.android.com/training/location).
+ *
  * Based on [this example](https://github.com/mayowa-egbewunmi/LocationUpdateWithLiveData/blob/master/app/src/main/java/com/mayowa/android/locationwithlivedata/LocationLiveData.kt).
  *
  * @param context application context
