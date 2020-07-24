@@ -14,7 +14,6 @@ import cy.org.rise.obsai.utils.TAG
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
-import kotlin.math.absoluteValue
 
 /**
  * Repository module for handling data operations, based on

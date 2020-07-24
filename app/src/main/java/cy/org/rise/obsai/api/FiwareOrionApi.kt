@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.api
 
 import android.util.Log
+import com.google.gson.GsonBuilder
 import cy.org.rise.obsai.db.Obstacle
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -83,7 +84,11 @@ interface FiwareOrionApi {
                 .baseUrl(httpUrl)
                 .client(client)
                 .addConverterFactory(
-                    GsonConverterFactory.create()
+                    GsonConverterFactory.create(
+                        // make sure only exposed fields are JSONified
+                        GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting()
+                            .create()
+                    )
                 )
                 .build()
                 .create(FiwareOrionApi::class.java)
