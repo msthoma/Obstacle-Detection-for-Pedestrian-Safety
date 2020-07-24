@@ -293,16 +293,6 @@ class ObstacleEditFragment : Fragment() {
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
 
-                // Shrink FAB when user is moving the map around
-                setOnCameraMoveStartedListener {
-                    fabSubmit.shrink()
-                    lifecycleScope.launch {
-                        // TODO add more checks here
-                        delay(8000)
-                        fabSubmit.extend()
-                    }
-                }
-
                 // make sure we still have location permission, if we don't, don't enable my
                 // location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
@@ -317,8 +307,22 @@ class ObstacleEditFragment : Fragment() {
                         false
                     }
                     setOnMyLocationClickListener {
+                        // TODO: 24/07/20 here move marker to current location if user clicks on
+                        //  location dot, but only after the user has manually changed location
+                        //  by long clicking on map. Also maybe afterwards re-make marker to
+                        //  follow location dot?
                         Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT)
                             .show()
+                    }
+
+                    // Shrink FAB when user is moving the map around
+                    setOnCameraMoveStartedListener {
+                        fabSubmit.shrink()
+                        lifecycleScope.launch {
+                            // TODO add more checks here
+                            delay(8000)
+                            fabSubmit.extend()
+                        }
                     }
                 }
             }
