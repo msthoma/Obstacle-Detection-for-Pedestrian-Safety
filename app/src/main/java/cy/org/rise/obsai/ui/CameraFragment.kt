@@ -94,40 +94,41 @@ class CameraFragment : Fragment() {
             cameraView.takePicture()
         }
 
-        // Get last known location and subscribe to location updates
-        viewModel.locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer
-        {newLocation ->
-            // location in some cases can be NULL see
-            // https://developer.android.com/training/location/retrieve-current#last-known
-            currentLocation = newLocation
+        viewModel.apply {
+            // Get last known location and subscribe to location updates
+            locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newLoc ->
+                // location in some cases can be NULL see
+                // https://developer.android.com/training/location/retrieve-current#last-known
+                currentLocation = newLoc
 
-            if (photo_details.isVisible) {
-                coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
-                    .longitude}\nAltitude ${newLocation.altitude.roundTo(2)}"
-            }
+                if (photo_details.isVisible) {
+                    coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
+                        .longitude}\nAltitude ${newLoc.altitude.roundTo(2)}"
+                }
 
-            // this saves location in photo's EXIF data
-            cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
-        })
+                // this saves location in photo's EXIF data
+                cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
+            })
 
-        // Track orientation
-        viewModel.orientationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            accelerometerReading = it.accelerometer
-            magnetometerReading = it.compass
-            orientationAngles = it.orientation
+            // Track orientation
+            orientationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                accelerometerReading = it.accelerometer
+                magnetometerReading = it.compass
+                orientationAngles = it.orientation
 
-            // Set details in overlay view
-            if (photo_details.isVisible) {
-                val orientationArray = orientationAngles.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                val compassArray = magnetometerReading.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                accelerometer.text = "Orientation: ${orientationArray}"
-                compass.text = "Compass: ${compassArray}"
-            }
-        })
+                // Set details in overlay view
+                if (photo_details.isVisible) {
+                    val orientationArray = orientationAngles.joinToString(transform = { fl ->
+                        fl.roundTo(3).toString()
+                    })
+                    val compassArray = magnetometerReading.joinToString(transform = { fl ->
+                        fl.roundTo(3).toString()
+                    })
+                    accelerometer.text = "Orientation: ${orientationArray}"
+                    compass.text = "Compass: ${compassArray}"
+                }
+            })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
