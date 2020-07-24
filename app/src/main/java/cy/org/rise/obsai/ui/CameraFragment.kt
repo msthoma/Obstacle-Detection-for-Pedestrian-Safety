@@ -15,10 +15,7 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.getUniqueAppInstallID
-import cy.org.rise.obsai.utils.roundTo
+import cy.org.rise.obsai.utils.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -118,17 +115,10 @@ class CameraFragment : Fragment() {
 
                 // Set details in overlay view
                 if (photo_details.isVisible) {
-                    val accelerometerArray = accelerometerReading.joinToString(transform = { fl ->
-                        fl.roundTo(3).toString()
-                    })
-                    val compassArray = magnetometerReading.joinToString(transform = { fl ->
-                        fl.roundTo(3).toString()
-                    })
-                    val orientationArray = orientationAngles.joinToString(transform = { fl ->
-                        fl.roundTo(3).toString()
-                    })
-                    accelerometer.text = getString(R.string.detail_orientation, accelerometerArray)
-                    compass.text = getString(R.string.detail_compass, compassArray)
+                    accelerometer.text =
+                        getString(R.string.detail_orientation, accelerometerReading.formatAsStr())
+                    compass.text =
+                        getString(R.string.detail_compass, magnetometerReading.formatAsStr())
                 }
             })
         }
