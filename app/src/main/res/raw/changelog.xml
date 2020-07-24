@@ -1,5 +1,16 @@
 <changelog>
     <release
+        date="2020-07-24"
+        versionCode="1"
+        versionName="Version 0.16.4">
+        <info>Improved location and orientation tracking</info>
+        <info>Location tracking continues while user edits current obstacle, more chances a
+            location fix will occur, or a more accurate location update will arrive
+        </info>
+        <info>More Greek translations</info>
+    </release>
+
+    <release
         date="2020-07-23"
         versionCode="1"
         versionName="Version 0.16.3">
