@@ -10,6 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.afollestad.assent.Permission
+import com.afollestad.assent.isAllGranted
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
@@ -96,22 +98,24 @@ class CameraFragment : Fragment() {
 
         viewModel.apply {
             // Get last known location and subscribe to location updates
-            locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newLoc ->
-                // location in some cases can be NULL see
-                // https://developer.android.com/training/location/retrieve-current#last-known
-                currentLocation = newLoc
+            if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
+                locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer { newLoc ->
+                    // location in some cases can be NULL see
+                    // https://developer.android.com/training/location/retrieve-current#last-known
+                    currentLocation = newLoc
 
-                // Set location in overlay view
-                if (photo_details.isVisible) {
-                    location.text = getString(
-                        R.string.detail_location,
-                        "${currentLocation.latitude}, ${currentLocation.longitude}"
-                    )
-                }
+                    // Set location in overlay view
+                    if (photo_details.isVisible) {
+                        location.text = getString(
+                            R.string.detail_location,
+                            "${currentLocation.latitude}, ${currentLocation.longitude}"
+                        )
+                    }
 
-                // this saves location in photo's EXIF data
-                cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
-            })
+                    // this saves location in photo's EXIF data
+                    cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
+                })
+            }
 
             // Track orientation
             orientationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
