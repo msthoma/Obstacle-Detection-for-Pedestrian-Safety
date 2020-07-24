@@ -55,7 +55,7 @@ class CameraFragment : Fragment(), SensorEventListener {
     private var sensor: Sensor? = null
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+        InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(

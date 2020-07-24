@@ -93,7 +93,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var cnnResults: Array<String>
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+        InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(

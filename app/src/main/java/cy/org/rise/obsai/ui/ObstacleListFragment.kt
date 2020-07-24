@@ -28,7 +28,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
@@ -44,7 +43,7 @@ class ObstacleListFragment : Fragment() {
 //    private lateinit var sessionManager: SessionManager
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+        InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(
