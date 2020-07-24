@@ -314,15 +314,15 @@ class ObstacleEditFragment : Fragment() {
                         Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT)
                             .show()
                     }
+                }
 
-                    // Shrink FAB when user is moving the map around
-                    setOnCameraMoveStartedListener {
-                        fabSubmit.shrink()
-                        lifecycleScope.launch {
-                            // TODO add more checks here
-                            delay(8000)
-                            fabSubmit.extend()
-                        }
+                // Shrink FAB when user is moving the map around
+                setOnCameraMoveStartedListener {
+                    fabSubmit.shrink()
+                    lifecycleScope.launch {
+                        // TODO add more checks here
+                        delay(8000)
+                        fabSubmit.extend()
                     }
                 }
             }
