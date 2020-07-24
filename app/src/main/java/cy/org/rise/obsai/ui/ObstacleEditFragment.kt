@@ -74,6 +74,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var fabSubmit: ExtendedFloatingActionButton
     private var fragCreationTime by Delegates.notNull<Long>()
     private var analysisIndicatorNotShown = true
+    private var locationNotManuallyEdited = true
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     // TFLite related vars
@@ -172,7 +173,6 @@ class ObstacleEditFragment : Fragment() {
 
                 bitmap?.let { bm ->
                     val cropSize = min(bm.width, bm.height)
-                    Log.d(TAG(), "cropSize $cropSize")
 
                     inputImageBuffer.load(bm)
                     val imageProcessor = ImageProcessor.Builder()
@@ -247,6 +247,7 @@ class ObstacleEditFragment : Fragment() {
         button_edit_photo.setOnClickListener {
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
+                    // TODO: 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
                     currentObstacle
                 )
             )
@@ -284,21 +285,31 @@ class ObstacleEditFragment : Fragment() {
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
+                    locationNotManuallyEdited = false
                     clear()
                     addMarker(MarkerOptions().position(latLng))
 
                     // Save location indicated by user
                     // TODO here the altitude should be updated as well, does maps provided it
                     //  somewhere? Or perhaps set it to 0
+                    //  also location accuracy
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
 
                 // make sure we still have location permission, if we don't, don't enable my
                 // location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
+                    Log.d(TAG(), "all granted")
                     viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
-                        clear()
-                        addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                        Log.d(TAG(), "new location")
+                        if (locationNotManuallyEdited) {
+                            clear()
+                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            currentObstacle.location.apply {
+                                this.latitude = it.latitude
+                                this.longitude = it.longitude
+                            }
+                        }
                     })
 
                     // Enable myLocation layer and button
@@ -311,8 +322,16 @@ class ObstacleEditFragment : Fragment() {
                         //  location dot, but only after the user has manually changed location
                         //  by long clicking on map. Also maybe afterwards re-make marker to
                         //  follow location dot?
-                        Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT)
-                            .show()
+                        if (!locationNotManuallyEdited) {
+                            clear()
+                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            currentObstacle.location.apply {
+                                this.latitude = it.latitude
+                                this.longitude = it.longitude
+                                // TODO: 24/07/20 include altitude, accuracy
+                            }
+                            locationNotManuallyEdited = true
+                        }
                     }
                 }
 
