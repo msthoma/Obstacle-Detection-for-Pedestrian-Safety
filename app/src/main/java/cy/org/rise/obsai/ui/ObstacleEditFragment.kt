@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -16,6 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.afollestad.assent.Permission
+import com.afollestad.assent.isAllGranted
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -104,6 +107,7 @@ class ObstacleEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get views of interest
         typeEditText = select_obstacle_type_edit_text
@@ -299,18 +303,23 @@ class ObstacleEditFragment : Fragment() {
                     }
                 }
 
-                viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
-                    clear()
-                    addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
-                })
+                // make sure we still have location permission, if we don't, don't enable my
+                // location layer on map
+                if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
+                        clear()
+                        addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                    })
 
-                // Enable myLocation layer and button
-                isMyLocationEnabled = true
-                setOnMyLocationButtonClickListener {
-                    false
-                }
-                setOnMyLocationClickListener {
-                    Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT).show()
+                    // Enable myLocation layer and button
+                    isMyLocationEnabled = true
+                    setOnMyLocationButtonClickListener {
+                        false
+                    }
+                    setOnMyLocationClickListener {
+                        Toast.makeText(requireContext(), "my location $it", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
         }
