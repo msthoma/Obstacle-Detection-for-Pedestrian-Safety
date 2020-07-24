@@ -36,11 +36,6 @@ import java.util.*
  *
  * The CameraView library is used for interacting with the camera
  * see [https://github.com/natario1/CameraView].
- *
- * For getting location, see documentation at [https://developer.android.com/training/location].
- *
- * For getting orientation, see
- * [https://developer.android.com/guide/topics/sensors/sensors_overview].
  */
 class CameraFragment : Fragment(), SensorEventListener {
     // Camera/photo related vars
