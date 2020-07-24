@@ -95,8 +95,19 @@ class CameraFragment : Fragment() {
         }
 
         // Get last known location and subscribe to location updates
-        viewModel.locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            updateObstacleLocation(it)
+        viewModel.locationLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer
+        {newLocation ->
+            // location in some cases can be NULL see
+            // https://developer.android.com/training/location/retrieve-current#last-known
+            currentLocation = newLocation
+
+            if (photo_details.isVisible) {
+                coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
+                    .longitude}\nAltitude ${newLocation.altitude.roundTo(2)}"
+            }
+
+            // this saves location in photo's EXIF data
+            cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
         })
 
         // Track orientation
@@ -173,21 +184,6 @@ class CameraFragment : Fragment() {
                 z = magnetometerReadingCopy[2].toDouble()
             )
         )
-    }
-
-    private fun updateObstacleLocation(location: Location) {
-        currentLocation = location
-
-        // location in some cases can be NULL see
-        // https://developer.android.com/training/location/retrieve-current#last-known
-
-        if (photo_details.isVisible) {
-            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
-                .longitude}\nAltitude ${location.altitude.roundTo(2)}"
-        }
-
-        // this saves location in photo's EXIF data
-        cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
