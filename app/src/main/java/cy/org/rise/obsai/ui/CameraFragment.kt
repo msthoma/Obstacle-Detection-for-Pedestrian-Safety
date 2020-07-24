@@ -1,11 +1,6 @@
 package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Environment
@@ -13,16 +8,20 @@ import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.*
+import com.afollestad.assent.Permission
+import com.afollestad.assent.isAllGranted
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.formatAsStr
 import cy.org.rise.obsai.utils.getUniqueAppInstallID
-import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -35,31 +34,23 @@ import java.util.*
  *
  * The CameraView library is used for interacting with the camera
  * see [https://github.com/natario1/CameraView].
- *
- * For getting location, see documentation at [https://developer.android.com/training/location].
- *
- * For getting orientation, see
- * [https://developer.android.com/guide/topics/sensors/sensors_overview].
  */
-class CameraFragment : Fragment(), SensorEventListener {
+class CameraFragment : Fragment() {
     // Camera/photo related vars
     private lateinit var cameraView: CameraView
     private lateinit var currentPhotoPath: String
 
     // Location related vars
     private lateinit var currentLocation: Location
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     // Sensor related vars
-    private lateinit var sensorManager: SensorManager
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
+    private var accelerometerReading = FloatArray(3)
+    private var magnetometerReading = FloatArray(3)
+    private var orientationAngles = FloatArray(3)
 
-    private var sensor: Sensor? = null
+    private val viewModel: ObstacleViewModel by viewModels {
+        InjectorUtils.provideObstacleViewModelFactory(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -101,28 +92,49 @@ class CameraFragment : Fragment(), SensorEventListener {
             }
         })
 
-//        cameraView.addFrameProcessor { frame ->
-//            if (frame.dataClass == Image::class.java) {
-//                Log.d(TAG(), "frame: ${frame.size} ${frame.time}")
-//            }
-//        }
-
         camera_button.setOnClickListener {
             Log.d(TAG(), "camera button pressed")
             cameraView.takePicture()
         }
 
-        // Get last known location (below in getLocationUpdates() a service is started that will
-        // provide a more up to date location if it becomes available)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let { updateObstacleLocation(it) }
+        viewModel.apply {
+            // Get last known location and subscribe to location updates
+            if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
+                locationLiveData.observe(viewLifecycleOwner, Observer { newLoc ->
+                    // location in some cases can be NULL see
+                    // https://developer.android.com/training/location/retrieve-current#last-known
+                    currentLocation = newLoc
+
+                    // Set location in overlay view
+                    if (photo_details.isVisible) {
+                        location.text = getString(
+                            R.string.detail_location,
+                            "${currentLocation.latitude}, ${currentLocation.longitude}"
+                        )
+                    }
+
+                    // this saves location in photo's EXIF data
+                    cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
+                })
+            }
+
+            // Track orientation
+            orientationLiveData.observe(viewLifecycleOwner, Observer {
+                accelerometerReading = it.accelerometer
+                magnetometerReading = it.compass
+                orientationAngles = it.orientation
+
+                // Set details in overlay view
+                if (photo_details.isVisible) {
+                    accelerometer.text =
+                        getString(R.string.detail_accelerometer, accelerometerReading.formatAsStr())
+                    compass.text =
+                        getString(R.string.detail_compass, magnetometerReading.formatAsStr())
+                    orientation.text =
+                        getString(R.string.detail_orientation, orientationAngles.formatAsStr())
+                }
+            })
         }
-
-        getLocationUpdates()
-
-        // Orientation stuff
-        sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -136,32 +148,6 @@ class CameraFragment : Fragment(), SensorEventListener {
         return File.createTempFile("JPEG_${timeStamp}", ".jpg", storageDir).apply {
             currentPhotoPath = this.absolutePath
         }
-    }
-
-    private fun getLocationUpdates() {
-        // this is used to get any updates to the location of the user, in case they change
-        // during taking a photo of an obstacle
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 20000 // 20s
-            fastestInterval = 10000 // 10s
-            smallestDisplacement = 2f // 2m
-        }
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult?.let { updateObstacleLocation(it.lastLocation) }
-            }
-        }
-    }
-
-    private fun startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun createCurrentObstacle(): Obstacle {
@@ -205,100 +191,6 @@ class CameraFragment : Fragment(), SensorEventListener {
                 z = magnetometerReadingCopy[2].toDouble()
             )
         )
-    }
-
-    private fun updateObstacleLocation(location: Location) {
-        currentLocation = location
-
-        // location in some cases can be NULL see
-        // https://developer.android.com/training/location/retrieve-current#last-known
-
-        if (photo_details.isVisible) {
-            coordinates.text = "Location: ${currentLocation.latitude}, ${currentLocation
-                .longitude}\nAltitude ${location.altitude.roundTo(2)}"
-        }
-
-        // this saves location in photo's EXIF data
-        cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopLocationUpdates()
-
-        // Don't receive any more updates from orientation sensors
-        sensorManager.unregisterListener(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startLocationUpdates()
-
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
-            sensorManager.registerListener(
-                this,
-                accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
-            sensorManager.registerListener(
-                this,
-                magneticField,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        Log.d(TAG(), "Sensor accuracy changed to $accuracy")
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        event?.let {
-            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    accelerometerReading,
-                    0,
-                    accelerometerReading.size
-                )
-            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    magnetometerReading,
-                    0,
-                    magnetometerReading.size
-                )
-            }
-            // Calculate device orientation by combining accelerometer and magneticField, see
-            // https://developer.android.com/guide/topics/sensors/sensors_position#sensors-pos-orient
-            // Results may need to be translated using remapCoordinateSystem(), see
-            // https://developer.android.com/reference/android/hardware/SensorManager#remapCoordinateSystem(float[],%20int,%20int,%20float[])
-            SensorManager.getRotationMatrix(
-                rotationMatrix,
-                null,
-                accelerometerReading,
-                magnetometerReading
-            )
-            SensorManager.getOrientation(rotationMatrix, orientationAngles)
-
-            // Set details in overlay view
-            if (photo_details.isVisible) {
-                val orientationArray = orientationAngles.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                val compassArray = magnetometerReading.joinToString(transform = { fl ->
-                    fl.roundTo(3).toString()
-                })
-                accelerometer.text = "Orientation: ${orientationArray}"
-                compass.text = "Compass: ${compassArray}"
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

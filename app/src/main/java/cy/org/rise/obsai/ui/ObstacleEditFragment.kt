@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -12,9 +13,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.afollestad.assent.Permission
+import com.afollestad.assent.isAllGranted
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -70,6 +74,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var fabSubmit: ExtendedFloatingActionButton
     private var fragCreationTime by Delegates.notNull<Long>()
     private var analysisIndicatorNotShown = true
+    private var locationNotManuallyEdited = true
     private val args: ObstacleEditFragmentArgs by navArgs()
 
     // TFLite related vars
@@ -88,7 +93,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var cnnResults: Array<String>
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+        InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(
@@ -103,6 +108,7 @@ class ObstacleEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get views of interest
         typeEditText = select_obstacle_type_edit_text
@@ -167,7 +173,6 @@ class ObstacleEditFragment : Fragment() {
 
                 bitmap?.let { bm ->
                     val cropSize = min(bm.width, bm.height)
-                    Log.d(TAG(), "cropSize $cropSize")
 
                     inputImageBuffer.load(bm)
                     val imageProcessor = ImageProcessor.Builder()
@@ -242,6 +247,7 @@ class ObstacleEditFragment : Fragment() {
         button_edit_photo.setOnClickListener {
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
+                    // TODO: 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
                     currentObstacle
                 )
             )
@@ -279,13 +285,54 @@ class ObstacleEditFragment : Fragment() {
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
+                    locationNotManuallyEdited = false
                     clear()
                     addMarker(MarkerOptions().position(latLng))
 
                     // Save location indicated by user
                     // TODO here the altitude should be updated as well, does maps provided it
                     //  somewhere? Or perhaps set it to 0
+                    //  also location accuracy
                     currentObstacle.setLocationFromLatLong(latLng)
+                }
+
+                // make sure we still have location permission, if we don't, don't enable my
+                // location layer on map
+                if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
+                    Log.d(TAG(), "all granted")
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
+                        Log.d(TAG(), "new location")
+                        if (locationNotManuallyEdited) {
+                            clear()
+                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            currentObstacle.location.apply {
+                                this.latitude = it.latitude
+                                this.longitude = it.longitude
+                            }
+                        }
+                    })
+
+                    // Enable myLocation layer and button
+                    isMyLocationEnabled = true
+                    setOnMyLocationButtonClickListener {
+                        false
+                    }
+                    setOnMyLocationClickListener {
+                        // TODO: 24/07/20 here move marker to current location if user clicks on
+                        //  location dot, but only after the user has manually changed location
+                        //  by long clicking on map. Also maybe afterwards re-make marker to
+                        //  follow location dot?
+                        if (!locationNotManuallyEdited) {
+                            clear()
+                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            currentObstacle.location.apply {
+                                this.latitude = it.latitude
+                                this.longitude = it.longitude
+                                // TODO: 24/07/20 include altitude, accuracy
+                            }
+                            locationNotManuallyEdited = true
+                        }
+                    }
                 }
 
                 // Shrink FAB when user is moving the map around
@@ -298,16 +345,6 @@ class ObstacleEditFragment : Fragment() {
                     }
                 }
             }
-
-//            TODO when user clicks my location button, marker should move to location provided
-//             by GPS, but fragment must first be able to get current position, perhaps by moving
-//             location tracking logic to view model
-//             see https://stackoverflow.com/questions/57961791/how-to-use-locationlistener-in-mvvm
-//             https://stackoverflow.com/questions/47619739/how-to-track-current-location-in-android-with-new-architecture-components
-//            googleMap.isMyLocationEnabled = true
-//            googleMap.setOnMyLocationButtonClickListener {
-//                see here https://developers.google.com/maps/documentation/android-sdk/location#my-location
-//            }
         }
 
         fabSubmit.setOnClickListener {

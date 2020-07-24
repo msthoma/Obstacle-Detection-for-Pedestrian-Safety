@@ -34,6 +34,17 @@ fun Double.roundTo(n: Int = 3): Double = "%.${n}f".format(Locale.ENGLISH, this).
 fun Float.roundTo(n: Int = 3): Float = "%.${n}f".format(Locale.ENGLISH, this).toFloat()
 
 /**
+ * Formats a float array to a string, while rounding each float.
+ *
+ * @return Float array as formatted string
+ */
+fun FloatArray.formatAsStr(): String = this.joinToString(
+    separator = ", ",
+    transform = { fl ->
+        fl.roundTo(3).toString()
+    })
+
+/**
  * Returns a unique ID for current app install - if such as ID does not exist yet, it is
  * automatically created, using a one-time generated random UUID.
  *

@@ -1,6 +1,5 @@
 package cy.org.rise.obsai.utils
 
-import android.app.Application
 import android.content.Context
 import androidx.fragment.app.Fragment
 import cy.org.rise.obsai.db.ObstacleRepository
@@ -25,11 +24,12 @@ object InjectorUtils {
         )
     }
 
-    fun provideObstacleViewModelFactory(
-        fragment: Fragment,
-        application: Application
-    ): ObstacleViewModelFactory {
+    fun provideObstacleViewModelFactory(fragment: Fragment): ObstacleViewModelFactory {
         val repository = getObstacleRepository(fragment.requireContext())
-        return ObstacleViewModelFactory(repository, application, fragment)
+        return ObstacleViewModelFactory(
+            repository,
+            fragment.requireActivity().application,
+            fragment
+        )
     }
 }

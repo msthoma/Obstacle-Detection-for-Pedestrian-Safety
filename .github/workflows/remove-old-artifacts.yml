@@ -1,0 +1,25 @@
+# Action to periodically remove old artifacts created by master build checks, so storage limits
+# are not exceeded
+# Source: https://github.com/c-hive/gha-remove-artifacts
+
+name: Remove old artifacts
+
+on:
+  #  push:
+  schedule:
+    # Every day at 1am
+    - cron: '0 1 * * *'
+
+jobs:
+  remove-old-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '10 days'
+          skip-recent: 5
+          # Optional inputs
+          # skip-tags: true

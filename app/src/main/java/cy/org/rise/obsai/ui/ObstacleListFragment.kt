@@ -28,7 +28,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
@@ -41,10 +40,10 @@ class ObstacleListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
-    private lateinit var sessionManager: SessionManager
+//    private lateinit var sessionManager: SessionManager
 
     private val viewModel: ObstacleViewModel by viewModels {
-        InjectorUtils.provideObstacleViewModelFactory(this, this.requireActivity().application)
+        InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(
@@ -62,7 +61,7 @@ class ObstacleListFragment : Fragment() {
         if (!requireContext().introStatus())
             findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
 
-        sessionManager = SessionManager(requireContext())
+//        sessionManager = SessionManager(requireContext())
 
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
