@@ -15,6 +15,7 @@ jobs:
   apk:
     name: Generate APK
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
