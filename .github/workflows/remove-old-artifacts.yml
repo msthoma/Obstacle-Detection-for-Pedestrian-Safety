@@ -8,6 +8,7 @@ on:
   schedule:
     # Every day at 1am
     - cron: '0 1 * * *'
+  push
 
 jobs:
   remove-old-artifacts:
