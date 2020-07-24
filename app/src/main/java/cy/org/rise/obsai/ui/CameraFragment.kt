@@ -118,14 +118,17 @@ class CameraFragment : Fragment() {
 
                 // Set details in overlay view
                 if (photo_details.isVisible) {
-                    val orientationArray = orientationAngles.joinToString(transform = { fl ->
+                    val accelerometerArray = accelerometerReading.joinToString(transform = { fl ->
                         fl.roundTo(3).toString()
                     })
                     val compassArray = magnetometerReading.joinToString(transform = { fl ->
                         fl.roundTo(3).toString()
                     })
-                    accelerometer.text = "Orientation: ${orientationArray}"
-                    compass.text = "Compass: ${compassArray}"
+                    val orientationArray = orientationAngles.joinToString(transform = { fl ->
+                        fl.roundTo(3).toString()
+                    })
+                    accelerometer.text = getString(R.string.detail_orientation, accelerometerArray)
+                    compass.text = getString(R.string.detail_compass, compassArray)
                 }
             })
         }
