@@ -63,6 +63,14 @@
     <string name="acra_crash_dialog_title">Η εφαρμογή παρουσίασε σφάλμα</string>
     <string name="acra_crash_input_prompt">Προσθήκη σχολίου (προαιρετικά):</string>
     <string name="acra_crash_message">"Λυπούμαστε, η εφαρμογή παρουσίασε κάποιο σφάλμα.\n\nΠαρακαλούμε όπως αναφέρετε το σφάλμα πατώντας OK πιο κάτω (θα σας ζητηθεί να στείλετε ένα αρχείο σφάλματος μέσω email στον προγραμματιστή της εφαρμογής)."</string>
+    <string name="detail_accelerometer">Επιταχυνσιόμετρο: %1$s</string>
+    <string name="detail_compass">Πυξίδα: %1$s</string>
+    <string name="detail_location">Τοποθεσία: %1$s</string>
+    <string name="detail_orientation">Προσανατολισμός: %1$s</string>
+    <string name="detail_getting_accelerometer">Πληρ. Επιταχυνσιομέτρου…</string>
+    <string name="detail_getting_compass">Πληρ. Πυξίδας…</string>
+    <string name="detail_getting_location">Πληρ. Τοποθεσίας…</string>
+    <string name="detail_getting_orientation">Πληρ. Προσανατολισμού…</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->
