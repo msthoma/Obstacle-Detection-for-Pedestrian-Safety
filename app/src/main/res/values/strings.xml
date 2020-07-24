@@ -61,6 +61,11 @@
     <string name="detail_location">Location: %1$s</string>
     <string name="detail_orientation">Orientation: %1$s</string>
 
+    <string name="detail_getting_accelerometer">Getting accelerometer…</string>
+    <string name="detail_getting_compass">Getting compass…</string>
+    <string name="detail_getting_location">Getting location…</string>
+    <string name="detail_getting_orientation">Getting orientation…</string>
+
     <string name="dialog_delete_all_msg">This action is not reversible.</string>
     <string name="dialog_delete_all_positive">Delete</string>
     <string name="dialog_delete_all_title">Delete all obstacles?</string>

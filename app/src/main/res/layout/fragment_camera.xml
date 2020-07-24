@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_tiny"
-            android:text="Getting location..."
+            android:text="@string/detail_getting_location"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_tiny"
-            android:text="Getting accelerometer..."
+            android:text="@string/detail_getting_accelerometer"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_tiny"
-            android:text="Getting compass..."
+            android:text="@string/detail_getting_compass"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_tiny"
-            android:text="Getting orientation..."
+            android:text="@string/detail_getting_orientation"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
