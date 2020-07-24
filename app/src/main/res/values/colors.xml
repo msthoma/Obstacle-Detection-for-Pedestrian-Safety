@@ -7,6 +7,7 @@
     <color name="colorPrimaryDark">#00796b</color>
     <color name="colorAccent">#536dfe</color>
     <color name="colorLightGray">#F6F6F6</color>
+    <color name="colorBlackTransparent">#80000000</color>
 
     <!-- Used this tool https://www.w3schools.com/colors/colors_triadic.asp to create colors -->
     <color name="introColor1">#4631A4</color>
