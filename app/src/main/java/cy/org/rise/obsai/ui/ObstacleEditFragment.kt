@@ -29,7 +29,10 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.CYPRUS
+import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
+import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
@@ -187,17 +190,27 @@ class ObstacleEditFragment : Fragment() {
                     // Add marker indicating the obstacle, if location provided is not 0, 0
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 16f))
+                    moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            obstaclePosition,
+                            DEFAULT_ZOOM_LEVEL
+                        )
+                    )
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.169933, 33.361071), 12f))
+                    moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(35.169933, 33.361071),
+                            CITY_ZOOM_LEVEL
+                        )
+                    )
                 }
 
                 // Add map boundaries
                 setLatLngBoundsForCameraTarget(CYPRUS)
 
                 // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-                setMinZoomPreference(7.5f)
+                setMinZoomPreference(MIN_ZOOM_LEVEL)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->

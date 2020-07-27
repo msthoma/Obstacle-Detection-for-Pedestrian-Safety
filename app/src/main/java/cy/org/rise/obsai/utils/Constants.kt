@@ -20,9 +20,13 @@ object Constants {
     // Key for pref that determines whether the app intro tutorial has been shown or not
     const val INTRO_SHOWN_KEY = "INTRO_SHOWN_KEY"
 
-    // Bounds for map view, for only the general area of Cyprus
+    // Map related constants
     val CYPRUS = LatLngBounds(
+        // Bounds for map view, for only the general area of Cyprus
         LatLng(34.520142, 32.186723), // Southwest corner
         LatLng(35.738372, 34.644546) // Northeast corner
     )
+    const val CITY_ZOOM_LEVEL = 12f
+    const val DEFAULT_ZOOM_LEVEL = 16f
+    const val MIN_ZOOM_LEVEL = 7.5f
 }
