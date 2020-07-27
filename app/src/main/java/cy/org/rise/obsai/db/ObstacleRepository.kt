@@ -139,6 +139,12 @@ class ObstacleRepository private constructor(
     suspend fun getAllServerObstacles(type: String) =
         orionService?.getAllServerObstacles(type)
 
+    /**
+     * Runs CNN classification on provided photo.
+     *
+     * @param photoPath full path of the photo to analyze
+     * @return map of labels and their probabilities according to the CNN
+     */
     fun analyzePhotoWithCNN(photoPath: String): Map<String, Float> {
         val IMAGE_MEAN = 0.0f
         val IMAGE_STD = 255.0f

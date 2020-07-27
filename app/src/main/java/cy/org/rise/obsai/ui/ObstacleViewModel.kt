@@ -89,6 +89,11 @@ class ObstacleViewModel internal constructor(
         rep.insertServerObstacle(restObstacle)
     }
 
+    /**
+     * Runs CNN classification on provided photo, and returns result as LiveData.
+     *
+     * @param photoPath full path of the photo to analyze
+     */
     fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
         try {
             emit(Result.success(rep.analyzePhotoWithCNN(photoPath)))
