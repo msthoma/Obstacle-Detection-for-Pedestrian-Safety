@@ -3,6 +3,7 @@ package cy.org.rise.obsai.ui
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
@@ -94,12 +95,11 @@ class ObstacleViewModel internal constructor(
      * @param photoPath full path of the photo to analyze
      */
     fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
-        try {
-            emit(Result.success(obstacleRepository.analyzePhotoWithCNN(photoPath)))
-        } catch (ex: Exception) {
-            emit(Result.failure(ex))
-        }
+        emit(kotlin.runCatching { obstacleRepository.analyzePhotoWithCNN(photoPath) })
     }
+
+    private fun getAlphabeticalTypeArray(): Array<String> =
+        app.resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
 //    val allServerObstacles = liveData(Dispatchers.IO) {
 //        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
