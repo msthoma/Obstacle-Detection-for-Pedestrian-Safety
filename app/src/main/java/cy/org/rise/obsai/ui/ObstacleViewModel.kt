@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
  * @property savedStateHandle
  * @constructor
  *
- * @param obstacleRepository instance of [ObstacleRepository]
+ * @param rep instance of [ObstacleRepository]
  */
 class ObstacleViewModel internal constructor(
-    private val obstacleRepository: ObstacleRepository,
+    private val rep: ObstacleRepository,
     private val app: Application,
     private val savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
@@ -41,7 +41,7 @@ class ObstacleViewModel internal constructor(
     /**
      * LiveData of obstacles in local db.
      */
-    val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getAllObstaclesLive()
+    val obstacles: LiveData<List<Obstacle>> = rep.getAllObstaclesLive()
 
     /**
      * Inserts obstacle in Room database.
@@ -54,7 +54,7 @@ class ObstacleViewModel internal constructor(
         // see https://stackoverflow.com/q/58341983 for comments on using GlobalScope
         GlobalScope.launch {
             // add to local db
-            obstacleRepository.insertObstacle(obstacle)
+            rep.insertObstacle(obstacle)
 
             // push to server
 //            try {
@@ -71,14 +71,14 @@ class ObstacleViewModel internal constructor(
 //                rep.updateObstacle(obstacle)
 //                Log.e(TAG(), "push to server failed", e)
 //            }
-            obstacleRepository.postToiNicosiaWM(obstacle)
+            rep.postToiNicosiaWM(obstacle)
         }
     }
 
     /**
      * Deletes all obstacles from local db.
      */
-    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { obstacleRepository.deleteAll() }
+    fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
     /**
      * Inserts obstacle in remote server.
@@ -86,7 +86,7 @@ class ObstacleViewModel internal constructor(
      * @param restObstacle object to be inserted into remote server
      */
     fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
-        obstacleRepository.insertServerObstacle(restObstacle)
+        rep.insertServerObstacle(restObstacle)
     }
 
     /**
@@ -95,7 +95,7 @@ class ObstacleViewModel internal constructor(
      * @param photoPath full path of the photo to analyze
      */
     fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
-        emit(kotlin.runCatching { obstacleRepository.analyzePhotoWithCNN(photoPath) })
+        emit(kotlin.runCatching { rep.analyzePhotoWithCNN(photoPath) })
     }
 
     private fun getAlphabeticalTypeArray(): Array<String> =
