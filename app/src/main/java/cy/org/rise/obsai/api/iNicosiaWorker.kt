@@ -33,7 +33,6 @@ class iNicosiaWorker(appContext: Context, workerParams: WorkerParameters) :
                     Result.success() // TODO pass on Response from API Result.success(....)
                 }
             } ?: Result.failure()
-
         } catch (e: Exception) {
             Log.e(TAG(), "Failed to upload entity with JSON $obstacleJson", e)
             Result.failure() // TODO pass on Response from API Result.failure(....)
