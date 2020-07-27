@@ -1,6 +1,8 @@
 package cy.org.rise.obsai.db
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.preference.PreferenceManager
 import androidx.work.*
@@ -11,9 +13,21 @@ import cy.org.rise.obsai.api.iNicosiaWorker
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.common.FileUtil
+import org.tensorflow.lite.support.common.TensorProcessor
+import org.tensorflow.lite.support.common.ops.NormalizeOp
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.ResizeOp
+import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
+import org.tensorflow.lite.support.image.ops.Rot90Op
+import org.tensorflow.lite.support.label.TensorLabel
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import kotlin.math.min
 
 /**
  * Repository module for handling data operations, based on [this](https://git.io/JJ0Re) example.
@@ -124,6 +138,69 @@ class ObstacleRepository private constructor(
      */
     suspend fun getAllServerObstacles(type: String) =
         orionService?.getAllServerObstacles(type)
+
+    suspend fun analyzePhotoWithCNN(photoPath: String): Map<String, Float> {
+        val IMAGE_MEAN = 0.0f
+        val IMAGE_STD = 255.0f
+        val PROBABILITY_MEAN = 0.0f
+        val PROBABILITY_STD = 1.0f
+
+        val tfliteModel = FileUtil.loadMappedFile(context, "cnn128RGB.tflite")
+        val tflite = Interpreter(tfliteModel, Interpreter.Options())
+
+        val labels = FileUtil.loadLabels(context, "cnnRGB_labels.txt")
+
+        val imageTensorIndex = 0
+        val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
+        val imageSizeY = imageShape[1]
+        val imageSizeX = imageShape[2]
+
+        val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
+        val probabilityTensorIndex = 0
+        val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
+        val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
+
+        var inputImageBuffer = TensorImage(imageDataType)
+
+        val outputProbabilityBuffer =
+            TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
+
+        val probabilityProcessor =
+            TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD))
+                .build()
+
+        val options = BitmapFactory.Options()
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val bitmap = BitmapFactory.decodeFile(photoPath, options)
+
+        val cropSize = min(bitmap.width, bitmap.height)
+
+        inputImageBuffer.load(bitmap)
+        val imageProcessor = ImageProcessor.Builder()
+            .add(ResizeWithCropOrPadOp(cropSize, cropSize))
+            .add(
+                ResizeOp(
+                    imageSizeX, imageSizeY,
+                    ResizeOp.ResizeMethod.NEAREST_NEIGHBOR
+                )
+            )
+            .add(Rot90Op(1))
+            .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
+            .build()
+        inputImageBuffer = imageProcessor.process(inputImageBuffer)
+
+        // run classification
+        tflite.run(
+            inputImageBuffer.buffer,
+            outputProbabilityBuffer.buffer.rewind()
+        )
+
+        // map labels and their predicted probabilities
+        return TensorLabel(
+            labels,
+            probabilityProcessor.process(outputProbabilityBuffer)
+        ).mapWithFloatValue
+    }
 
     companion object {
         // For Singleton instantiation
