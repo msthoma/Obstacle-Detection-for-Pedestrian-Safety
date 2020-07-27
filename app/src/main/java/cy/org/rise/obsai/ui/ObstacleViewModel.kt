@@ -2,10 +2,7 @@ package cy.org.rise.obsai.ui
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
@@ -90,6 +87,14 @@ class ObstacleViewModel internal constructor(
      */
     fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
         rep.insertServerObstacle(restObstacle)
+    }
+
+    fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
+        try {
+            emit(Result.success(rep.analyzePhotoWithCNN(photoPath)))
+        } catch (ex: Exception) {
+            emit(Result.failure(ex))
+        }
     }
 
 //    val allServerObstacles = liveData(Dispatchers.IO) {
