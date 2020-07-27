@@ -16,16 +16,13 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Repository module for handling data operations, based on
- * [this](https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/data/PlantRepository.kt)
- * example.
+ * Repository module for handling data operations, based on [this](https://git.io/JJ0Re) example.
  */
 
 class ObstacleRepository private constructor(
-    private val obstacleDao: ObstacleDao, private val
-    context: Context
+    private val obstacleDao: ObstacleDao,
+    private val context: Context
 ) {
-
     /**
      * Returns all obstacles saved in local database as LiveData.
      */
