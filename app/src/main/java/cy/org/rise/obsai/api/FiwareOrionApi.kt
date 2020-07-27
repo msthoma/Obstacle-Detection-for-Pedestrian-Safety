@@ -54,7 +54,7 @@ interface FiwareOrionApi {
         /**
          * Allows for singleton instantiation of the Retrofit service.
          *
-         * Based on this [example](https://github.com/android/architecture-components-samples/blob/d81da2cb1e3d61e40f052e631bb15883d0f9f637/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/api/RedditApi.kt).
+         * Based on this [example](https://git.io/JJ0RI).
          *
          * @param baseURL
          * @param accessToken
