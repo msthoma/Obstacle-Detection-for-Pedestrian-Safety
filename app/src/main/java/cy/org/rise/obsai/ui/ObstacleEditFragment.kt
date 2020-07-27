@@ -321,9 +321,6 @@ class ObstacleEditFragment : Fragment() {
             getAlphabeticalTypeArray()
         }
 
-        if (currentObstacle.obstacleType.isNotBlank())
-            Log.d(TAG("Index of current"), "${obsTypeArray.indexOf(currentObstacle.obstacleType)}")
-
         val dialog = MaterialDialog(requireContext()).customView(
             R.layout.type_selection_dialog,
             scrollable = true
@@ -487,16 +484,9 @@ class ObstacleEditFragment : Fragment() {
         if (allRequiredInfoEntered()) {
             // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
-            try {
-                // TODO: 11/07/20 is this necessary?
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.toast_obstacle_submitted),
-                    Toast.LENGTH_LONG
-                ).show()
-            } catch (e: Exception) {
-                Log.e(TAG(), "Exception while trying to show toast", e)
-            }
+            Toast.makeText(
+                requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
+            ).show()
             findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
             )
