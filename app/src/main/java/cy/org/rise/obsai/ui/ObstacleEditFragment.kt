@@ -38,10 +38,6 @@ import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.TensorProcessor
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.IOException
 import kotlin.properties.Delegates
@@ -58,29 +54,15 @@ import kotlin.properties.Delegates
  */
 class ObstacleEditFragment : Fragment() {
 
-    private lateinit var mapView: MapView
-    private lateinit var currentObstacle: Obstacle
-    private lateinit var typeEditText: EditText
-    private lateinit var fabSubmit: ExtendedFloatingActionButton
-    private var fragCreationTime by Delegates.notNull<Long>()
-    private var analysisIndicatorNotShown = true
-    private var locationNotManuallyEdited = true
-    private val args: ObstacleEditFragmentArgs by navArgs()
-
-    // TFLite related vars
-    private val IMAGE_MEAN = 0.0f
-    private val IMAGE_STD = 255.0f
-    private val PROBABILITY_MEAN = 0.0f
-    private val PROBABILITY_STD = 1.0f
-    private lateinit var tflite: Interpreter
-    private lateinit var inputImageBuffer: TensorImage
-    private lateinit var outputProbabilityBuffer: TensorBuffer
-    private lateinit var probabilityProcessor: TensorProcessor
-    private lateinit var labels: List<String>
-    private var imageSizeX by Delegates.notNull<Int>()
-    private var imageSizeY by Delegates.notNull<Int>()
-
     private lateinit var cnnResults: Array<String>
+    private lateinit var currentObstacle: Obstacle
+    private lateinit var fabSubmit: ExtendedFloatingActionButton
+    private lateinit var mapView: MapView
+    private lateinit var typeEditText: EditText
+    private val args: ObstacleEditFragmentArgs by navArgs()
+    private var analysisIndicatorNotShown = true
+    private var fragCreationTime by Delegates.notNull<Long>()
+    private var locationNotManuallyEdited = true
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
