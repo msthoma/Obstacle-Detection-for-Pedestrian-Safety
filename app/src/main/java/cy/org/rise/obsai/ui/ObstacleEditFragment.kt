@@ -1,6 +1,5 @@
 package cy.org.rise.obsai.ui
 
-
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -97,7 +96,8 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Set toolbar menu
@@ -141,7 +141,7 @@ class ObstacleEditFragment : Fragment() {
         // Setup all required for TFLite
         CoroutineScope(Dispatchers.Main).launch {
 
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
 
                 val tfliteModel = FileUtil.loadMappedFile(requireContext(), "cnn128RGB.tflite")
                 tflite = Interpreter(tfliteModel, Interpreter.Options())
