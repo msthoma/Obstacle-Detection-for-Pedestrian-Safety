@@ -53,7 +53,9 @@ class CameraFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
@@ -145,7 +147,7 @@ class CameraFragment : Fragment() {
 
         val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        return File.createTempFile("JPEG_${timeStamp}", ".jpg", storageDir).apply {
+        return File.createTempFile("JPEG_$timeStamp", ".jpg", storageDir).apply {
             currentPhotoPath = this.absolutePath
         }
     }
