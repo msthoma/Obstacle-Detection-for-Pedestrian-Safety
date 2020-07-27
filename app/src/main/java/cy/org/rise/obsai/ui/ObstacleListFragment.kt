@@ -139,6 +139,17 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
                 true
             }
+            R.id.action_add_mock_element -> {
+                viewModel.analyzePhotoWithCNN("").observe(viewLifecycleOwner, Observer { res ->
+                    res.onSuccess {
+                        Log.d(TAG("SUCCESS"), "$it")
+                    }
+                    res.onFailure {
+                        Log.d(TAG("FAILURE"), "$it")
+                    }
+                })
+                true
+            }
 //            R.id.action_sign_in -> {
 //                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
 //                true
