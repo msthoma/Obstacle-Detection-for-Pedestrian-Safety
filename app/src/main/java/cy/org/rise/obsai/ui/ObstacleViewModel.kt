@@ -3,7 +3,6 @@ package cy.org.rise.obsai.ui
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
@@ -90,16 +89,16 @@ class ObstacleViewModel internal constructor(
     }
 
     /**
-     * Runs CNN classification on provided photo, and returns result as LiveData.
+     * Runs CNN classification on provided photo, and returns LiveData<Result>.
+     *
+     * See [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
+     * for use of Result.
      *
      * @param photoPath full path of the photo to analyze
      */
     fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
         emit(kotlin.runCatching { rep.analyzePhotoWithCNN(photoPath) })
     }
-
-    private fun getAlphabeticalTypeArray(): Array<String> =
-        app.resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
 //    val allServerObstacles = liveData(Dispatchers.IO) {
 //        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
