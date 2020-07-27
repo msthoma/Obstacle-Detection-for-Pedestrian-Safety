@@ -1,8 +1,6 @@
 package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -38,21 +36,14 @@ import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.TensorProcessor
-import org.tensorflow.lite.support.common.ops.NormalizeOp
-import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
-import org.tensorflow.lite.support.image.ops.Rot90Op
-import org.tensorflow.lite.support.label.TensorLabel
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.IOException
-import kotlin.math.min
 import kotlin.properties.Delegates
 
 /**
@@ -138,97 +129,45 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
-        // Setup all required for TFLite
-        CoroutineScope(Dispatchers.Main).launch {
+        // Send photo to CNN for classification, and listen for results
+        viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
+            .observe(viewLifecycleOwner, Observer { cnnResult ->
 
-            withContext(Dispatchers.Default) {
-
-                val tfliteModel = FileUtil.loadMappedFile(requireContext(), "cnn128RGB.tflite")
-                tflite = Interpreter(tfliteModel, Interpreter.Options())
-
-                labels = FileUtil.loadLabels(requireContext(), "cnnRGB_labels.txt")
-
-                val imageTensorIndex = 0
-                val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
-                imageSizeY = imageShape[1]
-                imageSizeX = imageShape[2]
-
-                val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
-                val probabilityTensorIndex = 0
-                val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
-                val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
-
-                inputImageBuffer = TensorImage(imageDataType)
-
-                outputProbabilityBuffer =
-                    TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
-
-                probabilityProcessor =
-                    TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD))
-                        .build()
-
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                val bitmap = BitmapFactory.decodeFile(photoFile?.path, options)
-
-                bitmap?.let { bm ->
-                    val cropSize = min(bm.width, bm.height)
-
-                    inputImageBuffer.load(bm)
-                    val imageProcessor = ImageProcessor.Builder()
-                        .add(ResizeWithCropOrPadOp(cropSize, cropSize))
-                        .add(
-                            ResizeOp(
-                                imageSizeX, imageSizeY,
-                                ResizeOp.ResizeMethod.NEAREST_NEIGHBOR
-                            )
-                        )
-                        .add(Rot90Op(1))
-                        .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
-                        .build()
-                    inputImageBuffer = imageProcessor.process(inputImageBuffer)
-
-                    // run classification
-                    tflite.run(
-                        inputImageBuffer.buffer,
-                        outputProbabilityBuffer.buffer.rewind()
-                    )
-
-                    // map labels and their predicted probabilities
-                    return@withContext TensorLabel(
-                        labels,
-                        probabilityProcessor.process(outputProbabilityBuffer)
-                    ).mapWithFloatValue
+                cnnResult.onFailure {
+                    Log.d(TAG("FAILURE"), it.toString())
                 }
-            }.also { result ->
-                tflite.close()
 
-                // sort CNN results (smallest to largest)
-                val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
-                Log.d(TAG(), sorted.toString())
+                cnnResult.onSuccess { result ->
+                    Log.d(TAG(), result.toString())
+                    // sort CNN results (smallest to largest)
+                    val sorted = result.toList().sortedBy { (_, value) -> value }?.toMap()
+                    Log.d(TAG(), sorted.toString())
 
-                // reverse results (only keys) for displaying in input dialog
-                sorted?.keys?.reversed()?.toTypedArray()?.let { cnnResults = it }
+                    // reverse results (only keys) for displaying in input dialog
+                    sorted.keys.reversed().toTypedArray().let { cnnResults = it }
 
-                // save CNN results in obstacle, first sanitize keys
-                currentObstacle.typeProbabilitiesCNN = sorted?.map { (k, v) ->
-                    k.filterNot {
-                        setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                    } to v
-                }?.toMap()
+                    // save CNN results in obstacle, first sanitize keys
+                    currentObstacle.typeProbabilitiesCNN = sorted.map { (k, v) ->
+                        k.filterNot {
+                            setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                        } to v
+                    }.toMap()
 
-                val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
+                    val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
 
-                currentObstacle.timeUntilCnnResults = timeUntilCnnResults
-                Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
+                    currentObstacle.timeUntilCnnResults = timeUntilCnnResults
+                    Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
 
-                // Automatically show dialog when results become available
-                if (timeUntilCnnResults <= 5000)
-                    if (currentObstacle.obstacleType == "")
-                        if (::cnnResults.isInitialized)
-                            if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-            }
-        }
+                    // Automatically show dialog when results become available
+                    if (timeUntilCnnResults <= 5000) {
+                        if (currentObstacle.obstacleType == "") {
+                            if (::cnnResults.isInitialized) {
+                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
+                            }
+                        }
+                    }
+                }
+            })
 
         // Add listeners on editText
         typeEditText.apply {
