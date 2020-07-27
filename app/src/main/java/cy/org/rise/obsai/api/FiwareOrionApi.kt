@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.api
 
 import android.util.Log
+import com.google.gson.GsonBuilder
 import cy.org.rise.obsai.db.Obstacle
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -53,7 +54,7 @@ interface FiwareOrionApi {
         /**
          * Allows for singleton instantiation of the Retrofit service.
          *
-         * Based on this [example](https://github.com/android/architecture-components-samples/blob/d81da2cb1e3d61e40f052e631bb15883d0f9f637/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/api/RedditApi.kt).
+         * Based on this [example](https://git.io/JJ0RI).
          *
          * @param baseURL
          * @param accessToken
@@ -83,7 +84,11 @@ interface FiwareOrionApi {
                 .baseUrl(httpUrl)
                 .client(client)
                 .addConverterFactory(
-                    GsonConverterFactory.create()
+                    GsonConverterFactory.create(
+                        // make sure only exposed fields are JSONified
+                        GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting()
+                            .create()
+                    )
                 )
                 .build()
                 .create(FiwareOrionApi::class.java)

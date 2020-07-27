@@ -1,9 +1,6 @@
 package cy.org.rise.obsai.ui
 
-
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -26,34 +23,26 @@ import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
+import cy.org.rise.obsai.utils.Constants.CYPRUS
+import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
+import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
 import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
-import kotlinx.coroutines.*
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.common.FileUtil
-import org.tensorflow.lite.support.common.TensorProcessor
-import org.tensorflow.lite.support.common.ops.NormalizeOp
-import org.tensorflow.lite.support.image.ImageProcessor
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
-import org.tensorflow.lite.support.image.ops.Rot90Op
-import org.tensorflow.lite.support.label.TensorLabel
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
-import kotlin.math.min
 import kotlin.properties.Delegates
 
 /**
@@ -68,36 +57,23 @@ import kotlin.properties.Delegates
  */
 class ObstacleEditFragment : Fragment() {
 
-    private lateinit var mapView: MapView
-    private lateinit var currentObstacle: Obstacle
-    private lateinit var typeEditText: EditText
-    private lateinit var fabSubmit: ExtendedFloatingActionButton
-    private var fragCreationTime by Delegates.notNull<Long>()
-    private var analysisIndicatorNotShown = true
-    private var locationNotManuallyEdited = true
-    private val args: ObstacleEditFragmentArgs by navArgs()
-
-    // TFLite related vars
-    private val IMAGE_MEAN = 0.0f
-    private val IMAGE_STD = 255.0f
-    private val PROBABILITY_MEAN = 0.0f
-    private val PROBABILITY_STD = 1.0f
-    private lateinit var tflite: Interpreter
-    private lateinit var inputImageBuffer: TensorImage
-    private lateinit var outputProbabilityBuffer: TensorBuffer
-    private lateinit var probabilityProcessor: TensorProcessor
-    private lateinit var labels: List<String>
-    private var imageSizeX by Delegates.notNull<Int>()
-    private var imageSizeY by Delegates.notNull<Int>()
-
     private lateinit var cnnResults: Array<String>
+    private lateinit var currentObstacle: Obstacle
+    private lateinit var fabSubmit: ExtendedFloatingActionButton
+    private lateinit var mapView: MapView
+    private lateinit var typeEditText: EditText
+    private val args: ObstacleEditFragmentArgs by navArgs()
+    private var analysisIndicatorNotShown = true
+    private var fragCreationTime by Delegates.notNull<Long>()
+    private var locationNotManuallyEdited = true
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Set toolbar menu
@@ -138,97 +114,45 @@ class ObstacleEditFragment : Fragment() {
                 .into(obstacle_image_view)
         }
 
-        // Setup all required for TFLite
-        CoroutineScope(Dispatchers.Main).launch {
+        // Send photo to CNN for classification, and listen for results
+        viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
+            .observe(viewLifecycleOwner, Observer { cnnResult ->
 
-            withContext(Dispatchers.IO) {
-
-                val tfliteModel = FileUtil.loadMappedFile(requireContext(), "cnn128RGB.tflite")
-                tflite = Interpreter(tfliteModel, Interpreter.Options())
-
-                labels = FileUtil.loadLabels(requireContext(), "cnnRGB_labels.txt")
-
-                val imageTensorIndex = 0
-                val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
-                imageSizeY = imageShape[1]
-                imageSizeX = imageShape[2]
-
-                val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
-                val probabilityTensorIndex = 0
-                val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
-                val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
-
-                inputImageBuffer = TensorImage(imageDataType)
-
-                outputProbabilityBuffer =
-                    TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
-
-                probabilityProcessor =
-                    TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD))
-                        .build()
-
-                val options = BitmapFactory.Options()
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                val bitmap = BitmapFactory.decodeFile(photoFile?.path, options)
-
-                bitmap?.let { bm ->
-                    val cropSize = min(bm.width, bm.height)
-
-                    inputImageBuffer.load(bm)
-                    val imageProcessor = ImageProcessor.Builder()
-                        .add(ResizeWithCropOrPadOp(cropSize, cropSize))
-                        .add(
-                            ResizeOp(
-                                imageSizeX, imageSizeY,
-                                ResizeOp.ResizeMethod.NEAREST_NEIGHBOR
-                            )
-                        )
-                        .add(Rot90Op(1))
-                        .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
-                        .build()
-                    inputImageBuffer = imageProcessor.process(inputImageBuffer)
-
-                    // run classification
-                    tflite.run(
-                        inputImageBuffer.buffer,
-                        outputProbabilityBuffer.buffer.rewind()
-                    )
-
-                    // map labels and their predicted probabilities
-                    return@withContext TensorLabel(
-                        labels,
-                        probabilityProcessor.process(outputProbabilityBuffer)
-                    ).mapWithFloatValue
+                cnnResult.onFailure {
+                    Log.d(TAG("FAILURE"), it.toString())
                 }
-            }.also { result ->
-                tflite.close()
 
-                // sort CNN results (smallest to largest)
-                val sorted = result?.toList()?.sortedBy { (_, value) -> value }?.toMap()
-                Log.d(TAG(), sorted.toString())
+                cnnResult.onSuccess { result ->
+                    Log.d(TAG(), result.toString())
+                    // sort CNN results (smallest to largest)
+                    val sorted = result.toList().sortedBy { (_, value) -> value }.toMap()
+                    Log.d(TAG(), sorted.toString())
 
-                // reverse results (only keys) for displaying in input dialog
-                sorted?.keys?.reversed()?.toTypedArray()?.let { cnnResults = it }
+                    // reverse results (only keys) for displaying in input dialog
+                    sorted.keys.reversed().toTypedArray().let { cnnResults = it }
 
-                // save CNN results in obstacle, first sanitize keys
-                currentObstacle.typeProbabilitiesCNN = sorted?.map { (k, v) ->
-                    k.filterNot {
-                        setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                    } to v
-                }?.toMap()
+                    // save CNN results in obstacle, first sanitize keys
+                    currentObstacle.typeProbabilitiesCNN = sorted.map { (k, v) ->
+                        k.filterNot {
+                            setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                        } to v
+                    }.toMap()
 
-                val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
+                    val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
 
-                currentObstacle.timeUntilCnnResults = timeUntilCnnResults
-                Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
+                    currentObstacle.timeUntilCnnResults = timeUntilCnnResults
+                    Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
 
-                // Automatically show dialog when results become available
-                if (timeUntilCnnResults <= 5000)
-                    if (currentObstacle.obstacleType == "")
-                        if (::cnnResults.isInitialized)
-                            if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-            }
-        }
+                    // Automatically show dialog when results become available
+                    if (timeUntilCnnResults <= 5000) {
+                        if (currentObstacle.obstacleType == "") {
+                            if (::cnnResults.isInitialized) {
+                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
+                            }
+                        }
+                    }
+                }
+            })
 
         // Add listeners on editText
         typeEditText.apply {
@@ -260,28 +184,33 @@ class ObstacleEditFragment : Fragment() {
 
             val obstaclePosition = currentObstacle.getLocationAsLatLong()
 
-            val CYPRUS = LatLngBounds(
-                LatLng(34.520142, 32.186723), // Southwest corner
-                LatLng(35.738372, 34.644546) // Northeast corner
-            )
-
             googleMap.apply {
                 // Add marker and set map camera position
                 if (obstaclePosition.latitude != 0.0) {
                     // Add marker indicating the obstacle, if location provided is not 0, 0
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(obstaclePosition, 16f))
+                    moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            obstaclePosition,
+                            DEFAULT_ZOOM_LEVEL
+                        )
+                    )
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(35.169933, 33.361071), 12f))
+                    moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(35.169933, 33.361071),
+                            CITY_ZOOM_LEVEL
+                        )
+                    )
                 }
 
                 // Add map boundaries
                 setLatLngBoundsForCameraTarget(CYPRUS)
 
                 // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-                setMinZoomPreference(7.5f)
+                setMinZoomPreference(MIN_ZOOM_LEVEL)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
@@ -391,9 +320,6 @@ class ObstacleEditFragment : Fragment() {
         } else {
             getAlphabeticalTypeArray()
         }
-
-        if (currentObstacle.obstacleType.isNotBlank())
-            Log.d(TAG("Index of current"), "${obsTypeArray.indexOf(currentObstacle.obstacleType)}")
 
         val dialog = MaterialDialog(requireContext()).customView(
             R.layout.type_selection_dialog,
@@ -558,16 +484,9 @@ class ObstacleEditFragment : Fragment() {
         if (allRequiredInfoEntered()) {
             // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
-            try {
-                // TODO: 11/07/20 is this necessary?
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.toast_obstacle_submitted),
-                    Toast.LENGTH_LONG
-                ).show()
-            } catch (e: Exception) {
-                Log.e(TAG(), "Exception while trying to show toast", e)
-            }
+            Toast.makeText(
+                requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
+            ).show()
             findNavController().navigate(
                 R.id.action_obstacleEditFragment_to_obstacleListFragment
             )
@@ -594,7 +513,8 @@ class ObstacleEditFragment : Fragment() {
     }
 
     private fun populateRadioGroupTypeList(
-        radioGroup: RadioGroup, obsTypeArray: Array<String>,
+        radioGroup: RadioGroup,
+        obsTypeArray: Array<String>,
         listLimit: Int = obsTypeArray.size,
         addEmptyRadioButtonAtBottom: Boolean = true
     ) {

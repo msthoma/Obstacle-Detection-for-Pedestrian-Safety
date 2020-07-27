@@ -17,13 +17,8 @@ import java.util.*
  * Class (and its subclasses) implement [Serializable], which is required for passing Obstacle
  * objects as safe args by the Navigation component library.
  *
- * It is perhaps possible to utilise only one class for both [Obstacle] and [RestObstacle], see
- * Git history for failed attempt to do so. See discussions
- * [1](https://stackoverflow.com/q/39199426/3755276) &
- * [2](https://medium.com/holisticon-consultants/kotlin-data-class-mapping-aa0f9f750ca1) for
- * strategies of using the same class for both Room and Retrofit.
- * The [Obstacle.toRestObstacle] and [RestObstacle.toObstacle] methods are used as a compromise for
- * converting between the two.
+ * Note use of @Expose annotations for proper JSON serialization with Gson - must always be used
+ * with excludeFieldsWithoutExposeAnnotation() to work properly.
  *
  * ## Location information
  * For details on location data, see docs for
