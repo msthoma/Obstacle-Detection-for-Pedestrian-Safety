@@ -195,6 +195,8 @@ class ObstacleRepository private constructor(
             outputProbabilityBuffer.buffer.rewind()
         )
 
+        tflite.close()
+
         // map labels and their predicted probabilities
         return TensorLabel(
             labels,
