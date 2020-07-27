@@ -557,6 +557,26 @@ class ObstacleEditFragment : Fragment() {
     private fun getAlphabeticalTypeArray(): Array<String> =
         resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
+    private fun processCNNResults(results: Map<String, Float>? = null) {
+        // get type array either from CNN results, or from resources if CNN classification
+        // didn't work
+        cnnResults = if (results.isNullOrEmpty()) {
+            val alphabetic = getAlphabeticalTypeArray().map { it to 0.0f }.toMap()
+            // for now convert to array
+            alphabetic.keys.toTypedArray()
+        } else {
+            // sort CNN results (largest to smallest probability)
+            val sorted = results.toList().sortedByDescending { (_, value) -> value }.toMap()
+            // again, for now convert to simple array
+            val sortedArray = sorted.keys.toTypedArray()
+            // add types that are not part of the CNN
+            val diff = getAlphabeticalTypeArray().filterNot {
+                sortedArray.toSet().contains(it)
+            }.sorted().toTypedArray()
+            sortedArray + diff
+        }
+    }
+
     /**
      * Override of function required by map view.
      */
