@@ -23,13 +23,13 @@ import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.Constants.CYPRUS
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
@@ -122,7 +122,7 @@ class ObstacleEditFragment : Fragment() {
                 cnnResult.onSuccess { result ->
                     Log.d(TAG(), result.toString())
                     // sort CNN results (smallest to largest)
-                    val sorted = result.toList().sortedBy { (_, value) -> value }?.toMap()
+                    val sorted = result.toList().sortedBy { (_, value) -> value }.toMap()
                     Log.d(TAG(), sorted.toString())
 
                     // reverse results (only keys) for displaying in input dialog
@@ -180,11 +180,6 @@ class ObstacleEditFragment : Fragment() {
         mapView.getMapAsync { googleMap ->
 
             val obstaclePosition = currentObstacle.getLocationAsLatLong()
-
-            val CYPRUS = LatLngBounds(
-                LatLng(34.520142, 32.186723), // Southwest corner
-                LatLng(35.738372, 34.644546) // Northeast corner
-            )
 
             googleMap.apply {
                 // Add marker and set map camera position
@@ -515,7 +510,8 @@ class ObstacleEditFragment : Fragment() {
     }
 
     private fun populateRadioGroupTypeList(
-        radioGroup: RadioGroup, obsTypeArray: Array<String>,
+        radioGroup: RadioGroup,
+        obsTypeArray: Array<String>,
         listLimit: Int = obsTypeArray.size,
         addEmptyRadioButtonAtBottom: Boolean = true
     ) {
