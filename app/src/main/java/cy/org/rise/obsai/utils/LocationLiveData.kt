@@ -16,7 +16,7 @@ import com.google.android.gms.location.LocationServices
  *
  * For getting location, see [documentation](https://developer.android.com/training/location).
  *
- * Based on [this example](https://github.com/mayowa-egbewunmi/LocationUpdateWithLiveData/blob/master/app/src/main/java/com/mayowa/android/locationwithlivedata/LocationLiveData.kt).
+ * Based on [this example](https://git.io/JJ0Ev).
  *
  * @param context application context
  */
