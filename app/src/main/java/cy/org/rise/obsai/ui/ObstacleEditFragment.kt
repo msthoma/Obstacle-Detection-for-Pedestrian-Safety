@@ -60,7 +60,7 @@ class ObstacleEditFragment : Fragment() {
     // TODO 28/07/20 DON"T save type in obstacle!! use another variable
 
     // TODO 28/07/20 rename this to type...array
-    private lateinit var cnnResults: Array<String>
+    private lateinit var obsTypeArray: Array<String>
     private lateinit var currentObstacle: Obstacle
     private lateinit var fabSubmit: ExtendedFloatingActionButton
     private lateinit var mapView: MapView
@@ -137,32 +137,33 @@ class ObstacleEditFragment : Fragment() {
                 // CNN FAILURE
                 cnnResult.onFailure {
                     Log.d(TAG("CNN failure"), it.toString())
-                    processCNNResults()
+                    processCnnResults()
+
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
                         // set radio group, showing ALL types, falling back to the alphabetic list
                         populateRadioGroupTypeList(showOnlyTop5 = false)
                         // hide indicator
-                        hideAnalysisIndicator()
+                        toggleAnalysisIndicator()
                     }
                 }
                 // CNN SUCCESS
                 cnnResult.onSuccess { result ->
                     Log.d(TAG("CNN success"), result.toString())
-                    processCNNResults(result)
+                    processCnnResults(result)
 
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
                         // set radio group with top 5
                         populateRadioGroupTypeList(showOnlyTop5 = true)
                         // hide indicator
-                        hideAnalysisIndicator()
+                        toggleAnalysisIndicator()
                         // show CNN explanation, More button (hidden by default)
-                        toggleCNNexplanationAndMoreButton()
+                        toggleCnnExplanationAndMoreButton()
                         // add listener on show more button
                         typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
                             populateRadioGroupTypeList(showOnlyTop5 = false)
-                            toggleCNNexplanationAndMoreButton()
+                            toggleCnnExplanationAndMoreButton()
                         }
 
                         // save CNN results in obstacle, but first sanitize keys
@@ -191,9 +192,9 @@ class ObstacleEditFragment : Fragment() {
                 // set radio group, showing ALL types
                 populateRadioGroupTypeList(showOnlyTop5 = false)
                 // hide indicator
-                hideAnalysisIndicator()
+                toggleAnalysisIndicator()
                 // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
-                //  the value may be empty! ALSO, scroll to selection
+                //  the value may be empty! ALSO, scroll to selection, add all this to populate
             }
 
             // Clear any error message present editText value changes
@@ -342,9 +343,11 @@ class ObstacleEditFragment : Fragment() {
             R.layout.type_selection_dialog,
             scrollable = true
         )
+
         // get references to views that are of interest
         typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
         radioGroup = typeSelectionDialogLayout.types_radio_group
+
         // set up the other properties of the dialog
         typeSelectionDialog.apply {
             noAutoDismiss() // important, otherwise dialog is dismissed without the checks below
@@ -465,12 +468,12 @@ class ObstacleEditFragment : Fragment() {
         layoutParams.bottomMargin = 20
 
         // populate radio group, respecting any limits on number of items required
-        cnnResults.forEachIndexed { i, obsType ->
+        obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
                 rb.id = 1000 + i
                 rb.text = obsType
                 // add more margin for last non-empty rb
-                if (i == cnnResults.size - 1) layoutParams.bottomMargin = 40
+                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
                 if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
             })
@@ -482,7 +485,7 @@ class ObstacleEditFragment : Fragment() {
         // add empty radio button at bottom
         radioGroup.addView(RadioButton(context).also { rb ->
             // radio button with no text
-            rb.id = 1000 + cnnResults.size + 1
+            rb.id = 1000 + obsTypeArray.size + 1
             rb.layoutParams = layoutParams
             if (showOnlyTop5) rb.visibility = View.GONE
             // get a reference to it
@@ -537,10 +540,10 @@ class ObstacleEditFragment : Fragment() {
     private fun getAlphabeticalTypeArray(): Array<String> =
         resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
-    private fun processCNNResults(results: Map<String, Float>? = null) {
+    private fun processCnnResults(results: Map<String, Float>? = null) {
         // get type array either from CNN results, or from resources if CNN classification
         // didn't work
-        cnnResults = if (results.isNullOrEmpty()) {
+        obsTypeArray = if (results.isNullOrEmpty()) {
             val alphabetic = getAlphabeticalTypeArray().map { it to 0.0f }.toMap()
             // for now convert to array
             alphabetic.keys.toTypedArray()
@@ -557,17 +560,14 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    private fun hideAnalysisIndicator() {
-        Log.d(TAG(), "Hide analysis indicator")
-        typeSelectionDialogLayout.dialog_analysis_indicator?.toggleVisibility()
-        typeSelectionDialogLayout.dialog_contents?.toggleVisibility()
+    private fun toggleAnalysisIndicator() = typeSelectionDialogLayout.apply {
+        dialog_analysis_indicator?.toggleVisibility()
+        dialog_contents?.toggleVisibility()
     }
 
-    private fun toggleCNNexplanationAndMoreButton() {
-        typeSelectionDialogLayout.apply {
-            cnn_explanation?.toggleVisibility()
-            button_show_more_types?.toggleVisibility()
-        }
+    private fun toggleCnnExplanationAndMoreButton() = typeSelectionDialogLayout.apply {
+        cnn_explanation?.toggleVisibility()
+        button_show_more_types?.toggleVisibility()
     }
 
     /**
