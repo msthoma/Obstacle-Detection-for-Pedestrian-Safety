@@ -25,19 +25,18 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.*
 import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.CYPRUS
 import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.NICOSIA_CENTER
-import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.hideKeyboard
-import cy.org.rise.obsai.utils.showKeyboard
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
 import kotlinx.coroutines.delay
@@ -58,6 +57,9 @@ import kotlin.properties.Delegates
  */
 class ObstacleEditFragment : Fragment() {
 
+    // TODO 28/07/20 DON"T save type in obstacle!! use another variable
+
+    // TODO 28/07/20 rename this to type...array
     private lateinit var cnnResults: Array<String>
     private lateinit var currentObstacle: Obstacle
     private lateinit var fabSubmit: ExtendedFloatingActionButton
@@ -67,6 +69,13 @@ class ObstacleEditFragment : Fragment() {
     private var analysisIndicatorNotShown = true
     private var fragCreationTime by Delegates.notNull<Long>()
     private var locationNotManuallyEdited = true
+
+    private lateinit var typeSelectionDialog: MaterialDialog
+    private lateinit var typeSelectionDialogLayout: ConstraintLayout
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var lastEmptyRadioButton: RadioButton
+    private lateinit var customEditTextLayout: TextInputLayout
+    private lateinit var customEditText: TextInputEditText
 
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -93,8 +102,13 @@ class ObstacleEditFragment : Fragment() {
 
         // Get current obstacle
         currentObstacle = args.currentObstacle
-        // If type is already available, set it in editText
-        if (currentObstacle.obstacleType != "") typeEditText.setText(currentObstacle.obstacleType)
+
+        // If type is already available set it in editText, otherwise show selection dialog
+        if (currentObstacle.obstacleType != "") {
+            typeEditText.setText(currentObstacle.obstacleType)
+        } else {
+            showTypeSelectionDialog2()
+        }
 
         // Try to get the file from the arguments passed from the camera fragment
         val photoFile: File? = try {
@@ -118,22 +132,38 @@ class ObstacleEditFragment : Fragment() {
         // Send photo to CNN for classification, and listen for results
         viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
-
+                // TODO add slight delay here, so indicator is shown!!
+                // CNN FAILURE
                 cnnResult.onFailure {
-                    Log.d(TAG("FAILURE"), it.toString())
+                    Log.d(TAG("CNN failure"), it.toString())
+                    // fall back to an alphabetic type list
+                    processCNNResults()
+                    // set radio group, showing ALL types
+                    populateRadioGroupTypeList(showOnlyTop5 = false)
+                    // hide indicator
+                    hideAnalysisIndicator()
+                    // CNN explanation, More button hidden by default
+                    // show full alphabetical list
                 }
-
+                // CNN SUCCESS
                 cnnResult.onSuccess { result ->
-                    Log.d(TAG(), result.toString())
-                    // sort CNN results (smallest to largest)
-                    val sorted = result.toList().sortedBy { (_, value) -> value }.toMap()
-                    Log.d(TAG(), sorted.toString())
-
-                    // reverse results (only keys) for displaying in input dialog
-                    sorted.keys.reversed().toTypedArray().let { cnnResults = it }
+                    Log.d(TAG("CNN success"), result.toString())
+                    processCNNResults(result)
+                    // set radio group with top 5
+                    populateRadioGroupTypeList(showOnlyTop5 = true)
+                    // hide indicator
+                    hideAnalysisIndicator()
+                    // show CNN explanation, More button (hidden by default)
+                    toggleCNNexplanationAndMoreButton()
+                    // add listener on show more button
+                    // TODO here can call populateRadioGroupTypeList again with no limit
+                    typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
+                        populateRadioGroupTypeList(showOnlyTop5 = false)
+                        toggleCNNexplanationAndMoreButton()
+                    }
 
                     // save CNN results in obstacle, first sanitize keys
-                    currentObstacle.typeProbabilitiesCNN = sorted.map { (k, v) ->
+                    currentObstacle.typeProbabilitiesCNN = result.map { (k, v) ->
                         k.filterNot {
                             setOf(' ', '(', ')', '.', '-', '/').contains(it)
                         } to v
@@ -145,21 +175,31 @@ class ObstacleEditFragment : Fragment() {
                     Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
 
                     // Automatically show dialog when results become available
-                    if (timeUntilCnnResults <= 5000) {
-                        if (currentObstacle.obstacleType == "") {
-                            if (::cnnResults.isInitialized) {
-                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-                            }
-                        }
-                    }
+//                    if (timeUntilCnnResults <= 5000) {
+//                        if (currentObstacle.obstacleType == "") {
+//                            if (::cnnResults.isInitialized) {
+//                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
+//                            }
+//                        }
+//                    }
                 }
             })
 
         // Add listeners on editText
         typeEditText.apply {
             // Show custom dialog for obstacle type selection
+            // the dialog shown by tapping on edit text means it was shown before, so show it
+            // expanded by default
             setOnClickListener {
-                showTypeSelectionDialog()
+                showTypeSelectionDialog2()
+                // set radio group, showing ALL types
+                populateRadioGroupTypeList(showOnlyTop5 = false)
+                // hide indicator
+                hideAnalysisIndicator()
+                // CNN explanation, More button hidden by default
+                // show full alphabetical list
+                // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
+                //  the value may be empty! ALSO, scroll to selection
             }
 
             // Clear any error message present editText value changes
@@ -172,7 +212,7 @@ class ObstacleEditFragment : Fragment() {
         button_edit_photo.setOnClickListener {
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
-                    // TODO: 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
+                    // TODO 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
                     currentObstacle
                 )
             )
@@ -302,6 +342,62 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    private fun showTypeSelectionDialog2() {
+        // create dialog (re-create each time this function is called)
+        typeSelectionDialog = MaterialDialog(requireContext()).customView(
+            R.layout.type_selection_dialog,
+            scrollable = true
+        )
+        // get references to views that are of interest
+        typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
+        radioGroup = typeSelectionDialogLayout.types_radio_group
+        // set up the other properties of the dialog
+        typeSelectionDialog.apply {
+            noAutoDismiss() // important, otherwise dialog is dismissed without the checks below
+            title(text = getString(R.string.dialog_select_type_title))
+            positiveButton(R.string.dialog_OK_button) {
+                val checkedId = radioGroup.checkedRadioButtonId
+                if (checkedId != -1) {
+                    if (checkedId == lastEmptyRadioButton.id) {
+                        // customEditText selected, make sure text is not too short or empty
+                        val currentText = customEditText.editableText.toString().trim()
+                        if (currentText.length > 2) {
+                            Log.d(TAG(), "current custom text $currentText")
+                            currentObstacle.obstacleType = currentText
+                            typeEditText.setText(currentObstacle.obstacleType)
+                            dismiss()
+                        } else {
+                            // text provided too short/empty
+                            Toast.makeText(
+                                context, getString(R.string.toast_provide_valid_type), Toast
+                                    .LENGTH_SHORT
+                            ).show()
+                            // focus on editText and set error
+                            lastEmptyRadioButton.parent
+                                .requestChildFocus(customEditTextLayout, customEditTextLayout)
+                            customEditTextLayout.error =
+                                getString(R.string.error_type_not_valid)
+                        }
+                    } else {
+                        // selection is from predefined list, good to go
+                        typeEditText.setText(currentObstacle.obstacleType)
+                        dismiss()
+                    }
+                } else {
+                    // -1 means none selected
+                    Toast.makeText(
+                        context,
+                        getString(R.string.toast_make_selection),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
+            lifecycleOwner(viewLifecycleOwner)
+            show()
+        }
+    }
+
     private fun showTypeSelectionDialog() {
         // get type array either from CNN results, or from resources if CNN classification
         // didn't work
@@ -329,7 +425,7 @@ class ObstacleEditFragment : Fragment() {
         val radioGroup = customDialogView.types_radio_group
 
         // initially only show 5 most likely types, as determined by the CNN (hide the rest)
-        populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
+        populateRadioGroupTypeList(showOnlyTop5 = true)
 
         // get references to last radio button and customEditText
         val customEditTextLayout = customDialogView.type_custom_input_layout
@@ -399,53 +495,6 @@ class ObstacleEditFragment : Fragment() {
                 }
             }
         }
-
-        // finally, display the dialog
-        dialog.apply {
-            noAutoDismiss()
-            title(text = getString(R.string.dialog_select_type_title))
-            positiveButton(R.string.dialog_OK_button) {
-                val checkedId = radioGroup.checkedRadioButtonId
-                if (checkedId != -1) {
-                    if (checkedId == lastEmptyRadioButton.id) {
-                        // customEditText selected, make sure text is not too short or empty
-                        val currentText = customEditText.editableText.toString().trim()
-                        if (currentText.length > 2) {
-                            Log.d(TAG(), "current custom text $currentText")
-                            currentObstacle.obstacleType = currentText
-                            typeEditText.setText(currentObstacle.obstacleType)
-                            dismiss()
-                        } else {
-                            // text provided too short/empty
-                            Toast.makeText(
-                                context, getString(R.string.toast_provide_valid_type), Toast
-                                    .LENGTH_SHORT
-                            ).show()
-                            // focus on editText and set error
-                            lastEmptyRadioButton.parent
-                                .requestChildFocus(customEditTextLayout, customEditTextLayout)
-                            customEditTextLayout.error =
-                                getString(R.string.error_type_not_valid)
-                        }
-                    } else {
-                        // selection is from predefined list, good to go
-                        typeEditText.setText(currentObstacle.obstacleType)
-                        dismiss()
-                    }
-                } else {
-                    // -1 means none selected
-                    Toast.makeText(
-                        context,
-                        getString(R.string.toast_make_selection),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            }
-            negativeButton(R.string.dialog_cancel_button) { dismiss() }
-            lifecycleOwner(viewLifecycleOwner)
-            dialog.show()
-        }
     }
 
     private fun displayDiscardConfirmationDialog() {
@@ -508,12 +557,7 @@ class ObstacleEditFragment : Fragment() {
         return allEntered
     }
 
-    private fun populateRadioGroupTypeList(
-        radioGroup: RadioGroup,
-        obsTypeArray: Array<String>,
-        listLimit: Int = obsTypeArray.size,
-        addEmptyRadioButtonAtBottom: Boolean = true
-    ) {
+    private fun populateRadioGroupTypeList(showOnlyTop5: Boolean) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
 
@@ -526,27 +570,72 @@ class ObstacleEditFragment : Fragment() {
         layoutParams.bottomMargin = 20
 
         // populate radio group, respecting any limits on number of items required
-        obsTypeArray.forEachIndexed { i, obsType ->
+        cnnResults.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
                 rb.id = 1000 + i
                 rb.text = obsType
                 // add more margin for last non-empty rb
-                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
+                if (i == cnnResults.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
-                if (i >= listLimit) rb.visibility = View.GONE
+                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
             })
         }
 
         // larger margin for last empty rb, to accommodate editText
         layoutParams.bottomMargin = 75
 
-        if (addEmptyRadioButtonAtBottom) {
-            radioGroup.addView(RadioButton(context).also { rb ->
-                // empty text
-                rb.id = 1000 + obsTypeArray.size + 1
-                rb.layoutParams = layoutParams
-                rb.visibility = View.GONE
-            })
+        // add empty radio button at bottom
+        radioGroup.addView(RadioButton(context).also { rb ->
+            // radio button with no text
+            rb.id = 1000 + cnnResults.size + 1
+            rb.layoutParams = layoutParams
+            if (showOnlyTop5) rb.visibility = View.GONE
+            // get a reference to it
+            lastEmptyRadioButton = rb
+        })
+
+        // get customEditText and set its visibility
+        customEditTextLayout = typeSelectionDialogLayout.type_custom_input_layout
+        customEditText = typeSelectionDialogLayout.type_custom_input_edittext
+        if (showOnlyTop5) {
+            customEditTextLayout.visibility = View.GONE
+        } else {
+            customEditTextLayout.visibility = View.VISIBLE
+        }
+
+        // set listeners
+        customEditText.apply {
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) lastEmptyRadioButton.isChecked = true
+            }
+            setOnClickListener {
+                lastEmptyRadioButton.isChecked = true
+            }
+            addTextChangedListener { currentText ->
+                if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
+            }
+        }
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId != lastEmptyRadioButton.id) {
+                // capture current selection
+                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    currentObstacle.obstacleType = rb.text.toString()
+                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                }
+                // clear any focus on customEditText
+                customEditText.apply {
+                    clearFocus()
+                    hideKeyboard()
+                    customEditTextLayout.error = null
+                }
+            } else {
+                // when checkedId == lastEmptyRadioButton.id it means editText should
+                // be selected
+                customEditText.apply {
+                    requestFocus()
+                    showKeyboard()
+                }
+            }
         }
     }
 
@@ -570,6 +659,19 @@ class ObstacleEditFragment : Fragment() {
                 sortedArray.toSet().contains(it)
             }.sorted().toTypedArray()
             sortedArray + diff
+        }
+    }
+
+    private fun hideAnalysisIndicator() {
+        Log.d(TAG(), "Hide analysis indicator")
+        typeSelectionDialogLayout.dialog_analysis_indicator?.toggleVisibility()
+        typeSelectionDialogLayout.dialog_contents?.toggleVisibility()
+    }
+
+    private fun toggleCNNexplanationAndMoreButton() {
+        typeSelectionDialogLayout.apply {
+            cnn_explanation?.toggleVisibility()
+            button_show_more_types?.toggleVisibility()
         }
     }
 
