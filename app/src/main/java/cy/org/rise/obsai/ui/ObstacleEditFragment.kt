@@ -59,25 +59,23 @@ class ObstacleEditFragment : Fragment() {
 
     // TODO 28/07/20 DON"T save type in obstacle!! use another variable
 
-    private lateinit var obsTypeArray: Array<String>
     private lateinit var currentObstacle: Obstacle
+    private lateinit var customEditText: TextInputEditText
+    private lateinit var customEditTextLayout: TextInputLayout
     private lateinit var fabSubmit: ExtendedFloatingActionButton
+    private lateinit var lastEmptyRadioButton: RadioButton
     private lateinit var mapView: MapView
+    private lateinit var obsTypeArray: Array<String>
+    private lateinit var radioGroup: RadioGroup
     private lateinit var typeEditText: EditText
-    private val args: ObstacleEditFragmentArgs by navArgs()
-    private var fragCreationTime by Delegates.notNull<Long>()
-    private var locationNotManuallyEdited = true
-
     private lateinit var typeSelectionDialog: MaterialDialog
     private lateinit var typeSelectionDialogLayout: ConstraintLayout
-    private lateinit var radioGroup: RadioGroup
-    private lateinit var lastEmptyRadioButton: RadioButton
-    private lateinit var customEditTextLayout: TextInputLayout
-    private lateinit var customEditText: TextInputEditText
-
+    private val args: ObstacleEditFragmentArgs by navArgs()
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
     }
+    private var start by Delegates.notNull<Long>()
+    private var locationNotManuallyEdited = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,19 +85,17 @@ class ObstacleEditFragment : Fragment() {
         // Set toolbar menu
         setHasOptionsMenu(true)
         // Save creation time
-        fragCreationTime = System.currentTimeMillis()
+        start = System.currentTimeMillis()
 
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission") // permission is checked below before it is used
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Get views of interest
+        // Get current obstacle and other views of interest
+        currentObstacle = args.currentObstacle
         typeEditText = select_obstacle_type_edit_text
         fabSubmit = fab_submit
-
-        // Get current obstacle
-        currentObstacle = args.currentObstacle
 
         // If type is already available set it in editText, otherwise show selection dialog
         if (currentObstacle.obstacleType.isNotEmpty()) {
@@ -108,14 +104,13 @@ class ObstacleEditFragment : Fragment() {
             showTypeSelectionDialog()
         }
 
+        // Set obstacle photo in image view
         try {
-            // Try to get the file from the arguments passed from the camera fragment
             File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null
         }?.let { photoFile ->
-            // If the photo file exists, set it in image view
             Picasso.get()
                 .load(photoFile)
                 // If cache is enabled, the photo won't refresh after it's cropped
@@ -128,38 +123,30 @@ class ObstacleEditFragment : Fragment() {
         // Send photo to CNN for classification, and listen for results
         viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
-
                 // TODO add slight delay here, so indicator is shown!!
                 // TODO also add time limit, if results are not available show alphabetical
-                // CNN FAILURE
                 cnnResult.onFailure {
                     Log.d(TAG("CNN failure"), it.toString())
                     obsTypeArray = processCnnResults()
 
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
-                        // set radio group, showing ALL types, falling back to the alphabetic list
-                        populateRadioGroupTypeList(showOnlyTop5 = false)
-                        // hide indicator
-                        toggleAnalysisIndicator()
+                        populateSelectionList(onlyTop5 = false) // show ALL types alphabetically
+                        toggleAnalysisIndicator() // hide image analysis indicator
                     }
                 }
-                // CNN SUCCESS
                 cnnResult.onSuccess { result ->
                     Log.d(TAG("CNN success"), result.toString())
                     obsTypeArray = processCnnResults(result)
 
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
-                        // set radio group with top 5
-                        populateRadioGroupTypeList(showOnlyTop5 = true)
-                        // hide indicator
-                        toggleAnalysisIndicator()
-                        // show CNN explanation, More button (hidden by default)
-                        toggleCnnExplanationAndMoreButton()
-                        // add listener on show more button
+                        populateSelectionList(onlyTop5 = true) // show only top 5 types
+                        toggleAnalysisIndicator() // hide image analysis indicator
+                        toggleCnnExplanationAndMoreButton() // show CNN explanation & More button
                         typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
-                            populateRadioGroupTypeList(showOnlyTop5 = false)
+                            // listen for clicks on More button
+                            populateSelectionList(onlyTop5 = false)
                             toggleCnnExplanationAndMoreButton()
                         }
 
@@ -171,12 +158,8 @@ class ObstacleEditFragment : Fragment() {
                         }.toMap()
 
                         // save processing time
-                        currentObstacle.timeUntilCnnResults =
-                            System.currentTimeMillis() - fragCreationTime
-                        Log.d(
-                            TAG(),
-                            "${currentObstacle.timeUntilCnnResults} millis until CNN results"
-                        )
+                        currentObstacle.timeUntilCnnResults = System.currentTimeMillis() - start
+                        Log.d(TAG(), "${currentObstacle.timeUntilCnnResults} ms until CNN results")
                     }
                 }
             })
@@ -186,22 +169,18 @@ class ObstacleEditFragment : Fragment() {
             // here, it means it was shown before, so it is shown expanded by default
             setOnClickListener {
                 showTypeSelectionDialog()
-                // set radio group, showing ALL types
-                populateRadioGroupTypeList(showOnlyTop5 = false)
-                // hide indicator
-                toggleAnalysisIndicator()
+                populateSelectionList(onlyTop5 = false) // show ALL types, alphabetic or based on CNN
+                toggleAnalysisIndicator() // hide indicator
                 // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
                 //  the value may be empty! ALSO, scroll to selection, add all this to populate
             }
-
-            // Clear any error message present editText value changes
             addTextChangedListener {
-                select_obstacle_type_layout.error = null
+                select_obstacle_type_layout.error = null // clear errors when editText value changes
             }
         }
 
         button_edit_photo.setOnClickListener {
-            // Go to photo editing fragment
+            // Go to photo cropping fragment
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     // TODO 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
@@ -218,27 +197,21 @@ class ObstacleEditFragment : Fragment() {
             val obstaclePosition = currentObstacle.getLocationAsLatLong()
 
             googleMap.apply {
-                // Add marker and set map camera position
                 if (obstaclePosition.latitude != 0.0) {
-                    // Add marker indicating the obstacle, if location provided is not 0, 0
+                    // Add obstacle marker
                     addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
                     // Move map camera to above obstacle position
                     moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            obstaclePosition,
-                            DEFAULT_ZOOM_LEVEL
-                        )
+                        CameraUpdateFactory.newLatLngZoom(obstaclePosition, DEFAULT_ZOOM_LEVEL)
                     )
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
                     moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
                 }
 
-                // Add map boundaries
-                setLatLngBoundsForCameraTarget(CYPRUS)
+                setLatLngBoundsForCameraTarget(CYPRUS) // Add map boundaries
 
-                // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-                setMinZoomPreference(MIN_ZOOM_LEVEL)
+                setMinZoomPreference(MIN_ZOOM_LEVEL) // Set min zoom (1 is world, 20 buildings)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
@@ -429,7 +402,6 @@ class ObstacleEditFragment : Fragment() {
      */
     private fun checkAndSubmitObstacle() {
         if (allRequiredInfoEntered()) {
-            // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
             Toast.makeText(
                 requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
@@ -464,10 +436,10 @@ class ObstacleEditFragment : Fragment() {
     /**
      * Populates the contents of the type selection dialog.
      *
-     * @param showOnlyTop5 whether to show only the top 5 choices or all of them
+     * @param onlyTop5 whether to show only the top 5 choices or all of them
      * TODO add option to set current selected
      */
-    private fun populateRadioGroupTypeList(showOnlyTop5: Boolean) {
+    private fun populateSelectionList(onlyTop5: Boolean) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
 
@@ -482,33 +454,29 @@ class ObstacleEditFragment : Fragment() {
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
-                // set radio button IDs in the form of ID_OFFSET + i (integers)
-                rb.id = ID_OFFSET + i
+                rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
                 rb.text = obsType
                 // add more margin for last non-empty rb
                 if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
-                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
+                if (onlyTop5 && i >= 5) rb.visibility = View.GONE
             })
         }
 
-        // larger margin for last empty rb, to accommodate editText
-        layoutParams.bottomMargin = 75
+        layoutParams.bottomMargin = 75 // larger margin for last empty rb, to accommodate editText
 
-        // add empty radio button at bottom
+        // add empty radio button (no text) at bottom
         radioGroup.addView(RadioButton(context).also { rb ->
-            // radio button with no text
             rb.id = ID_OFFSET + obsTypeArray.size + 1
             rb.layoutParams = layoutParams
-            if (showOnlyTop5) rb.visibility = View.GONE
-            // get a reference to it
-            lastEmptyRadioButton = rb
+            if (onlyTop5) rb.visibility = View.GONE
+            lastEmptyRadioButton = rb // get a reference to it
         })
 
         // get customEditText and set its visibility
         customEditTextLayout = typeSelectionDialogLayout.type_custom_input_layout
         customEditText = typeSelectionDialogLayout.type_custom_input_edittext
-        if (showOnlyTop5) {
+        if (onlyTop5) {
             customEditTextLayout.visibility = View.GONE
         } else {
             customEditTextLayout.visibility = View.VISIBLE
