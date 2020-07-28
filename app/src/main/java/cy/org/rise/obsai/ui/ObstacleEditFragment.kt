@@ -60,9 +60,7 @@ import kotlin.properties.Delegates
  * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
-
     // TODO 28/07/20 DON"T save type in obstacle!! use another variable
-
     private lateinit var currentObstacle: Obstacle
     private lateinit var customEditText: TextInputEditText
     private lateinit var customEditTextLayout: TextInputLayout
@@ -92,8 +90,7 @@ class ObstacleEditFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Get current obstacle and other views of interest
-        currentObstacle = args.currentObstacle
+        currentObstacle = args.currentObstacle // Get current obstacle from previous fragment args
         typeEditText = select_obstacle_type_edit_text
         fabSubmit = fab_submit
 
@@ -166,9 +163,8 @@ class ObstacleEditFragment : Fragment() {
             })
 
         typeEditText.apply {
-            // When type selection dialog is triggered from here, it means it was shown before,
-            // so it is shown expanded by default
             setOnClickListener {
+                // When dialog is triggered here, it means it was shown before, so it is shown expanded
                 showTypeSelectionDialog()
                 populateSelectionList(onlyTop5 = false) // show ALL types, alphabetic or based on CNN
                 toggleAnalysisIndicator() // hide indicator
@@ -198,25 +194,21 @@ class ObstacleEditFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) { discardConfirmationDialog() }
     }
 
-    /**
-     * Manages obstacle map view.
-     */
+    /** Manages obstacle map view. */
     @SuppressLint("MissingPermission") // permission is checked below before it is used
     private fun setupMapView() {
         mapView = map
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
 
-            val obstaclePosition = currentObstacle.getLocationAsLatLong()
+            val obsPosition = currentObstacle.getLocationAsLatLong()
 
             googleMap.apply {
-                if (obstaclePosition.latitude != 0.0) {
+                if (obsPosition.latitude != 0.0) {
                     // Add obstacle marker
-                    addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+                    addMarker(MarkerOptions().position(obsPosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(obstaclePosition, DEFAULT_ZOOM_LEVEL)
-                    )
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, DEFAULT_ZOOM_LEVEL))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
                     moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
@@ -231,11 +223,10 @@ class ObstacleEditFragment : Fragment() {
                     locationNotManuallyEdited = false
                     clear()
                     addMarker(MarkerOptions().position(latLng))
-
+                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                     // TODO here the altitude should be updated as well, does maps provided it
                     //  somewhere? Or perhaps set it to 0
                     //  also location accuracy
-                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                 }
 
                 // Make sure we still have location permission before enabling location layer on map
@@ -253,8 +244,7 @@ class ObstacleEditFragment : Fragment() {
                         }
                     })
 
-                    // Enable myLocation layer and button
-                    isMyLocationEnabled = true
+                    isMyLocationEnabled = true // Enable myLocation layer and button
                     setOnMyLocationButtonClickListener { false }
                     setOnMyLocationClickListener {
                         // TODO 24/07/20 here move marker to current location if user clicks on
@@ -274,9 +264,8 @@ class ObstacleEditFragment : Fragment() {
                     }
                 }
 
-                // Shrink FAB when user is moving the map around
                 setOnCameraMoveStartedListener {
-                    fabSubmit.shrink()
+                    fabSubmit.shrink() // Shrink FAB when user is moving the map around
                     lifecycleScope.launch {
                         // TODO add more checks here, check if it is extended or not
                         delay(8000)
@@ -305,9 +294,7 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    /**
-     * Displays the obstacle type selection dialog.
-     */
+    /** Displays the obstacle type selection dialog. */
     private fun showTypeSelectionDialog() {
         // create dialog (re-created each time this function is called)
         typeSelectionDialog = MaterialDialog(requireContext()).customView(
@@ -368,20 +355,17 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    /**
-     * Shows confirmation dialog in the cases of back press, up press, or menu cancel action
-     * selected.
-     */
+    /** Shows confirmation dialog when back or up is presssed, or menu cancel action is selected. */
     private fun discardConfirmationDialog() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_discard_title)
             message(R.string.dialog_discard_msg)
             icon(R.drawable.ic_warning_black_24dp)
-
+            lifecycleOwner(viewLifecycleOwner)
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
             positiveButton(R.string.dialog_discard_positive) {
-                // delete obstacle photo
                 try {
-                    File(currentObstacle.photoPath).delete()
+                    File(currentObstacle.photoPath).delete() // delete obstacle photo
                 } catch (ex: IOException) {
                     Log.e(TAG(), "Error deleting obstacle photo", ex)
                 }
@@ -392,15 +376,10 @@ class ObstacleEditFragment : Fragment() {
                     R.id.action_obstacleEditFragment_to_obstacleListFragment
                 )
             }
-
-            negativeButton(R.string.dialog_cancel_button) { dismiss() }
-            lifecycleOwner(viewLifecycleOwner)
         }
     }
 
-    /**
-     * Submits current obstacle, provided that all required information has been entered.
-     */
+    /** Submits current obstacle, provided that all required information has been entered. */
     private fun checkAndSubmitObstacle() {
         if (allRequiredInfoEntered()) {
             viewModel.insertObstacle(currentObstacle)
@@ -411,10 +390,7 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    /**
-     * Checks whether all required information about the obstacle has been entered (type and
-     * location).
-     */
+    /** Checks whether all required obstacle information has been entered (type and location). */
     private fun allRequiredInfoEntered(): Boolean =
         if (select_obstacle_type_edit_text.text.toString().isBlank()) {
             // Check if type was selected
@@ -535,68 +511,46 @@ class ObstacleEditFragment : Fragment() {
             sortedArray + diff
         }
 
-    /**
-     * Toggles visibility of the image analysis indicator, and the other dialog contents.
-     */
+    /** Toggles visibility of the image analysis indicator, and the other dialog contents. */
     private fun toggleAnalysisIndicator() = typeSelectionDialogLayout.apply {
         dialog_analysis_indicator?.toggleVisibility()
         dialog_contents?.toggleVisibility()
     }
 
-    /**
-     * Toggles visibility of the CNN explanation message, as well as the Show more button.
-     */
+    /** Toggles visibility of the CNN explanation message, as well as the Show more button. */
     private fun toggleCnnExplanationAndMoreButton() = typeSelectionDialogLayout.apply {
         cnn_explanation?.toggleVisibility()
         button_show_more_types?.toggleVisibility()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onResume() {
-        super.onResume()
-        mapView.onResume()
+        super.onResume(); mapView.onResume()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onStart() {
-        super.onStart()
-        mapView.onStart()
+        super.onStart(); mapView.onStart()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onStop() {
-        super.onStop()
-        mapView.onStop()
+        super.onStop(); mapView.onStop()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
+        super.onDestroy(); mapView.onDestroy()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
+        super.onLowMemory(); mapView.onLowMemory()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onPause() {
-        super.onPause()
-        mapView.onPause()
+        super.onPause(); mapView.onPause()
     }
 
     private companion object {
