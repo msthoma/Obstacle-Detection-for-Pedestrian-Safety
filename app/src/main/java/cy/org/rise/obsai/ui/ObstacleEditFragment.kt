@@ -337,6 +337,9 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Displays the obstacle type selection dialog.
+     */
     private fun showTypeSelectionDialog() {
         // create dialog (re-created each time this function is called)
         typeSelectionDialog = MaterialDialog(requireContext()).customView(
@@ -395,8 +398,11 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Shows confirmation dialog in the cases of back press, up press, or menu cancel action
+     * selected.
+     */
     private fun displayDiscardConfirmationDialog() {
-        // shows confirmation dialog in the cases of back press, up press, menu cancel option
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_discard_title)
             message(R.string.dialog_discard_msg)
@@ -422,8 +428,10 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Submits current obstacle, provided that all required information has been entered.
+     */
     private fun checkAndSubmitObstacle() {
-        // Make sure the user has chosen an obstacle type before submitting
         if (allRequiredInfoEntered()) {
             // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
@@ -436,10 +444,15 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Checks whether all required information about the obstacle has been entered (type and
+     * location).
+     * TODO change this to if chain, final else = true
+     */
     private fun allRequiredInfoEntered(): Boolean {
         var allEntered = true
         // Check if type was selected
-        if (select_obstacle_type_edit_text.text.toString() == "") {
+        if (select_obstacle_type_edit_text.text.toString().isBlank()) {
             allEntered = false
             select_obstacle_type_layout.error =
                 getString(R.string.error_type_not_selected)
@@ -455,6 +468,12 @@ class ObstacleEditFragment : Fragment() {
         return allEntered
     }
 
+    /**
+     * Populates the contents of the type selection dialog.
+     *
+     * @param showOnlyTop5 whether to show only the top 5 choices or all of them
+     * TODO add option to set current selected
+     */
     private fun populateRadioGroupTypeList(showOnlyTop5: Boolean) {
         // make sure any previous entries are removed
         radioGroup.removeAllViews()
@@ -537,9 +556,23 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Retrieves alphabetical obstacle type array from resources.
+     *
+     * @return alphabetical obstacle type array
+     */
     private fun getAlphabeticalTypeArray(): Array<String> =
         resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
+    /**
+     * Transforms CNN results so they can be displayed in the UI, by sorting them and adding any
+     * types that are not part of the CNN; in case the results are empty (CNN failure), an
+     * alphabetical list is returned.
+     * TODO make this return a result instead of setting it here
+     *
+     * TODO make this return Map instead of Array
+     * @param results processed CNN results
+     */
     private fun processCnnResults(results: Map<String, Float>? = null) {
         // get type array either from CNN results, or from resources if CNN classification
         // didn't work
@@ -560,11 +593,17 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Toggles visibility of the image analysis indicator, and the other dialog contents.
+     */
     private fun toggleAnalysisIndicator() = typeSelectionDialogLayout.apply {
         dialog_analysis_indicator?.toggleVisibility()
         dialog_contents?.toggleVisibility()
     }
 
+    /**
+     * Toggles visibility of the CNN explanation message, as well as the Show more button.
+     */
     private fun toggleCnnExplanationAndMoreButton() = typeSelectionDialogLayout.apply {
         cnn_explanation?.toggleVisibility()
         button_show_more_types?.toggleVisibility()
