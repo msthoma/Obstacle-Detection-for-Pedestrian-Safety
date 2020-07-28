@@ -165,10 +165,12 @@ class ObstacleEditFragment : Fragment() {
             setOnClickListener {
                 // When dialog is triggered here, it means it was shown before, so it is shown expanded
                 showTypeSelectionDialog()
-                populateSelectionList(onlyTop5 = false) // show ALL types, alphabetic or based on CNN
+                // Show ALL types, alphabetic or based on CNN. Also set previously selected value.
+                // NOTE: if the user pressed cancel on the dialog initially, the obstacle type may
+                // be empty, but that is dealt with by the populateSelectionList() function
+                // TODO scroll to current selection if available
+                populateSelectionList(onlyTop5 = false, setSelected = currentObstacle.obstacleType)
                 toggleAnalysisIndicator() // hide indicator
-                // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
-                //  the value may be empty! ALSO, scroll to selection, add all this to populate
             }
             // clear errors when editText value changes
             addTextChangedListener { select_obstacle_type_layout.error = null }
@@ -396,16 +398,20 @@ class ObstacleEditFragment : Fragment() {
      * Populates the contents of the type selection dialog.
      *
      * @param onlyTop5 whether to show only the top 5 choices or all of them
-     * TODO add option to set current selected
+     * @param setSelected mark radio button with this value as selected; specifying this will
+     * show all types regardless of the onlyTop5 parameter value
      */
-    private fun populateSelectionList(onlyTop5: Boolean) {
+    private fun populateSelectionList(onlyTop5: Boolean, setSelected: String = "") {
+        val showOnlyTop5 = if (setSelected.isNotBlank()) false else onlyTop5
+
         radioGroup.removeAllViews() // make sure any previous entries are removed
 
         // create view params for individual Radio Buttons
         val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         layoutParams.bottomMargin = 20
 
-        // populate radio group, respecting any limits on number of items required
+        // populate radio group, respecting any limits set on number of type; when a limit is
+        // specified, all types are set in the group, but the ones above the limit are marked as GONE
         obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(requireContext()).also { rb ->
                 rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
@@ -413,7 +419,8 @@ class ObstacleEditFragment : Fragment() {
                 // add more margin for last non-empty rb
                 if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
-                if (onlyTop5 && i >= 5) rb.visibility = View.GONE
+                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
+                if (setSelected.isNotBlank() && obsType == setSelected) rb.isChecked = true
             })
         }
 
@@ -423,14 +430,14 @@ class ObstacleEditFragment : Fragment() {
         radioGroup.addView(RadioButton(requireContext()).also { rb ->
             rb.id = ID_OFFSET + obsTypeArray.size + 1
             rb.layoutParams = layoutParams
-            if (onlyTop5) rb.visibility = View.GONE
+            if (showOnlyTop5) rb.visibility = View.GONE
             lastEmptyRadioButton = rb // get a reference to it
         })
 
         // get customEditText and set its visibility
         customEditTextLayout = typeSelectionDialogLayout.type_custom_input_layout
         customEditText = typeSelectionDialogLayout.type_custom_input_edittext
-        if (onlyTop5) {
+        if (showOnlyTop5) {
             customEditTextLayout.visibility = View.GONE
         } else {
             customEditTextLayout.visibility = View.VISIBLE
