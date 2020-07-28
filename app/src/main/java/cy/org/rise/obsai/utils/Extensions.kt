@@ -116,3 +116,10 @@ fun View.hideKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as Inp
  * */
 fun View.showKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
     .toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY)
+
+/**
+ * Toggles visibility of a view between View.VISIBLE and View.GONE.
+ */
+fun View.toggleVisibility() =
+    if (this.visibility == View.VISIBLE) this.visibility = View.GONE else this.visibility = View
+        .VISIBLE
