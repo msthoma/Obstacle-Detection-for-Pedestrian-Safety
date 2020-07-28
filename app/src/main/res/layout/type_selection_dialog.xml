@@ -48,10 +48,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small"
             android:text="@string/dialog_cnn_explanation"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/types_radio_group"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
 
         <RadioGroup
             android:id="@+id/types_radio_group"
@@ -121,10 +123,12 @@
             android:layout_height="wrap_content"
             android:gravity="center|start"
             android:text="@string/button_show_more_types"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/types_radio_group" />
+            app:layout_constraintTop_toBottomOf="@id/types_radio_group"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
