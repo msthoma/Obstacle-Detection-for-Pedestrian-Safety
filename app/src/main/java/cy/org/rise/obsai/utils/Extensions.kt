@@ -14,6 +14,7 @@ import java.util.*
  *
  * @param msg string for displaying next to current class name
  */
+@Suppress("unused")
 inline fun <reified T> T.TAG(msg: String = "") =
     T::class.java.simpleName + if (msg.isNotEmpty()) " ($msg)" else ""
 
