@@ -259,7 +259,6 @@ class ObstacleEditFragment : Fragment() {
                 // make sure we still have location permission, if we don't, don't enable my
                 // location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
-                    Log.d(TAG(), "all granted")
                     viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
                         Log.d(TAG(), "new location")
                         if (locationNotManuallyEdited) {
@@ -278,7 +277,7 @@ class ObstacleEditFragment : Fragment() {
                         false
                     }
                     setOnMyLocationClickListener {
-                        // TODO: 24/07/20 here move marker to current location if user clicks on
+                        // TODO 24/07/20 here move marker to current location if user clicks on
                         //  location dot, but only after the user has manually changed location
                         //  by long clicking on map. Also maybe afterwards re-make marker to
                         //  follow location dot?
@@ -288,7 +287,7 @@ class ObstacleEditFragment : Fragment() {
                             currentObstacle.location.apply {
                                 this.latitude = it.latitude
                                 this.longitude = it.longitude
-                                // TODO: 24/07/20 include altitude, accuracy
+                                // TODO 24/07/20 include altitude, accuracy
                             }
                             locationNotManuallyEdited = true
                         }
@@ -299,7 +298,7 @@ class ObstacleEditFragment : Fragment() {
                 setOnCameraMoveStartedListener {
                     fabSubmit.shrink()
                     lifecycleScope.launch {
-                        // TODO add more checks here
+                        // TODO add more checks here, check if it is extended or not
                         delay(8000)
                         fabSubmit.extend()
                     }
@@ -447,26 +446,23 @@ class ObstacleEditFragment : Fragment() {
     /**
      * Checks whether all required information about the obstacle has been entered (type and
      * location).
-     * TODO change this to if chain, final else = true
      */
-    private fun allRequiredInfoEntered(): Boolean {
-        var allEntered = true
-        // Check if type was selected
+    private fun allRequiredInfoEntered(): Boolean =
         if (select_obstacle_type_edit_text.text.toString().isBlank()) {
-            allEntered = false
+            // Check if type was selected
             select_obstacle_type_layout.error =
                 getString(R.string.error_type_not_selected)
-        }
-        // Check if location was selected
-        if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
-            allEntered = false
+            false
+        } else if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
+            // Check if location was selected
             Toast.makeText(
                 requireContext(), getString(R.string.toast_location_required),
                 Toast.LENGTH_LONG
             ).show()
+            false
+        } else {
+            true
         }
-        return allEntered
-    }
 
     /**
      * Populates the contents of the type selection dialog.
@@ -568,15 +564,12 @@ class ObstacleEditFragment : Fragment() {
      * Transforms CNN results so they can be displayed in the UI, by sorting them and adding any
      * types that are not part of the CNN; in case the results are empty (CNN failure), an
      * alphabetical list is returned.
-     * TODO make this return a result instead of setting it here
      *
      * TODO make this return Map instead of Array
      * @param results processed CNN results
      */
-    private fun processCnnResults(results: Map<String, Float>? = null) {
-        // get type array either from CNN results, or from resources if CNN classification
-        // didn't work
-        obsTypeArray = if (results.isNullOrEmpty()) {
+    private fun processCnnResults(results: Map<String, Float>? = null): Array<String> =
+        if (results.isNullOrEmpty()) {
             val alphabetic = getAlphabeticalTypeArray().map { it to 0.0f }.toMap()
             // for now convert to array
             alphabetic.keys.toTypedArray()
@@ -591,7 +584,6 @@ class ObstacleEditFragment : Fragment() {
             }.sorted().toTypedArray()
             sortedArray + diff
         }
-    }
 
     /**
      * Toggles visibility of the image analysis indicator, and the other dialog contents.
