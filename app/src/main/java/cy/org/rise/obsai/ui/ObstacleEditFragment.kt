@@ -66,7 +66,6 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var typeEditText: EditText
     private val args: ObstacleEditFragmentArgs by navArgs()
-    private var analysisIndicatorNotShown = true
     private var fragCreationTime by Delegates.notNull<Long>()
     private var locationNotManuallyEdited = true
 
@@ -88,7 +87,7 @@ class ObstacleEditFragment : Fragment() {
     ): View? {
         // Set toolbar menu
         setHasOptionsMenu(true)
-        // save create time
+        // Save creation time
         fragCreationTime = System.currentTimeMillis()
 
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
@@ -107,7 +106,7 @@ class ObstacleEditFragment : Fragment() {
         if (currentObstacle.obstacleType != "") {
             typeEditText.setText(currentObstacle.obstacleType)
         } else {
-            showTypeSelectionDialog2()
+            showTypeSelectionDialog()
         }
 
         // Try to get the file from the arguments passed from the camera fragment
@@ -133,6 +132,7 @@ class ObstacleEditFragment : Fragment() {
         viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
                 // TODO add slight delay here, so indicator is shown!!
+                // TODO also add time limit, if results are not available show alphabetical
                 // CNN FAILURE
                 cnnResult.onFailure {
                     Log.d(TAG("CNN failure"), it.toString())
@@ -142,8 +142,6 @@ class ObstacleEditFragment : Fragment() {
                     populateRadioGroupTypeList(showOnlyTop5 = false)
                     // hide indicator
                     hideAnalysisIndicator()
-                    // CNN explanation, More button hidden by default
-                    // show full alphabetical list
                 }
                 // CNN SUCCESS
                 cnnResult.onSuccess { result ->
@@ -156,48 +154,34 @@ class ObstacleEditFragment : Fragment() {
                     // show CNN explanation, More button (hidden by default)
                     toggleCNNexplanationAndMoreButton()
                     // add listener on show more button
-                    // TODO here can call populateRadioGroupTypeList again with no limit
                     typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
                         populateRadioGroupTypeList(showOnlyTop5 = false)
                         toggleCNNexplanationAndMoreButton()
                     }
 
-                    // save CNN results in obstacle, first sanitize keys
+                    // save CNN results in obstacle, but first sanitize keys
                     currentObstacle.typeProbabilitiesCNN = result.map { (k, v) ->
                         k.filterNot {
                             setOf(' ', '(', ')', '.', '-', '/').contains(it)
                         } to v
                     }.toMap()
 
-                    val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
-
-                    currentObstacle.timeUntilCnnResults = timeUntilCnnResults
-                    Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
-
-                    // Automatically show dialog when results become available
-//                    if (timeUntilCnnResults <= 5000) {
-//                        if (currentObstacle.obstacleType == "") {
-//                            if (::cnnResults.isInitialized) {
-//                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-//                            }
-//                        }
-//                    }
+                    // save processing time
+                    currentObstacle.timeUntilCnnResults =
+                        System.currentTimeMillis() - fragCreationTime
+                    Log.d(TAG(), "${currentObstacle.timeUntilCnnResults} millis until CNN results")
                 }
             })
 
-        // Add listeners on editText
         typeEditText.apply {
-            // Show custom dialog for obstacle type selection
-            // the dialog shown by tapping on edit text means it was shown before, so show it
-            // expanded by default
+            // Show custom dialog for obstacle type selection, when the dialog is triggered from
+            // here, it means it was shown before, so it is shown expanded by default
             setOnClickListener {
-                showTypeSelectionDialog2()
+                showTypeSelectionDialog()
                 // set radio group, showing ALL types
                 populateRadioGroupTypeList(showOnlyTop5 = false)
                 // hide indicator
                 hideAnalysisIndicator()
-                // CNN explanation, More button hidden by default
-                // show full alphabetical list
                 // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
                 //  the value may be empty! ALSO, scroll to selection
             }
@@ -342,8 +326,8 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    private fun showTypeSelectionDialog2() {
-        // create dialog (re-create each time this function is called)
+    private fun showTypeSelectionDialog() {
+        // create dialog (re-created each time this function is called)
         typeSelectionDialog = MaterialDialog(requireContext()).customView(
             R.layout.type_selection_dialog,
             scrollable = true
@@ -395,105 +379,6 @@ class ObstacleEditFragment : Fragment() {
             negativeButton(R.string.dialog_cancel_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
             show()
-        }
-    }
-
-    private fun showTypeSelectionDialog() {
-        // get type array either from CNN results, or from resources if CNN classification
-        // didn't work
-        val obsTypeArray = if (::cnnResults.isInitialized) {
-            if (cnnResults.isNotEmpty()) {
-                // add types that are not part of the CNN
-                val diff = getAlphabeticalTypeArray().filterNot {
-                    cnnResults.toSet().contains(it)
-                }.sorted().toTypedArray()
-                cnnResults + diff
-            } else getAlphabeticalTypeArray()
-        } else {
-            getAlphabeticalTypeArray()
-        }
-
-        val dialog = MaterialDialog(requireContext()).customView(
-            R.layout.type_selection_dialog,
-            scrollable = true
-        )
-
-        // get references to views on dialog that are of interest
-        val customDialogView = dialog.getCustomView() as ConstraintLayout
-        val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
-        val dialogContents = customDialogView.dialog_contents
-        val radioGroup = customDialogView.types_radio_group
-
-        // initially only show 5 most likely types, as determined by the CNN (hide the rest)
-        populateRadioGroupTypeList(showOnlyTop5 = true)
-
-        // get references to last radio button and customEditText
-        val customEditTextLayout = customDialogView.type_custom_input_layout
-        val customEditText = customDialogView.type_custom_input_edittext
-        // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
-        val lastEmptyRadioButton =
-            radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
-
-        // show analysis indicator when first launched
-        if (analysisIndicatorNotShown) {
-            analysisIndicatorNotShown = false
-            lifecycleScope.launch {
-                delay((1200..1800).random().toLong())
-                dialogAnalysisIndicator.visibility = View.GONE
-                dialogContents.visibility = View.VISIBLE
-            }
-        } else {
-            dialogAnalysisIndicator.visibility = View.GONE
-            dialogContents.visibility = View.VISIBLE
-        }
-
-        // show more button is clicked
-        customDialogView.button_show_more_types?.setOnClickListener { showMoreButton ->
-            // reveal all possible types
-            for (i in 0..obsTypeArray.size + 1)
-                radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
-
-            // hide more button and CNN explanation
-            showMoreButton.visibility = View.GONE
-            customDialogView.cnn_explanation?.visibility = View.GONE
-
-            // show custom editText
-            customEditTextLayout.visibility = View.VISIBLE
-        }
-
-        // set listeners to all views to regulate their behaviour
-        customEditText.apply {
-            setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) lastEmptyRadioButton.isChecked = true
-            }
-            setOnClickListener {
-                lastEmptyRadioButton.isChecked = true
-            }
-            addTextChangedListener { currentText ->
-                if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
-            }
-        }
-        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId != lastEmptyRadioButton.id) {
-                // capture current selection
-                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                    currentObstacle.obstacleType = rb.text.toString()
-                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
-                }
-                // clear any focus on customEditText
-                customEditText.apply {
-                    clearFocus()
-                    hideKeyboard()
-                    customEditTextLayout.error = null
-                }
-            } else {
-                // when checkedId == lastEmptyRadioButton.id it means editText should
-                // be selected
-                customEditText.apply {
-                    requestFocus()
-                    showKeyboard()
-                }
-            }
         }
     }
 
