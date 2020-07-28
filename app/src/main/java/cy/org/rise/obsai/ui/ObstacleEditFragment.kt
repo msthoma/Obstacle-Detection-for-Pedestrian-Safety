@@ -403,7 +403,7 @@ class ObstacleEditFragment : Fragment() {
             icon(R.drawable.ic_warning_black_24dp)
 
             positiveButton(R.string.dialog_discard_positive) {
-                // first delete photo of obstacle that was taken
+                // delete obstacle photo
                 try {
                     File(currentObstacle.photoPath).delete()
                 } catch (ex: IOException) {
@@ -470,7 +470,8 @@ class ObstacleEditFragment : Fragment() {
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.forEachIndexed { i, obsType ->
             radioGroup.addView(RadioButton(context).also { rb ->
-                rb.id = 1000 + i
+                // set radio button IDs in the form of ID_OFFSET + i (integers)
+                rb.id = ID_OFFSET + i
                 rb.text = obsType
                 // add more margin for last non-empty rb
                 if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
@@ -485,7 +486,7 @@ class ObstacleEditFragment : Fragment() {
         // add empty radio button at bottom
         radioGroup.addView(RadioButton(context).also { rb ->
             // radio button with no text
-            rb.id = 1000 + obsTypeArray.size + 1
+            rb.id = ID_OFFSET + obsTypeArray.size + 1
             rb.layoutParams = layoutParams
             if (showOnlyTop5) rb.visibility = View.GONE
             // get a reference to it
@@ -520,15 +521,14 @@ class ObstacleEditFragment : Fragment() {
                     currentObstacle.obstacleType = rb.text.toString()
                     Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
                 }
-                // clear any focus on customEditText
+                // clear any focus and error on customEditText
                 customEditText.apply {
                     clearFocus()
                     hideKeyboard()
                     customEditTextLayout.error = null
                 }
             } else {
-                // when checkedId == lastEmptyRadioButton.id it means editText should
-                // be selected
+                // when checkedId == lastEmptyRadioButton.id select editText
                 customEditText.apply {
                     requestFocus()
                     showKeyboard()
@@ -616,5 +616,9 @@ class ObstacleEditFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         mapView.onPause()
+    }
+
+    private companion object {
+        const val ID_OFFSET = 100
     }
 }
