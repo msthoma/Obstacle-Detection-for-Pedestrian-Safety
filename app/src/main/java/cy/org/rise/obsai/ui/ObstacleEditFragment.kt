@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.LinearLayout.LayoutParams
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -323,11 +322,7 @@ class ObstacleEditFragment : Fragment() {
                             dismiss()
                         } else {
                             // text provided too short/empty
-                            Toast.makeText(
-                                requireContext(),
-                                R.string.toast_provide_valid_type,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            requireContext().toast(R.string.toast_provide_valid_type)
                             // focus on editText and set error
                             lastEmptyRadioButton.parent
                                 .requestChildFocus(customEditTextLayout, customEditTextLayout)
@@ -341,9 +336,7 @@ class ObstacleEditFragment : Fragment() {
                     }
                 } else {
                     // -1 means none selected
-                    Toast.makeText(
-                        requireContext(), R.string.toast_make_selection, Toast.LENGTH_SHORT
-                    ).show()
+                    requireContext().toast(R.string.toast_make_selection, short = true)
                 }
             }
             negativeButton(R.string.dialog_cancel_button) { dismiss() }
@@ -380,9 +373,7 @@ class ObstacleEditFragment : Fragment() {
     private fun checkAndSubmitObstacle() {
         if (allRequiredInfoEntered()) {
             viewModel.insertObstacle(currentObstacle)
-            Toast.makeText(
-                requireContext(), R.string.toast_obstacle_submitted, Toast.LENGTH_LONG
-            ).show()
+            requireContext().toast(R.string.toast_obstacle_submitted)
             findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
     }
@@ -395,9 +386,7 @@ class ObstacleEditFragment : Fragment() {
             false
         } else if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
             // Check if location was selected
-            Toast.makeText(
-                requireContext(), R.string.toast_location_required, Toast.LENGTH_LONG
-            ).show()
+            requireContext().toast(R.string.toast_location_required)
             false
         } else {
             true
