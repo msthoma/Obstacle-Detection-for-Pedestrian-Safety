@@ -59,7 +59,6 @@ class ObstacleEditFragment : Fragment() {
 
     // TODO 28/07/20 DON"T save type in obstacle!! use another variable
 
-    // TODO 28/07/20 rename this to type...array
     private lateinit var obsTypeArray: Array<String>
     private lateinit var currentObstacle: Obstacle
     private lateinit var fabSubmit: ExtendedFloatingActionButton
@@ -109,16 +108,14 @@ class ObstacleEditFragment : Fragment() {
             showTypeSelectionDialog()
         }
 
-        // Try to get the file from the arguments passed from the camera fragment
-        val photoFile: File? = try {
+        try {
+            // Try to get the file from the arguments passed from the camera fragment
             File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null
-        }
-
-        // If the photo file exists, set it in image view
-        photoFile?.also {
+        }?.let { photoFile ->
+            // If the photo file exists, set it in image view
             Picasso.get()
                 .load(photoFile)
                 // If cache is enabled, the photo won't refresh after it's cropped
@@ -185,7 +182,7 @@ class ObstacleEditFragment : Fragment() {
             })
 
         typeEditText.apply {
-            // Show custom dialog for obstacle type selection, when the dialog is triggered from
+            // Show custom dialog for obstacle type selection. When the dialog is triggered from
             // here, it means it was shown before, so it is shown expanded by default
             setOnClickListener {
                 showTypeSelectionDialog()
@@ -203,8 +200,8 @@ class ObstacleEditFragment : Fragment() {
             }
         }
 
-        // Go to photo editing fragment
         button_edit_photo.setOnClickListener {
+            // Go to photo editing fragment
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
                     // TODO 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
