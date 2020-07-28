@@ -10,8 +10,7 @@ import cy.org.rise.obsai.db.ObstacleRepository
 
 /**
  * Factory for creating an [ObstacleViewModel] with a constructor that takes an
- * [ObstacleRepository], based on
- * [this example](https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/viewmodels/PlantListViewModelFactory.kt)
+ * [ObstacleRepository], based on [this example](https://git.io/JJ0D5).
  */
 class ObstacleViewModelFactory(
     private val repository: ObstacleRepository,

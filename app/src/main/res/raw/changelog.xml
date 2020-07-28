@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-07-28"
+        versionCode="1"
+        versionName="Version 0.17.0">
+        <info>Complete overhaul of the underlying logic of the type selection dialog</info>
+        <info>Many bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-27"
         versionCode="1"
         versionName="Version 0.16.5">

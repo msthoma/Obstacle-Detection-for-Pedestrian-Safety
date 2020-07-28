@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidDomInspection -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@drawable/example_obs_20190808_102427129"
-    tools:context=".ui.CameraFragment">
+    tools:context=".ui.CameraFragment"
+    tools:menu="menu_camera">
 
     <!-- app:cameraExperimental="true" in CameraView below enforces use of Camera2, which should
     be available in all devices with SDK >= 21, which is the minimum for the app -->

@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidDomInspection -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".ui.CropFragment">
+    tools:context=".ui.CropFragment"
+    tools:menu="menu_crop">
 
     <!-- Customization details at https://github.com/ArthurHub/Android-Image-Cropper/wiki/Visual-Customization -->
     <com.theartofdev.edmodo.cropper.CropImageView

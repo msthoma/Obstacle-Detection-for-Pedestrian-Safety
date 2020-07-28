@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.EditText
+import android.widget.LinearLayout.LayoutParams
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -25,18 +28,18 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.*
 import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.CYPRUS
 import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.hideKeyboard
-import cy.org.rise.obsai.utils.showKeyboard
+import cy.org.rise.obsai.utils.Constants.NICOSIA_CENTER
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
 import kotlinx.coroutines.delay
@@ -56,55 +59,54 @@ import kotlin.properties.Delegates
  * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
-
-    private lateinit var cnnResults: Array<String>
+    // TODO 28/07/20 DON"T save type in obstacle!! use another variable
     private lateinit var currentObstacle: Obstacle
+    private lateinit var customEditText: TextInputEditText
+    private lateinit var customEditTextLayout: TextInputLayout
     private lateinit var fabSubmit: ExtendedFloatingActionButton
+    private lateinit var lastEmptyRadioButton: RadioButton
     private lateinit var mapView: MapView
+    private lateinit var obsTypeArray: Array<String>
+    private lateinit var radioGroup: RadioGroup
     private lateinit var typeEditText: EditText
+    private lateinit var typeSelectionDialog: MaterialDialog
+    private lateinit var typeSelectionDialogLayout: ConstraintLayout
     private val args: ObstacleEditFragmentArgs by navArgs()
-    private var analysisIndicatorNotShown = true
-    private var fragCreationTime by Delegates.notNull<Long>()
-    private var locationNotManuallyEdited = true
-
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
     }
+    private var start by Delegates.notNull<Long>()
+    private var locationNotManuallyEdited = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Set toolbar menu
-        setHasOptionsMenu(true)
-        // save create time
-        fragCreationTime = System.currentTimeMillis()
-
+        setHasOptionsMenu(true) // Set toolbar menu
+        start = System.currentTimeMillis() // Save creation time
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Get views of interest
+        currentObstacle = args.currentObstacle // Get current obstacle from previous fragment args
         typeEditText = select_obstacle_type_edit_text
         fabSubmit = fab_submit
 
-        // Get current obstacle
-        currentObstacle = args.currentObstacle
-        // If type is already available, set it in editText
-        if (currentObstacle.obstacleType != "") typeEditText.setText(currentObstacle.obstacleType)
+        // If type is already available set it in editText, otherwise show selection dialog
+        if (currentObstacle.obstacleType.isNotEmpty()) {
+            typeEditText.setText(currentObstacle.obstacleType)
+        } else {
+            showTypeSelectionDialog()
+        }
 
-        // Try to get the file from the arguments passed from the camera fragment
-        val photoFile: File? = try {
+        // Set obstacle photo in image view
+        try {
             File(currentObstacle.photoPath)
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG(), "Error getting image file")
             null
-        }
-
-        // If the photo file exists, set it in image view
-        photoFile?.also {
+        }?.let { photoFile ->
             Picasso.get()
                 .load(photoFile)
                 // If cache is enabled, the photo won't refresh after it's cropped
@@ -117,137 +119,134 @@ class ObstacleEditFragment : Fragment() {
         // Send photo to CNN for classification, and listen for results
         viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
-
+                // TODO add slight delay here, so indicator is shown!!
+                // TODO also add time limit, if results are not available show alphabetical
                 cnnResult.onFailure {
-                    Log.d(TAG("FAILURE"), it.toString())
+                    Log.d(TAG("CNN failure"), it.toString())
+                    obsTypeArray = processCnnResults()
+
+                    // make sure dialog is currently being displayed
+                    if (::typeSelectionDialog.isInitialized) {
+                        populateSelectionList(onlyTop5 = false) // show ALL types alphabetically
+                        toggleAnalysisIndicator() // hide image analysis indicator
+                    }
                 }
-
                 cnnResult.onSuccess { result ->
-                    Log.d(TAG(), result.toString())
-                    // sort CNN results (smallest to largest)
-                    val sorted = result.toList().sortedBy { (_, value) -> value }.toMap()
-                    Log.d(TAG(), sorted.toString())
+                    Log.d(TAG("CNN success"), result.toString())
+                    obsTypeArray = processCnnResults(result)
 
-                    // reverse results (only keys) for displaying in input dialog
-                    sorted.keys.reversed().toTypedArray().let { cnnResults = it }
-
-                    // save CNN results in obstacle, first sanitize keys
-                    currentObstacle.typeProbabilitiesCNN = sorted.map { (k, v) ->
-                        k.filterNot {
-                            setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                        } to v
-                    }.toMap()
-
-                    val timeUntilCnnResults = System.currentTimeMillis() - fragCreationTime
-
-                    currentObstacle.timeUntilCnnResults = timeUntilCnnResults
-                    Log.d(TAG(), "$timeUntilCnnResults millis until CNN results")
-
-                    // Automatically show dialog when results become available
-                    if (timeUntilCnnResults <= 5000) {
-                        if (currentObstacle.obstacleType == "") {
-                            if (::cnnResults.isInitialized) {
-                                if (cnnResults.isNotEmpty()) showTypeSelectionDialog()
-                            }
+                    // make sure dialog is currently being displayed
+                    if (::typeSelectionDialog.isInitialized) {
+                        populateSelectionList(onlyTop5 = true) // show only top 5 types
+                        toggleAnalysisIndicator() // hide image analysis indicator
+                        toggleCnnExplanationAndMoreButton() // show CNN explanation & More button
+                        typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
+                            // listen for clicks on More button
+                            populateSelectionList(onlyTop5 = false)
+                            toggleCnnExplanationAndMoreButton()
                         }
+
+                        // save CNN results in obstacle, as well as the CNN processing time
+                        currentObstacle.apply {
+                            typeProbabilitiesCNN = result.map { (k, v) ->
+                                // sanitize types so they play well when JSONified
+                                k.filterNot {
+                                    setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                                } to v
+                            }.toMap()
+                            timeUntilCnnResults = System.currentTimeMillis() - start
+                        }
+                        Log.d(TAG(), "${currentObstacle.timeUntilCnnResults} ms until CNN results")
                     }
                 }
             })
 
-        // Add listeners on editText
         typeEditText.apply {
-            // Show custom dialog for obstacle type selection
             setOnClickListener {
+                // When dialog is triggered here, it means it was shown before, so it is shown expanded
                 showTypeSelectionDialog()
+                // Show ALL types, alphabetic or based on CNN. Also set previously selected value.
+                // NOTE: if the user pressed cancel on the dialog initially, the obstacle type may
+                // be empty, but that is dealt with by the populateSelectionList() function below
+                populateSelectionList(onlyTop5 = false, setSelected = currentObstacle.obstacleType)
+                toggleAnalysisIndicator() // hide image analysis indicator
             }
-
-            // Clear any error message present editText value changes
-            addTextChangedListener {
-                select_obstacle_type_layout.error = null
-            }
+            // clear errors when editText value changes
+            addTextChangedListener { select_obstacle_type_layout.error = null }
         }
 
-        // Go to photo editing fragment
         button_edit_photo.setOnClickListener {
+            // Go to photo cropping fragment
             findNavController().navigate(
                 ObstacleEditFragmentDirections.actionObstacleEditFragmentToCropFragment(
-                    // TODO: 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
+                    // TODO 24/07/20 when user comes back from crop, respect any location edits, don't track GPS
                     currentObstacle
                 )
             )
         }
 
-        // Setup map view
+        setupMapView() // Setup map view
+
+        fabSubmit.setOnClickListener { checkAndSubmitObstacle() }
+
+        // display discard confirmation dialog when up is pressed (overriding onSupportNavigateUp
+        // in MainActivity enables re-routing of up callback here)
+        requireActivity().onBackPressedDispatcher.addCallback(this) { discardConfirmationDialog() }
+    }
+
+    /** Manages obstacle map view. */
+    @SuppressLint("MissingPermission") // permission is checked below before it is used
+    private fun setupMapView() {
         mapView = map
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
 
-            val obstaclePosition = currentObstacle.getLocationAsLatLong()
+            val obsPosition = currentObstacle.getLocationAsLatLong()
 
             googleMap.apply {
-                // Add marker and set map camera position
-                if (obstaclePosition.latitude != 0.0) {
-                    // Add marker indicating the obstacle, if location provided is not 0, 0
-                    addMarker(MarkerOptions().position(obstaclePosition).title("Marker"))
+                if (obsPosition.latitude != 0.0) {
+                    // Add obstacle marker
+                    addMarker(MarkerOptions().position(obsPosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            obstaclePosition,
-                            DEFAULT_ZOOM_LEVEL
-                        )
-                    )
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, DEFAULT_ZOOM_LEVEL))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(35.169933, 33.361071),
-                            CITY_ZOOM_LEVEL
-                        )
-                    )
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
                 }
 
-                // Add map boundaries
-                setLatLngBoundsForCameraTarget(CYPRUS)
+                setLatLngBoundsForCameraTarget(CYPRUS) // Add map boundaries
 
-                // Set min zoom, so user cannot zoom out too much (1 is world, 20 buildings)
-                setMinZoomPreference(MIN_ZOOM_LEVEL)
+                setMinZoomPreference(MIN_ZOOM_LEVEL) // Set min zoom (1 is world, 20 buildings)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
                     locationNotManuallyEdited = false
                     clear()
                     addMarker(MarkerOptions().position(latLng))
-
-                    // Save location indicated by user
+                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                     // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere? Or perhaps set it to 0
-                    //  also location accuracy
-                    currentObstacle.setLocationFromLatLong(latLng)
+                    //  somewhere? Or perhaps set it to 0. Also set location accuracy
                 }
 
-                // make sure we still have location permission, if we don't, don't enable my
-                // location layer on map
+                // Make sure we still have location permission before enabling location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
-                    Log.d(TAG(), "all granted")
-                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
-                        Log.d(TAG(), "new location")
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLoc ->
                         if (locationNotManuallyEdited) {
                             clear()
-                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            addMarker(
+                                MarkerOptions().position(LatLng(newLoc.latitude, newLoc.longitude))
+                            )
                             currentObstacle.location.apply {
-                                this.latitude = it.latitude
-                                this.longitude = it.longitude
+                                this.latitude = newLoc.latitude
+                                this.longitude = newLoc.longitude
                             }
                         }
                     })
 
-                    // Enable myLocation layer and button
-                    isMyLocationEnabled = true
-                    setOnMyLocationButtonClickListener {
-                        false
-                    }
+                    isMyLocationEnabled = true // Enable myLocation layer and button
+                    setOnMyLocationButtonClickListener { false }
                     setOnMyLocationClickListener {
-                        // TODO: 24/07/20 here move marker to current location if user clicks on
+                        // TODO 24/07/20 here move marker to current location if user clicks on
                         //  location dot, but only after the user has manually changed location
                         //  by long clicking on map. Also maybe afterwards re-make marker to
                         //  follow location dot?
@@ -257,34 +256,22 @@ class ObstacleEditFragment : Fragment() {
                             currentObstacle.location.apply {
                                 this.latitude = it.latitude
                                 this.longitude = it.longitude
-                                // TODO: 24/07/20 include altitude, accuracy
+                                // TODO 24/07/20 include altitude, accuracy
                             }
                             locationNotManuallyEdited = true
                         }
                     }
                 }
 
-                // Shrink FAB when user is moving the map around
                 setOnCameraMoveStartedListener {
-                    fabSubmit.shrink()
+                    fabSubmit.shrink() // Shrink FAB when user is moving the map around
                     lifecycleScope.launch {
-                        // TODO add more checks here
+                        // TODO add more checks here, check if it is extended or not
                         delay(8000)
                         fabSubmit.extend()
                     }
                 }
             }
-        }
-
-        fabSubmit.setOnClickListener {
-            checkAndSubmitObstacle()
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // display discard confirmation dialog on back press, and also on up press (when up
-            // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
-            // up here)
-            displayDiscardConfirmationDialog()
         }
     }
 
@@ -299,114 +286,26 @@ class ObstacleEditFragment : Fragment() {
                 true
             }
             R.id.action_cancel_edit_obstacle -> {
-                displayDiscardConfirmationDialog()
+                discardConfirmationDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    /** Displays the obstacle type selection dialog. */
     private fun showTypeSelectionDialog() {
-        // get type array either from CNN results, or from resources if CNN classification
-        // didn't work
-        val obsTypeArray = if (::cnnResults.isInitialized) {
-            if (cnnResults.isNotEmpty()) {
-                // add types that are not part of the CNN
-                val diff = getAlphabeticalTypeArray().filterNot {
-                    cnnResults.toSet().contains(it)
-                }.sorted().toTypedArray()
-                cnnResults + diff
-            } else getAlphabeticalTypeArray()
-        } else {
-            getAlphabeticalTypeArray()
-        }
+        // create dialog (re-created each time this function is called)
+        typeSelectionDialog = MaterialDialog(requireContext())
+            .customView(R.layout.type_selection_dialog, scrollable = true)
 
-        val dialog = MaterialDialog(requireContext()).customView(
-            R.layout.type_selection_dialog,
-            scrollable = true
-        )
+        // get references to views of interest
+        typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
+        radioGroup = typeSelectionDialogLayout.types_radio_group
 
-        // get references to views on dialog that are of interest
-        val customDialogView = dialog.getCustomView() as ConstraintLayout
-        val dialogAnalysisIndicator = customDialogView.dialog_analysis_indicator
-        val dialogContents = customDialogView.dialog_contents
-        val radioGroup = customDialogView.types_radio_group
-
-        // initially only show 5 most likely types, as determined by the CNN (hide the rest)
-        populateRadioGroupTypeList(radioGroup, obsTypeArray, 5)
-
-        // get references to last radio button and customEditText
-        val customEditTextLayout = customDialogView.type_custom_input_layout
-        val customEditText = customDialogView.type_custom_input_edittext
-        // when radio buttons are added, they are given IDs in the form 1000 + index in obsTypeArray
-        val lastEmptyRadioButton =
-            radioGroup.findViewById<RadioButton>(1000 + obsTypeArray.size + 1)
-
-        // show analysis indicator when first launched
-        if (analysisIndicatorNotShown) {
-            analysisIndicatorNotShown = false
-            lifecycleScope.launch {
-                delay((1200..1800).random().toLong())
-                dialogAnalysisIndicator.visibility = View.GONE
-                dialogContents.visibility = View.VISIBLE
-            }
-        } else {
-            dialogAnalysisIndicator.visibility = View.GONE
-            dialogContents.visibility = View.VISIBLE
-        }
-
-        // show more button is clicked
-        customDialogView.button_show_more_types?.setOnClickListener { showMoreButton ->
-            // reveal all possible types
-            for (i in 0..obsTypeArray.size + 1)
-                radioGroup.findViewById<RadioButton>(1000 + i)?.visibility = View.VISIBLE
-
-            // hide more button and CNN explanation
-            showMoreButton.visibility = View.GONE
-            customDialogView.cnn_explanation?.visibility = View.GONE
-
-            // show custom editText
-            customEditTextLayout.visibility = View.VISIBLE
-        }
-
-        // set listeners to all views to regulate their behaviour
-        customEditText.apply {
-            setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) lastEmptyRadioButton.isChecked = true
-            }
-            setOnClickListener {
-                lastEmptyRadioButton.isChecked = true
-            }
-            addTextChangedListener { currentText ->
-                if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
-            }
-        }
-        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId != lastEmptyRadioButton.id) {
-                // capture current selection
-                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                    currentObstacle.obstacleType = rb.text.toString()
-                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
-                }
-                // clear any focus on customEditText
-                customEditText.apply {
-                    clearFocus()
-                    hideKeyboard()
-                    customEditTextLayout.error = null
-                }
-            } else {
-                // when checkedId == lastEmptyRadioButton.id it means editText should
-                // be selected
-                customEditText.apply {
-                    requestFocus()
-                    showKeyboard()
-                }
-            }
-        }
-
-        // finally, display the dialog
-        dialog.apply {
-            noAutoDismiss()
+        // set up the other properties of the dialog
+        typeSelectionDialog.apply {
+            noAutoDismiss() // important, otherwise dialog is dismissed without the checks below
             title(text = getString(R.string.dialog_select_type_title))
             positiveButton(R.string.dialog_OK_button) {
                 val checkedId = radioGroup.checkedRadioButtonId
@@ -421,10 +320,7 @@ class ObstacleEditFragment : Fragment() {
                             dismiss()
                         } else {
                             // text provided too short/empty
-                            Toast.makeText(
-                                context, getString(R.string.toast_provide_valid_type), Toast
-                                    .LENGTH_SHORT
-                            ).show()
+                            requireContext().toast(R.string.toast_provide_valid_type)
                             // focus on editText and set error
                             lastEmptyRadioButton.parent
                                 .requestChildFocus(customEditTextLayout, customEditTextLayout)
@@ -438,170 +334,230 @@ class ObstacleEditFragment : Fragment() {
                     }
                 } else {
                     // -1 means none selected
-                    Toast.makeText(
-                        context,
-                        getString(R.string.toast_make_selection),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    requireContext().toast(R.string.toast_make_selection, short = true)
                 }
             }
             negativeButton(R.string.dialog_cancel_button) { dismiss() }
             lifecycleOwner(viewLifecycleOwner)
-            dialog.show()
+            show()
         }
     }
 
-    private fun displayDiscardConfirmationDialog() {
-        // shows confirmation dialog in the cases of back press, up press, menu cancel option
+    /** Shows confirmation dialog when back or up are pressed, or menu cancel action is selected. */
+    private fun discardConfirmationDialog() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_discard_title)
             message(R.string.dialog_discard_msg)
             icon(R.drawable.ic_warning_black_24dp)
-
+            lifecycleOwner(viewLifecycleOwner)
+            negativeButton(R.string.dialog_cancel_button) { dismiss() }
             positiveButton(R.string.dialog_discard_positive) {
-                // first delete photo of obstacle that was taken
                 try {
-                    File(currentObstacle.photoPath).delete()
+                    File(currentObstacle.photoPath).delete() // delete obstacle photo
                 } catch (ex: IOException) {
                     Log.e(TAG(), "Error deleting obstacle photo", ex)
                 }
-
                 // by navigating back with the action below, the back stack is popped up to the
                 // list fragment, and so a back press there does not return the user back here
                 findNavController().navigate(
                     R.id.action_obstacleEditFragment_to_obstacleListFragment
                 )
             }
-
-            negativeButton(R.string.dialog_cancel_button) { dismiss() }
-            lifecycleOwner(viewLifecycleOwner)
         }
     }
 
+    /** Submits current obstacle, provided that all required information has been entered. */
     private fun checkAndSubmitObstacle() {
-        // Make sure the user has chosen an obstacle type before submitting
         if (allRequiredInfoEntered()) {
-            // Obstacle type already saved in obstacle entity
             viewModel.insertObstacle(currentObstacle)
-            Toast.makeText(
-                requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
-            ).show()
-            findNavController().navigate(
-                R.id.action_obstacleEditFragment_to_obstacleListFragment
-            )
+            requireContext().toast(R.string.toast_obstacle_submitted)
+            findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
     }
 
-    private fun allRequiredInfoEntered(): Boolean {
-        var allEntered = true
-        // Check if type was selected
-        if (select_obstacle_type_edit_text.text.toString() == "") {
-            allEntered = false
-            select_obstacle_type_layout.error =
-                getString(R.string.error_type_not_selected)
+    /** Checks whether all required obstacle information has been entered (type and location). */
+    private fun allRequiredInfoEntered(): Boolean =
+        if (select_obstacle_type_edit_text.text.toString().isBlank()) {
+            // Check if type was selected
+            select_obstacle_type_layout.error = getString(R.string.error_type_not_selected)
+            false
+        } else if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
+            // Check if location was selected
+            requireContext().toast(R.string.toast_location_required)
+            false
+        } else {
+            true
         }
-        // Check if location was selected
-        if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
-            allEntered = false
-            Toast.makeText(
-                requireContext(), getString(R.string.toast_location_required),
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        return allEntered
-    }
 
-    private fun populateRadioGroupTypeList(
-        radioGroup: RadioGroup,
-        obsTypeArray: Array<String>,
-        listLimit: Int = obsTypeArray.size,
-        addEmptyRadioButtonAtBottom: Boolean = true
-    ) {
-        // make sure any previous entries are removed
-        radioGroup.removeAllViews()
+    /**
+     * Populates the contents of the type selection dialog.
+     *
+     * @param onlyTop5 whether to show only the top 5 choices or all of them
+     * @param setSelected mark radio button with this value as checked; specifying this will
+     * show all types regardless of what value the onlyTop5 parameter has
+     */
+    private fun populateSelectionList(onlyTop5: Boolean, setSelected: String = "") {
+        val showOnlyTop5 = if (setSelected.isNotBlank()) false else onlyTop5
+
+        radioGroup.removeAllViews() // make sure any previous entries are removed
 
         // create view params for individual Radio Buttons
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-
+        val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         layoutParams.bottomMargin = 20
 
-        // populate radio group, respecting any limits on number of items required
+        // populate radio group, respecting any limits set on number of type; when a limit is
+        // specified, all types are set in the group, but the ones above the limit are marked as GONE
         obsTypeArray.forEachIndexed { i, obsType ->
-            radioGroup.addView(RadioButton(context).also { rb ->
-                rb.id = 1000 + i
+            radioGroup.addView(RadioButton(requireContext()).also { rb ->
+                rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
                 rb.text = obsType
                 // add more margin for last non-empty rb
                 if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
-                if (i >= listLimit) rb.visibility = View.GONE
+                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
             })
         }
 
-        // larger margin for last empty rb, to accommodate editText
-        layoutParams.bottomMargin = 75
+        layoutParams.bottomMargin = 75 // larger margin for last empty rb, to accommodate editText
 
-        if (addEmptyRadioButtonAtBottom) {
-            radioGroup.addView(RadioButton(context).also { rb ->
-                // empty text
-                rb.id = 1000 + obsTypeArray.size + 1
-                rb.layoutParams = layoutParams
-                rb.visibility = View.GONE
-            })
+        // add empty radio button (no text) at bottom
+        radioGroup.addView(RadioButton(requireContext()).also { rb ->
+            rb.id = ID_OFFSET + obsTypeArray.size + 1
+            rb.layoutParams = layoutParams
+            if (showOnlyTop5) rb.visibility = View.GONE
+            lastEmptyRadioButton = rb // get a reference to it
+        })
+
+        // get customEditText and set its visibility
+        customEditTextLayout = typeSelectionDialogLayout.type_custom_input_layout
+        customEditText = typeSelectionDialogLayout.type_custom_input_edittext
+        if (showOnlyTop5) {
+            customEditTextLayout.visibility = View.GONE
+        } else {
+            customEditTextLayout.visibility = View.VISIBLE
+        }
+
+        // set listeners to customEditText and radioGroup
+        customEditText.apply {
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) lastEmptyRadioButton.isChecked = true
+            }
+            setOnClickListener { lastEmptyRadioButton.isChecked = true }
+            addTextChangedListener { currentText ->
+                if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
+                lastEmptyRadioButton.isChecked = true // needed when text is set via setSelected
+            }
+        }
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId != lastEmptyRadioButton.id) {
+                radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    currentObstacle.obstacleType = rb.text.toString() // capture current selection
+                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                }
+                // remove focus and clear errors from customEditText
+                customEditText.apply {
+                    clearFocus(); hideKeyboard(); customEditTextLayout.error = null
+                }
+            } else {
+                // when checkedId == lastEmptyRadioButton.id select editText
+                customEditText.apply { requestFocus(); showKeyboard() }
+            }
+        }
+
+        // if setSelected is specified, mark appropriate radio button as checked; by doing this
+        // after the listeners above are set, dialog behaves the same as if this was a user action
+        if (setSelected.isNotBlank()) {
+            if (setSelected !in obsTypeArray) {
+                // type not in predefined list, it was provided by the user
+                // when setting the customEditText's text here, it automatically gains focus
+                customEditText.setText(setSelected)
+            } else {
+                // type in predefined list
+                radioGroup.findViewById<RadioButton>(ID_OFFSET + obsTypeArray.indexOf(setSelected))
+                    ?.let { rb ->
+                        rb.isChecked = true // mark corresponding rb as checked
+                        radioGroup.requestChildFocus(rb, rb) // scroll to it
+                    }
+            }
         }
     }
 
+    /**
+     * Retrieves alphabetical obstacle type array from resources.
+     *
+     * @return alphabetical obstacle type array
+     */
     private fun getAlphabeticalTypeArray(): Array<String> =
         resources.getStringArray(R.array.obstacle_types_array).toList().sorted().toTypedArray()
 
     /**
-     * Override of function required by map view.
+     * Transforms CNN results so they can be displayed in the UI, by sorting them and adding any
+     * types that are not part of the CNN; in case the results are empty (CNN failure), an
+     * alphabetical list is returned.
+     *
+     * TODO make this return Map instead of Array
+     * @param results processed CNN results
      */
+    private fun processCnnResults(results: Map<String, Float>? = null): Array<String> =
+        if (results.isNullOrEmpty()) {
+            val alphabetic = getAlphabeticalTypeArray().map { it to 0.0f }.toMap()
+            // for now convert to array
+            alphabetic.keys.toTypedArray()
+        } else {
+            // sort CNN results (largest to smallest probability)
+            val sorted = results.toList().sortedByDescending { (_, value) -> value }.toMap()
+            // again, for now convert to simple array
+            val sortedArray = sorted.keys.toTypedArray()
+            // add types that are not part of the CNN
+            val diff = getAlphabeticalTypeArray().filterNot {
+                sortedArray.toSet().contains(it)
+            }.sorted().toTypedArray()
+            sortedArray + diff
+        }
+
+    /** Toggles visibility of the image analysis indicator, and the other dialog contents. */
+    private fun toggleAnalysisIndicator() = typeSelectionDialogLayout.apply {
+        dialog_analysis_indicator?.toggleVisibility()
+        dialog_contents?.toggleVisibility()
+    }
+
+    /** Toggles visibility of the CNN explanation message, as well as the Show more button. */
+    private fun toggleCnnExplanationAndMoreButton() = typeSelectionDialogLayout.apply {
+        cnn_explanation?.toggleVisibility()
+        button_show_more_types?.toggleVisibility()
+    }
+
+    /** Override of function required by map view. */
     override fun onResume() {
-        super.onResume()
-        mapView.onResume()
+        super.onResume(); mapView.onResume()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onStart() {
-        super.onStart()
-        mapView.onStart()
+        super.onStart(); mapView.onStart()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onStop() {
-        super.onStop()
-        mapView.onStop()
+        super.onStop(); mapView.onStop()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
+        super.onDestroy(); mapView.onDestroy()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
+        super.onLowMemory(); mapView.onLowMemory()
     }
 
-    /**
-     * Override of function required by map view.
-     */
+    /** Override of function required by map view. */
     override fun onPause() {
-        super.onPause()
-        mapView.onPause()
+        super.onPause(); mapView.onPause()
+    }
+
+    private companion object {
+        const val ID_OFFSET = 100
     }
 }

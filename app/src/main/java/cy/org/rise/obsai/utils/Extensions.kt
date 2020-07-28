@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
 import android.view.inputmethod.InputMethodManager.SHOW_FORCED
+import android.widget.Toast
 import java.util.*
 
 /**
@@ -14,6 +15,7 @@ import java.util.*
  *
  * @param msg string for displaying next to current class name
  */
+@Suppress("unused")
 inline fun <reified T> T.TAG(msg: String = "") =
     T::class.java.simpleName + if (msg.isNotEmpty()) " ($msg)" else ""
 
@@ -73,25 +75,43 @@ fun Context.getUniqueAppInstallID(): String {
     return installUniqueID
 }
 
-// TODO: 11/07/20 add javadoc
+/**
+ * Provides an indication of whether the app has been already shown or not, based on a
+ * SharedPreference. If the preference does not exist yet, it is created with a default value of
+ * false.
+ *
+ * @param setToShown whether to set the preference to shown or not
+ * @return boolean of whether the app intro has been shown already or not
+ */
 fun Context.introStatus(setToShown: Boolean = false): Boolean {
     val shPref = this.getSharedPreferences(Constants.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE)
 
     // makes sure pref is created if it does not exist yet
-    if (!shPref.contains(Constants.INTRO_SHOWN_KEY))
+    if (!shPref.contains(Constants.INTRO_SHOWN_KEY)) {
         with(shPref.edit()) {
             putBoolean(Constants.INTRO_SHOWN_KEY, false)
             apply()
         }
+    }
 
-    if (setToShown)
+    if (setToShown) {
         with(shPref.edit()) {
             putBoolean(Constants.INTRO_SHOWN_KEY, true)
             apply()
         }
+    }
 
     return shPref.getBoolean(Constants.INTRO_SHOWN_KEY, false)
 }
+
+/**
+ * Allows showing a toast from wherever context is available.
+ *
+ * @param resId resource ID of toast message
+ * @param short whether to use duration = Toast.LENGTH_SHORT, default is Toast.LENGTH_LONG
+ */
+fun Context.toast(resId: Int, short: Boolean = false) =
+    Toast.makeText(this, resId, if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
 
 /**
  * Extension function that hides soft keyboard.
@@ -114,3 +134,10 @@ fun View.hideKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as Inp
  * */
 fun View.showKeyboard() = (context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
     .toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY)
+
+/**
+ * Toggles visibility of a view between View.VISIBLE and View.GONE.
+ */
+fun View.toggleVisibility() =
+    if (this.visibility == View.VISIBLE) this.visibility = View.GONE else this.visibility = View
+        .VISIBLE

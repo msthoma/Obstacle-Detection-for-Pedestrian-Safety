@@ -19,29 +19,28 @@ import kotlinx.coroutines.launch
  * @property savedStateHandle
  * @constructor
  *
- * @param obstacleRepository instance of [ObstacleRepository]
+ * @param rep instance of [ObstacleRepository]
  */
 class ObstacleViewModel internal constructor(
-    obstacleRepository: ObstacleRepository,
-    application: Application,
+    private val rep: ObstacleRepository,
+    private val app: Application,
     private val savedStateHandle: SavedStateHandle
-) : AndroidViewModel(application) {
-    private val rep = obstacleRepository
+) : AndroidViewModel(app) {
 
     /**
      * Location tracking as LiveData.
      */
-    val locationLiveData by lazy { LocationLiveData(application) }
+    val locationLiveData by lazy { LocationLiveData(app) }
 
     /**
      * Orientation tracking as LiveData.
      */
-    val orientationLiveData by lazy { OrientationLiveData(application) }
+    val orientationLiveData by lazy { OrientationLiveData(app) }
 
     /**
      * LiveData of obstacles in local db.
      */
-    val obstacles: LiveData<List<Obstacle>> = obstacleRepository.getAllObstaclesLive()
+    val obstacles: LiveData<List<Obstacle>> = rep.getAllObstaclesLive()
 
     /**
      * Inserts obstacle in Room database.
@@ -90,16 +89,15 @@ class ObstacleViewModel internal constructor(
     }
 
     /**
-     * Runs CNN classification on provided photo, and returns result as LiveData.
+     * Runs CNN classification on provided photo, and returns LiveData<Result>.
+     *
+     * See [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
+     * for use of Result.
      *
      * @param photoPath full path of the photo to analyze
      */
     fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
-        try {
-            emit(Result.success(rep.analyzePhotoWithCNN(photoPath)))
-        } catch (ex: Exception) {
-            emit(Result.failure(ex))
-        }
+        emit(kotlin.runCatching { rep.analyzePhotoWithCNN(photoPath) })
     }
 
 //    val allServerObstacles = liveData(Dispatchers.IO) {
