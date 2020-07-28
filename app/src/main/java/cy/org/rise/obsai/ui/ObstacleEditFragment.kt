@@ -33,6 +33,7 @@ import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.CYPRUS
 import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
 import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
+import cy.org.rise.obsai.utils.Constants.NICOSIA_CENTER
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.hideKeyboard
@@ -198,12 +199,7 @@ class ObstacleEditFragment : Fragment() {
                     )
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(35.169933, 33.361071),
-                            CITY_ZOOM_LEVEL
-                        )
-                    )
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
                 }
 
                 // Add map boundaries

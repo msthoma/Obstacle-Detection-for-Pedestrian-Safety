@@ -26,6 +26,7 @@ object Constants {
         LatLng(34.520142, 32.186723), // Southwest corner
         LatLng(35.738372, 34.644546) // Northeast corner
     )
+    val NICOSIA_CENTER = LatLng(35.169933, 33.361071)
     const val CITY_ZOOM_LEVEL = 12f
     const val DEFAULT_ZOOM_LEVEL = 16f
     const val MIN_ZOOM_LEVEL = 7.5f
