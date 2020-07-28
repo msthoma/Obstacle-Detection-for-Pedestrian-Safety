@@ -82,11 +82,8 @@ class ObstacleEditFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Set toolbar menu
-        setHasOptionsMenu(true)
-        // Save creation time
-        start = System.currentTimeMillis()
-
+        setHasOptionsMenu(true) // Set toolbar menu
+        start = System.currentTimeMillis() // Save creation time
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
@@ -189,7 +186,19 @@ class ObstacleEditFragment : Fragment() {
             )
         }
 
-        // Setup map view
+        setupMapView() // Setup map view
+
+        fabSubmit.setOnClickListener { checkAndSubmitObstacle() }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // display discard confirmation dialog on back press, and also on up press (when up
+            // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
+            // up here)
+            displayDiscardConfirmationDialog()
+        }
+    }
+
+    private fun setupMapView() {
         mapView = map
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
         mapView.getMapAsync { googleMap ->
@@ -274,17 +283,6 @@ class ObstacleEditFragment : Fragment() {
                     }
                 }
             }
-        }
-
-        fabSubmit.setOnClickListener {
-            checkAndSubmitObstacle()
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // display discard confirmation dialog on back press, and also on up press (when up
-            // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
-            // up here)
-            displayDiscardConfirmationDialog()
         }
     }
 
