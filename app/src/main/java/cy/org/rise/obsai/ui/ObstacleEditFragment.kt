@@ -298,12 +298,10 @@ class ObstacleEditFragment : Fragment() {
     /** Displays the obstacle type selection dialog. */
     private fun showTypeSelectionDialog() {
         // create dialog (re-created each time this function is called)
-        typeSelectionDialog = MaterialDialog(requireContext()).customView(
-            R.layout.type_selection_dialog,
-            scrollable = true
-        )
+        typeSelectionDialog = MaterialDialog(requireContext())
+            .customView(R.layout.type_selection_dialog, scrollable = true)
 
-        // get references to views that are of interest
+        // get references to views of interest
         typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
         radioGroup = typeSelectionDialogLayout.types_radio_group
 
@@ -361,7 +359,6 @@ class ObstacleEditFragment : Fragment() {
                 } catch (ex: IOException) {
                     Log.e(TAG(), "Error deleting obstacle photo", ex)
                 }
-
                 // by navigating back with the action below, the back stack is popped up to the
                 // list fragment, and so a back press there does not return the user back here
                 findNavController().navigate(
@@ -420,7 +417,6 @@ class ObstacleEditFragment : Fragment() {
                 if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
                 rb.layoutParams = layoutParams
                 if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
-                if (setSelected.isNotBlank() && obsType == setSelected) rb.isChecked = true
             })
         }
 
@@ -451,6 +447,7 @@ class ObstacleEditFragment : Fragment() {
             setOnClickListener { lastEmptyRadioButton.isChecked = true }
             addTextChangedListener { currentText ->
                 if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
+                lastEmptyRadioButton.isChecked = true // needed when text is set via setSelected
             }
         }
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -466,6 +463,17 @@ class ObstacleEditFragment : Fragment() {
             } else {
                 // when checkedId == lastEmptyRadioButton.id select editText
                 customEditText.apply { requestFocus(); showKeyboard() }
+            }
+        }
+
+        // if setSelected is specified, mark appropriate radio button as checked; by doing this
+        // after the listeners above are set, dialog behaves the same as if this was a user action
+        if (setSelected.isNotBlank()) {
+            if (setSelected !in obsTypeArray) {
+                customEditText.setText(setSelected)
+            } else {
+                radioGroup.findViewById<RadioButton>(ID_OFFSET + obsTypeArray.indexOf(setSelected))
+                    ?.let { it.isChecked = true }
             }
         }
     }
