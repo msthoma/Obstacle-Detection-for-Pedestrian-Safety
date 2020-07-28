@@ -167,10 +167,9 @@ class ObstacleEditFragment : Fragment() {
                 showTypeSelectionDialog()
                 // Show ALL types, alphabetic or based on CNN. Also set previously selected value.
                 // NOTE: if the user pressed cancel on the dialog initially, the obstacle type may
-                // be empty, but that is dealt with by the populateSelectionList() function
-                // TODO scroll to current selection if available
+                // be empty, but that is dealt with by the populateSelectionList() function below
                 populateSelectionList(onlyTop5 = false, setSelected = currentObstacle.obstacleType)
-                toggleAnalysisIndicator() // hide indicator
+                toggleAnalysisIndicator() // hide image analysis indicator
             }
             // clear errors when editText value changes
             addTextChangedListener { select_obstacle_type_layout.error = null }
@@ -226,8 +225,7 @@ class ObstacleEditFragment : Fragment() {
                     addMarker(MarkerOptions().position(latLng))
                     currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                     // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere? Or perhaps set it to 0
-                    //  also location accuracy
+                    //  somewhere? Or perhaps set it to 0. Also set location accuracy
                 }
 
                 // Make sure we still have location permission before enabling location layer on map
@@ -470,10 +468,16 @@ class ObstacleEditFragment : Fragment() {
         // after the listeners above are set, dialog behaves the same as if this was a user action
         if (setSelected.isNotBlank()) {
             if (setSelected !in obsTypeArray) {
+                // type not in predefined list, it was provided by the user
+                // when setting the customEditText's text here, it automatically gains focus
                 customEditText.setText(setSelected)
             } else {
+                // type in predefined list
                 radioGroup.findViewById<RadioButton>(ID_OFFSET + obsTypeArray.indexOf(setSelected))
-                    ?.let { it.isChecked = true }
+                    ?.let { rb ->
+                        rb.isChecked = true // mark corresponding rb as checked
+                        radioGroup.requestChildFocus(rb, rb) // scroll to it
+                    }
             }
         }
     }
