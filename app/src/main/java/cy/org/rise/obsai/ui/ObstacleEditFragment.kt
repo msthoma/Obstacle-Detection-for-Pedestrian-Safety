@@ -87,7 +87,6 @@ class ObstacleEditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_obstacle_edit, container, false)
     }
 
-    @SuppressLint("MissingPermission") // permission is checked below before it is used
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Get current obstacle and other views of interest
         currentObstacle = args.currentObstacle
@@ -198,6 +197,10 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Manages obstacle map view.
+     */
+    @SuppressLint("MissingPermission") // permission is checked below before it is used
     private fun setupMapView() {
         mapView = map
         mapView.onCreate(null) // TODO fix, here a mapViewBundle should be passed instead of null
