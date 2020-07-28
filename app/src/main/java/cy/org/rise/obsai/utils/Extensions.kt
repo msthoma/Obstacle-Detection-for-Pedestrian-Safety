@@ -73,7 +73,14 @@ fun Context.getUniqueAppInstallID(): String {
     return installUniqueID
 }
 
-// TODO: 11/07/20 add javadoc
+/**
+ * Provides an indication of whether the app has been already shown or not, based on a
+ * SharedPreference. If the preference does not exist yet, it is created with a default value of
+ * false.
+ *
+ * @param setToShown whether to set the preference to shown or not
+ * @return boolean of whether the app intro has been shown already or not
+ */
 fun Context.introStatus(setToShown: Boolean = false): Boolean {
     val shPref = this.getSharedPreferences(Constants.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE)
 
