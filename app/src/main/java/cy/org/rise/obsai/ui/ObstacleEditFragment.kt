@@ -325,9 +325,8 @@ class ObstacleEditFragment : Fragment() {
                             // text provided too short/empty
                             Toast.makeText(
                                 requireContext(),
-                                getString(R.string.toast_provide_valid_type),
-                                Toast
-                                    .LENGTH_SHORT
+                                R.string.toast_provide_valid_type,
+                                Toast.LENGTH_SHORT
                             ).show()
                             // focus on editText and set error
                             lastEmptyRadioButton.parent
@@ -343,9 +342,7 @@ class ObstacleEditFragment : Fragment() {
                 } else {
                     // -1 means none selected
                     Toast.makeText(
-                        requireContext(),
-                        getString(R.string.toast_make_selection),
-                        Toast.LENGTH_SHORT
+                        requireContext(), R.string.toast_make_selection, Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -355,7 +352,7 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
-    /** Shows confirmation dialog when back or up is presssed, or menu cancel action is selected. */
+    /** Shows confirmation dialog when back or up are pressed, or menu cancel action is selected. */
     private fun discardConfirmationDialog() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_discard_title)
@@ -384,7 +381,7 @@ class ObstacleEditFragment : Fragment() {
         if (allRequiredInfoEntered()) {
             viewModel.insertObstacle(currentObstacle)
             Toast.makeText(
-                requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
+                requireContext(), R.string.toast_obstacle_submitted, Toast.LENGTH_LONG
             ).show()
             findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
@@ -399,8 +396,7 @@ class ObstacleEditFragment : Fragment() {
         } else if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
             // Check if location was selected
             Toast.makeText(
-                requireContext(), getString(R.string.toast_location_required),
-                Toast.LENGTH_LONG
+                requireContext(), R.string.toast_location_required, Toast.LENGTH_LONG
             ).show()
             false
         } else {
