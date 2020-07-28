@@ -398,8 +398,8 @@ class ObstacleEditFragment : Fragment() {
      * Populates the contents of the type selection dialog.
      *
      * @param onlyTop5 whether to show only the top 5 choices or all of them
-     * @param setSelected mark radio button with this value as selected; specifying this will
-     * show all types regardless of the onlyTop5 parameter value
+     * @param setSelected mark radio button with this value as checked; specifying this will
+     * show all types regardless of what value the onlyTop5 parameter has
      */
     private fun populateSelectionList(onlyTop5: Boolean, setSelected: String = "") {
         val showOnlyTop5 = if (setSelected.isNotBlank()) false else onlyTop5
