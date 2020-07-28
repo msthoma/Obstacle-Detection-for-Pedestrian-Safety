@@ -103,7 +103,7 @@ class ObstacleEditFragment : Fragment() {
         currentObstacle = args.currentObstacle
 
         // If type is already available set it in editText, otherwise show selection dialog
-        if (currentObstacle.obstacleType != "") {
+        if (currentObstacle.obstacleType.isNotEmpty()) {
             typeEditText.setText(currentObstacle.obstacleType)
         } else {
             showTypeSelectionDialog()
@@ -131,45 +131,55 @@ class ObstacleEditFragment : Fragment() {
         // Send photo to CNN for classification, and listen for results
         viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
+
                 // TODO add slight delay here, so indicator is shown!!
                 // TODO also add time limit, if results are not available show alphabetical
                 // CNN FAILURE
                 cnnResult.onFailure {
                     Log.d(TAG("CNN failure"), it.toString())
-                    // fall back to an alphabetic type list
                     processCNNResults()
-                    // set radio group, showing ALL types
-                    populateRadioGroupTypeList(showOnlyTop5 = false)
-                    // hide indicator
-                    hideAnalysisIndicator()
+                    // make sure dialog is currently being displayed
+                    if (::typeSelectionDialog.isInitialized) {
+                        // set radio group, showing ALL types, falling back to the alphabetic list
+                        populateRadioGroupTypeList(showOnlyTop5 = false)
+                        // hide indicator
+                        hideAnalysisIndicator()
+                    }
                 }
                 // CNN SUCCESS
                 cnnResult.onSuccess { result ->
                     Log.d(TAG("CNN success"), result.toString())
                     processCNNResults(result)
-                    // set radio group with top 5
-                    populateRadioGroupTypeList(showOnlyTop5 = true)
-                    // hide indicator
-                    hideAnalysisIndicator()
-                    // show CNN explanation, More button (hidden by default)
-                    toggleCNNexplanationAndMoreButton()
-                    // add listener on show more button
-                    typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
-                        populateRadioGroupTypeList(showOnlyTop5 = false)
+
+                    // make sure dialog is currently being displayed
+                    if (::typeSelectionDialog.isInitialized) {
+                        // set radio group with top 5
+                        populateRadioGroupTypeList(showOnlyTop5 = true)
+                        // hide indicator
+                        hideAnalysisIndicator()
+                        // show CNN explanation, More button (hidden by default)
                         toggleCNNexplanationAndMoreButton()
+                        // add listener on show more button
+                        typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
+                            populateRadioGroupTypeList(showOnlyTop5 = false)
+                            toggleCNNexplanationAndMoreButton()
+                        }
+
+                        // save CNN results in obstacle, but first sanitize keys
+                        currentObstacle.typeProbabilitiesCNN = result.map { (k, v) ->
+                            k.filterNot {
+                                setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                            } to v
+                        }.toMap()
+
+                        // save processing time
+                        currentObstacle.timeUntilCnnResults =
+                            System.currentTimeMillis() - fragCreationTime
+                        Log.d(
+                            TAG(),
+                            "${currentObstacle.timeUntilCnnResults} millis until CNN results"
+                        )
                     }
-
-                    // save CNN results in obstacle, but first sanitize keys
-                    currentObstacle.typeProbabilitiesCNN = result.map { (k, v) ->
-                        k.filterNot {
-                            setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                        } to v
-                    }.toMap()
-
-                    // save processing time
-                    currentObstacle.timeUntilCnnResults =
-                        System.currentTimeMillis() - fragCreationTime
-                    Log.d(TAG(), "${currentObstacle.timeUntilCnnResults} millis until CNN results")
                 }
             })
 
