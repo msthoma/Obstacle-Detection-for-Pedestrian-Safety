@@ -137,7 +137,7 @@ class ObstacleEditFragment : Fragment() {
                 // CNN FAILURE
                 cnnResult.onFailure {
                     Log.d(TAG("CNN failure"), it.toString())
-                    processCnnResults()
+                    obsTypeArray = processCnnResults()
 
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
@@ -150,7 +150,7 @@ class ObstacleEditFragment : Fragment() {
                 // CNN SUCCESS
                 cnnResult.onSuccess { result ->
                     Log.d(TAG("CNN success"), result.toString())
-                    processCnnResults(result)
+                    obsTypeArray = processCnnResults(result)
 
                     // make sure dialog is currently being displayed
                     if (::typeSelectionDialog.isInitialized) {
@@ -256,17 +256,17 @@ class ObstacleEditFragment : Fragment() {
                     currentObstacle.setLocationFromLatLong(latLng)
                 }
 
-                // make sure we still have location permission, if we don't, don't enable my
-                // location layer on map
+                // Make sure we still have location permission before enabling location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
-                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer {
-                        Log.d(TAG(), "new location")
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLoc ->
                         if (locationNotManuallyEdited) {
                             clear()
-                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
+                            addMarker(
+                                MarkerOptions().position(LatLng(newLoc.latitude, newLoc.longitude))
+                            )
                             currentObstacle.location.apply {
-                                this.latitude = it.latitude
-                                this.longitude = it.longitude
+                                this.latitude = newLoc.latitude
+                                this.longitude = newLoc.longitude
                             }
                         }
                     })
