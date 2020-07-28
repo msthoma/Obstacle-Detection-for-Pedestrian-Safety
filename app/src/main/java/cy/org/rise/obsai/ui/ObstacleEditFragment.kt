@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.*
+import android.widget.EditText
+import android.widget.LinearLayout.LayoutParams
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -146,23 +150,24 @@ class ObstacleEditFragment : Fragment() {
                             toggleCnnExplanationAndMoreButton()
                         }
 
-                        // save CNN results in obstacle, but first sanitize keys
-                        currentObstacle.typeProbabilitiesCNN = result.map { (k, v) ->
-                            k.filterNot {
-                                setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                            } to v
-                        }.toMap()
-
-                        // save processing time
-                        currentObstacle.timeUntilCnnResults = System.currentTimeMillis() - start
+                        // save CNN results in obstacle, as well as the CNN processing time
+                        currentObstacle.apply {
+                            typeProbabilitiesCNN = result.map { (k, v) ->
+                                // sanitize types so they play well when JSONified
+                                k.filterNot {
+                                    setOf(' ', '(', ')', '.', '-', '/').contains(it)
+                                } to v
+                            }.toMap()
+                            timeUntilCnnResults = System.currentTimeMillis() - start
+                        }
                         Log.d(TAG(), "${currentObstacle.timeUntilCnnResults} ms until CNN results")
                     }
                 }
             })
 
         typeEditText.apply {
-            // Show custom dialog for obstacle type selection. When the dialog is triggered from
-            // here, it means it was shown before, so it is shown expanded by default
+            // When type selection dialog is triggered from here, it means it was shown before,
+            // so it is shown expanded by default
             setOnClickListener {
                 showTypeSelectionDialog()
                 populateSelectionList(onlyTop5 = false) // show ALL types, alphabetic or based on CNN
@@ -170,9 +175,8 @@ class ObstacleEditFragment : Fragment() {
                 // TODO set previously selected value!!! NOTE: if the user pressed cancel initially,
                 //  the value may be empty! ALSO, scroll to selection, add all this to populate
             }
-            addTextChangedListener {
-                select_obstacle_type_layout.error = null // clear errors when editText value changes
-            }
+            // clear errors when editText value changes
+            addTextChangedListener { select_obstacle_type_layout.error = null }
         }
 
         button_edit_photo.setOnClickListener {
@@ -189,12 +193,9 @@ class ObstacleEditFragment : Fragment() {
 
         fabSubmit.setOnClickListener { checkAndSubmitObstacle() }
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // display discard confirmation dialog on back press, and also on up press (when up
-            // is pressed, overriding onSupportNavigateUp in MainActivity enables re-routing of
-            // up here)
-            displayDiscardConfirmationDialog()
-        }
+        // display discard confirmation dialog when up is pressed (overriding onSupportNavigateUp
+        // in MainActivity enables re-routing of up callback here)
+        requireActivity().onBackPressedDispatcher.addCallback(this) { discardConfirmationDialog() }
     }
 
     /**
@@ -231,11 +232,10 @@ class ObstacleEditFragment : Fragment() {
                     clear()
                     addMarker(MarkerOptions().position(latLng))
 
-                    // Save location indicated by user
                     // TODO here the altitude should be updated as well, does maps provided it
                     //  somewhere? Or perhaps set it to 0
                     //  also location accuracy
-                    currentObstacle.setLocationFromLatLong(latLng)
+                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                 }
 
                 // Make sure we still have location permission before enabling location layer on map
@@ -255,9 +255,7 @@ class ObstacleEditFragment : Fragment() {
 
                     // Enable myLocation layer and button
                     isMyLocationEnabled = true
-                    setOnMyLocationButtonClickListener {
-                        false
-                    }
+                    setOnMyLocationButtonClickListener { false }
                     setOnMyLocationClickListener {
                         // TODO 24/07/20 here move marker to current location if user clicks on
                         //  location dot, but only after the user has manually changed location
@@ -300,7 +298,7 @@ class ObstacleEditFragment : Fragment() {
                 true
             }
             R.id.action_cancel_edit_obstacle -> {
-                displayDiscardConfirmationDialog()
+                discardConfirmationDialog()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -339,7 +337,9 @@ class ObstacleEditFragment : Fragment() {
                         } else {
                             // text provided too short/empty
                             Toast.makeText(
-                                context, getString(R.string.toast_provide_valid_type), Toast
+                                requireContext(),
+                                getString(R.string.toast_provide_valid_type),
+                                Toast
                                     .LENGTH_SHORT
                             ).show()
                             // focus on editText and set error
@@ -356,7 +356,7 @@ class ObstacleEditFragment : Fragment() {
                 } else {
                     // -1 means none selected
                     Toast.makeText(
-                        context,
+                        requireContext(),
                         getString(R.string.toast_make_selection),
                         Toast.LENGTH_SHORT
                     ).show()
@@ -372,7 +372,7 @@ class ObstacleEditFragment : Fragment() {
      * Shows confirmation dialog in the cases of back press, up press, or menu cancel action
      * selected.
      */
-    private fun displayDiscardConfirmationDialog() {
+    private fun discardConfirmationDialog() {
         MaterialDialog(requireContext()).show {
             title(R.string.dialog_discard_title)
             message(R.string.dialog_discard_msg)
@@ -407,9 +407,7 @@ class ObstacleEditFragment : Fragment() {
             Toast.makeText(
                 requireContext(), getString(R.string.toast_obstacle_submitted), Toast.LENGTH_LONG
             ).show()
-            findNavController().navigate(
-                R.id.action_obstacleEditFragment_to_obstacleListFragment
-            )
+            findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
         }
     }
 
@@ -420,8 +418,7 @@ class ObstacleEditFragment : Fragment() {
     private fun allRequiredInfoEntered(): Boolean =
         if (select_obstacle_type_edit_text.text.toString().isBlank()) {
             // Check if type was selected
-            select_obstacle_type_layout.error =
-                getString(R.string.error_type_not_selected)
+            select_obstacle_type_layout.error = getString(R.string.error_type_not_selected)
             false
         } else if (currentObstacle.location.latitude == 0.0 || currentObstacle.location.longitude == 0.0) {
             // Check if location was selected
@@ -441,20 +438,15 @@ class ObstacleEditFragment : Fragment() {
      * TODO add option to set current selected
      */
     private fun populateSelectionList(onlyTop5: Boolean) {
-        // make sure any previous entries are removed
-        radioGroup.removeAllViews()
+        radioGroup.removeAllViews() // make sure any previous entries are removed
 
         // create view params for individual Radio Buttons
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-
+        val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         layoutParams.bottomMargin = 20
 
         // populate radio group, respecting any limits on number of items required
         obsTypeArray.forEachIndexed { i, obsType ->
-            radioGroup.addView(RadioButton(context).also { rb ->
+            radioGroup.addView(RadioButton(requireContext()).also { rb ->
                 rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
                 rb.text = obsType
                 // add more margin for last non-empty rb
@@ -467,7 +459,7 @@ class ObstacleEditFragment : Fragment() {
         layoutParams.bottomMargin = 75 // larger margin for last empty rb, to accommodate editText
 
         // add empty radio button (no text) at bottom
-        radioGroup.addView(RadioButton(context).also { rb ->
+        radioGroup.addView(RadioButton(requireContext()).also { rb ->
             rb.id = ID_OFFSET + obsTypeArray.size + 1
             rb.layoutParams = layoutParams
             if (onlyTop5) rb.visibility = View.GONE
@@ -483,37 +475,29 @@ class ObstacleEditFragment : Fragment() {
             customEditTextLayout.visibility = View.VISIBLE
         }
 
-        // set listeners
+        // set listeners to customEditText and radioGroup
         customEditText.apply {
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) lastEmptyRadioButton.isChecked = true
             }
-            setOnClickListener {
-                lastEmptyRadioButton.isChecked = true
-            }
+            setOnClickListener { lastEmptyRadioButton.isChecked = true }
             addTextChangedListener { currentText ->
                 if (currentText.toString().trim().length > 2) customEditTextLayout.error = null
             }
         }
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != lastEmptyRadioButton.id) {
-                // capture current selection
                 radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
-                    currentObstacle.obstacleType = rb.text.toString()
+                    currentObstacle.obstacleType = rb.text.toString() // capture current selection
                     Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
                 }
-                // clear any focus and error on customEditText
+                // remove focus and clear errors from customEditText
                 customEditText.apply {
-                    clearFocus()
-                    hideKeyboard()
-                    customEditTextLayout.error = null
+                    clearFocus(); hideKeyboard(); customEditTextLayout.error = null
                 }
             } else {
                 // when checkedId == lastEmptyRadioButton.id select editText
-                customEditText.apply {
-                    requestFocus()
-                    showKeyboard()
-                }
+                customEditText.apply { requestFocus(); showKeyboard() }
             }
         }
     }
