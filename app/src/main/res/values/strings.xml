@@ -95,6 +95,7 @@
     <string name="title_location_map">Location (long click on map to edit)</string>
     <string name="title_obstacle_photo">Obstacle photo</string>
     <string name="press_plus_to_report_obstacle">Press + to report an obstacle</string>
+    <string name="toast_deleted_everything">Deleted everything</string>
 
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>

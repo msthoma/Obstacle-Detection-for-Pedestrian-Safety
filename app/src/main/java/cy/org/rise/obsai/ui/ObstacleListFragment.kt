@@ -140,14 +140,18 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.analyzePhotoWithCNN("").observe(viewLifecycleOwner, Observer { res ->
-                    res.onSuccess {
-                        Log.d(TAG("SUCCESS"), "$it")
-                    }
-                    res.onFailure {
-                        Log.d(TAG("FAILURE"), "$it")
-                    }
-                })
+                viewModel.analyzePhotoWithCNN(
+                    "/storage/emulated/0/Android/data/cy.org." +
+                            "rise.obsai/files/Pictures/JPEG_20200729_1243046940642852856588851.jpg"
+                )
+                    .observe(viewLifecycleOwner, Observer { res ->
+                        res.onSuccess {
+                            Log.d(TAG("SUCCESS"), "$it")
+                        }
+                        res.onFailure {
+                            Log.d(TAG("FAILURE"), "$it")
+                        }
+                    })
                 true
             }
 //            R.id.action_sign_in -> {
@@ -186,7 +190,7 @@ class ObstacleListFragment : Fragment() {
                         icon(R.drawable.ic_warning_black_24dp)
                         positiveButton(R.string.dialog_delete_all_positive) {
                             viewModel.deleteAll()
-                            Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, getString(R.string.toast_deleted_everything), Toast.LENGTH_SHORT).show()
                             dismiss()
                         }
                         negativeButton(R.string.dialog_cancel_button) { dismiss() }

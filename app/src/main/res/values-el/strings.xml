@@ -71,6 +71,7 @@
     <string name="detail_getting_compass">Πληρ. Πυξίδας…</string>
     <string name="detail_getting_location">Πληρ. Τοποθεσίας…</string>
     <string name="detail_getting_orientation">Πληρ. Προσανατολισμού…</string>
+    <string name="toast_deleted_everything">Διαγράφηκαν όλα</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->
