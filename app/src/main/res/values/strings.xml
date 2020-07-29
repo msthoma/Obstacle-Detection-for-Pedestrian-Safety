@@ -87,6 +87,7 @@
     <string name="toast_error_saving_cropped">Error saving cropped photo, please try again</string>
     <string name="toast_location_required">Please select obstacle location on map</string>
     <string name="toast_make_selection">Please make a selection</string>
+    <string name="toast_not_implemented">Not implemented yet</string>
     <string name="toast_obstacle_submitted">Obstacle submitted!</string>
     <string name="toast_provide_valid_type">Please provide a valid type</string>
 
