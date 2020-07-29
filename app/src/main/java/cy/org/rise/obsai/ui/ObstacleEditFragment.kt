@@ -136,8 +136,14 @@ class ObstacleEditFragment : Fragment() {
                         toggleAnalysisIndicator() // hide image analysis indicator
                         toggleCnnExplanationAndMoreButton() // show CNN explanation & More button
                         typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
-                            // listen for clicks on More button
-                            populateSelectionList(onlyTop5 = false)
+                            // listen for clicks on More button; note that the populate function
+                            // is called with the setSelected parameter filled here, which covers
+                            // the case when the user selects an option from the top 5 list, and
+                            // then clicks more; this allows the proper rb to be marked as checked
+                            populateSelectionList(
+                                onlyTop5 = false,
+                                setSelected = currentObstacle.obstacleType
+                            )
                             toggleCnnExplanationAndMoreButton()
                         }
 
@@ -440,6 +446,7 @@ class ObstacleEditFragment : Fragment() {
         // set listeners to customEditText and radioGroup
         customEditText.apply {
             setOnFocusChangeListener { _, hasFocus ->
+                Log.d(TAG("focus listener"), "hasFocus $hasFocus")
                 if (hasFocus) lastEmptyRadioButton.isChecked = true
             }
             setOnClickListener { lastEmptyRadioButton.isChecked = true }
@@ -451,6 +458,10 @@ class ObstacleEditFragment : Fragment() {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != lastEmptyRadioButton.id) {
                 radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    // marking the rb as checked here is required in the case where the user
+                    // selects an option from the top 5 list, and then clicks more; without
+                    // marking the rb as checked here, it is unchecked for some reason
+                    if (!rb.isChecked) rb.isChecked = true
                     currentObstacle.obstacleType = rb.text.toString() // capture current selection
                     Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
                 }
@@ -475,6 +486,9 @@ class ObstacleEditFragment : Fragment() {
                 // type in predefined list
                 radioGroup.findViewById<RadioButton>(ID_OFFSET + obsTypeArray.indexOf(setSelected))
                     ?.let { rb ->
+                        // marking the rb below as checked fails for some reason, so it's marked
+                        // again as checked in the OnCheckedChangeListener of the radioGroup
+                        // above, where for some reason it works
                         rb.isChecked = true // mark corresponding rb as checked
                         radioGroup.requestChildFocus(rb, rb) // scroll to it
                     }
