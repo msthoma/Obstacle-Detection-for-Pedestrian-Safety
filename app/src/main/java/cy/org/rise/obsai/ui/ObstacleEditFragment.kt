@@ -37,7 +37,7 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.*
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
-import kotlinx.android.synthetic.main.type_selection_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_type_selection.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -203,7 +203,7 @@ class ObstacleEditFragment : Fragment() {
         mapView.getMapAsync { googleMap ->
 
             val obsPosition = currentObstacle.getLocationAsLatLong()
-
+            Log.d(TAG(), "currentObstacle location $obsPosition, ${currentObstacle.location}")
             googleMap.apply {
                 if (obsPosition.latitude != 0.0) {
                     // Add obstacle marker
@@ -298,7 +298,7 @@ class ObstacleEditFragment : Fragment() {
     private fun showTypeSelectionDialog() {
         // create dialog (re-created each time this function is called)
         typeSelectionDialog = MaterialDialog(requireContext())
-            .customView(R.layout.type_selection_dialog, scrollable = true)
+            .customView(R.layout.dialog_type_selection, scrollable = true)
 
         // get references to views of interest
         typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
