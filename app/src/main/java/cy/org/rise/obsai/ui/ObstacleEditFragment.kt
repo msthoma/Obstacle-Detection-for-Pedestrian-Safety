@@ -266,7 +266,7 @@ class ObstacleEditFragment : Fragment() {
                     fabSubmit.shrink() // Shrink FAB when user is moving the map around
                     lifecycleScope.launch {
                         // TODO add more checks here, check if it is extended or not
-                        delay(8000)
+                        delay(FAB_DELAY)
                         fabSubmit.extend()
                     }
                 }
@@ -407,7 +407,7 @@ class ObstacleEditFragment : Fragment() {
 
         // create view params for individual Radio Buttons
         val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        layoutParams.bottomMargin = 20
+        layoutParams.bottomMargin = MARGIN_NORMAL
 
         // populate radio group, respecting any limits set on number of type; when a limit is
         // specified, all types are set in the group, but the ones above the limit are marked as GONE
@@ -416,13 +416,13 @@ class ObstacleEditFragment : Fragment() {
                 rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
                 rb.text = obsType
                 // add more margin for last non-empty rb
-                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
+                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = MARGIN_MEDIUM
                 rb.layoutParams = layoutParams
-                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
+                if (showOnlyTop5 && i >= NUMBER_OF_TOP_CHOICES) rb.visibility = View.GONE
             })
         }
 
-        layoutParams.bottomMargin = 75 // larger margin for last empty rb, to accommodate editText
+        layoutParams.bottomMargin = MARGIN_LARGE // more margin for last rb, to accommodate editText
 
         // add empty radio button (no text) at bottom
         radioGroup.addView(RadioButton(requireContext()).also { rb ->
@@ -563,5 +563,10 @@ class ObstacleEditFragment : Fragment() {
 
     private companion object {
         const val ID_OFFSET = 100
+        const val MARGIN_NORMAL = 20
+        const val MARGIN_MEDIUM = 40
+        const val MARGIN_LARGE = 75
+        const val NUMBER_OF_TOP_CHOICES = 5
+        const val FAB_DELAY = 800L
     }
 }
