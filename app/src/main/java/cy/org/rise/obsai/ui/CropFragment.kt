@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
+import cy.org.rise.obsai.utils.toast
 import kotlinx.android.synthetic.main.fragment_crop.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -121,11 +121,7 @@ class CropFragment : Fragment() {
                         // This is back on the Main thread
                         Log.d(TAG(), "Saving cropped photo result: $success")
                         if (!success) {
-                            Toast.makeText(
-                                context,
-                                getString(R.string.toast_error_saving_cropped),
-                                Toast.LENGTH_LONG
-                            ).show()
+                            requireContext().toast(R.string.toast_error_saving_cropped)
                         }
                         // Navigate back to Εdit fragment
                         findNavController().navigate(
