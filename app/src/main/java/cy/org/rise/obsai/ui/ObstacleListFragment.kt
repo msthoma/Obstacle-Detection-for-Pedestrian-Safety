@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -30,6 +29,7 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
+import cy.org.rise.obsai.utils.toast
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
 /**
@@ -190,7 +190,7 @@ class ObstacleListFragment : Fragment() {
                         icon(R.drawable.ic_warning_black_24dp)
                         positiveButton(R.string.dialog_delete_all_positive) {
                             viewModel.deleteAll()
-                            Toast.makeText(context, getString(R.string.toast_deleted_everything), Toast.LENGTH_SHORT).show()
+                            requireContext().toast(R.string.toast_deleted_everything)
                             dismiss()
                         }
                         negativeButton(R.string.dialog_cancel_button) { dismiss() }
