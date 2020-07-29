@@ -26,6 +26,7 @@ import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -35,11 +36,6 @@ import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.*
-import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.CYPRUS
-import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.NICOSIA_CENTER
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.android.synthetic.main.type_selection_dialog.view.*
 import kotlinx.coroutines.delay
@@ -568,5 +564,16 @@ class ObstacleEditFragment : Fragment() {
         const val MARGIN_LARGE = 75
         const val NUMBER_OF_TOP_CHOICES = 5
         const val FAB_DELAY = 800L
+
+        // Map related constants
+        val CYPRUS = LatLngBounds(
+            // Bounds for map view, for only the general area of Cyprus
+            LatLng(34.520142, 32.186723), // Southwest corner
+            LatLng(35.738372, 34.644546) // Northeast corner
+        )
+        val NICOSIA_CENTER = LatLng(35.169933, 33.361071)
+        const val CITY_ZOOM_LEVEL = 12f
+        const val DEFAULT_ZOOM_LEVEL = 16f
+        const val MIN_ZOOM_LEVEL = 7.5f
     }
 }
