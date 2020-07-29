@@ -59,7 +59,6 @@ import kotlin.properties.Delegates
  * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
-    // TODO 28/07/20 DON"T save type in obstacle!! use another variable
     private lateinit var currentObstacle: Obstacle
     private lateinit var customEditText: TextInputEditText
     private lateinit var customEditTextLayout: TextInputLayout
@@ -306,6 +305,7 @@ class ObstacleEditFragment : Fragment() {
         // set up the other properties of the dialog
         typeSelectionDialog.apply {
             noAutoDismiss() // important, otherwise dialog is dismissed without the checks below
+            cancelOnTouchOutside(false) // prevent cancelling by clicking outside of dialog
             title(text = getString(R.string.dialog_select_type_title))
             positiveButton(R.string.dialog_OK_button) {
                 val checkedId = radioGroup.checkedRadioButtonId
@@ -337,7 +337,11 @@ class ObstacleEditFragment : Fragment() {
                     requireContext().toast(R.string.toast_make_selection, short = true)
                 }
             }
-            negativeButton(R.string.dialog_cancel_button) { dismiss() }
+            negativeButton(R.string.dialog_cancel_button) {
+                // revert type to any previous selection if dialog is dismissed via Cancel button
+                currentObstacle.obstacleType = typeEditText.editableText.toString().trim()
+                dismiss()
+            }
             lifecycleOwner(viewLifecycleOwner)
             show()
         }
