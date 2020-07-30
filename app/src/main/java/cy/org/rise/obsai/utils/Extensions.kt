@@ -109,7 +109,8 @@ fun Context.introStatus(setToShown: Boolean = false): Boolean {
  * Allows showing a toast from wherever context is available.
  *
  * @param resId resource ID of toast message
- * @param short whether to use duration = Toast.LENGTH_SHORT, default is Toast.LENGTH_LONG
+ * @param duration one of either Toast.LENGTH_SHORT or Toast.LENGTH_LONG (default), representing
+ * the duration the toast will stay on screen
  */
 fun Context.toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_LONG) =
     Toast.makeText(this, resId, duration).show()
