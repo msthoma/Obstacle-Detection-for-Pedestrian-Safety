@@ -1,4 +1,4 @@
-package cy.org.rise.obsai.tflite
+package cy.org.rise.obsai.data
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

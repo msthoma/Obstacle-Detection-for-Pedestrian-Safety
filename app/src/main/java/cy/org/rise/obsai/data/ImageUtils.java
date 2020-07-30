@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package cy.org.rise.obsai.tflite;
+package cy.org.rise.obsai.data;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
