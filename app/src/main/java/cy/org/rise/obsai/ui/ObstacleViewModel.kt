@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
  * App view model.
  *
  * @property savedStateHandle
- * @constructor
- *
+ * @constructor Creates a new view model.
+ * @param app application context
  * @param rep instance of [ObstacleRepository]
  */
 class ObstacleViewModel internal constructor(
@@ -27,19 +27,13 @@ class ObstacleViewModel internal constructor(
     private val savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-    /**
-     * Location tracking as LiveData.
-     */
+    /** Location tracking as LiveData. */
     val locationLiveData by lazy { LocationLiveData(app) }
 
-    /**
-     * Orientation tracking as LiveData.
-     */
+    /** Orientation tracking as LiveData. */
     val orientationLiveData by lazy { OrientationLiveData(app) }
 
-    /**
-     * LiveData of obstacles in local db.
-     */
+    /** LiveData of obstacles in local db. */
     val obstacles: LiveData<List<Obstacle>> = rep.getAllObstaclesLive()
 
     /**
@@ -56,6 +50,8 @@ class ObstacleViewModel internal constructor(
             rep.insertObstacle(obstacle)
 
             // push to server
+            rep.postToiNicosiaWM(obstacle)
+
 //            try {
 //                val res = rep.postToiNicosia(obstacle)
 //                Log.d("server push res", res.toString())
@@ -64,19 +60,15 @@ class ObstacleViewModel internal constructor(
 //                    rep.updateObstacle(obstacle)
 //                }
 //            } catch (e: Exception) {
-//                // TODO here catch other exceptions as well, e.g. for inserting obstacle to
 //                //  Fiware, not only uploading photo to Minio
 //                obstacle.uploadStatus = "Error"
 //                rep.updateObstacle(obstacle)
 //                Log.e(TAG(), "push to server failed", e)
 //            }
-            rep.postToiNicosiaWM(obstacle)
         }
     }
 
-    /**
-     * Deletes all obstacles from local db.
-     */
+    /** Deletes all obstacles from local db. */
     fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
     /**
