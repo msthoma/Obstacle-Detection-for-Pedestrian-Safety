@@ -1,6 +1,5 @@
 package cy.org.rise.obsai.ui
 
-
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -33,17 +32,16 @@ import java.io.FileOutputStream
  */
 @ExperimentalStdlibApi
 class CropFragment : Fragment() {
-
-    // Arguments from the Edit fragment
-    private val args: ObstacleEditFragmentArgs by navArgs()
+    private val args: ObstacleEditFragmentArgs by navArgs() // Args from the Edit fragment
 
     private lateinit var currentObstacle: Obstacle
     private lateinit var cropImageView: CropImageView
-
     private lateinit var photoExifTags: Map<String, String>
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Set toolbar menu
         setHasOptionsMenu(true)
@@ -67,17 +65,15 @@ class CropFragment : Fragment() {
 
         photoFile?.also { file ->
             // Setup crop view
-            context?.also { context ->
-                cropImageView.apply {
-                    setImageUriAsync(
-                        FileProvider.getUriForFile(
-                            context, "com.example.android.fileprovider", file
-                        )
+            cropImageView.apply {
+                setImageUriAsync(
+                    FileProvider.getUriForFile(
+                        requireContext(), "com.example.android.fileprovider", file
                     )
-                    isAutoZoomEnabled = true
-                    scaleType = CropImageView.ScaleType.FIT_CENTER
-                    isShowProgressBar = true
-                }
+                )
+                isAutoZoomEnabled = true
+                scaleType = CropImageView.ScaleType.FIT_CENTER
+                isShowProgressBar = true
             }
 
             // Attempt to preserve Exif tags of photo, if they exist
@@ -120,10 +116,8 @@ class CropFragment : Fragment() {
                     }.let { success ->
                         // This is back on the Main thread
                         Log.d(TAG(), "Saving cropped photo result: $success")
-                        if (!success) {
-                            requireContext().toast(R.string.toast_error_saving_cropped)
-                        }
-                        // Navigate back to Εdit fragment
+                        if (!success) requireContext().toast(R.string.toast_error_saving_cropped)
+                        // Navigate back to Edit fragment
                         findNavController().navigate(
                             CropFragmentDirections.actionCropFragmentToObstacleEditFragment(
                                 currentObstacle
@@ -142,7 +136,7 @@ class CropFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_rotate_photo -> {
-                // Rotate photo 90o clockwise
+                // Rotate photo 90° clockwise
                 cropImageView.rotateImage(90)
                 true
             }
@@ -164,18 +158,19 @@ class CropFragment : Fragment() {
         }
     }
 
+    /** Provides a list of possible ExifTags, stored in an assets file. */
     private fun getPossibleExifTags(): List<String>? {
         // Returns a list with the values of all possible Exif tags. The list is read from a .txt
         // file in Assets. I extracted the list from the source of the following page:
         // https://developer.android.com/reference/kotlin/androidx/exifinterface/media/ExifInterface
         // using https://regex101.com/ with the Regex py expression r"&quot;([a-zA-Z]{2,})&quot;"
         return try {
-            val ins = requireContext().assets?.open("ExifTags.txt")
+            val inputStream = requireContext().assets?.open("ExifTags.txt")
             val tagList = mutableListOf<String>()
-            ins?.bufferedReader()?.forEachLine {
+            inputStream?.bufferedReader()?.forEachLine {
                 tagList.add(it)
             }
-            ins?.close()
+            inputStream?.close()
             // Here I'm removing the Orientation tag, since the cropping library already deals
             // with it when saving the cropped photo
             tagList.remove("Orientation")
