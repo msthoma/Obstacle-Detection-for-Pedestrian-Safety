@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import cy.org.rise.obsai.api.RestObstacle
+import cy.org.rise.obsai.data.CnnClassifier
 import cy.org.rise.obsai.data.LocationLiveData
 import cy.org.rise.obsai.data.OrientationLiveData
 import cy.org.rise.obsai.db.Obstacle
@@ -12,6 +13,7 @@ import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.tensorflow.lite.support.common.FileUtil
 
 /**
  * App view model.
@@ -32,6 +34,18 @@ class ObstacleViewModel internal constructor(
 
     /** Orientation tracking as LiveData. */
     val orientationLiveData by lazy { OrientationLiveData(app) }
+
+    /** CNN classifier. */
+    private val cnnClassifier by lazy {
+        CnnClassifier(
+            tfLiteModel = FileUtil.loadMappedFile(app, "cnn128RGB.tflite"),
+            cnnLabels = FileUtil.loadLabels(app, "cnnRGB_labels.txt")
+        )
+    }
+
+    fun classifyPhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
+        emit(kotlin.runCatching { cnnClassifier.classifyPhoto(photoPath) })
+    }
 
     /** LiveData of obstacles in local db. */
     val obstacles: LiveData<List<Obstacle>> = rep.getAllObstaclesLive()
