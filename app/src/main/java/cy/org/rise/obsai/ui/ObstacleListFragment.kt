@@ -140,7 +140,7 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.analyzePhotoWithCNN(
+                viewModel.classifyPhotoWithCNN(
                     "/storage/emulated/0/Android/data/cy.org." +
                             "rise.obsai/files/Pictures/JPEG_20200729_1243046940642852856588851.jpg"
                 )
