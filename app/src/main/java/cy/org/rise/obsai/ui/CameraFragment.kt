@@ -58,41 +58,39 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // set camera settings
-        // most of the other settings for CameraView are set in the activity's xml layout
+        // set camera settings, most of the other settings for CameraView are set in fragment's xml
         cameraView = camera_view
-        cameraView.setLifecycleOwner(this)
+        cameraView.apply {
+            setLifecycleOwner(this@CameraFragment)
 
-        cameraView.addCameraListener(object : CameraListener() {
-            override fun onPictureTaken(result: PictureResult) {
-
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    Log.e(TAG(), "Error creating image file")
-                    null
-                }
-
-                photoFile?.let { tempPhotoFile ->
-                    result.toFile(tempPhotoFile) { finalPhotoFile ->
-                        finalPhotoFile?.let {
-                            val action = CameraFragmentDirections
-                                .actionCameraFragmentToObstacleEditFragment(
-                                    createCurrentObstacle()
-                                )
-                            findNavController().navigate(action)
-                        } ?: throw IOException("Unable to save obstacle photo")
+            addCameraListener(object : CameraListener() {
+                override fun onPictureTaken(result: PictureResult) {
+                    // create file and save captured photo
+                    try {
+                        createImageFile()
+                    } catch (ex: IOException) {
+                        Log.e(TAG(), "Error creating image file", ex)
+                        null
+                    }?.let { tempPhotoFile ->
+                        result.toFile(tempPhotoFile) { finalPhotoFile ->
+                            finalPhotoFile?.let {
+                                val action = CameraFragmentDirections
+                                    .actionCameraFragmentToObstacleEditFragment(
+                                        createCurrentObstacle()
+                                    )
+                                findNavController().navigate(action)
+                            } ?: throw IOException("Unable to save obstacle photo")
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
 
         camera_button.setOnClickListener {
             Log.d(TAG(), "camera button pressed")
@@ -115,7 +113,7 @@ class CameraFragment : Fragment() {
                         )
                     }
 
-                    // this saves location in photo's EXIF data
+                    // save location in photo's EXIF data
                     cameraView.setLocation(currentLocation.latitude, currentLocation.longitude)
                 })
             }
