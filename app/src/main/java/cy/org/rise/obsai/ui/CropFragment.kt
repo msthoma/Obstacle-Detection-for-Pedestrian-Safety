@@ -68,7 +68,7 @@ class CropFragment : Fragment() {
             cropImageView.apply {
                 setImageUriAsync(
                     FileProvider.getUriForFile(
-                        requireContext(), "com.example.android.fileprovider", file
+                        requireContext(), getString(R.string.fileprovider_authority), file
                     )
                 )
                 isAutoZoomEnabled = true
