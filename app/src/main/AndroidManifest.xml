@@ -21,10 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--android:usesCleartextTraffic="true"-->
-        <!--TODO usesCleartextTraffic should only be used for testing over http, remove when
-        app switches to https-->
-
         <activity
             android:name=".ui.appIntro.AppIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
