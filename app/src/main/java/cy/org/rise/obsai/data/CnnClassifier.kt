@@ -15,6 +15,14 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.MappedByteBuffer
 import kotlin.math.min
 
+/**
+ * CNN classifier class.
+ *
+ * @property cnnLabels the labels the CNN outputs probabilities for, usually loaded from an
+ * asset file
+ * @constructor Creates a CNN classifier by loading the related files from the app's assets.
+ * @param tfLiteModel the CNN TensorFlow Lite (.tflite) model file, as a MappedByteBuffer
+ */
 class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: MutableList<String>) {
     private val tfLiteInterpreter = Interpreter(tfLiteModel, Interpreter.Options())
 
@@ -38,6 +46,12 @@ class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: Mutabl
         TensorProcessor.Builder().add(NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD))
             .build()
 
+    /**
+     * Runs CNN classification on provided photo.
+     *
+     * @param photoPath full path of the photo to analyze
+     * @return map of labels and their probabilities according to the CNN
+     */
     fun classifyPhoto(photoPath: String): Map<String, Float> {
         val options = BitmapFactory.Options()
         options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -62,6 +76,7 @@ class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: Mutabl
             .mapWithFloatValue
     }
 
+    /** Closes the TFLite interpreter, releasing the resources it holds. */
     fun close() = tfLiteInterpreter.close()
 
     private companion object {
