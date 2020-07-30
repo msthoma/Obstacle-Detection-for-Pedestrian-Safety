@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -25,6 +26,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -233,32 +235,18 @@ class ObstacleEditFragment : Fragment() {
 
                 // Make sure we still have location permission before enabling location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
-                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLoc ->
-                        if (locationNotManuallyEdited) {
-                            clear()
-                            addMarker(
-                                MarkerOptions().position(LatLng(newLoc.latitude, newLoc.longitude))
-                            )
-                            currentObstacle.location.apply {
-                                this.latitude = newLoc.latitude
-                                this.longitude = newLoc.longitude
-                            }
-                        }
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLocation ->
+                        // Continue tracking and updating obstacle location, unless user manually
+                        // edited its location
+                        if (locationNotManuallyEdited) updateLocation(newLocation, googleMap)
                     })
 
                     isMyLocationEnabled = true // Enable myLocation layer and button
                     setOnMyLocationButtonClickListener { false }
-                    setOnMyLocationClickListener {
-                        // Triggered when the user clicks on my location dot
+                    setOnMyLocationClickListener { newLocation ->
+                        // When the user clicks on my location dot, move the obstacle location there
                         if (!locationNotManuallyEdited) {
-                            clear()
-                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
-                            currentObstacle.location.apply {
-                                this.latitude = it.latitude
-                                this.longitude = it.longitude
-                                currentObstacle.locationAccuracy = it.accuracy
-                                currentObstacle.altitude = it.altitude
-                            }
+                            updateLocation(newLocation, googleMap)
                             locationNotManuallyEdited = true
                         }
                     }
@@ -291,6 +279,17 @@ class ObstacleEditFragment : Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun updateLocation(loc: Location, googleMap: GoogleMap) {
+        googleMap.clear()
+        googleMap.addMarker(MarkerOptions().position(LatLng(loc.latitude, loc.longitude)))
+        currentObstacle.apply {
+            location.latitude = loc.latitude
+            location.longitude = loc.longitude
+            locationAccuracy = loc.accuracy
+            altitude = loc.altitude
         }
     }
 
