@@ -207,7 +207,7 @@ class ObstacleEditFragment : Fragment() {
         mapView.getMapAsync { googleMap ->
 
             val obsPosition = currentObstacle.getLocationAsLatLong()
-            Log.d(TAG(), "currentObstacle location $obsPosition, ${currentObstacle.location}")
+
             googleMap.apply {
                 if (obsPosition.latitude != 0.0) {
                     // Add obstacle marker
@@ -284,6 +284,12 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates current obstacle location, as well as its marker on the map.
+     *
+     * @param loc new location
+     * @param googleMap map view to update location marker
+     */
     private fun updateLocation(loc: Location, googleMap: GoogleMap) {
         googleMap.clear()
         googleMap.addMarker(MarkerOptions().position(LatLng(loc.latitude, loc.longitude)))
@@ -384,12 +390,12 @@ class ObstacleEditFragment : Fragment() {
             submitDialog.show()
             lifecycleScope.launch {
                 viewModel.insertObstacle(currentObstacle)
-                delay(2000L)
+                delay(1000L)
                 submitDialogLayout.apply {
                     submitProgressBar?.visibility = View.INVISIBLE
                     submissionDone?.visibility = View.VISIBLE
                 }
-                delay(2000L)
+                delay(1000L)
                 requireContext().toast(R.string.toast_obstacle_submitted)
                 findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
             }
@@ -461,7 +467,6 @@ class ObstacleEditFragment : Fragment() {
         // set listeners to customEditText and radioGroup
         customEditText.apply {
             setOnFocusChangeListener { _, hasFocus ->
-                Log.d(TAG("focus listener"), "hasFocus $hasFocus")
                 if (hasFocus) lastEmptyRadioButton.isChecked = true
             }
             setOnClickListener { lastEmptyRadioButton.isChecked = true }
