@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.LinearLayout.LayoutParams
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -337,7 +338,7 @@ class ObstacleEditFragment : Fragment() {
                     }
                 } else {
                     // -1 means none selected
-                    requireContext().toast(R.string.toast_make_selection, short = true)
+                    requireContext().toast(R.string.toast_make_selection, Toast.LENGTH_SHORT)
                 }
             }
             negativeButton(R.string.dialog_cancel_button) {
