@@ -70,6 +70,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var typeEditText: EditText
     private lateinit var typeSelectionDialog: MaterialDialog
     private lateinit var typeSelectionDialogLayout: ConstraintLayout
+
     private val args: ObstacleEditFragmentArgs by navArgs()
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -213,15 +214,15 @@ class ObstacleEditFragment : Fragment() {
                     // Add obstacle marker
                     addMarker(MarkerOptions().position(obsPosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, DEFAULT_ZOOM_LEVEL))
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, ZOOM_LEVEL_DEFAULT))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, ZOOM_LEVEL_CITY))
                 }
 
                 setLatLngBoundsForCameraTarget(CYPRUS) // Add map boundaries
 
-                setMinZoomPreference(MIN_ZOOM_LEVEL) // Set min zoom (1 is world, 20 buildings)
+                setMinZoomPreference(ZOOM_LEVEL_MIN) // Set min zoom (1 is world, 20 buildings)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
@@ -258,7 +259,7 @@ class ObstacleEditFragment : Fragment() {
                     fabSubmit.shrink() // Shrink FAB when user is moving the map around
                     lifecycleScope.launch {
                         // TODO add more checks here, check if it is extended or not
-                        delay(FAB_DELAY)
+                        delay(DELAY_FAB)
                         fabSubmit.extend()
                     }
                 }
@@ -390,12 +391,12 @@ class ObstacleEditFragment : Fragment() {
             submitDialog.show()
             lifecycleScope.launch {
                 viewModel.insertObstacle(currentObstacle)
-                delay(1000L)
+                delay(DELAY_SUBMIT)
                 submitDialogLayout.apply {
                     submitProgressBar?.visibility = View.INVISIBLE
                     submissionDone?.visibility = View.VISIBLE
                 }
-                delay(1000L)
+                delay(DELAY_SUBMIT)
                 requireContext().toast(R.string.toast_obstacle_submitted)
                 findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
             }
@@ -597,7 +598,10 @@ class ObstacleEditFragment : Fragment() {
         const val MARGIN_MEDIUM = 40
         const val MARGIN_LARGE = 75
         const val NUMBER_OF_TOP_CHOICES = 5
-        const val FAB_DELAY = 800L
+
+        // Time constants
+        const val DELAY_FAB = 5000L
+        const val DELAY_SUBMIT = 1000L
 
         // Map related constants
         val CYPRUS = LatLngBounds(
@@ -606,8 +610,8 @@ class ObstacleEditFragment : Fragment() {
             LatLng(35.738372, 34.644546) // Northeast corner
         )
         val NICOSIA_CENTER = LatLng(35.169933, 33.361071)
-        const val CITY_ZOOM_LEVEL = 12f
-        const val DEFAULT_ZOOM_LEVEL = 16f
-        const val MIN_ZOOM_LEVEL = 7.5f
+        const val ZOOM_LEVEL_CITY = 12f
+        const val ZOOM_LEVEL_DEFAULT = 16f
+        const val ZOOM_LEVEL_MIN = 7.5f
     }
 }
