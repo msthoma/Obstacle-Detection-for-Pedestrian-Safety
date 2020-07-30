@@ -91,9 +91,3 @@ class OrientationLiveData(context: Context) : LiveData<OrientationReadings>(), S
         }
     }
 }
-
-data class OrientationReadings(
-    val accelerometer: FloatArray,
-    val compass: FloatArray,
-    val orientation: FloatArray
-)
