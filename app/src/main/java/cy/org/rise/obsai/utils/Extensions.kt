@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
 import android.view.inputmethod.InputMethodManager.SHOW_FORCED
 import android.widget.Toast
+import androidx.annotation.StringRes
 import java.util.*
 
 /**
@@ -110,8 +111,8 @@ fun Context.introStatus(setToShown: Boolean = false): Boolean {
  * @param resId resource ID of toast message
  * @param short whether to use duration = Toast.LENGTH_SHORT, default is Toast.LENGTH_LONG
  */
-fun Context.toast(resId: Int, short: Boolean = false) =
-    Toast.makeText(this, resId, if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
+fun Context.toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_LONG) =
+    Toast.makeText(this, resId, duration).show()
 
 /**
  * Extension function that hides soft keyboard.
