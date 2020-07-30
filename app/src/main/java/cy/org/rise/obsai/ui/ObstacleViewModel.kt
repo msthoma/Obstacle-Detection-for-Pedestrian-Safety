@@ -4,10 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import cy.org.rise.obsai.api.RestObstacle
+import cy.org.rise.obsai.data.LocationLiveData
+import cy.org.rise.obsai.data.OrientationLiveData
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRepository
-import cy.org.rise.obsai.utils.LocationLiveData
-import cy.org.rise.obsai.utils.OrientationLiveData
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
