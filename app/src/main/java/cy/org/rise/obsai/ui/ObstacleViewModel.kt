@@ -132,4 +132,10 @@ class ObstacleViewModel internal constructor(
 //        Log.d(TAG(), faceArray[0]?.confidence().toString())
 //        return faceArray
 //    }
+
+    /** Override to make sure the cnnClassifier is closed when the VM is cleared. */
+    override fun onCleared() {
+        super.onCleared()
+        if (lazyCnnClassifier.isInitialized()) cnnClassifier.close()
+    }
 }
