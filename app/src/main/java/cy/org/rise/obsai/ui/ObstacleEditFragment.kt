@@ -249,10 +249,6 @@ class ObstacleEditFragment : Fragment() {
                     isMyLocationEnabled = true // Enable myLocation layer and button
                     setOnMyLocationButtonClickListener { false }
                     setOnMyLocationClickListener {
-                        // TODO 24/07/20 here move marker to current location if user clicks on
-                        //  location dot, but only after the user has manually changed location
-                        //  by long clicking on map. Also maybe afterwards re-make marker to
-                        //  follow location dot?
                         if (!locationNotManuallyEdited) {
                             clear()
                             addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
