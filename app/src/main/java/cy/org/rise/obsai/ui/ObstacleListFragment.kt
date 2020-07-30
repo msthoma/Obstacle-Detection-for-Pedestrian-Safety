@@ -35,7 +35,6 @@ import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 /**
  * Displays a list with current obstacles.
  */
-@ExperimentalStdlibApi
 class ObstacleListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
@@ -293,20 +292,6 @@ class ObstacleListFragment : Fragment() {
         (context.getSystemService(Context.LOCATION_SERVICE) as LocationManager).isProviderEnabled(
             LocationManager.GPS_PROVIDER
         )
-
-    // creates a random label-probability map to simulate CNN output
-    // TODO: 23/07/20 remove
-    private fun generateRandomMap(): Map<String, Float> {
-        val stringArray = resources.getStringArray(R.array.obstacle_types_array)
-        return buildMap {
-            stringArray.forEach { obsType ->
-                val filtered = obsType.filterNot {
-                    setOf(' ', '(', ')', '.', '-', '/').contains(it)
-                }
-                this[filtered] = 0.0f
-            }
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
