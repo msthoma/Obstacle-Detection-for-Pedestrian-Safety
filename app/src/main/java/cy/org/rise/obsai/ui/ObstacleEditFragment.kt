@@ -223,12 +223,12 @@ class ObstacleEditFragment : Fragment() {
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
-                    locationNotManuallyEdited = false
                     clear()
                     addMarker(MarkerOptions().position(latLng))
                     currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
                     // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere? Or perhaps set it to 0. Also set location accuracy
+                    //  somewhere? Or perhaps set it to 0. Also location accuracy
+                    locationNotManuallyEdited = false
                 }
 
                 // Make sure we still have location permission before enabling location layer on map
@@ -249,13 +249,15 @@ class ObstacleEditFragment : Fragment() {
                     isMyLocationEnabled = true // Enable myLocation layer and button
                     setOnMyLocationButtonClickListener { false }
                     setOnMyLocationClickListener {
+                        // Triggered when the user clicks on my location dot
                         if (!locationNotManuallyEdited) {
                             clear()
                             addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
                             currentObstacle.location.apply {
                                 this.latitude = it.latitude
                                 this.longitude = it.longitude
-                                // TODO 24/07/20 include altitude, accuracy
+                                currentObstacle.locationAccuracy = it.accuracy
+                                currentObstacle.altitude = it.altitude
                             }
                             locationNotManuallyEdited = true
                         }
