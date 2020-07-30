@@ -16,11 +16,6 @@ import java.nio.MappedByteBuffer
 import kotlin.math.min
 
 class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: MutableList<String>) {
-    val IMAGE_MEAN = 0.0f
-    val IMAGE_STD = 255.0f
-    val PROBABILITY_MEAN = 0.0f
-    val PROBABILITY_STD = 1.0f
-
     private val tflite = Interpreter(tfLiteModel, Interpreter.Options())
 
     private val imageTensorIndex = 0
@@ -66,5 +61,12 @@ class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: Mutabl
         // return map of labels and their predicted probabilities
         return TensorLabel(cnnLabels, probabilityProcessor.process(outputProbabilityBuffer))
             .mapWithFloatValue
+    }
+
+    private companion object {
+        const val IMAGE_MEAN = 0.0f
+        const val IMAGE_STD = 255.0f
+        const val PROBABILITY_MEAN = 0.0f
+        const val PROBABILITY_STD = 1.0f
     }
 }
