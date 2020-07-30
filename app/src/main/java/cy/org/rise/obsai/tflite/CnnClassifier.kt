@@ -16,17 +16,18 @@ import java.nio.MappedByteBuffer
 import kotlin.math.min
 
 class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: MutableList<String>) {
-    private val tflite = Interpreter(tfLiteModel, Interpreter.Options())
+    private val tfLiteInterpreter = Interpreter(tfLiteModel, Interpreter.Options())
 
     private val imageTensorIndex = 0
-    private val imageShape = tflite.getInputTensor(imageTensorIndex).shape()
+    private val imageShape = tfLiteInterpreter.getInputTensor(imageTensorIndex).shape()
     private val imageSizeY = imageShape[1]
     private val imageSizeX = imageShape[2]
 
-    private val imageDataType = tflite.getInputTensor(imageTensorIndex).dataType()
+    private val imageDataType = tfLiteInterpreter.getInputTensor(imageTensorIndex).dataType()
     private val probabilityTensorIndex = 0
-    private val probabilityShape = tflite.getOutputTensor(probabilityTensorIndex).shape()
-    private val probabilityDataType = tflite.getOutputTensor(probabilityTensorIndex).dataType()
+    private val probabilityShape = tfLiteInterpreter.getOutputTensor(probabilityTensorIndex).shape()
+    private val probabilityDataType =
+        tfLiteInterpreter.getOutputTensor(probabilityTensorIndex).dataType()
 
     private var inputImageBuffer = TensorImage(imageDataType)
 
@@ -54,9 +55,7 @@ class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: Mutabl
         inputImageBuffer = imageProcessor.process(inputImageBuffer)
 
         // run classification
-        tflite.run(inputImageBuffer.buffer, outputProbabilityBuffer.buffer.rewind())
-
-        tflite.close()
+        tfLiteInterpreter.run(inputImageBuffer.buffer, outputProbabilityBuffer.buffer.rewind())
 
         // return map of labels and their predicted probabilities
         return TensorLabel(cnnLabels, probabilityProcessor.process(outputProbabilityBuffer))
