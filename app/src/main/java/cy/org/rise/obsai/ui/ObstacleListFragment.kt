@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -30,6 +29,7 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.introStatus
+import cy.org.rise.obsai.utils.toast
 import kotlinx.android.synthetic.main.fragment_obstacle_list.*
 
 /**
@@ -140,14 +140,18 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.analyzePhotoWithCNN("").observe(viewLifecycleOwner, Observer { res ->
-                    res.onSuccess {
-                        Log.d(TAG("SUCCESS"), "$it")
-                    }
-                    res.onFailure {
-                        Log.d(TAG("FAILURE"), "$it")
-                    }
-                })
+                viewModel.analyzePhotoWithCNN(
+                    "/storage/emulated/0/Android/data/cy.org." +
+                            "rise.obsai/files/Pictures/JPEG_20200729_1243046940642852856588851.jpg"
+                )
+                    .observe(viewLifecycleOwner, Observer { res ->
+                        res.onSuccess {
+                            Log.d(TAG("SUCCESS"), "$it")
+                        }
+                        res.onFailure {
+                            Log.d(TAG("FAILURE"), "$it")
+                        }
+                    })
                 true
             }
 //            R.id.action_sign_in -> {
@@ -186,7 +190,7 @@ class ObstacleListFragment : Fragment() {
                         icon(R.drawable.ic_warning_black_24dp)
                         positiveButton(R.string.dialog_delete_all_positive) {
                             viewModel.deleteAll()
-                            Toast.makeText(context, "Deleted everything", Toast.LENGTH_SHORT).show()
+                            requireContext().toast(R.string.toast_deleted_everything)
                             dismiss()
                         }
                         negativeButton(R.string.dialog_cancel_button) { dismiss() }

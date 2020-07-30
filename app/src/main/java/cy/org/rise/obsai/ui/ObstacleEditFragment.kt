@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -8,6 +9,7 @@ import android.widget.EditText
 import android.widget.LinearLayout.LayoutParams
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -24,8 +26,10 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -35,13 +39,9 @@ import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.*
-import cy.org.rise.obsai.utils.Constants.CITY_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.CYPRUS
-import cy.org.rise.obsai.utils.Constants.DEFAULT_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.MIN_ZOOM_LEVEL
-import cy.org.rise.obsai.utils.Constants.NICOSIA_CENTER
+import kotlinx.android.synthetic.main.dialog_submission_progress.view.*
+import kotlinx.android.synthetic.main.dialog_type_selection.view.*
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
-import kotlinx.android.synthetic.main.type_selection_dialog.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -59,7 +59,6 @@ import kotlin.properties.Delegates
  * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
-    // TODO 28/07/20 DON"T save type in obstacle!! use another variable
     private lateinit var currentObstacle: Obstacle
     private lateinit var customEditText: TextInputEditText
     private lateinit var customEditTextLayout: TextInputLayout
@@ -71,6 +70,7 @@ class ObstacleEditFragment : Fragment() {
     private lateinit var typeEditText: EditText
     private lateinit var typeSelectionDialog: MaterialDialog
     private lateinit var typeSelectionDialogLayout: ConstraintLayout
+
     private val args: ObstacleEditFragmentArgs by navArgs()
     private val viewModel: ObstacleViewModel by viewModels {
         InjectorUtils.provideObstacleViewModelFactory(this)
@@ -141,8 +141,14 @@ class ObstacleEditFragment : Fragment() {
                         toggleAnalysisIndicator() // hide image analysis indicator
                         toggleCnnExplanationAndMoreButton() // show CNN explanation & More button
                         typeSelectionDialogLayout.button_show_more_types?.setOnClickListener {
-                            // listen for clicks on More button
-                            populateSelectionList(onlyTop5 = false)
+                            // listen for clicks on More button; note that the populate function
+                            // is called with the setSelected parameter filled here, which covers
+                            // the case when the user selects an option from the top 5 list, and
+                            // then clicks more; this allows the proper rb to be marked as checked
+                            populateSelectionList(
+                                onlyTop5 = false,
+                                setSelected = currentObstacle.obstacleType
+                            )
                             toggleCnnExplanationAndMoreButton()
                         }
 
@@ -208,56 +214,42 @@ class ObstacleEditFragment : Fragment() {
                     // Add obstacle marker
                     addMarker(MarkerOptions().position(obsPosition).title("Marker"))
                     // Move map camera to above obstacle position
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, DEFAULT_ZOOM_LEVEL))
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(obsPosition, ZOOM_LEVEL_DEFAULT))
                 } else {
                     // In case location is empty, move camera above the general area of Nicosia
-                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, CITY_ZOOM_LEVEL))
+                    moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, ZOOM_LEVEL_CITY))
                 }
 
                 setLatLngBoundsForCameraTarget(CYPRUS) // Add map boundaries
 
-                setMinZoomPreference(MIN_ZOOM_LEVEL) // Set min zoom (1 is world, 20 buildings)
+                setMinZoomPreference(ZOOM_LEVEL_MIN) // Set min zoom (1 is world, 20 buildings)
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
+                    // Convert LatLng to Location, to reuse the fun below that requires Location
+                    updateLocation(
+                        Location("").apply {
+                            latitude = latLng.latitude; longitude = latLng.longitude
+                        },
+                        googleMap
+                    )
                     locationNotManuallyEdited = false
-                    clear()
-                    addMarker(MarkerOptions().position(latLng))
-                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
-                    // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere? Or perhaps set it to 0. Also set location accuracy
                 }
 
                 // Make sure we still have location permission before enabling location layer on map
                 if (isAllGranted(Permission.ACCESS_FINE_LOCATION)) {
-                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLoc ->
-                        if (locationNotManuallyEdited) {
-                            clear()
-                            addMarker(
-                                MarkerOptions().position(LatLng(newLoc.latitude, newLoc.longitude))
-                            )
-                            currentObstacle.location.apply {
-                                this.latitude = newLoc.latitude
-                                this.longitude = newLoc.longitude
-                            }
-                        }
+                    viewModel.locationLiveData.observe(viewLifecycleOwner, Observer { newLocation ->
+                        // Continue tracking and updating obstacle location, unless user manually
+                        // edited its location
+                        if (locationNotManuallyEdited) updateLocation(newLocation, googleMap)
                     })
 
                     isMyLocationEnabled = true // Enable myLocation layer and button
                     setOnMyLocationButtonClickListener { false }
-                    setOnMyLocationClickListener {
-                        // TODO 24/07/20 here move marker to current location if user clicks on
-                        //  location dot, but only after the user has manually changed location
-                        //  by long clicking on map. Also maybe afterwards re-make marker to
-                        //  follow location dot?
+                    setOnMyLocationClickListener { newLocation ->
+                        // When the user clicks on my location dot, move the obstacle location there
                         if (!locationNotManuallyEdited) {
-                            clear()
-                            addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)))
-                            currentObstacle.location.apply {
-                                this.latitude = it.latitude
-                                this.longitude = it.longitude
-                                // TODO 24/07/20 include altitude, accuracy
-                            }
+                            updateLocation(newLocation, googleMap)
                             locationNotManuallyEdited = true
                         }
                     }
@@ -267,7 +259,7 @@ class ObstacleEditFragment : Fragment() {
                     fabSubmit.shrink() // Shrink FAB when user is moving the map around
                     lifecycleScope.launch {
                         // TODO add more checks here, check if it is extended or not
-                        delay(8000)
+                        delay(DELAY_FAB)
                         fabSubmit.extend()
                     }
                 }
@@ -293,11 +285,28 @@ class ObstacleEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates current obstacle location, as well as its marker on the map.
+     *
+     * @param loc new location
+     * @param googleMap map view to update location marker
+     */
+    private fun updateLocation(loc: Location, googleMap: GoogleMap) {
+        googleMap.clear()
+        googleMap.addMarker(MarkerOptions().position(LatLng(loc.latitude, loc.longitude)))
+        currentObstacle.apply {
+            location.latitude = loc.latitude
+            location.longitude = loc.longitude
+            locationAccuracy = loc.accuracy
+            altitude = loc.altitude
+        }
+    }
+
     /** Displays the obstacle type selection dialog. */
     private fun showTypeSelectionDialog() {
         // create dialog (re-created each time this function is called)
         typeSelectionDialog = MaterialDialog(requireContext())
-            .customView(R.layout.type_selection_dialog, scrollable = true)
+            .customView(R.layout.dialog_type_selection, scrollable = true)
 
         // get references to views of interest
         typeSelectionDialogLayout = typeSelectionDialog.getCustomView() as ConstraintLayout
@@ -306,6 +315,7 @@ class ObstacleEditFragment : Fragment() {
         // set up the other properties of the dialog
         typeSelectionDialog.apply {
             noAutoDismiss() // important, otherwise dialog is dismissed without the checks below
+            cancelOnTouchOutside(false) // prevent cancelling by clicking outside of dialog
             title(text = getString(R.string.dialog_select_type_title))
             positiveButton(R.string.dialog_OK_button) {
                 val checkedId = radioGroup.checkedRadioButtonId
@@ -334,10 +344,14 @@ class ObstacleEditFragment : Fragment() {
                     }
                 } else {
                     // -1 means none selected
-                    requireContext().toast(R.string.toast_make_selection, short = true)
+                    requireContext().toast(R.string.toast_make_selection, Toast.LENGTH_SHORT)
                 }
             }
-            negativeButton(R.string.dialog_cancel_button) { dismiss() }
+            negativeButton(R.string.dialog_cancel_button) {
+                // revert type to any previous selection if dialog is dismissed via Cancel button
+                currentObstacle.obstacleType = typeEditText.editableText.toString().trim()
+                dismiss()
+            }
             lifecycleOwner(viewLifecycleOwner)
             show()
         }
@@ -369,9 +383,23 @@ class ObstacleEditFragment : Fragment() {
     /** Submits current obstacle, provided that all required information has been entered. */
     private fun checkAndSubmitObstacle() {
         if (allRequiredInfoEntered()) {
-            viewModel.insertObstacle(currentObstacle)
-            requireContext().toast(R.string.toast_obstacle_submitted)
-            findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+            val submitDialog =
+                MaterialDialog(requireContext()).customView(R.layout.dialog_submission_progress)
+            val submitDialogLayout = submitDialog.getCustomView()
+            submitDialog.cancelOnTouchOutside(false)
+            submitDialog.lifecycleOwner(viewLifecycleOwner)
+            submitDialog.show()
+            lifecycleScope.launch {
+                viewModel.insertObstacle(currentObstacle)
+                delay(DELAY_SUBMIT)
+                submitDialogLayout.apply {
+                    submitProgressBar?.visibility = View.INVISIBLE
+                    submissionDone?.visibility = View.VISIBLE
+                }
+                delay(DELAY_SUBMIT)
+                requireContext().toast(R.string.toast_obstacle_submitted)
+                findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+            }
         }
     }
 
@@ -403,7 +431,7 @@ class ObstacleEditFragment : Fragment() {
 
         // create view params for individual Radio Buttons
         val layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        layoutParams.bottomMargin = 20
+        layoutParams.bottomMargin = MARGIN_NORMAL
 
         // populate radio group, respecting any limits set on number of type; when a limit is
         // specified, all types are set in the group, but the ones above the limit are marked as GONE
@@ -412,13 +440,13 @@ class ObstacleEditFragment : Fragment() {
                 rb.id = ID_OFFSET + i // set radio button IDs in the form of ID_OFFSET + i (ints)
                 rb.text = obsType
                 // add more margin for last non-empty rb
-                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = 40
+                if (i == obsTypeArray.size - 1) layoutParams.bottomMargin = MARGIN_MEDIUM
                 rb.layoutParams = layoutParams
-                if (showOnlyTop5 && i >= 5) rb.visibility = View.GONE
+                if (showOnlyTop5 && i >= NUMBER_OF_TOP_CHOICES) rb.visibility = View.GONE
             })
         }
 
-        layoutParams.bottomMargin = 75 // larger margin for last empty rb, to accommodate editText
+        layoutParams.bottomMargin = MARGIN_LARGE // more margin for last rb, to accommodate editText
 
         // add empty radio button (no text) at bottom
         radioGroup.addView(RadioButton(requireContext()).also { rb ->
@@ -451,6 +479,10 @@ class ObstacleEditFragment : Fragment() {
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             if (checkedId != lastEmptyRadioButton.id) {
                 radioGroup.findViewById<RadioButton>(checkedId).also { rb ->
+                    // marking the rb as checked here is required in the case where the user
+                    // selects an option from the top 5 list, and then clicks more; without
+                    // marking the rb as checked here, it is unchecked for some reason
+                    if (!rb.isChecked) rb.isChecked = true
                     currentObstacle.obstacleType = rb.text.toString() // capture current selection
                     Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
                 }
@@ -475,6 +507,9 @@ class ObstacleEditFragment : Fragment() {
                 // type in predefined list
                 radioGroup.findViewById<RadioButton>(ID_OFFSET + obsTypeArray.indexOf(setSelected))
                     ?.let { rb ->
+                        // marking the rb below as checked fails for some reason, so it's marked
+                        // again as checked in the OnCheckedChangeListener of the radioGroup
+                        // above, where for some reason it works
                         rb.isChecked = true // mark corresponding rb as checked
                         radioGroup.requestChildFocus(rb, rb) // scroll to it
                     }
@@ -559,5 +594,24 @@ class ObstacleEditFragment : Fragment() {
 
     private companion object {
         const val ID_OFFSET = 100
+        const val MARGIN_NORMAL = 20
+        const val MARGIN_MEDIUM = 40
+        const val MARGIN_LARGE = 75
+        const val NUMBER_OF_TOP_CHOICES = 5
+
+        // Time constants
+        const val DELAY_FAB = 5000L
+        const val DELAY_SUBMIT = 1000L
+
+        // Map related constants
+        val CYPRUS = LatLngBounds(
+            // Bounds for map view, for only the general area of Cyprus
+            LatLng(34.520142, 32.186723), // Southwest corner
+            LatLng(35.738372, 34.644546) // Northeast corner
+        )
+        val NICOSIA_CENTER = LatLng(35.169933, 33.361071)
+        const val ZOOM_LEVEL_CITY = 12f
+        const val ZOOM_LEVEL_DEFAULT = 16f
+        const val ZOOM_LEVEL_MIN = 7.5f
     }
 }

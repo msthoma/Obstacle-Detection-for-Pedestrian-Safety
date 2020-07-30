@@ -34,7 +34,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 17
-        def versionPatch = 0
+        def versionPatch = 1
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -187,7 +187,7 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // WorkManager
-    def work_version = "2.3.4"
+    def work_version = "2.4.0"
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // empty library below fixes work manager's conflict with guava, see https://stackoverflow.com/q/56639529/
