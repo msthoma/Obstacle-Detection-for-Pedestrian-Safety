@@ -1,5 +1,14 @@
 <changelog>
     <release
+        date="2020-07-30"
+        versionCode="1"
+        versionName="Version 0.17.1">
+        <info>Added dialog with progress indication during obstacle submission</info>
+        <info>Fixes in re-designed type selection dialog</info>
+        <info>Other bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-28"
         versionCode="1"
         versionName="Version 0.17.0">
