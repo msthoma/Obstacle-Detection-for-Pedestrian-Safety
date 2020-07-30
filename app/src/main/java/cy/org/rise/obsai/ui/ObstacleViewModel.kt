@@ -35,13 +35,18 @@ class ObstacleViewModel internal constructor(
     /** Orientation tracking as LiveData. */
     val orientationLiveData by lazy { OrientationLiveData(app) }
 
-    /** CNN classifier. */
-    private val cnnClassifier by lazy {
+    /** Lazy initialization of the CNN classifier - by keeping a reference to the Lazy object
+     * itself, we can check if the classifier was actually initialized in onCleared() below.
+     */
+    private val lazyCnnClassifier = lazy {
         CnnClassifier(
             tfLiteModel = FileUtil.loadMappedFile(app, "cnn128RGB.tflite"),
             cnnLabels = FileUtil.loadLabels(app, "cnnRGB_labels.txt")
         )
     }
+
+    /** CNN classifier. */
+    private val cnnClassifier by lazyCnnClassifier
 
     fun classifyPhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
         emit(kotlin.runCatching { cnnClassifier.classifyPhoto(photoPath) })
