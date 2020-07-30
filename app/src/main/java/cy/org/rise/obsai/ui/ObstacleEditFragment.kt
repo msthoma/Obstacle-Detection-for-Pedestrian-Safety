@@ -225,11 +225,13 @@ class ObstacleEditFragment : Fragment() {
 
                 // Listen for long clicks on map, which allows user to change location manually
                 setOnMapLongClickListener { latLng ->
-                    clear()
-                    addMarker(MarkerOptions().position(latLng))
-                    currentObstacle.setLocationFromLatLong(latLng) // Save location as set by user
-                    // TODO here the altitude should be updated as well, does maps provided it
-                    //  somewhere? Or perhaps set it to 0. Also location accuracy
+                    // Convert LatLng to Location, to reuse the fun below that requires Location
+                    updateLocation(
+                        Location("").apply {
+                            latitude = latLng.latitude; longitude = latLng.longitude
+                        },
+                        googleMap
+                    )
                     locationNotManuallyEdited = false
                 }
 
