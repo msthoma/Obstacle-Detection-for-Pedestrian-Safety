@@ -62,6 +62,8 @@ class CnnClassifier(tfLiteModel: MappedByteBuffer, private val cnnLabels: Mutabl
             .mapWithFloatValue
     }
 
+    fun close() = tfLiteInterpreter.close()
+
     private companion object {
         const val IMAGE_MEAN = 0.0f
         const val IMAGE_STD = 255.0f
