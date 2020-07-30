@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.fragment_obstacle_list.*
  */
 @ExperimentalStdlibApi
 class ObstacleListFragment : Fragment() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
 //    private lateinit var sessionManager: SessionManager
@@ -47,7 +46,9 @@ class ObstacleListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Set toolbar menu
         setHasOptionsMenu(true)
@@ -58,10 +59,10 @@ class ObstacleListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // On first launch redirect to the Intro
-        if (!requireContext().introStatus())
+        if (!requireContext().introStatus()) {
             findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
-
-//        sessionManager = SessionManager(requireContext())
+        }
+        //        sessionManager = SessionManager(requireContext())
 
         recyclerView = recycler_view
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -156,26 +157,6 @@ class ObstacleListFragment : Fragment() {
             }
 //            R.id.action_sign_in -> {
 //                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
-//                true
-//            }
-//            R.id.action_add_mock_element -> {
-//                val mockObstacle = Obstacle(
-//                    appInstallID = requireContext().getUniqueAppInstallID(),
-//                    obstacleType = "MockObstacle",
-//                    location = Obstacle.Location(
-//                        latitude = 35.169160,
-//                        longitude = 33.361459
-//                    ),
-//                    altitude = 31.4,
-//                    orientation = Obstacle.Orientation(
-//                        x = 1.0,
-//                        y = 2.0,
-//                        z = 3.0
-//                    ),
-//                    photoPath = "pathToPhoto",
-//                    typeProbabilitiesCNN = generateRandomMap()
-//                )
-//                viewModel.insertObstacle(mockObstacle)
 //                true
 //            }
             R.id.action_app_intro -> {
