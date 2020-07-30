@@ -48,6 +48,14 @@ class ObstacleViewModel internal constructor(
     /** CNN classifier. */
     private val cnnClassifier by lazyCnnClassifier
 
+    /**
+     * Runs CNN classification on provided photo, and returns LiveData<Result>.
+     *
+     * See [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
+     * for use of Result.
+     *
+     * @param photoPath full path of the photo to analyze
+     */
     fun classifyPhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
         emit(kotlin.runCatching { cnnClassifier.classifyPhoto(photoPath) })
     }
@@ -97,18 +105,6 @@ class ObstacleViewModel internal constructor(
      */
     fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
         rep.insertServerObstacle(restObstacle)
-    }
-
-    /**
-     * Runs CNN classification on provided photo, and returns LiveData<Result>.
-     *
-     * See [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
-     * for use of Result.
-     *
-     * @param photoPath full path of the photo to analyze
-     */
-    fun analyzePhotoWithCNN(photoPath: String) = liveData(Dispatchers.Default) {
-        emit(kotlin.runCatching { rep.analyzePhotoWithCNN(photoPath) })
     }
 
 //    val allServerObstacles = liveData(Dispatchers.IO) {
