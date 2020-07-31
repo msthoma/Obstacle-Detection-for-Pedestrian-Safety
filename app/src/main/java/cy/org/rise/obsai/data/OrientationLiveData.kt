@@ -1,4 +1,4 @@
-package cy.org.rise.obsai.utils
+package cy.org.rise.obsai.data
 
 import android.content.Context
 import android.hardware.Sensor
@@ -7,12 +7,14 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import androidx.lifecycle.LiveData
+import cy.org.rise.obsai.utils.TAG
 
 /**
  * Class that provides orientation data as LiveData. Tracking is only active as long as there is an
  * observer, when it becomes inactive the tracking stops.
  *
- * For orientation sensor information, see [Android dev topic](https://developer.android.com/guide/topics/sensors/sensors_overview).
+ * For orientation sensor information, see
+ * [Android dev topic](https://developer.android.com/guide/topics/sensors/sensors_overview).
  *
  * @param context application context
  */
@@ -89,9 +91,3 @@ class OrientationLiveData(context: Context) : LiveData<OrientationReadings>(), S
         }
     }
 }
-
-data class OrientationReadings(
-    val accelerometer: FloatArray,
-    val compass: FloatArray,
-    val orientation: FloatArray
-)

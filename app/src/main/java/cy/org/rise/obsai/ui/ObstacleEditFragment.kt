@@ -117,7 +117,7 @@ class ObstacleEditFragment : Fragment() {
         }
 
         // Send photo to CNN for classification, and listen for results
-        viewModel.analyzePhotoWithCNN(currentObstacle.photoPath)
+        viewModel.classifyPhotoWithCNN(currentObstacle.photoPath)
             .observe(viewLifecycleOwner, Observer { cnnResult ->
                 // TODO add slight delay here, so indicator is shown!!
                 // TODO also add time limit, if results are not available show alphabetical
