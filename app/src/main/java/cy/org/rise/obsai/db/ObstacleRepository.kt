@@ -91,14 +91,14 @@ class ObstacleRepository private constructor(
     fun postToiNicosiaWM(obstacle: Obstacle) {
         // Check if mobile data is allowed by the user
         val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean("allow_mobile_data", false)
+            .getBoolean("allow_mobile_data", false) // TODO move this to constant
         Log.d(TAG(), "Mobile data allowed: $mobileDataAllowed")
 
         val workManager = WorkManager.getInstance(context)
 
         val uploadConstraints = Constraints.Builder()
             .setRequiredNetworkType(
-                // TODO recheck network logic here, as it does it produce the intended behaviour?
+                // TODO recheck network logic here, as it is does it produce the intended behaviour?
                 if (mobileDataAllowed) {
                     NetworkType.CONNECTED
                 } else {
@@ -109,7 +109,7 @@ class ObstacleRepository private constructor(
 
         val upload = OneTimeWorkRequestBuilder<iNicosiaWorker>()
             .setInputData(
-                Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.toJson()).build()
+                Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.id).build()
             )
             .setConstraints(uploadConstraints)
             .build()
