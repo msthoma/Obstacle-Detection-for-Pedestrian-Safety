@@ -18,10 +18,7 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.utils.InjectorUtils
-import cy.org.rise.obsai.utils.TAG
-import cy.org.rise.obsai.utils.formatAsStr
-import cy.org.rise.obsai.utils.getUniqueAppInstallID
+import cy.org.rise.obsai.utils.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import java.io.File
 import java.io.IOException
@@ -196,11 +193,7 @@ class CameraFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_toggle_photo_details -> {
-                if (photo_details.isVisible) {
-                    photo_details.visibility = View.GONE
-                } else {
-                    photo_details.visibility = View.VISIBLE
-                }
+                photo_details.toggleVisibility()
                 true
             }
             else -> super.onOptionsItemSelected(item)
