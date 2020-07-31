@@ -50,16 +50,18 @@ class CustomAdapter internal constructor() :
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         // Get element from the dataset at this position and replace the contents of the view
         // with that element
         val obs = obstacles[position]
 
         viewHolder.apply {
-            typeView.text = "Type: ${obs.obstacleType}"
-            locationView.text =
-                "Location: ${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
+            typeView.text =
+                typeView.resources.getString(R.string.detail_object_type, obs.obstacleType)
+            locationView.text = locationView.resources.getString(
+                R.string.detail_location,
+                "${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
+            )
             // TODO 11/07/20 format dates to locale strings, add ThreeTenABP
             timeView.text = obs.timeStamp.toString()
         }
