@@ -88,8 +88,6 @@ class AppRepository private constructor(
             .getBoolean("allow_mobile_data", false) // TODO move this to constant
         Log.d(TAG(), "Mobile data allowed: $mobileDataAllowed")
 
-        val workManager = WorkManager.getInstance(context)
-
         val uploadConstraints = Constraints.Builder()
             .setRequiredNetworkType(
                 // TODO recheck network logic here, as it is does it produce the intended behaviour?
@@ -106,7 +104,7 @@ class AppRepository private constructor(
             .setConstraints(uploadConstraints)
             .build()
 
-        workManager.enqueue(upload)
+        WorkManager.getInstance(context).enqueue(upload)
     }
 
     /**
