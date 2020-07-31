@@ -8,7 +8,7 @@ import cy.org.rise.obsai.db.ObstacleRoomDatabase
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
 
-class iNicosiaWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
 
     override fun doWork(): Result {
         var obstacleId: String? = null

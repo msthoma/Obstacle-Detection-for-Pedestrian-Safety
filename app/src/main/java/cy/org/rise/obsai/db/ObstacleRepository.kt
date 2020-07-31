@@ -7,7 +7,7 @@ import androidx.work.*
 import cy.org.rise.obsai.api.FiwareOrionApi
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
-import cy.org.rise.obsai.api.iNicosiaWorker
+import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
@@ -107,7 +107,7 @@ class ObstacleRepository private constructor(
             )
             .build()
 
-        val upload = OneTimeWorkRequestBuilder<iNicosiaWorker>()
+        val upload = OneTimeWorkRequestBuilder<INicosiaWorker>()
             .setInputData(
                 Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.id).build()
             )
