@@ -6,14 +6,14 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import cy.org.rise.obsai.db.ObstacleRepository
+import cy.org.rise.obsai.db.AppRepository
 
 /**
  * Factory for creating an [ObstacleViewModel] with a constructor that takes an
- * [ObstacleRepository], based on [this example](https://git.io/JJ0D5).
+ * [AppRepository], based on [this example](https://git.io/JJ0D5).
  */
 class ObstacleViewModelFactory(
-    private val repository: ObstacleRepository,
+    private val repository: AppRepository,
     private val application: Application,
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle? = null

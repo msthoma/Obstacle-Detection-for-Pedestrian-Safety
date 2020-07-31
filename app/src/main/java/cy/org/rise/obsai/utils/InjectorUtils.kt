@@ -2,7 +2,7 @@ package cy.org.rise.obsai.utils
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import cy.org.rise.obsai.db.ObstacleRepository
+import cy.org.rise.obsai.db.AppRepository
 import cy.org.rise.obsai.db.ObstacleRoomDatabase
 import cy.org.rise.obsai.ui.ObstacleViewModelFactory
 
@@ -14,8 +14,8 @@ import cy.org.rise.obsai.ui.ObstacleViewModelFactory
 
 object InjectorUtils {
 
-    private fun getObstacleRepository(context: Context): ObstacleRepository {
-        return ObstacleRepository.getInstance(
+    private fun getObstacleRepository(context: Context): AppRepository {
+        return AppRepository.getInstance(
             ObstacleRoomDatabase.getInstance(
                 context
                     .applicationContext

@@ -8,7 +8,7 @@ import cy.org.rise.obsai.data.CnnClassifier
 import cy.org.rise.obsai.data.LocationLiveData
 import cy.org.rise.obsai.data.OrientationLiveData
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.db.ObstacleRepository
+import cy.org.rise.obsai.db.AppRepository
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -21,10 +21,10 @@ import org.tensorflow.lite.support.common.FileUtil
  * @property savedStateHandle
  * @constructor Creates a new view model.
  * @param app application context
- * @param rep instance of [ObstacleRepository]
+ * @param rep instance of [AppRepository]
  */
 class ObstacleViewModel internal constructor(
-    private val rep: ObstacleRepository,
+    private val rep: AppRepository,
     private val app: Application,
     private val savedStateHandle: SavedStateHandle
 ) : AndroidViewModel(app) {

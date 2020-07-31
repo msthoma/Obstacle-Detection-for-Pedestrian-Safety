@@ -19,7 +19,7 @@ import java.io.IOException
  * Repository module for handling data operations, based on [this](https://git.io/JJ0Re) example.
  */
 
-class ObstacleRepository private constructor(
+class AppRepository private constructor(
     private val obstacleDao: ObstacleDao,
     private val context: Context
 ) {
@@ -108,9 +108,7 @@ class ObstacleRepository private constructor(
             .build()
 
         val upload = OneTimeWorkRequestBuilder<INicosiaWorker>()
-            .setInputData(
-                Data.Builder().putString(Constants.KEY_OBSTACLE_ID, obstacle.id).build()
-            )
+            .setInputData(Data.Builder().putString(Constants.KEY_OBSTACLE_ID, obstacle.id).build())
             .setConstraints(uploadConstraints)
             .build()
 
@@ -128,7 +126,7 @@ class ObstacleRepository private constructor(
     companion object {
         // For Singleton instantiation
         @Volatile
-        private var instance: ObstacleRepository? = null
+        private var instance: AppRepository? = null
 
         /**
          * Returns singleton of Repository.
@@ -139,7 +137,7 @@ class ObstacleRepository private constructor(
         fun getInstance(obstacleDao: ObstacleDao, context: Context) =
             instance ?: synchronized(this) {
                 instance
-                    ?: ObstacleRepository(obstacleDao, context)
+                    ?: AppRepository(obstacleDao, context)
                         .also { instance = it }
             }
     }
