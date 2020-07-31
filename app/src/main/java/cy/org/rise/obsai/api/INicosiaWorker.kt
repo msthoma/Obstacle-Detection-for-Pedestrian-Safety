@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.db.ObstacleRoomDatabase
+import cy.org.rise.obsai.db.AppRoomDatabase
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
 
@@ -16,7 +16,7 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
 
     // TODO 31/07/20 improve use of variables
     private lateinit var obstacle: Obstacle
-    private lateinit var db: ObstacleRoomDatabase
+    private lateinit var db: AppRoomDatabase
 
     override fun doWork(): Result {
         var obstacleId: String? = null
@@ -26,7 +26,7 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
             obstacleId = inputData.getString(Constants.KEY_OBSTACLE_ID)
 
             obstacleId?.let {
-                db = ObstacleRoomDatabase.getInstance(applicationContext)
+                db = AppRoomDatabase.getInstance(applicationContext)
 
                 obstacle = db.obstacleDao().getObstacleById(it)
 
