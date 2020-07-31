@@ -5,40 +5,40 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
+import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.row_item.view.*
 import java.io.File
 
-/**
- * Provides views to the RecyclerView with obstacle data.
- */
+/** Provides views to the RecyclerView with obstacle data. */
 class CustomAdapter internal constructor() :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     private var obstacles = emptyList<Obstacle>() // Cached copy of obstacles
 
-    /**
-     * Provide a reference to the type of views that you are using (custom ViewHolder)
-     */
+    /** Provide a reference to the type of views that you are using (custom ViewHolder) */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        //        val textView: TextView
-//        val uploadStatusView: TextView
-        val typeView: TextView
         val locationView: TextView
         val timeView: TextView
+        val typeView: TextView
+        val uploadStatusView: ImageView
 
         init {
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
-            typeView = v.type_view
-            locationView = v.location_view
-            timeView = v.time_view
+            v.apply {
+                setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
+                locationView = location_view
+                timeView = time_view
+                typeView = type_view
+                uploadStatusView = upload_status_view
+            }
         }
     }
 
@@ -60,31 +60,42 @@ class CustomAdapter internal constructor() :
             typeView.text = "Type: ${obs.obstacleType}"
             locationView.text =
                 "Location: ${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
-            // TODO: 11/07/20 format dates to locale strings, add ThreeTenABP
+            // TODO 11/07/20 format dates to locale strings, add ThreeTenABP
             timeView.text = obs.timeStamp.toString()
         }
-//        viewHolder.textView.text = "Type:\t${obs.obstacleType}\n" +
-//                "Location:\t${obs.location.latitude}, ${obs.location.longitude}\n" +
-//                "Orientation:\tx: ${"%.3f".format(obs.orientation.x)}, " +
-//                "y: ${"%.3f".format(obs.orientation.y)}, " +
-//                "z: ${"%.3f".format(obs.orientation.z)}\n" +
-//                "${obs.timeStamp}"
 
-//        when (obs.uploadStatus) {
-//            "Uploading..." -> viewHolder.uploadStatusView.text = obs.uploadStatus
-//            "200" -> {
-//                viewHolder.uploadStatusView.apply {
-//                    text = "Upload status: Success (${obs.uploadStatus})"
-//                    setTextColor(resources.getColor(R.color.colorPrimary))
-//                }
-//            }
-//            else -> {
-//                viewHolder.uploadStatusView.apply {
-//                    text = "Upload status: Failure (${obs.uploadStatus})"
-//                    setTextColor(resources.getColor(R.color.design_default_color_error))
-//                }
-//            }
-//        }
+        when (obs.uploadStatus) {
+            Constants.UPLOAD_SUCCESS -> viewHolder.uploadStatusView.apply {
+                setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_cloud_done_outline_24dp,
+                        null
+                    )
+                )
+                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadSuccess, null))
+            }
+            Constants.UPLOAD_FAIL -> viewHolder.uploadStatusView.apply {
+                setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_error_outline_24dp,
+                        null
+                    )
+                )
+                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadError, null))
+            }
+            Constants.UPLOADING -> viewHolder.uploadStatusView.apply {
+                setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_uploading_outline_24dp,
+                        null
+                    )
+                )
+                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadInProgress, null))
+            }
+        }
 
         // Set picture
         Picasso.get()
