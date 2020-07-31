@@ -15,12 +15,17 @@ import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
 import cy.org.rise.obsai.utils.roundTo
 import kotlinx.android.synthetic.main.row_item.view.*
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 import java.io.File
 
 /** Provides views to the RecyclerView with obstacle data. */
 class CustomAdapter internal constructor() :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
+    private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
     private var obstacles = emptyList<Obstacle>() // Cached copy of obstacles
 
     /** Provide a reference to the type of views that you are using (custom ViewHolder) */
@@ -64,8 +69,8 @@ class CustomAdapter internal constructor() :
                 R.string.detail_location,
                 "${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
             )
-            // TODO 11/07/20 format dates to locale strings, add ThreeTenABP
-            timeView.text = obs.timeStamp.toString()
+            timeView.text = Instant.ofEpochMilli(obs.timeStamp.time)
+                .atZone(ZoneId.systemDefault()).toLocalDateTime().format(formatter)
 
             // Set upload status indicator
             when (obs.uploadStatus) {
