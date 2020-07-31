@@ -75,4 +75,5 @@
             app:layout_constraintStart_toEndOf="@id/obstacle_image_view"
             tools:text="11/08/2020 13:14" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
