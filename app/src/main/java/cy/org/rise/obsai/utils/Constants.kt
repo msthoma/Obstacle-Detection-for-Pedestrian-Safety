@@ -16,4 +16,10 @@ object Constants {
 
     // Key for pref that determines whether the app intro tutorial has been shown or not
     const val INTRO_SHOWN_KEY = "INTRO_SHOWN_KEY"
+
+    // temp consts for uploading status
+    // TODO 31/07/20 change to enum
+    const val UPLOAD_FAIL = "failed"
+    const val UPLOAD_SUCCESS = "uploaded"
+    const val UPLOADING = "uploading"
 }
