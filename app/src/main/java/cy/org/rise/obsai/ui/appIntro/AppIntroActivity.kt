@@ -65,7 +65,6 @@ class AppIntroActivity : AppIntro() {
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         super.onSlideChanged(oldFragment, newFragment)
         Log.d("onSlideChanged", newFragment?.tag.toString())
-
     }
 
     override fun onNextPressed(currentFragment: Fragment?) {
