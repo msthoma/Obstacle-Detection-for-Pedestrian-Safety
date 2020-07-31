@@ -30,7 +30,7 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
 
                 obstacle = db.obstacleDao().getObstacleById(it)
 
-                val api = FiwareOrionApi.create(FiwareOrionApi.iNICOSIA_BASE_URL)
+                val api = INicosiaApi.create(INicosiaApi.iNICOSIA_BASE_URL)
 
                 val response = api?.postToiNicosiaJson(obstacle)?.execute()
 

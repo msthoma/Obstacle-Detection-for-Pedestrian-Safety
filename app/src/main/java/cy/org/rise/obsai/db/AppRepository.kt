@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.preference.PreferenceManager
 import androidx.work.*
-import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.api.INicosiaApi
 import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
@@ -59,8 +59,8 @@ class AppRepository private constructor(
 
     // Network operations
     private val orionService by lazy {
-        FiwareOrionApi.create(
-            FiwareOrionApi.iNICOSIA_BASE_URL,
+        INicosiaApi.create(
+            INicosiaApi.iNICOSIA_BASE_URL,
             SessionManager(context).fetchAuthToken() ?: ""
         )
     }

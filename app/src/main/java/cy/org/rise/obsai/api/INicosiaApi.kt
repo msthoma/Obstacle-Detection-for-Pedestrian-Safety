@@ -13,10 +13,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-/**
- * Interface for Retrofit requests.
- */
-interface FiwareOrionApi {
+/** Interface for Retrofit requests. */
+interface INicosiaApi {
     @GET("version")
     suspend fun getOrionVersion(): OrionVersion
 
@@ -60,10 +58,10 @@ interface FiwareOrionApi {
          * @param accessToken
          * @return
          */
-        fun create(baseURL: String, accessToken: String = ""): FiwareOrionApi? = baseURL
+        fun create(baseURL: String, accessToken: String = ""): INicosiaApi? = baseURL
             .toHttpUrlOrNull()?.let { create(it, accessToken) }
 
-        private fun create(httpUrl: HttpUrl, accessToken: String = ""): FiwareOrionApi {
+        private fun create(httpUrl: HttpUrl, accessToken: String = ""): INicosiaApi {
             // add logger to Retrofit
             val logger = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
@@ -91,7 +89,7 @@ interface FiwareOrionApi {
                     )
                 )
                 .build()
-                .create(FiwareOrionApi::class.java)
+                .create(INicosiaApi::class.java)
         }
     }
 }
