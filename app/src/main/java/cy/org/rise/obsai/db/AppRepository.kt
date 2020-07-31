@@ -15,33 +15,21 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
-/**
- * Repository module for handling data operations, based on [this](https://git.io/JJ0Re) example.
- */
-
+/** Repository module for handling data operations, based on [this](https://git.io/JJ0Re). */
 class AppRepository private constructor(
     private val obstacleDao: ObstacleDao,
     private val context: Context
 ) {
-    /**
-     * Returns all obstacles saved in local database as LiveData.
-     */
+    /** Returns all obstacles saved in local database as LiveData. */
     fun getAllObstaclesLive() = obstacleDao.getAllObstaclesLive()
 
-    /**
-     * Inserts obstacle in local database.
-     */
+    /** Inserts obstacle in local database. */
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
-    /**
-     * Updates obstacle already in local database.
-     */
+    /** Updates obstacle already in local database. */
     fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
 
-    /**
-     * Deletes all obstacles from local database, and their accompanying photo files in loca
-     * storage.
-     */
+    /** Deletes all obstacles from local db, and their corresponding photo in local storage. */
     suspend fun deleteAll() {
         val allObstacles = obstacleDao.getAllObstacles()
         // delete photo files first
@@ -88,6 +76,12 @@ class AppRepository private constructor(
         return orionService?.insertServerObstacle(restObstacle)
     }
 
+    /**
+     * Uploads obstacles to iNicosia using Work Manager to schedule uploads when an appropriate
+     * network connection exists.
+     *
+     * @param obstacle entity to upload
+     */
     fun postToiNicosiaWM(obstacle: Obstacle) {
         // Check if mobile data is allowed by the user
         val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
