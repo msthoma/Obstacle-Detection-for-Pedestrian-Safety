@@ -1,6 +1,5 @@
 package cy.org.rise.obsai.ui
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +26,7 @@ class CustomAdapter internal constructor() :
     /** Provide a reference to the type of views that you are using (custom ViewHolder) */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val locationView: TextView
+        val obstaclePhotoView: ImageView
         val timeView: TextView
         val typeView: TextView
         val uploadStatusView: ImageView
@@ -35,6 +35,7 @@ class CustomAdapter internal constructor() :
             v.apply {
                 setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
                 locationView = location_view
+                obstaclePhotoView = imageView
                 timeView = time_view
                 typeView = type_view
                 uploadStatusView = upload_status_view
@@ -43,7 +44,7 @@ class CustomAdapter internal constructor() :
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view.
+        // Create a new view
         val v = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.row_item, viewGroup, false)
         return ViewHolder(v)
@@ -51,61 +52,52 @@ class CustomAdapter internal constructor() :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        // Get element from the dataset at this position and replace the contents of the view
-        // with that element
+        // Get element from dataset at this position and replace the contents with element details
         val obs = obstacles[position]
 
+        // Get reference to resources, needed many times below
+        val res = viewHolder.itemView.resources
+
         viewHolder.apply {
-            typeView.text =
-                typeView.resources.getString(R.string.detail_object_type, obs.obstacleType)
-            locationView.text = locationView.resources.getString(
+            typeView.text = res.getString(R.string.detail_object_type, obs.obstacleType)
+            locationView.text = res.getString(
                 R.string.detail_location,
                 "${obs.location.latitude.roundTo(5)}, ${obs.location.longitude.roundTo(5)}"
             )
             // TODO 11/07/20 format dates to locale strings, add ThreeTenABP
             timeView.text = obs.timeStamp.toString()
-        }
 
-        when (obs.uploadStatus) {
-            Constants.UPLOAD_SUCCESS -> viewHolder.uploadStatusView.apply {
-                setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_cloud_done_outline_24dp,
-                        null
+            // Set upload status indicator
+            when (obs.uploadStatus) {
+                Constants.UPLOAD_SUCCESS -> uploadStatusView.apply {
+                    setImageDrawable(
+                        ResourcesCompat
+                            .getDrawable(res, R.drawable.ic_cloud_done_outline_24dp, null)
                     )
-                )
-                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadSuccess, null))
-            }
-            Constants.UPLOAD_FAIL -> viewHolder.uploadStatusView.apply {
-                setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_error_outline_24dp,
-                        null
+                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadSuccess, null))
+                }
+                Constants.UPLOAD_FAIL -> uploadStatusView.apply {
+                    setImageDrawable(
+                        ResourcesCompat.getDrawable(res, R.drawable.ic_error_outline_24dp, null)
                     )
-                )
-                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadError, null))
-            }
-            Constants.UPLOADING -> viewHolder.uploadStatusView.apply {
-                setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_uploading_outline_24dp,
-                        null
+                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadError, null))
+                }
+                Constants.UPLOADING -> uploadStatusView.apply {
+                    setImageDrawable(
+                        ResourcesCompat.getDrawable(res, R.drawable.ic_uploading_outline_24dp, null)
                     )
-                )
-                setColorFilter(ResourcesCompat.getColor(resources, R.color.uploadInProgress, null))
+                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadInProgress, null))
+                }
             }
-        }
 
-        // Set picture
-        Picasso.get()
-            .load(File(obs.photoPath))
-            .placeholder(R.drawable.ic_noun_barrier_2895012)
-            .resize(200, 0)
-            .centerInside()
-            .into(viewHolder.itemView.imageView)
+            // Set picture
+            Picasso.get()
+                .load(File(obs.photoPath))
+                .placeholder(R.drawable.ic_noun_barrier_2895012)
+                .resize(200, 0)
+                .centerInside()
+                .into(obstaclePhotoView)
+        }
     }
 
     internal fun setObstacles(obstacles: List<Obstacle>) {
@@ -113,8 +105,6 @@ class CustomAdapter internal constructor() :
         notifyDataSetChanged()
     }
 
-    /**
-     * Return the size of your dataset (invoked by the layout manager)
-     */
+    /** Return the size of your dataset (invoked by the layout manager) */
     override fun getItemCount() = obstacles.size
 }
