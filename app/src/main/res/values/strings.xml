@@ -100,6 +100,12 @@
     <string name="title_obstacle_photo">Obstacle photo</string>
     <string name="press_plus_to_report_obstacle">Press + to report an obstacle</string>
 
+    <string name="preference_key_allow_mobile_data" translatable="false">allow_mobile_data</string>
+    <string name="preference_key_app_version" translatable="false">key_app_version</string>
+    <string name="preference_key_changelog" translatable="false">changelog</string>
+    <string name="preference_key_open_source_libraries" translatable="false">open_source_libraries</string>
+    <string name="preference_key_show_app_intro" translatable="false">appIntro</string>
+
     <string-array name="obstacle_types_array">
         <item>Advert. Sign</item>
         <item>Crack</item>
