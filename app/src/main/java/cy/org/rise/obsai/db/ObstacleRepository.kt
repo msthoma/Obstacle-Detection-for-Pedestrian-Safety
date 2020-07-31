@@ -109,7 +109,7 @@ class ObstacleRepository private constructor(
 
         val upload = OneTimeWorkRequestBuilder<INicosiaWorker>()
             .setInputData(
-                Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.id).build()
+                Data.Builder().putString(Constants.KEY_OBSTACLE_ID, obstacle.id).build()
             )
             .setConstraints(uploadConstraints)
             .build()

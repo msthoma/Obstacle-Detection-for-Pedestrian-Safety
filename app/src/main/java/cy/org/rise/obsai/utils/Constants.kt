@@ -5,7 +5,7 @@ package cy.org.rise.obsai.utils
  */
 object Constants {
     // Key for obstacles in Work Manager
-    const val KEY_OBSTACLE_JSON = "KEY_OBSTACLE_ENTITY"
+    const val KEY_OBSTACLE_ID = "KEY_OBSTACLE_ID"
 
     // SharedPreferences file name
     const val PREFERENCE_FILE_KEY = "cy.org.rise.obsai.PREFERENCE_FILE_KEY"

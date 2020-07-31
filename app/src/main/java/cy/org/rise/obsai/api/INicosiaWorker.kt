@@ -15,10 +15,7 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
 
         return try {
             // Get obstacle ID
-            obstacleId = inputData.getString(Constants.KEY_OBSTACLE_JSON)
-
-            // Convert back to Obstacle entity
-//            val obstacle = Gson().fromJson<Obstacle>(obstacleId, Obstacle::class.java)
+            obstacleId = inputData.getString(Constants.KEY_OBSTACLE_ID)
 
             obstacleId?.let {
                 val dbObstacle = ObstacleRoomDatabase.getInstance(applicationContext).obstacleDao()
