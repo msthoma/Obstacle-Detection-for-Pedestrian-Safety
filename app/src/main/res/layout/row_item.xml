@@ -18,7 +18,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/obstacle_image_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="4dp"
@@ -35,7 +35,7 @@
             android:orientation="vertical"
             android:padding="@dimen/margin_small"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/obstacle_image_view"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView

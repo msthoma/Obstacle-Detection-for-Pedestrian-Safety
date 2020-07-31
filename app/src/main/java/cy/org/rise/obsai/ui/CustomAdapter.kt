@@ -40,7 +40,7 @@ class CustomAdapter internal constructor() :
             v.apply {
                 setOnClickListener { Log.d(TAG(), "Element $adapterPosition clicked.") }
                 locationView = location_view
-                obstaclePhotoView = imageView
+                obstaclePhotoView = obstacle_image_view
                 timeView = time_view
                 typeView = type_view
                 uploadStatusView = upload_status_view
