@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.work.Configuration
+import com.jakewharton.threetenabp.AndroidThreeTen
 import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import org.acra.ACRA
@@ -15,6 +16,7 @@ import org.acra.data.StringFormat
 /**
  * CustomApplication is used to enable:
  *  - initialization of the ACRA error reporting library
+ *  - initialization of ThreeTenABP
  *  - custom implementation of getWorkManagerConfiguration()
  */
 @AcraCore(buildConfigClass = BuildConfig::class, reportFormat = StringFormat.JSON)
@@ -31,6 +33,12 @@ class CustomApplication : Application(), Configuration.Provider {
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
         ACRA.init(this)
+    }
+
+    // initialize ThreeTenABP https://github.com/JakeWharton/ThreeTenABP/
+    override fun onCreate() {
+        super.onCreate()
+        AndroidThreeTen.init(this)
     }
 
     // see https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration#implement-configuration-provider

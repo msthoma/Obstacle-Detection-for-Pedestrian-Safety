@@ -252,4 +252,7 @@ dependencies {
 
     // TouchImageView https://github.com/MikeOrtiz/TouchImageView
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
+
+    // ThreeTen Android Backport library https://github.com/JakeWharton/ThreeTenABP/
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 }
