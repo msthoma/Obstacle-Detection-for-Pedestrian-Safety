@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
-import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
@@ -36,7 +36,7 @@ class ObstacleRepository private constructor(
     /**
      * Updates obstacle already in local database.
      */
-    suspend fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
+    fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
 
     /**
      * Deletes all obstacles from local database, and their accompanying photo files in loca

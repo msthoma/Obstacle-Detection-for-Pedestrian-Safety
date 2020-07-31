@@ -21,7 +21,7 @@ interface ObstacleDao {
     suspend fun insertObstacle(obstacle: Obstacle)
 
     @Update
-    suspend fun updateObstacle(obstacle: Obstacle)
+    fun updateObstacle(obstacle: Obstacle)
 
     @Query("DELETE FROM obstacle_table")
     suspend fun deleteAll()
