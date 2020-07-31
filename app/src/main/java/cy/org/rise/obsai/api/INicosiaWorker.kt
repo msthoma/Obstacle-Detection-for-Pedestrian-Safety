@@ -8,13 +8,16 @@ import cy.org.rise.obsai.db.ObstacleRoomDatabase
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
 
+/** Worker responsible for uploading obstacles to iNicosia. */
 class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+
+    // TODO 31/07/20  add retries by returning Result.retry()
 
     override fun doWork(): Result {
         var obstacleId: String? = null
 
         return try {
-            // Get obstacle ID
+            // Get obstacle from db with its id, and upload it to remote platform
             obstacleId = inputData.getString(Constants.KEY_OBSTACLE_ID)
 
             obstacleId?.let {
