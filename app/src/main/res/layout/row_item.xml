@@ -52,8 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/margin_tiny"
-                tools:text="Location: Car" />
-
+                tools:text="Location: 35.13, 33.31" />
         </LinearLayout>
 
         <ImageView
@@ -61,8 +60,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="@dimen/margin_small"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_cloud_done_outline_24dp"
             tools:tint="@color/uploadSuccess" />
 
@@ -71,10 +70,9 @@
             style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_tiny"
+            android:layout_margin="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/obstacle_image_view"
             tools:text="11/08/2020 13:14" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>
