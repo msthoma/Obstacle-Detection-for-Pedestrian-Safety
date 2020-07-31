@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.ObstacleRoomDatabase
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.TAG
@@ -13,6 +14,10 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
 
     // TODO 31/07/20  add retries by returning Result.retry()
 
+    // TODO 31/07/20 improve use of variables
+    private lateinit var obstacle: Obstacle
+    private lateinit var db: ObstacleRoomDatabase
+
     override fun doWork(): Result {
         var obstacleId: String? = null
 
@@ -21,24 +26,35 @@ class INicosiaWorker(context: Context, params: WorkerParameters) : Worker(contex
             obstacleId = inputData.getString(Constants.KEY_OBSTACLE_ID)
 
             obstacleId?.let {
-                val dbObstacle = ObstacleRoomDatabase.getInstance(applicationContext).obstacleDao()
-                    .getObstacleById(it)
+                db = ObstacleRoomDatabase.getInstance(applicationContext)
+
+                obstacle = db.obstacleDao().getObstacleById(it)
 
                 val api = FiwareOrionApi.create(FiwareOrionApi.iNICOSIA_BASE_URL)
 
-                val response = api?.postToiNicosiaJson(dbObstacle)?.execute()
+                val response = api?.postToiNicosiaJson(obstacle)?.execute()
 
                 return response?.let {
                     if (!response.isSuccessful) {
+                        updateUploadStatus(Constants.UPLOAD_FAIL)
                         Result.failure()
                     } else {
+                        updateUploadStatus(Constants.UPLOAD_SUCCESS)
                         Result.success() // TODO pass on Response from API Result.success(....)
                     }
                 } ?: Result.failure()
             } ?: Result.failure()
         } catch (e: Exception) {
             Log.e(TAG(), "Failed to upload entity with ID $obstacleId", e)
+            updateUploadStatus(Constants.UPLOAD_FAIL)
             Result.failure() // TODO pass on Response from API Result.failure(....)
+        }
+    }
+
+    private fun updateUploadStatus(status: String) {
+        Log.d(TAG(), "updating Upload Status to $status")
+        if (::db.isInitialized && ::obstacle.isInitialized) {
+            db.obstacleDao().updateObstacle(obstacle.apply { uploadStatus = status })
         }
     }
 }
