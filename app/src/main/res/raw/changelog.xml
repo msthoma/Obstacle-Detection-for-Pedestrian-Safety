@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-07-31"
+        versionCode="1"
+        versionName="Version 0.17.2">
+        <info>Improvements in neural network image classification logic</info>
+    </release>
+
+    <release
         date="2020-07-30"
         versionCode="1"
         versionName="Version 0.17.1">
