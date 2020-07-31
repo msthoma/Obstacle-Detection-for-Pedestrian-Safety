@@ -13,7 +13,6 @@
     card_view:cardElevation="5dp"
     tools:menu="menu_main">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -57,26 +56,16 @@
 
         </LinearLayout>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/textView"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:gravity="top"-->
-        <!--            android:padding="@dimen/margin_small"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintStart_toEndOf="@id/imageView"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            tools:text="Row item" />-->
+        <ImageView
+            android:id="@+id/upload_status_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_cloud_done_outline_24dp"
+            tools:tint="@color/uploadSuccess" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/upload_status_view"-->
-        <!--            style="@style/TextAppearance.AppCompat.Caption"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:padding="@dimen/margin_small"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            tools:text="Upload status" />-->
         <TextView
             android:id="@+id/time_view"
             style="@style/TextAppearance.AppCompat.Caption"
