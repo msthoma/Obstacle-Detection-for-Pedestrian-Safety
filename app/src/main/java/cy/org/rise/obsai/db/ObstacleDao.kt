@@ -15,7 +15,7 @@ interface ObstacleDao {
     suspend fun getAllObstacles(): List<Obstacle>
 
     @Query("SELECT * FROM obstacle_table WHERE id = :obstacleId")
-    suspend fun getObstacleById(obstacleId: String): Obstacle
+    fun getObstacleById(obstacleId: String): Obstacle
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertObstacle(obstacle: Obstacle)
