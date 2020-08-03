@@ -86,10 +86,7 @@ class AppRepository private constructor(
     fun postToiNicosiaWM(obstacle: Obstacle) {
         // Check if mobile data is allowed by the user
         val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(
-                context.resources.getString(R.string.preference_key_allow_mobile_data),
-                false
-            )
+            .getBoolean(context.resources.getString(R.string.pref_key_allow_mobile_data), false)
         Log.d(TAG(), "Mobile data allowed: $mobileDataAllowed")
 
         val uploadConstraints = Constraints.Builder()

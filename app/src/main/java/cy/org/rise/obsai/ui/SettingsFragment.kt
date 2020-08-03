@@ -17,12 +17,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         // set app version
-        findPreference<Preference>(getString(R.string.preference_key_app_version))?.summary =
+        findPreference<Preference>(getString(R.string.pref_key_app_version))?.summary =
             "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         // intentionally crash app to test crash reporting, triggered by repeated count view clicks
         var viewClicks = 0
-        findPreference<Preference>(getString(R.string.preference_key_app_version))
+        findPreference<Preference>(getString(R.string.pref_key_app_version))
             ?.setOnPreferenceClickListener {
                 viewClicks += 1
                 Log.d(TAG(), "$viewClicks view clicks...")
@@ -33,7 +33,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
 
         // navigate to intro
-        findPreference<Preference>(getString(R.string.preference_key_show_app_intro))
+        findPreference<Preference>(getString(R.string.pref_key_show_app_intro))
             ?.setOnPreferenceClickListener {
                 // TODO 11/07/20 figure out intro navigation
                 findNavController().navigate(R.id.action_settingsFragment_to_appIntroActivity)
@@ -41,7 +41,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
 
         // show changelog
-        findPreference<Preference>(getString(R.string.preference_key_changelog))
+        findPreference<Preference>(getString(R.string.pref_key_changelog))
             ?.setOnPreferenceClickListener {
                 ChangelogBuilder()
                     .withUseBulletList(true)
@@ -51,7 +51,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
 
         // click listener for libraries activity
-        findPreference<Preference>(getString(R.string.preference_key_open_source_libraries))
+        findPreference<Preference>(getString(R.string.pref_key_open_source_libraries))
             ?.setOnPreferenceClickListener {
                 findNavController().navigate(R.id.action_settingsFragment_to_aboutActivity)
                 true
