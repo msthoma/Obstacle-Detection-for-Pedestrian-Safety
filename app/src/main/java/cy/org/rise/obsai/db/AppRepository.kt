@@ -105,6 +105,7 @@ class AppRepository private constructor(
             .setConstraints(uploadConstraints)
             .build()
 
+        // check enqueueUniquePeriodicWork(tag..., policy, data) to replace previous items in queue
         WorkManager.getInstance(context).enqueue(upload)
     }
 
