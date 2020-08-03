@@ -63,6 +63,6 @@ class INicosiaWorker(appContext: Context, params: WorkerParameters) : Worker(app
     }
 
     private companion object {
-        const val MAX_RETRIES = 3
+        const val MAX_RETRIES = 4 // will retry 5 times, retry count starts at 0
     }
 }
