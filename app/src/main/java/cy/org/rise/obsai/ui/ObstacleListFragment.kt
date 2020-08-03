@@ -304,7 +304,7 @@ class ObstacleListFragment : Fragment() {
                 Activity.RESULT_CANCELED -> {
                     Log.d(TAG(), "RESULT_CANCELED")
                     // The user was asked to change settings, but chose not to
-                    // TODO: 23/07/20 show snackbar? or ask if they want to proceed without GPS
+                    // TODO 23/07/20 show snackbar? or ask if they want to proceed without GPS
                 }
             }
         }
