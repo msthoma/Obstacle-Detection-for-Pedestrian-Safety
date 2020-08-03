@@ -33,8 +33,8 @@ android {
         // versioning - see https://semver.org/
         versionCode 1
         def versionMajor = 0
-        def versionMinor = 17
-        def versionPatch = 2
+        def versionMinor = 18
+        def versionPatch = 0
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -252,4 +252,7 @@ dependencies {
 
     // TouchImageView https://github.com/MikeOrtiz/TouchImageView
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
+
+    // ThreeTen Android Backport library https://github.com/JakeWharton/ThreeTenABP/
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 }

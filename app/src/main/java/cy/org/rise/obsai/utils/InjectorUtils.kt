@@ -2,30 +2,27 @@ package cy.org.rise.obsai.utils
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import cy.org.rise.obsai.db.ObstacleRepository
-import cy.org.rise.obsai.db.ObstacleRoomDatabase
+import cy.org.rise.obsai.db.AppRepository
+import cy.org.rise.obsai.db.AppRoomDatabase
 import cy.org.rise.obsai.ui.ObstacleViewModelFactory
 
 /**
  * Static methods used to inject classes needed for Activities and Fragments.
  *
- * Based on this [example](https://github.com/android/sunflower/blob/master/app/src/main/java/com/google/samples/apps/sunflower/utilities/InjectorUtils.kt).
+ * Based on this [example](https://git.io/JJaYb).
  */
 
 object InjectorUtils {
 
-    private fun getObstacleRepository(context: Context): ObstacleRepository {
-        return ObstacleRepository.getInstance(
-            ObstacleRoomDatabase.getInstance(
-                context
-                    .applicationContext
-            ).obstacleDao(),
+    private fun getAppRepository(context: Context): AppRepository {
+        return AppRepository.getInstance(
+            AppRoomDatabase.getInstance(context.applicationContext).obstacleDao(),
             context.applicationContext
         )
     }
 
     fun provideObstacleViewModelFactory(fragment: Fragment): ObstacleViewModelFactory {
-        val repository = getObstacleRepository(fragment.requireContext())
+        val repository = getAppRepository(fragment.requireContext())
         return ObstacleViewModelFactory(
             repository,
             fragment.requireActivity().application,

@@ -4,10 +4,11 @@ import android.content.Context
 import android.util.Log
 import androidx.preference.PreferenceManager
 import androidx.work.*
-import cy.org.rise.obsai.api.FiwareOrionApi
+import cy.org.rise.obsai.R
+import cy.org.rise.obsai.api.INicosiaApi
+import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.api.MinIOUploader
 import cy.org.rise.obsai.api.RestObstacle
-import cy.org.rise.obsai.api.iNicosiaWorker
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
@@ -15,33 +16,21 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
-/**
- * Repository module for handling data operations, based on [this](https://git.io/JJ0Re) example.
- */
-
-class ObstacleRepository private constructor(
+/** Repository module for handling data operations, based on [this](https://git.io/JJ0Re). */
+class AppRepository private constructor(
     private val obstacleDao: ObstacleDao,
     private val context: Context
 ) {
-    /**
-     * Returns all obstacles saved in local database as LiveData.
-     */
+    /** Returns all obstacles saved in local database as LiveData. */
     fun getAllObstaclesLive() = obstacleDao.getAllObstaclesLive()
 
-    /**
-     * Inserts obstacle in local database.
-     */
+    /** Inserts obstacle in local database. */
     suspend fun insertObstacle(obstacle: Obstacle) = obstacleDao.insertObstacle(obstacle)
 
-    /**
-     * Updates obstacle already in local database.
-     */
-    suspend fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
+    /** Updates obstacle already in local database. */
+    fun updateObstacle(obstacle: Obstacle) = obstacleDao.updateObstacle(obstacle)
 
-    /**
-     * Deletes all obstacles from local database, and their accompanying photo files in loca
-     * storage.
-     */
+    /** Deletes all obstacles from local db, and their corresponding photo in local storage. */
     suspend fun deleteAll() {
         val allObstacles = obstacleDao.getAllObstacles()
         // delete photo files first
@@ -59,8 +48,8 @@ class ObstacleRepository private constructor(
 
     // Network operations
     private val orionService by lazy {
-        FiwareOrionApi.create(
-            FiwareOrionApi.iNICOSIA_BASE_URL,
+        INicosiaApi.create(
+            INicosiaApi.iNICOSIA_BASE_URL,
             SessionManager(context).fetchAuthToken() ?: ""
         )
     }
@@ -88,13 +77,17 @@ class ObstacleRepository private constructor(
         return orionService?.insertServerObstacle(restObstacle)
     }
 
+    /**
+     * Uploads obstacles to iNicosia using Work Manager to schedule uploads when an appropriate
+     * network connection exists.
+     *
+     * @param obstacle entity to upload
+     */
     fun postToiNicosiaWM(obstacle: Obstacle) {
         // Check if mobile data is allowed by the user
         val mobileDataAllowed = PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean("allow_mobile_data", false) // TODO move this to constant
+            .getBoolean(context.resources.getString(R.string.pref_key_allow_mobile_data), false)
         Log.d(TAG(), "Mobile data allowed: $mobileDataAllowed")
-
-        val workManager = WorkManager.getInstance(context)
 
         val uploadConstraints = Constraints.Builder()
             .setRequiredNetworkType(
@@ -107,14 +100,13 @@ class ObstacleRepository private constructor(
             )
             .build()
 
-        val upload = OneTimeWorkRequestBuilder<iNicosiaWorker>()
-            .setInputData(
-                Data.Builder().putString(Constants.KEY_OBSTACLE_JSON, obstacle.id).build()
-            )
+        val upload = OneTimeWorkRequestBuilder<INicosiaWorker>()
+            .setInputData(Data.Builder().putString(Constants.KEY_OBSTACLE_ID, obstacle.id).build())
             .setConstraints(uploadConstraints)
             .build()
 
-        workManager.enqueue(upload)
+        // check enqueueUniquePeriodicWork(tag..., policy, data) to replace previous items in queue
+        WorkManager.getInstance(context).enqueue(upload)
     }
 
     /**
@@ -128,7 +120,7 @@ class ObstacleRepository private constructor(
     companion object {
         // For Singleton instantiation
         @Volatile
-        private var instance: ObstacleRepository? = null
+        private var instance: AppRepository? = null
 
         /**
          * Returns singleton of Repository.
@@ -139,7 +131,7 @@ class ObstacleRepository private constructor(
         fun getInstance(obstacleDao: ObstacleDao, context: Context) =
             instance ?: synchronized(this) {
                 instance
-                    ?: ObstacleRepository(obstacleDao, context)
+                    ?: AppRepository(obstacleDao, context)
                         .also { instance = it }
             }
     }

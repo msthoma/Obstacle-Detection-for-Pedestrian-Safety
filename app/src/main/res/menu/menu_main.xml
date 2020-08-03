@@ -46,4 +46,5 @@
         android:orderInCategory="600"
         android:title="@string/action_delete_all"
         app:showAsAction="never" />
+
 </menu>

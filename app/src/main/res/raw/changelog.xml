@@ -1,5 +1,18 @@
 <changelog>
     <release
+        date="2020-08-03"
+        versionCode="1"
+        versionName="Version 0.18.0">
+        <info>Added upload status for each reported obstacle, with icons that show whether the
+            upload was successful, still in progress or failed
+        </info>
+        <info>In case of failed uploads to remote platform, the app now retries the uploads a
+            number of times until it succeeds
+        </info>
+        <info>Bug fixes</info>
+    </release>
+
+    <release
         date="2020-07-31"
         versionCode="1"
         versionName="Version 0.17.2">

@@ -18,9 +18,7 @@ class Converters {
      * @return date as Date object
      */
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
-    }
+    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
 
     /**
      * Converts Date to millis.
@@ -29,9 +27,7 @@ class Converters {
      * @return date as millis
      */
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
-    }
+    fun dateToTimestamp(date: Date?): Long? = date?.time
 
     /**
      * Converts string to map of strings and floats, based on
@@ -41,10 +37,9 @@ class Converters {
      * @return map of obstacle types and probabilities
      */
     @TypeConverter
-    fun stringToMapOfStringFloat(value: String): Map<String, Float>? {
-        return if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
+    fun stringToMapOfStringFloat(value: String): Map<String, Float>? =
+        if (value == "") null else Gson().fromJson(value, object : TypeToken<Map<String,
                 Float>>() {}.type)
-    }
 
     /**
      * Converts map of strings and floats to string, based on
@@ -54,7 +49,6 @@ class Converters {
      * @return map converted to string
      */
     @TypeConverter
-    fun mapStingFloatToString(value: Map<String, Float>?): String {
-        return value?.let { Gson().toJson(it) } ?: ""
-    }
+    fun mapStingFloatToString(value: Map<String, Float>?): String =
+        value?.let { Gson().toJson(it) } ?: ""
 }

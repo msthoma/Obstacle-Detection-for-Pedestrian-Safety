@@ -11,13 +11,13 @@ import androidx.room.TypeConverters
  */
 @Database(entities = [Obstacle::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
-abstract class ObstacleRoomDatabase : RoomDatabase() {
+abstract class AppRoomDatabase : RoomDatabase() {
     abstract fun obstacleDao(): ObstacleDao
 
     companion object {
         // For Singleton instantiation
         @Volatile
-        private var INSTANCE: ObstacleRoomDatabase? = null
+        private var INSTANCE: AppRoomDatabase? = null
 
         /**
          * Returns a singleton instance of the app's Room database.
@@ -25,17 +25,17 @@ abstract class ObstacleRoomDatabase : RoomDatabase() {
          * @param context application context
          * @return
          */
-        fun getInstance(context: Context): ObstacleRoomDatabase {
+        fun getInstance(context: Context): AppRoomDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE
                 ?: synchronized(this) {
                     val instance = Room.databaseBuilder(
                         context.applicationContext,
-                        ObstacleRoomDatabase::class.java,
+                        AppRoomDatabase::class.java,
                         "obstacle_db"
                     )
-                        .fallbackToDestructiveMigration() // FIXME: 11/07/20 migrations
+                        .fallbackToDestructiveMigration() // FIXME 11/07/20 migrations
                         .build()
                     INSTANCE = instance
                     instance

@@ -5,7 +5,7 @@ package cy.org.rise.obsai.utils
  */
 object Constants {
     // Key for obstacles in Work Manager
-    const val KEY_OBSTACLE_JSON = "KEY_OBSTACLE_ENTITY"
+    const val KEY_OBSTACLE_ID = "KEY_OBSTACLE_ID"
 
     // SharedPreferences file name
     const val PREFERENCE_FILE_KEY = "cy.org.rise.obsai.PREFERENCE_FILE_KEY"
@@ -16,4 +16,10 @@ object Constants {
 
     // Key for pref that determines whether the app intro tutorial has been shown or not
     const val INTRO_SHOWN_KEY = "INTRO_SHOWN_KEY"
+
+    // temp consts for uploading status
+    // TODO 31/07/20 change to enum
+    const val UPLOAD_FAIL = "failed"
+    const val UPLOAD_SUCCESS = "uploaded"
+    const val UPLOADING = "uploading"
 }

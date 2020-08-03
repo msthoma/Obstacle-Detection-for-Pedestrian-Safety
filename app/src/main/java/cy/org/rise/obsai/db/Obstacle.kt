@@ -98,7 +98,7 @@ data class Obstacle(
     var timeUntilCnnResults: Long = 0,
 
     @ColumnInfo
-    var uploadStatus: String = "Uploading..."
+    var uploadStatus: String = Constants.UPLOADING
 
 ) : Serializable {
 

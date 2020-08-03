@@ -72,6 +72,8 @@
     <string name="detail_getting_location">Πληρ. Τοποθεσίας…</string>
     <string name="detail_getting_orientation">Πληρ. Προσανατολισμού…</string>
     <string name="toast_deleted_everything">Διαγράφηκαν όλα</string>
+    <string name="detail_object_type">Είδος: %1$s</string>
+    <string name="dialog_submitting_obstacle">Υποβολή εμποδίου…</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->

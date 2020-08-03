@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    <color name="colorPrimary">#008577</color>-->
-    <!--    <color name="colorPrimaryDark">#00574B</color>-->
-    <!--    <color name="colorAccent">#4CAF50</color>-->
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796b</color>
     <color name="colorAccent">#536dfe</color>
@@ -14,4 +11,8 @@
     <color name="introColor2">#C1561C</color>
     <color name="introColor3">#1565C0</color>
     <color name="introColor4">#91AA37</color>
+
+    <color name="uploadError">#80FF0000</color>
+    <color name="uploadSuccess">#8043A047</color>
+    <color name="uploadInProgress">#80A1A1A1</color>
 </resources>

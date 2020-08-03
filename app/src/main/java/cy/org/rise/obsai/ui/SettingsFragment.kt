@@ -11,48 +11,50 @@ import cy.org.rise.obsai.BuildConfig
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.TAG
 
-/**
- * Fragment that displays the app's settings.
- */
+/** Fragment that displays the app's settings. */
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         // set app version
-        findPreference<Preference>("version")?.summary =
+        findPreference<Preference>(getString(R.string.pref_key_app_version))?.summary =
             "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
         // intentionally crash app to test crash reporting, triggered by repeated count view clicks
         var viewClicks = 0
-        findPreference<Preference>("version")?.setOnPreferenceClickListener {
-            viewClicks += 1
-            Log.d(TAG(), "$viewClicks view clicks...")
-            if (viewClicks == 20) {
-                throw RuntimeException("This crash was intentional!")
+        findPreference<Preference>(getString(R.string.pref_key_app_version))
+            ?.setOnPreferenceClickListener {
+                viewClicks += 1
+                Log.d(TAG(), "$viewClicks view clicks...")
+                if (viewClicks == 20) {
+                    throw RuntimeException("This crash was intentional!")
+                }
+                true
             }
-            true
-        }
 
         // navigate to intro
-        findPreference<Preference>("appIntro")?.setOnPreferenceClickListener {
-            // TODO: 11/07/20 figure out intro navigation
-            findNavController().navigate(R.id.action_settingsFragment_to_appIntroActivity)
-            true
-        }
+        findPreference<Preference>(getString(R.string.pref_key_show_app_intro))
+            ?.setOnPreferenceClickListener {
+                // TODO 11/07/20 figure out intro navigation
+                findNavController().navigate(R.id.action_settingsFragment_to_appIntroActivity)
+                true
+            }
 
         // show changelog
-        findPreference<Preference>("changelog")?.setOnPreferenceClickListener {
-            ChangelogBuilder()
-                .withUseBulletList(true)
-                .withTitle(getString(R.string.setting_changelog_title))
-                .buildAndShowDialog(activity as AppCompatActivity?, false)
-            true
-        }
+        findPreference<Preference>(getString(R.string.pref_key_changelog))
+            ?.setOnPreferenceClickListener {
+                ChangelogBuilder()
+                    .withUseBulletList(true)
+                    .withTitle(getString(R.string.setting_changelog_title))
+                    .buildAndShowDialog(activity as AppCompatActivity?, false)
+                true
+            }
 
         // click listener for libraries activity
-        findPreference<Preference>("open_source_libraries")?.setOnPreferenceClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_aboutActivity)
-            true
-        }
+        findPreference<Preference>(getString(R.string.pref_key_open_source_libraries))
+            ?.setOnPreferenceClickListener {
+                findNavController().navigate(R.id.action_settingsFragment_to_aboutActivity)
+                true
+            }
     }
 }
