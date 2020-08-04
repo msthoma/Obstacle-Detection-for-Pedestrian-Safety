@@ -108,13 +108,8 @@ class AppRepository private constructor(
         WorkManager.getInstance(context).enqueue(upload)
     }
 
-    /**
-     * Gets all obstacles saved on server.
-     *
-     * @param type type of entity required, here should be "Obstacle"
-     */
-    suspend fun getAllServerObstacles(type: String) =
-        iNicosiaApi?.getAllServerObstacles(type)
+    /** Gets all obstacles saved on server. */
+    suspend fun getAllServerObstacles() = iNicosiaApi?.getAllServerObstacles()
 
     companion object {
         // For Singleton instantiation
