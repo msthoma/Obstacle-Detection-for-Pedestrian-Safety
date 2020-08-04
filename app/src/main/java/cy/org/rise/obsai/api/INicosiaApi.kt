@@ -74,6 +74,17 @@ interface INicosiaApi {
                 .addInterceptor(serviceInterceptor)
                 .build()
 
+            // TODO 04/08/20 try to use custom serializer for location as shown
+            //  here https://stackoverflow.com/questions/6873020/gson-date-format
+//            val des = JsonSerializer<Obstacle.Location>()
+
+//            val ser: JsonSerializer<Date> =
+//                JsonSerializer<Any?> { src, typeOfSrc, context ->
+//                    if (src == null) null else JsonPrimitive(
+//                        src.getTime()
+//                    )
+//                }
+
             return Retrofit.Builder()
                 .baseUrl(httpUrl)
                 .client(client)
