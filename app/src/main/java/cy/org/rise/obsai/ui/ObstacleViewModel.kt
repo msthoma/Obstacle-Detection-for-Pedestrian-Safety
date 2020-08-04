@@ -98,14 +98,6 @@ class ObstacleViewModel internal constructor(
     /** Deletes all obstacles from local db. */
     fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
-    /**
-     * Inserts obstacle in remote server.
-     *
-     * @param restObstacle object to be inserted into remote server
-     */
-    fun insertServerObstacle(restObstacle: RestObstacle) =
-        viewModelScope.launch(Dispatchers.IO) { rep.insertServerObstacle(restObstacle) }
-
     /** Gets all obstacles on iNicosia. */
     val allServerObstacles =
         liveData(Dispatchers.IO) { emit(rep.getAllServerObstacles()) }

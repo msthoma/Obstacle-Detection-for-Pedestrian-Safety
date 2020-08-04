@@ -18,9 +18,6 @@ interface INicosiaApi {
     @GET("get_obstacles_problems")
     suspend fun getAllServerObstacles(): List<Obstacle>
 
-    @POST("v2/entities")
-    suspend fun insertServerObstacle(@Body restObstacle: RestObstacle): Response<Unit>
-
     @FormUrlEncoded
     @POST("oauth2/token")
     @Headers("No-AccessToken-Required: true")
