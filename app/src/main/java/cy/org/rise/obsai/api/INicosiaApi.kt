@@ -39,14 +39,10 @@ interface INicosiaApi {
     fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
 
     companion object {
-        /**
-         * Keyrock endpoint, used for authentication.
-         */
+        /** Keyrock endpoint, used for authentication. */
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
 
-        /**
-         * Orion Broker endpoint, used for interactions with Fiware.
-         */
+        /** Orion Broker endpoint, used for interactions with Fiware. */
         const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
 
         /**
@@ -56,7 +52,7 @@ interface INicosiaApi {
          *
          * @param baseURL
          * @param accessToken
-         * @return
+         * @return iNicosia API
          */
         fun create(baseURL: String, accessToken: String = ""): INicosiaApi? = baseURL
             .toHttpUrlOrNull()?.let { create(it, accessToken) }
