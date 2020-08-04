@@ -22,6 +22,7 @@ import androidx.navigation.fragment.navArgs
 import com.afollestad.assent.Permission
 import com.afollestad.assent.isAllGranted
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -59,6 +60,7 @@ import kotlin.properties.Delegates
  * Google cloud first (see documentation linked above).
  */
 class ObstacleEditFragment : Fragment() {
+    private var currentTypeByUser = ""
     private lateinit var currentObstacle: Obstacle
     private lateinit var customEditText: TextInputEditText
     private lateinit var customEditTextLayout: TextInputLayout
@@ -147,7 +149,7 @@ class ObstacleEditFragment : Fragment() {
                             // then clicks more; this allows the proper rb to be marked as checked
                             populateSelectionList(
                                 onlyTop5 = false,
-                                setSelected = currentObstacle.obstacleType
+                                setSelected = currentTypeByUser //currentObstacle.obstacleType
                             )
                             toggleCnnExplanationAndMoreButton()
                         }
@@ -322,10 +324,10 @@ class ObstacleEditFragment : Fragment() {
                 if (checkedId != -1) {
                     if (checkedId == lastEmptyRadioButton.id) {
                         // customEditText selected, make sure text is not too short or empty
-                        val currentText = customEditText.editableText.toString().trim()
-                        if (currentText.length > 2) {
-                            Log.d(TAG(), "current custom text $currentText")
-                            currentObstacle.obstacleType = currentText
+                        currentTypeByUser = customEditText.editableText.toString().trim()
+                        if (currentTypeByUser.length > 2) {
+                            Log.d(TAG(), "current custom text $currentTypeByUser")
+                            currentObstacle.obstacleType = currentTypeByUser
                             typeEditText.setText(currentObstacle.obstacleType)
                             dismiss()
                         } else {
@@ -339,6 +341,7 @@ class ObstacleEditFragment : Fragment() {
                         }
                     } else {
                         // selection is from predefined list, good to go
+                        currentObstacle.obstacleType = currentTypeByUser
                         typeEditText.setText(currentObstacle.obstacleType)
                         dismiss()
                     }
@@ -349,9 +352,10 @@ class ObstacleEditFragment : Fragment() {
             }
             negativeButton(R.string.dialog_cancel_button) {
                 // revert type to any previous selection if dialog is dismissed via Cancel button
-                currentObstacle.obstacleType = typeEditText.editableText.toString().trim()
+//                currentObstacle.obstacleType = typeEditText.editableText.toString().trim()
                 dismiss()
             }
+            onDismiss { Log.d(TAG(), "ON DISMISS"); currentTypeByUser = "" }
             lifecycleOwner(viewLifecycleOwner)
             show()
         }
@@ -483,8 +487,9 @@ class ObstacleEditFragment : Fragment() {
                     // selects an option from the top 5 list, and then clicks more; without
                     // marking the rb as checked here, it is unchecked for some reason
                     if (!rb.isChecked) rb.isChecked = true
-                    currentObstacle.obstacleType = rb.text.toString() // capture current selection
-                    Log.d(TAG(), "current selection ${currentObstacle.obstacleType}")
+                    currentTypeByUser = rb.text.toString()
+//                    currentObstacle.obstacleType = rb.text.toString() // capture current selection
+                    Log.d(TAG(), "current selection $currentTypeByUser")
                 }
                 // remove focus and clear errors from customEditText
                 customEditText.apply {

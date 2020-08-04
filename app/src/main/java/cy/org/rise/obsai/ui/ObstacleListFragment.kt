@@ -140,18 +140,10 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.classifyPhotoWithCNN(
-                    "/storage/emulated/0/Android/data/cy.org." +
-                            "rise.obsai/files/Pictures/JPEG_20200729_1243046940642852856588851.jpg"
-                )
-                    .observe(viewLifecycleOwner, Observer { res ->
-                        res.onSuccess {
-                            Log.d(TAG("SUCCESS"), "$it")
-                        }
-                        res.onFailure {
-                            Log.d(TAG("FAILURE"), "$it")
-                        }
-                    })
+//                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
+//                    Log.d(TAG(), "server obs size ${serObs?.size}")
+//                })
+                findNavController().navigate(R.id.action_obstacleListFragment_to_mapFragment)
                 true
             }
 //            R.id.action_sign_in -> {
@@ -304,7 +296,7 @@ class ObstacleListFragment : Fragment() {
                 Activity.RESULT_CANCELED -> {
                     Log.d(TAG(), "RESULT_CANCELED")
                     // The user was asked to change settings, but chose not to
-                    // TODO: 23/07/20 show snackbar? or ask if they want to proceed without GPS
+                    // TODO 23/07/20 show snackbar? or ask if they want to proceed without GPS
                 }
             }
         }

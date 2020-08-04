@@ -18,8 +18,8 @@ interface INicosiaApi {
     @GET("version")
     suspend fun getOrionVersion(): OrionVersion
 
-    @GET("v2/entities")
-    suspend fun getAllServerObstacles(@Query("type") type: String): List<RestObstacle>
+    @GET("get_obstacles_problems")
+    suspend fun getAllServerObstacles(): List<Obstacle>
 
     @POST("v2/entities")
     suspend fun insertServerObstacle(@Body restObstacle: RestObstacle): Response<Unit>
@@ -39,14 +39,10 @@ interface INicosiaApi {
     fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
 
     companion object {
-        /**
-         * Keyrock endpoint, used for authentication.
-         */
+        /** Keyrock endpoint, used for authentication. */
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
 
-        /**
-         * Orion Broker endpoint, used for interactions with Fiware.
-         */
+        /** Orion Broker endpoint, used for interactions with Fiware. */
         const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
 
         /**
@@ -56,7 +52,7 @@ interface INicosiaApi {
          *
          * @param baseURL
          * @param accessToken
-         * @return
+         * @return iNicosia API
          */
         fun create(baseURL: String, accessToken: String = ""): INicosiaApi? = baseURL
             .toHttpUrlOrNull()?.let { create(it, accessToken) }
@@ -77,6 +73,17 @@ interface INicosiaApi {
                 .addInterceptor(logger)
                 .addInterceptor(serviceInterceptor)
                 .build()
+
+            // TODO 04/08/20 try to use custom serializer for location as shown
+            //  here https://stackoverflow.com/questions/6873020/gson-date-format
+//            val des = JsonSerializer<Obstacle.Location>()
+
+//            val ser: JsonSerializer<Date> =
+//                JsonSerializer<Any?> { src, typeOfSrc, context ->
+//                    if (src == null) null else JsonPrimitive(
+//                        src.getTime()
+//                    )
+//                }
 
             return Retrofit.Builder()
                 .baseUrl(httpUrl)

@@ -102,6 +102,13 @@ class CustomAdapter internal constructor() :
                 .resize(200, 0)
                 .centerInside()
                 .into(obstaclePhotoView)
+
+//            this.itemView.setOnClickListener {
+//                Log.d(TAG("ORIGINAL"), "$obs")
+//                val obsJSON = obs.toJson()
+//                Log.d(TAG("JSON"), obsJSON)
+//                Log.d(TAG("BACK to obs"), Gson().fromJson(obsJSON, Obstacle::class.java).toJson())
+//            }
         }
     }
 

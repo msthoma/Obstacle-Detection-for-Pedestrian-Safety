@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-08-04"
+        versionCode="1"
+        versionName="Version 0.18.1">
+        <info>First implementation of map with all reported obstacles in iNicosia</info>
+    </release>
+
+    <release
         date="2020-08-03"
         versionCode="1"
         versionName="Version 0.18.0">

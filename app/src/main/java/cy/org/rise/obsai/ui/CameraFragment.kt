@@ -72,6 +72,8 @@ class CameraFragment : Fragment() {
                     try {
                         createImageFile()
                     } catch (ex: IOException) {
+                        // TODO 03/08/20 here either redirect user to list fragment and say there
+                        //  was an error in saving, or leave camera on and allow user to retake
                         Log.e(TAG(), "Error creating image file", ex)
                         null
                     }?.let { tempPhotoFile ->

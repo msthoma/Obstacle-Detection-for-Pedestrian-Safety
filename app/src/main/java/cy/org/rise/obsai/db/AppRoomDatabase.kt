@@ -10,7 +10,7 @@ import androidx.room.TypeConverters
  * Abstract class for Room database.
  */
 @Database(entities = [Obstacle::class], version = 2, exportSchema = false)
-@TypeConverters(Converters::class)
+@TypeConverters(DbConverters::class)
 abstract class AppRoomDatabase : RoomDatabase() {
     abstract fun obstacleDao(): ObstacleDao
 

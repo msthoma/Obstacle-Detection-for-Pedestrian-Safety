@@ -7,8 +7,8 @@ import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.data.CnnClassifier
 import cy.org.rise.obsai.data.LocationLiveData
 import cy.org.rise.obsai.data.OrientationLiveData
-import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.db.AppRepository
+import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -103,17 +103,14 @@ class ObstacleViewModel internal constructor(
      *
      * @param restObstacle object to be inserted into remote server
      */
-    fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
-        rep.insertServerObstacle(restObstacle)
-    }
+    fun insertServerObstacle(restObstacle: RestObstacle) =
+        viewModelScope.launch(Dispatchers.IO) { rep.insertServerObstacle(restObstacle) }
 
-//    val allServerObstacles = liveData(Dispatchers.IO) {
-//        val allRestObstacles = rep.getAllServerObstacles("Obstacle")
-//        val allObstacles = allRestObstacles.map { it.toObstacle() }
-//        emit(allObstacles)
-//    }
+    /** Gets all obstacles on iNicosia. */
+    val allServerObstacles =
+        liveData(Dispatchers.IO) { emit(rep.getAllServerObstacles()) }
 
-//    fun getAllServer() = viewModelScope.launch { rep.getAllServerObstacles("Obstacle") }
+//    val allServerObs = viewModelScope.launch(Dispatchers.IO) { rep.getAllServerObstacles() }
 
 //    fun ff(path: String) = viewModelScope.launch {
 //        findFaces(path)

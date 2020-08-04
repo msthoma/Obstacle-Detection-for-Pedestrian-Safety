@@ -2,6 +2,7 @@ package cy.org.rise.obsai.utils
 
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY
@@ -42,10 +43,7 @@ fun Float.roundTo(n: Int = 3): Float = "%.${n}f".format(Locale.ENGLISH, this).to
  * @return Float array as formatted string
  */
 fun FloatArray.formatAsStr(): String = this.joinToString(
-    separator = ", ",
-    transform = { fl ->
-        fl.roundTo(3).toString()
-    })
+    separator = ", ", transform = { fl -> fl.roundTo(3).toString() })
 
 /**
  * Returns a unique ID for current app install - if such as ID does not exist yet, it is
@@ -67,7 +65,7 @@ fun Context.getUniqueAppInstallID(): String {
     if (installUniqueID == Constants.PREF_UNIQUE_ID_EMPTY) {
         with(shPref.edit()) {
             installUniqueID = UUID.randomUUID().toString()
-            android.util.Log.d(TAG(), "Created device unique ID $installUniqueID")
+            Log.d(TAG(), "Created device unique ID $installUniqueID")
             putString(Constants.PREF_UNIQUE_ID_KEY, installUniqueID)
             apply()
         }

@@ -47,10 +47,9 @@ class AppRepository private constructor(
     }
 
     // Network operations
-    private val orionService by lazy {
+    private val iNicosiaApi by lazy {
         INicosiaApi.create(
-            INicosiaApi.iNICOSIA_BASE_URL,
-            SessionManager(context).fetchAuthToken() ?: ""
+            INicosiaApi.iNICOSIA_BASE_URL, SessionManager(context).fetchAuthToken() ?: ""
         )
     }
 
@@ -74,7 +73,7 @@ class AppRepository private constructor(
 //        } catch (connectError: ConnectException) {
 //            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
 //        }
-        return orionService?.insertServerObstacle(restObstacle)
+        return iNicosiaApi?.insertServerObstacle(restObstacle)
     }
 
     /**
@@ -109,13 +108,8 @@ class AppRepository private constructor(
         WorkManager.getInstance(context).enqueue(upload)
     }
 
-    /**
-     * Gets all obstacles saved on server.
-     *
-     * @param type type of entity required, here should be "Obstacle"
-     */
-    suspend fun getAllServerObstacles(type: String) =
-        orionService?.getAllServerObstacles(type)
+    /** Gets all obstacles saved on server. */
+    suspend fun getAllServerObstacles() = iNicosiaApi?.getAllServerObstacles()
 
     companion object {
         // For Singleton instantiation
