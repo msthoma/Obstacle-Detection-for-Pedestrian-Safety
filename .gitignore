@@ -85,3 +85,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# files that contain the GMaps API key, in both release and debug directories
+app/src/*/res/values/google_maps_api.xml
