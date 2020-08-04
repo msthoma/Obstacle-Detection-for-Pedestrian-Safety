@@ -16,6 +16,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.utils.InjectorUtils
 import cy.org.rise.obsai.utils.TAG
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class MapFragment : Fragment() {
 
@@ -36,10 +40,19 @@ class MapFragment : Fragment() {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NICOSIA_CENTER, 12f))
         viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { obstacles ->
             Log.d(TAG(), "got ${obstacles?.size} obstacles")
-            Log.d(TAG(), "obstacle 1: ${obstacles?.get(0)}")
             obstacles?.forEach {
-                Log.d(TAG(), "adding obstacle at ${it.getLocationAsLatLong()}")
-                googleMap.addMarker(MarkerOptions().position(it.getLocationAsLatLong()))
+                Log.d(TAG(), "adding obstacle at ${it.location.coordinates}")
+                googleMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(it.location.coordinates[0], it.location.coordinates[1]))
+                        .title(it.obstacleType)
+                        .snippet("Reported on " +
+                            Instant.ofEpochMilli(it.timeStamp.time)
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime().format(
+                                    DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+                                )
+                        )
+                )
             }
         })
     }
