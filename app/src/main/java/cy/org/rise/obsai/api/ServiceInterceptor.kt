@@ -8,13 +8,11 @@ import okhttp3.Interceptor
  * Token is only added if it's specified, and if it's needed (not needed for logging in for
  * example). Based on [this](https://stackoverflow.com/a/55651256)
  * and [this](https://stackoverflow.com/a/58333111).
- * */
+ */
 
 class ServiceInterceptor : Interceptor {
 
-    /**
-     * AccessToken for authentication.
-     */
+    /** AccessToken for authentication. */
     var token: String = ""
 
     /**
