@@ -103,13 +103,12 @@ class ObstacleViewModel internal constructor(
      *
      * @param restObstacle object to be inserted into remote server
      */
-    fun insertServerObstacle(restObstacle: RestObstacle) = viewModelScope.launch(Dispatchers.IO) {
-        rep.insertServerObstacle(restObstacle)
-    }
+    fun insertServerObstacle(restObstacle: RestObstacle) =
+        viewModelScope.launch(Dispatchers.IO) { rep.insertServerObstacle(restObstacle) }
 
-    val allServerObstacles = liveData(Dispatchers.IO) {
-        emit(rep.getAllServerObstacles())
-    }
+    /** Gets all obstacles on iNicosia. */
+    val allServerObstacles =
+        liveData(Dispatchers.IO) { emit(rep.getAllServerObstacles()) }
 
 //    val allServerObs = viewModelScope.launch(Dispatchers.IO) { rep.getAllServerObstacles() }
 
