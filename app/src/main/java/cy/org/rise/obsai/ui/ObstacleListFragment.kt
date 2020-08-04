@@ -140,18 +140,9 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.classifyPhotoWithCNN(
-                    "/storage/emulated/0/Android/data/cy.org." +
-                            "rise.obsai/files/Pictures/JPEG_20200729_1243046940642852856588851.jpg"
-                )
-                    .observe(viewLifecycleOwner, Observer { res ->
-                        res.onSuccess {
-                            Log.d(TAG("SUCCESS"), "$it")
-                        }
-                        res.onFailure {
-                            Log.d(TAG("FAILURE"), "$it")
-                        }
-                    })
+                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
+                    Log.d(TAG(), "server obs size ${serObs?.size}")
+                })
                 true
             }
 //            R.id.action_sign_in -> {
