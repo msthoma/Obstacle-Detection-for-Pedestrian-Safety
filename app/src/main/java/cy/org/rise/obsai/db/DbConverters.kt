@@ -10,7 +10,7 @@ import java.util.*
  * [type converters](https://developer.android.com/reference/androidx/room/TypeConverter), used
  * for saving complex data in Room DB.
  */
-class Converters {
+class DbConverters {
     /**
      * Converts date in millis to Date.
      *
