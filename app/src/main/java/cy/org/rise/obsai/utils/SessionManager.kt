@@ -23,7 +23,7 @@ class SessionManager(context: Context) {
     }
 
     /** Function to fetch auth token. */
-    fun fetchAuthToken(): String? = prefs.getString(ACCESS_TOKEN, null)
+    fun fetchAuthToken(): String? = prefs.getString(ACCESS_TOKEN, "")
 
     companion object {
         const val ACCESS_TOKEN = "accessToken"
