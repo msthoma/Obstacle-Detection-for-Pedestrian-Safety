@@ -140,9 +140,10 @@ class ObstacleListFragment : Fragment() {
                 true
             }
             R.id.action_add_mock_element -> {
-                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
-                    Log.d(TAG(), "server obs size ${serObs?.size}")
-                })
+//                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
+//                    Log.d(TAG(), "server obs size ${serObs?.size}")
+//                })
+                findNavController().navigate(R.id.action_obstacleListFragment_to_mapFragment)
                 true
             }
 //            R.id.action_sign_in -> {
