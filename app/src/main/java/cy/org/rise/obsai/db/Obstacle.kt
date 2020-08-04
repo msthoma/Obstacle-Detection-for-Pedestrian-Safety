@@ -113,7 +113,9 @@ data class Obstacle(
      * @property longitude
      */
     data class Location(
+        @Expose
         var latitude: Double,
+        @Expose
         var longitude: Double
     ) : Serializable {
         @Expose
