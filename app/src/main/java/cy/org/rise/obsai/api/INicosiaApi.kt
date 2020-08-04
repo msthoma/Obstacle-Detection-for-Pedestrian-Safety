@@ -15,9 +15,6 @@ import retrofit2.http.*
 
 /** Interface for Retrofit requests. */
 interface INicosiaApi {
-    @GET("version")
-    suspend fun getOrionVersion(): OrionVersion
-
     @GET("get_obstacles_problems")
     suspend fun getAllServerObstacles(): List<Obstacle>
 
