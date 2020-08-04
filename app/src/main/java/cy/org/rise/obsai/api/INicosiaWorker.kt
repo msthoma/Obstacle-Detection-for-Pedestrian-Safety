@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import cy.org.rise.obsai.db.AppRoomDatabase
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.Constants
+import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
 
 /** Worker responsible for uploading obstacles to iNicosia. */
@@ -35,7 +36,9 @@ class INicosiaWorker(appContext: Context, params: WorkerParameters) : Worker(app
 
                 obstacle = db.obstacleDao().getObstacleById(it)
 
-                val api = INicosiaApi.create(INicosiaApi.iNICOSIA_BASE_URL)
+                val authToken = SessionManager(applicationContext).fetchAuthToken() ?: ""
+
+                val api = INicosiaApi.create(INicosiaApi.iNICOSIA_BASE_URL, authToken)
 
                 val response = api?.postToiNicosiaJson(obstacle)?.execute()
 
