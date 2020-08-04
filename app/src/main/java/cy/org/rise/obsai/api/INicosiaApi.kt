@@ -39,13 +39,12 @@ interface INicosiaApi {
         /** Keyrock endpoint, used for authentication. */
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
 
-        /** Orion Broker endpoint, used for interactions with Fiware. */
+        /** iNicosia endpoint. */
         const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
 
         /**
-         * Allows for singleton instantiation of the Retrofit service.
-         *
-         * Based on this [example](https://git.io/JJ0RI).
+         * Allows for singleton instantiation of the Retrofit service. Based on this
+         * [example](https://git.io/JJ0RI).
          *
          * @param baseURL
          * @param accessToken
