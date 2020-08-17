@@ -1,5 +1,12 @@
 <changelog>
     <release
+        date="2020-08-17"
+        versionCode="1"
+        versionName="Version 0.18.2">
+        <info>Minor code restructures</info>
+    </release>
+
+    <release
         date="2020-08-04"
         versionCode="1"
         versionName="Version 0.18.1">
