@@ -15,14 +15,8 @@ import retrofit2.http.*
 
 /** Interface for Retrofit requests. */
 interface INicosiaApi {
-    @GET("version")
-    suspend fun getOrionVersion(): OrionVersion
-
     @GET("get_obstacles_problems")
     suspend fun getAllServerObstacles(): List<Obstacle>
-
-    @POST("v2/entities")
-    suspend fun insertServerObstacle(@Body restObstacle: RestObstacle): Response<Unit>
 
     @FormUrlEncoded
     @POST("oauth2/token")
@@ -42,13 +36,12 @@ interface INicosiaApi {
         /** Keyrock endpoint, used for authentication. */
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
 
-        /** Orion Broker endpoint, used for interactions with Fiware. */
+        /** iNicosia endpoint. */
         const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
 
         /**
-         * Allows for singleton instantiation of the Retrofit service.
-         *
-         * Based on this [example](https://git.io/JJ0RI).
+         * Allows for singleton instantiation of the Retrofit service. Based on this
+         * [example](https://git.io/JJ0RI).
          *
          * @param baseURL
          * @param accessToken

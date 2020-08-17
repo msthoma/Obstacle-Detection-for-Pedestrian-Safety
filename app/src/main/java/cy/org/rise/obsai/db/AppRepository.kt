@@ -8,11 +8,9 @@ import cy.org.rise.obsai.R
 import cy.org.rise.obsai.api.INicosiaApi
 import cy.org.rise.obsai.api.INicosiaWorker
 import cy.org.rise.obsai.api.MinIOUploader
-import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.utils.Constants
 import cy.org.rise.obsai.utils.SessionManager
 import cy.org.rise.obsai.utils.TAG
-import retrofit2.Response
 import java.io.File
 import java.io.IOException
 
@@ -55,25 +53,6 @@ class AppRepository private constructor(
 
     private val minIOUploader by lazy {
         MinIOUploader.instance
-    }
-
-    /**
-     * Uploads entity to server.
-     *
-     * @param restObstacle entity to be uploaded to the server
-     * @return retrofit2 Response
-     */
-    suspend fun insertServerObstacle(restObstacle: RestObstacle): Response<Unit>? {
-//        try {
-//            minIOUploader.uploadPhoto(
-//                serverPhotoName = "${restObstacle.id}.jpg",
-//                photoPath = restObstacle.photoPath.value,
-//                bucket = "rise.test"
-//            )
-//        } catch (connectError: ConnectException) {
-//            Log.e(TAG(), "Failed to connect to MinIO: $connectError")
-//        }
-        return iNicosiaApi?.insertServerObstacle(restObstacle)
     }
 
     /**

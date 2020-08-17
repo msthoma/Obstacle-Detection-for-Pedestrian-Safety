@@ -1,15 +1,12 @@
 package cy.org.rise.obsai.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
-import cy.org.rise.obsai.api.RestObstacle
 import cy.org.rise.obsai.data.CnnClassifier
 import cy.org.rise.obsai.data.LocationLiveData
 import cy.org.rise.obsai.data.OrientationLiveData
 import cy.org.rise.obsai.db.AppRepository
 import cy.org.rise.obsai.db.Obstacle
-import cy.org.rise.obsai.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,8 +33,7 @@ class ObstacleViewModel internal constructor(
     val orientationLiveData by lazy { OrientationLiveData(app) }
 
     /** Lazy initialization of the CNN classifier - by keeping a reference to the Lazy object
-     * itself, we can check if the classifier was actually initialized in onCleared() below.
-     */
+     * itself, we can check if the classifier was actually initialized in onCleared() below. */
     private val lazyCnnClassifier = lazy {
         CnnClassifier(
             tfLiteModel = FileUtil.loadMappedFile(app, "cnn128RGB.tflite"),
@@ -49,9 +45,8 @@ class ObstacleViewModel internal constructor(
     private val cnnClassifier by lazyCnnClassifier
 
     /**
-     * Runs CNN classification on provided photo, and returns LiveData<Result>.
-     *
-     * See [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
+     * Runs CNN classification on provided photo, and returns LiveData<Result>. See
+     * [https://medium.com/@jcamilorada/arrow-try-is-dead-long-live-kotlin-result-5b086892a71e]
      * for use of Result.
      *
      * @param photoPath full path of the photo to analyze
@@ -64,53 +59,31 @@ class ObstacleViewModel internal constructor(
     val obstacles: LiveData<List<Obstacle>> = rep.getAllObstaclesLive()
 
     /**
-     * Inserts obstacle in Room database.
+     * Inserts obstacle in local Room database, as well as schedules an upload of the obstacle to
+     * iNicosia (with Work Manager) as soon as an appropriate network connection is available.
      *
-     * @param obstacle object to be inserted into db
+     * @param obstacle object to be inserted into db and uploaded to iNicosia
      */
     fun insertObstacle(obstacle: Obstacle) {
-        Log.d(TAG(), "inserting obstacle...")
-
         // see https://stackoverflow.com/q/58341983 for comments on using GlobalScope
         GlobalScope.launch {
-            // add to local db
-            rep.insertObstacle(obstacle)
-
-            // push to server
-            rep.postToiNicosiaWM(obstacle)
-
-//            try {
-//                val res = rep.postToiNicosia(obstacle)
-//                Log.d("server push res", res.toString())
-//                res?.let { response ->
-//                    obstacle.uploadStatus = response.code().toString()
-//                    rep.updateObstacle(obstacle)
-//                }
-//            } catch (e: Exception) {
-//                //  Fiware, not only uploading photo to Minio
-//                obstacle.uploadStatus = "Error"
-//                rep.updateObstacle(obstacle)
-//                Log.e(TAG(), "push to server failed", e)
-//            }
+            rep.insertObstacle(obstacle) // add to local db
+            rep.postToiNicosiaWM(obstacle) // upload to server
         }
     }
 
     /** Deletes all obstacles from local db. */
     fun deleteAll() = viewModelScope.launch(Dispatchers.IO) { rep.deleteAll() }
 
-    /**
-     * Inserts obstacle in remote server.
-     *
-     * @param restObstacle object to be inserted into remote server
-     */
-    fun insertServerObstacle(restObstacle: RestObstacle) =
-        viewModelScope.launch(Dispatchers.IO) { rep.insertServerObstacle(restObstacle) }
+    /** Gets all obstacles stored on iNicosia. */
+    val allServerObstacles = liveData(Dispatchers.IO) { emit(rep.getAllServerObstacles()) }
 
-    /** Gets all obstacles on iNicosia. */
-    val allServerObstacles =
-        liveData(Dispatchers.IO) { emit(rep.getAllServerObstacles()) }
-
-//    val allServerObs = viewModelScope.launch(Dispatchers.IO) { rep.getAllServerObstacles() }
+    /** Override to make sure the cnnClassifier is closed when the VM is cleared. */
+    override fun onCleared() {
+        super.onCleared()
+        if (lazyCnnClassifier.isInitialized()) cnnClassifier.close()
+    }
+}
 
 //    fun ff(path: String) = viewModelScope.launch {
 //        findFaces(path)
@@ -125,10 +98,3 @@ class ObstacleViewModel internal constructor(
 //        Log.d(TAG(), faceArray[0]?.confidence().toString())
 //        return faceArray
 //    }
-
-    /** Override to make sure the cnnClassifier is closed when the VM is cleared. */
-    override fun onCleared() {
-        super.onCleared()
-        if (lazyCnnClassifier.isInitialized()) cnnClassifier.close()
-    }
-}
