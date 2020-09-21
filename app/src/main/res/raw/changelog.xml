@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-09-21"
+        versionCode="1"
+        versionName="Version 0.18.3">
+        <info>Added menu button for showing obstacle map</info>
+        <info>Major updates to libraries used</info>
+    </release>
+
+    <release
         date="2020-08-17"
         versionCode="1"
         versionName="Version 0.18.2">
