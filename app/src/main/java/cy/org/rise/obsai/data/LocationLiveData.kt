@@ -53,6 +53,12 @@ class LocationLiveData(context: Context) : LiveData<Location>() {
 
     private fun setLocation(location: Location) {
         Log.d(TAG(), "location set to [${location.latitude}, ${location.longitude}]")
+        // the snippet below is useful in demo cases where the actual position of the device
+        // should not appear, it defaults to the rough location of RISE
+//        location.apply {
+//            latitude = 35.16989
+//            longitude = 33.360753
+//        }
         value = location
     }
 
