@@ -73,6 +73,7 @@
     <string name="toast_deleted_everything">Διαγράφηκαν όλα</string>
     <string name="detail_object_type">Είδος: %1$s</string>
     <string name="dialog_submitting_obstacle">Υποβολή εμποδίου…</string>
+    <string name="action_show_obstacle_map">Χάρτης εμποδίων</string>
 
     <!--    <string-array name="obstacle_types_array">-->
     <!--        <item>Διαφημιστική πινακίδα</item>-->
