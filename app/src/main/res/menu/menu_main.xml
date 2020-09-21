@@ -20,7 +20,7 @@
     <item
         android:id="@+id/action_show_obstacle_map"
         android:orderInCategory="300"
-        android:title="@string/action_add_mock_element"
+        android:title="@string/action_show_obstacle_map"
         app:showAsAction="never" />
 
     <item
