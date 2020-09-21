@@ -139,7 +139,7 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
                 true
             }
-            R.id.action_add_mock_element -> {
+            R.id.action_show_obstacle_map -> {
 //                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
 //                    Log.d(TAG(), "server obs size ${serObs?.size}")
 //                })
