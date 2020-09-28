@@ -203,7 +203,7 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     // Play Services location provider
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 
     // Maps library, uses OpenStreetMap - http://osmdroid.github.io/osmdroid/
     // removed, leaving this in case it's needed in the future
@@ -234,7 +234,7 @@ dependencies {
     implementation 'com.github.MFlisar:changelog:1.1.6'
 
     // MinIO Java SDK for photo object storage https://github.com/minio/minio-java
-    implementation 'io.minio:minio:7.1.2'
+    implementation 'io.minio:minio:7.1.4'
 
     // Kotlin reflection library
     // implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
