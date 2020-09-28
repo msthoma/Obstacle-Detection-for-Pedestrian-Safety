@@ -1,6 +1,7 @@
 package cy.org.rise.obsai.ui
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -57,8 +58,20 @@ class ObstacleListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Check device RAM information before launching app Intro, since it seems to cause
+        // crashes in low memory devices (probably due to one of the images included, or the
+        // library used for the Intro)
+        val activityManager =
+            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memInfo = ActivityManager.MemoryInfo()
+        activityManager.getMemoryInfo(memInfo)
+
+        val totalRAMinMb = memInfo.totalMem / 1048576.0
+
+        Log.d(TAG(), "Total device RAM: $totalRAMinMb")
+
         // On first launch redirect to the Intro
-        if (!requireContext().introStatus()) {
+        if (!requireContext().introStatus() && totalRAMinMb >= 1500) {
             findNavController().navigate(R.id.action_obstacleListFragment_to_appIntroActivity)
         }
         //        sessionManager = SessionManager(requireContext())
