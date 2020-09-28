@@ -34,7 +34,7 @@ android {
         versionCode 1
         def versionMajor = 0
         def versionMinor = 18
-        def versionPatch = 3
+        def versionPatch = 4
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
