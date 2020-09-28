@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-09-28"
+        versionCode="1"
+        versionName="Version 0.18.4">
+        <info>Fixed possible bug in low memory devices when showing the app Intro</info>
+        <info>Library updates</info>
+    </release>
+
+    <release
         date="2020-09-21"
         versionCode="1"
         versionName="Version 0.18.3">

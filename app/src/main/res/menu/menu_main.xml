@@ -13,7 +13,7 @@
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings_24dp"
-        android:orderInCategory="300"
+        android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
 
@@ -22,7 +22,7 @@
         android:icon="@drawable/ic_map_24"
         android:orderInCategory="200"
         android:title="@string/action_show_obstacle_map"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_app_intro"
