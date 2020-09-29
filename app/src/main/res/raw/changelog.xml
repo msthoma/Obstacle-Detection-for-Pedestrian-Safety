@@ -1,5 +1,15 @@
 <changelog>
     <release
+        date="2020-09-29"
+        versionCode="1"
+        versionName="Version 0.18.5">
+        <info>Fixed layout issues with the app's Intro, text should not be cut off in the majority
+            of cases
+        </info>
+        <info>More fixes for app Intro in low memory devices</info>
+    </release>
+
+    <release
         date="2020-09-28"
         versionCode="1"
         versionName="Version 0.18.4">
@@ -19,7 +29,7 @@
         date="2020-08-17"
         versionCode="1"
         versionName="Version 0.18.2">
-        <info>Minor code restructures</info>
+        <info>Minor code restructuring</info>
     </release>
 
     <release
