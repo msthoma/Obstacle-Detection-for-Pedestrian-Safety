@@ -7,7 +7,10 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/margin_medium"
+    android:paddingStart="@dimen/margin_medium"
+    android:paddingTop="@dimen/margin_medium"
+    android:paddingEnd="@dimen/margin_medium"
+    android:paddingBottom="@dimen/margin_huge"
     tools:background="@color/introColor1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,12 +21,13 @@
             android:id="@+id/title"
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingBottom="@dimen/margin_medium"
             android:text="Welcome!"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:src="@drawable/ic_noun_barrier_2895012"
+            app:layout_constraintBottom_toTopOf="@id/text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.2"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,16 +44,15 @@
             app:tint="#FFFFFF" />
 
         <TextView
-
+            android:id="@+id/text"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="The aim of this app is to enable pedestrians to report any obstacles they encounter to the authorities, which will hopefully increase pedestrian safety by allowing the authorities to deal with the obstructions more quickly."
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
