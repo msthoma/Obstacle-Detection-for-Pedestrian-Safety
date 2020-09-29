@@ -7,7 +7,10 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/margin_medium"
+    android:paddingStart="@dimen/margin_medium"
+    android:paddingTop="@dimen/margin_medium"
+    android:paddingEnd="@dimen/margin_medium"
+    android:paddingBottom="@dimen/margin_huge"
     tools:background="@color/introColor3">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,44 +21,47 @@
             android:id="@+id/title"
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center|bottom"
-            android:paddingBottom="@dimen/margin_small"
+            android:paddingTop="@dimen/margin_medium"
+            android:paddingBottom="@dimen/margin_medium"
             android:text="Tutorial"
             android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@id/image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/pinch_to_zoom"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="(You can pinch to zoom on the screenshots below)"
-            android:textColor="#ffffff"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/pinch_to_zoom"-->
+        <!--            style="@style/TextAppearance.AppCompat.Caption"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:gravity="center"-->
+        <!--            android:text="(You can pinch to zoom on the screenshots below)"-->
+        <!--            android:textColor="#ffffff"-->
+        <!--            android:visibility="invisible"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/title" />-->
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:src="@drawable/appintrotutorial"
+            app:layout_constraintBottom_toTopOf="@id/text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.55"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title" />
 
         <TextView
+            android:id="@+id/text"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center|top"
+            android:paddingBottom="@dimen/margin_huge"
             android:text="Steps to report an obstacle:\n\n- Launch the app and click +\n- Take a photo of the obstacle\n- Select its type (the embedded neural network suggests the most likely types)\n- Click the Submit button and you are done!"
             android:textColor="#ffffff"
             app:layout_constraintBottom_toBottomOf="parent"
