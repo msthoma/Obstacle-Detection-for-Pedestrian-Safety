@@ -55,15 +55,15 @@
                 tools:text="Location: 35.13, 33.31" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/upload_status_view"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_margin="@dimen/margin_small"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:src="@drawable/ic_cloud_done_outline_24dp"
-            tools:tint="@color/uploadSuccess" />
+<!--        <ImageView-->
+<!--            android:id="@+id/upload_status_view"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_margin="@dimen/margin_small"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            tools:src="@drawable/ic_cloud_done_outline_24dp"-->
+<!--            tools:tint="@color/uploadSuccess" />-->
 
         <TextView
             android:id="@+id/time_view"

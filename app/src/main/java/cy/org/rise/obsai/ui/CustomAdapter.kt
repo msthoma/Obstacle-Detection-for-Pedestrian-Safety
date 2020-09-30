@@ -34,7 +34,7 @@ class CustomAdapter internal constructor() :
         val obstaclePhotoView: ImageView
         val timeView: TextView
         val typeView: TextView
-        val uploadStatusView: ImageView
+//        val uploadStatusView: ImageView
 
         init {
             v.apply {
@@ -43,7 +43,7 @@ class CustomAdapter internal constructor() :
                 obstaclePhotoView = obstacle_image_view
                 timeView = time_view
                 typeView = type_view
-                uploadStatusView = upload_status_view
+//                uploadStatusView = upload_status_view
             }
         }
     }
@@ -73,27 +73,27 @@ class CustomAdapter internal constructor() :
                 .atZone(ZoneId.systemDefault()).toLocalDateTime().format(formatter)
 
             // Set upload status indicator
-            when (obs.uploadStatus) {
-                Constants.UPLOAD_SUCCESS -> uploadStatusView.apply {
-                    setImageDrawable(
-                        ResourcesCompat
-                            .getDrawable(res, R.drawable.ic_cloud_done_outline_24dp, null)
-                    )
-                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadSuccess, null))
-                }
-                Constants.UPLOAD_FAIL -> uploadStatusView.apply {
-                    setImageDrawable(
-                        ResourcesCompat.getDrawable(res, R.drawable.ic_error_outline_24dp, null)
-                    )
-                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadError, null))
-                }
-                Constants.UPLOADING -> uploadStatusView.apply {
-                    setImageDrawable(
-                        ResourcesCompat.getDrawable(res, R.drawable.ic_uploading_outline_24dp, null)
-                    )
-                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadInProgress, null))
-                }
-            }
+//            when (obs.uploadStatus) {
+//                Constants.UPLOAD_SUCCESS -> uploadStatusView.apply {
+//                    setImageDrawable(
+//                        ResourcesCompat
+//                            .getDrawable(res, R.drawable.ic_cloud_done_outline_24dp, null)
+//                    )
+//                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadSuccess, null))
+//                }
+//                Constants.UPLOAD_FAIL -> uploadStatusView.apply {
+//                    setImageDrawable(
+//                        ResourcesCompat.getDrawable(res, R.drawable.ic_error_outline_24dp, null)
+//                    )
+//                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadError, null))
+//                }
+//                Constants.UPLOADING -> uploadStatusView.apply {
+//                    setImageDrawable(
+//                        ResourcesCompat.getDrawable(res, R.drawable.ic_uploading_outline_24dp, null)
+//                    )
+//                    setColorFilter(ResourcesCompat.getColor(res, R.color.uploadInProgress, null))
+//                }
+//            }
 
             // Set picture
             Picasso.get()
