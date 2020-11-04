@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-11-04"
+        versionCode="1"
+        versionName="Version 0.18.7">
+        <info>Updated URL for new iNicosia API</info>
+        <info>Restored UI changes that were reverted in previous commit</info>
+    </release>
+
+    <release
         date="2020-09-30"
         versionCode="1"
         versionName="Version 0.18.6">
