@@ -40,6 +40,7 @@ import com.squareup.picasso.Picasso
 import cy.org.rise.obsai.R
 import cy.org.rise.obsai.db.Obstacle
 import cy.org.rise.obsai.utils.*
+import kotlinx.android.synthetic.main.dialog_submission_progress.*
 import kotlinx.android.synthetic.main.dialog_type_selection.view.*
 import kotlinx.android.synthetic.main.fragment_obstacle_edit.*
 import kotlinx.coroutines.delay
@@ -386,27 +387,27 @@ class ObstacleEditFragment : Fragment() {
     /** Submits current obstacle, provided that all required information has been entered. */
     private fun checkAndSubmitObstacle() {
         if (allRequiredInfoEntered()) {
-            viewModel.insertObstacle(currentObstacle)
-            requireContext().toast(R.string.toast_obstacle_submitted)
-            findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+//            viewModel.insertObstacle(currentObstacle)
+//            requireContext().toast(R.string.toast_obstacle_submitted)
+//            findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
 
-//            val submitDialog =
-//                MaterialDialog(requireContext()).customView(R.layout.dialog_submission_progress)
-//            val submitDialogLayout = submitDialog.getCustomView()
-//            submitDialog.cancelOnTouchOutside(false)
-//            submitDialog.lifecycleOwner(viewLifecycleOwner)
-//            submitDialog.show()
-//            lifecycleScope.launch {
-//                viewModel.insertObstacle(currentObstacle)
-//                delay(DELAY_SUBMIT)
-//                submitDialogLayout.apply {
-//                    submitProgressBar?.visibility = View.INVISIBLE
-//                    submissionDone?.visibility = View.VISIBLE
-//                }
-//                delay(DELAY_SUBMIT)
-//                requireContext().toast(R.string.toast_obstacle_submitted)
-//                findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
-//            }
+            val submitDialog =
+                MaterialDialog(requireContext()).customView(R.layout.dialog_submission_progress)
+            val submitDialogLayout = submitDialog.getCustomView()
+            submitDialog.cancelOnTouchOutside(false)
+            submitDialog.lifecycleOwner(viewLifecycleOwner)
+            submitDialog.show()
+            lifecycleScope.launch {
+                viewModel.insertObstacle(currentObstacle)
+                delay(DELAY_SUBMIT)
+                submitDialogLayout.apply {
+                    submitProgressBar?.visibility = View.INVISIBLE
+                    submissionDone?.visibility = View.VISIBLE
+                }
+                delay(DELAY_SUBMIT)
+                requireContext().toast(R.string.toast_obstacle_submitted)
+                findNavController().navigate(R.id.action_obstacleEditFragment_to_obstacleListFragment)
+            }
         }
     }
 

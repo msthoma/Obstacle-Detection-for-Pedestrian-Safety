@@ -37,7 +37,7 @@ interface INicosiaApi {
         const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
 
         /** iNicosia endpoint. */
-        const val iNICOSIA_BASE_URL = "https://7e3fa2d3.ngrok.io/docs/"
+        const val iNICOSIA_BASE_URL = "http://inicosia.rise.org.cy/docs/"
 
         /**
          * Allows for singleton instantiation of the Retrofit service. Based on this
