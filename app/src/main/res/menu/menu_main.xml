@@ -17,12 +17,12 @@
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
 
-<!--    <item-->
-<!--        android:id="@+id/action_show_obstacle_map"-->
-<!--        android:icon="@drawable/ic_map_24"-->
-<!--        android:orderInCategory="200"-->
-<!--        android:title="@string/action_show_obstacle_map"-->
-<!--        app:showAsAction="never" />-->
+    <item
+        android:id="@+id/action_show_obstacle_map"
+        android:icon="@drawable/ic_map_24"
+        android:orderInCategory="200"
+        android:title="@string/action_show_obstacle_map"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_app_intro"

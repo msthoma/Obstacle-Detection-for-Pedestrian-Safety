@@ -152,13 +152,13 @@ class ObstacleListFragment : Fragment() {
                 findNavController().navigate(R.id.action_obstacleListFragment_to_settingsFragment)
                 true
             }
-//            R.id.action_show_obstacle_map -> {
-////                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
-////                    Log.d(TAG(), "server obs size ${serObs?.size}")
-////                })
-//                findNavController().navigate(R.id.action_obstacleListFragment_to_mapFragment)
-//                true
-//            }
+            R.id.action_show_obstacle_map -> {
+//                viewModel.allServerObstacles.observe(viewLifecycleOwner, Observer { serObs ->
+//                    Log.d(TAG(), "server obs size ${serObs?.size}")
+//                })
+                findNavController().navigate(R.id.action_obstacleListFragment_to_mapFragment)
+                true
+            }
 //            R.id.action_sign_in -> {
 //                findNavController().navigate(R.id.action_obstacleListFragment_to_accountFragment)
 //                true
