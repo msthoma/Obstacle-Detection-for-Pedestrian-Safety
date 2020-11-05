@@ -75,9 +75,9 @@ fun Context.getUniqueAppInstallID(): String {
 }
 
 /**
- * Provides an indication of whether the app has been already shown or not, based on a
- * SharedPreference. If the preference does not exist yet, it is created with a default value of
- * false.
+ * Provides an indication of whether the app Intro tutorial has been already shown or not, based
+ * on a SharedPreference. If the preference does not exist yet, it is created with a default
+ * value of false.
  *
  * @param setToShown whether to set the preference to shown or not
  * @return boolean of whether the app intro has been shown already or not
