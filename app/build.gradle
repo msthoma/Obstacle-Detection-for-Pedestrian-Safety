@@ -15,7 +15,7 @@ apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     // specifying an NDK version is needed temporarily to fix Github CI build issues, see links:
@@ -28,13 +28,13 @@ android {
     defaultConfig {
         applicationId "cy.org.rise.obsai"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         // versioning - see https://semver.org/
         versionCode 1
         def versionMajor = 0
         def versionMinor = 18
-        def versionPatch = 7
+        def versionPatch = 8
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -254,5 +254,5 @@ dependencies {
     // implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
 
     // ThreeTen Android Backport library https://github.com/JakeWharton/ThreeTenABP/
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.0'
 }

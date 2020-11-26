@@ -1,5 +1,13 @@
 <changelog>
     <release
+        date="2020-11-26"
+        versionCode="1"
+        versionName="Version 0.18.8">
+        <info>Updated target SDK to 30 (Android 11)</info>
+        <info>Library updates</info>
+    </release>
+
+    <release
         date="2020-11-04"
         versionCode="1"
         versionName="Version 0.18.7">
