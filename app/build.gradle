@@ -15,7 +15,7 @@ apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'org.jetbrains.dokka'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     // specifying an NDK version is needed temporarily to fix Github CI build issues, see links:
@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId "cy.org.rise.obsai"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
 
         // versioning - see https://semver.org/
         versionCode 1
