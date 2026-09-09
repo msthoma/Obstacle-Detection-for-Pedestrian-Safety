@@ -9,7 +9,7 @@
 
 An Android app that lets pedestrians report obstacles blocking a pavement, such as a car parked across it, a pot-hole, a bin or an overgrown shrub. The person photographs the obstacle, a convolutional neural network running on the phone suggests what kind of obstacle it is, and the report goes to the city with its location, the phone's orientation and the photo attached.
 
-The app was built at the RISE Research Centre in Nicosia, Cyprus (now the [CYENS Centre of Excellence](https://www.cyens.org.cy)), as part of the study published as Thoma et al. (2021), [_"A Smartphone Application Designed to Detect Obstacles for Pedestrians' Safety"_](https://doi.org/10.1007/978-3-030-76063-2_25). The reports it produced fed the iNicosia smart-city platform.
+The app was built at the RISE Research Centre in Nicosia, Cyprus (now the [CYENS Centre of Excellence](https://cyens.org.cy)), as part of the study published as Thoma et al. (2021), [_"A Smartphone Application Designed to Detect Obstacles for Pedestrians' Safety"_](https://doi.org/10.1007/978-3-030-76063-2_25). The reports it produced fed the iNicosia smart-city platform.
 
 ## Publication
 
