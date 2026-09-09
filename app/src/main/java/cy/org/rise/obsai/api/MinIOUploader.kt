@@ -36,9 +36,11 @@ class MinIOUploader {
     }
 
     companion object {
-        private const val endpoint = "http://192.168.10.10:9001/"
-        private const val accessKey = "minio"
-        private const val secretKey = "minio123"
+        // Fill in the address and credentials of your own MinIO server for photo
+        // uploads to work.
+        private const val endpoint = "YOUR_MINIO_ENDPOINT"
+        private const val accessKey = "YOUR_MINIO_ACCESS_KEY"
+        private const val secretKey = "YOUR_MINIO_SECRET_KEY"
 
         // endpoint for tests, works without accessKey and secretKey
         // private const val endpoint = "https://play.min.io"

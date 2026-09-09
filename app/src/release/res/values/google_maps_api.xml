@@ -1,6 +1,7 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
+    Replace the placeholder below with your own Google Maps API key, obtained as
+    described here: https://developers.google.com/maps/documentation/android-sdk/get-api-key
     -->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCZ-ZyuKzC55-FZ9RsIuzB6G7-P0m9bHqw</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">YOUR_GOOGLE_MAPS_API_KEY</string>
 </resources>

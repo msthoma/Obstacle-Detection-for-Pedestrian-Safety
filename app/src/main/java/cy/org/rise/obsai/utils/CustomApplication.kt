@@ -20,7 +20,8 @@ import org.acra.data.StringFormat
  *  - custom implementation of getWorkManagerConfiguration()
  */
 @AcraCore(buildConfigClass = BuildConfig::class, reportFormat = StringFormat.JSON)
-@AcraMailSender(mailTo = "msthoma@outlook.com")
+// fill in the address that should receive crash reports
+@AcraMailSender(mailTo = "your.email@example.com")
 @AcraDialog(
     resTitle = R.string.acra_crash_dialog_title,
     resPositiveButtonText = R.string.dialog_OK_button,

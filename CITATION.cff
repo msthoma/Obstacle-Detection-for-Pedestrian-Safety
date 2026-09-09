@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Obstacles app"
+abstract: "Android app that lets pedestrians report obstacles on pavements, classifying each obstacle on-device with a convolutional neural network."
+type: software
+authors:
+  - family-names: Thoma
+    given-names: Marios
+repository-code: "https://github.com/msthoma/Obstacle-Detection-for-Pedestrian-Safety"
+license: MIT
+date-released: "2020-11-26"
+version: "0.18.8"
+keywords:
+  - android
+  - computer-vision
+  - convolutional-neural-network
+  - tensorflow-lite
+  - smart-cities
+  - pedestrian-safety
+preferred-citation:
+  type: conference-paper
+  title: "A Smartphone Application Designed to Detect Obstacles for Pedestrians' Safety"
+  authors:
+    - family-names: Thoma
+      given-names: Marios
+    - family-names: Theodosiou
+      given-names: Zenonas
+    - family-names: Partaourides
+      given-names: Harris
+    - family-names: Tylliros
+      given-names: Charalambos
+    - family-names: Antoniades
+      given-names: Demetris
+    - family-names: Lanitis
+      given-names: Andreas
+  collection-title: "Science and Technologies for Smart Cities. SmartCity360° 2020. Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering"
+  publisher:
+    name: "Springer, Cham"
+  year: 2021
+  start: 358
+  end: 371
+  doi: "10.1007/978-3-030-76063-2_25"
+  isbn: "978-3-030-76063-2"

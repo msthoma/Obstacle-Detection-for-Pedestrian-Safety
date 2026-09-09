@@ -33,11 +33,14 @@ interface INicosiaApi {
     fun postToiNicosiaJson(@Body obstacle: Obstacle): Call<Unit>
 
     companion object {
-        /** Keyrock endpoint, used for authentication. */
-        const val LOGIN_BASE_URL = "http://192.168.10.10:3005/"
+        /**
+         * Keyrock endpoint, used for authentication. Fill in the base URL of your own
+         * FIWARE Keyrock instance.
+         */
+        const val LOGIN_BASE_URL = "YOUR_KEYROCK_ENDPOINT"
 
-        /** iNicosia endpoint. */
-        const val iNICOSIA_BASE_URL = "http://inicosia.rise.org.cy/docs/"
+        /** iNicosia endpoint. Fill in the base URL of the iNicosia API. */
+        const val iNICOSIA_BASE_URL = "YOUR_INICOSIA_ENDPOINT"
 
         /**
          * Allows for singleton instantiation of the Retrofit service. Based on this
